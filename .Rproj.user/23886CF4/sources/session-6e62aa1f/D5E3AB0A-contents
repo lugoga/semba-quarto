@@ -56,9 +56,9 @@ website:
     image: thumbnail_blog.png
     card-style: summary_large_image
     creator: "@rappa753"
-  comments:
-    hypothesis: 
-      theme: clean
+comments:
+  giscus:
+    repo: lugoga/semba-quarto
   
 # filters:
 #   - code-filename
