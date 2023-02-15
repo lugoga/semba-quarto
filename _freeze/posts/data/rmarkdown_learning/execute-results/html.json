@@ -1,0 +1,16 @@
+{
+  "hash": "eb8fe0a9463a6e17c0726b45d454420f",
+  "result": {
+    "markdown": "---\ntitle: \"Learning Rmarkdown\"\nauthor: \"Masumbuko Semba\"\noutput: bookdown::html_document2\nbibliography: book.bib\n---\n\n\n\n# Introduction\nWe aimed at assessing the performance of different diet on chick weight. We use rmarkdown to automate the report that contain formatted plain text, code,figures, table and reference As mentioned previous, an R Markdown file is simply a plain text with and `.Rmd` extension. \n\n## Data\nWe use the data `ChickWeight` from the base R **dataset** package. It has four variables;\n\n+ `weight`: a numeric vector with the body weight of the chick in gm\n+ `Time`: a numeric vector with the number of days since the birth when the record begin at day zero\n+ `Chick`: an ordered factor with levels that group chicks with the same diet together\n+ `Diet`: A factor with levels 1--4 indicating the type of feed used for experimental\n\nWe first need to load the tidyverse package developed by Hadley Wickham and others [@tidyverse]. We load using the `require()`function and used ggplot to make figure \\@ref(fig:fig1).\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell layout-align=\"center\"}\n::: {.cell-output-display}\n![Performance of feed used to feed chicken for three weeks](rmarkdown_learning_files/figure-html/fig1-1.png){fig-align='center' width=480}\n:::\n:::\n\n\n## Reference\n",
+    "supporting": [
+      "rmarkdown_learning_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

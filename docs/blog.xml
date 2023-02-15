@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Semba&#39;s blog</title>
+<link>https://semba.github.io/semba/blog.html</link>
+<atom:link href="https://semba.github.io/semba/blog.xml" rel="self" type="application/rss+xml"/>
+<description>Coding for all for better today and tommorow</description>
+<generator>quarto-1.2.269</generator>
+<lastBuildDate>Sun, 19 Feb 2023 21:00:00 GMT</lastBuildDate>
+<item>
+  <title>Main and Inset maps with R</title>
+  <dc:creator>Masumbuko Semba</dc:creator>
+  <link>https://semba.github.io/semba/posts/inset_main_map/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<section id="introduction" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="introduction">Introduction</h3>
+<p>In this post, We learn how we can make publication quality inset maps in R using <code>ggplot2</code> package <span class="citation" data-cites="ggplot">(Wickham 2016)</span>. When publishing scientific research in journals or presenting research work at a conference, showing maps of data collection sites or experimental locations is one of the key visualization elements. Maps of study sites or sampling locations can help the audience and readers to fathom the data in a better way. Mapping sounds fancy, but it needs substantial training and skill set to make high-quality maps that are reader-friendly and visually aesthetic.</p>
+<p>Sometimes, the study sites are more dispersed and are easy to visualize in large geographic areas. However, in some cases, study sites are clustered, which makes it hard to show them on a broader scale. In that case, inset maps help us show the locations with reference to familiar geographical regions. An inset map is a smaller map featured on the same page as the main map. Traditionally, inset maps are shown at a larger scale (smaller area) than the main map. Often, an inset map is used as a locator map that shows the area of the main map in a broader, more familiar geographical frame of reference.</p>
+</section>
+<section id="spatial-vector-data-storage" class="level3">
+<h3 class="anchored" data-anchor-id="spatial-vector-data-storage">Spatial Vector Data Storage</h3>
+<p>If you have been using the vector data and doing spatial analysis, you know shapefile. Shapefile is the most commonly used vector data formats to store data and carry out any spatial analysis.</p>
+</section>
+<section id="characteristics-of-a-shapefile" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="characteristics-of-a-shapefile">Characteristics of a shapefile</h3>
+<p>Shapefiles are vector data storage models for storing feature classes composed of points, lines and polygons, but never a mixture. It stores information of the location, shape and attributes of geographical features. Each item in a shapefile has attributes that describe it composed of rows, called records and columns called fields and can also store multipart features, in which a single feature includes multiple objects which includes</p>
+<ul>
+<li><strong>.shp</strong> file stores coordinate data</li>
+<li><strong>.dbf</strong> file stores attribute data</li>
+<li><strong>.shx</strong> file stores a spatial index that speeds drawing and analysis</li>
+<li><strong>.prj</strong> file stores projection information</li>
+<li><strong>.avl</strong> file stores legend</li>
+<li><strong>.xml</strong> file contains metadata</li>
+</ul>
+</section>
+<section id="characteristics-of-a-shapefile-1" class="level3">
+<h3 class="anchored" data-anchor-id="characteristics-of-a-shapefile-1">Characteristics of a shapefile</h3>
+<ul>
+<li>Takes up more storage space on your system</li>
+<li>Shapefiles have a minimum size of 2GB</li>
+<li>Do not support names in fields longer than 10 characters</li>
+<li>A shapefile cannot have more than one geometry type in a file.</li>
+<li>Cannot store data and time in the same field</li>
+<li>Do not support raster files</li>
+<li>Do not store NULL values in a field; when a value is NULL, a shapefile will use 0 instead.</li>
+</ul>
+<p>But, shapefile has a lot of disadvantages when you wish to scale your work and build integrated &amp; automated workflows for large-scale deployments. Geopackage format offers a variety of features in this regard. And that’s why you need to use Geopackage files instead of shapefile. Let’s dive deeper into the details.</p>
+</section>
+<section id="geopackage" class="level3">
+<h3 class="anchored" data-anchor-id="geopackage">Geopackage</h3>
+<p>A Geopackage is platform-independent format for storing and transferring geospatial information. It is a SQLite based standard format designed for stand-alone databases that holds both raster data and multiple vector data layers in a single file and can be accessible by non-GIS software.</p>
+</section>
+<section id="characteristics-of-a-geopackage" class="level3">
+<h3 class="anchored" data-anchor-id="characteristics-of-a-geopackage">Characteristics of a Geopackage</h3>
+<ul>
+<li>Geopackages are open source, SQLite based database</li>
+<li>No limitation on the file size and can handle large number of features</li>
+<li>Can store both raster as well as vector data layers</li>
+<li>A single Geopackage file can have multiple vector layers with each layer having a different geometry type.</li>
+</ul>
+</section>
+<section id="why-choose-geopackages-and-not-shapefiles" class="level3">
+<h3 class="anchored" data-anchor-id="why-choose-geopackages-and-not-shapefiles">Why choose Geopackages and not Shapefiles?</h3>
+<ol type="1">
+<li><p>Shapefile is a multi-file format with minimum of 3 files and several other attached files with different extensions. Sharing a shapefile with someone would be complicated as all the other files attached will also have to be shared. Whereas, Geopackages includes all the information of the layer in a file and is easier to transfer or share.</p></li>
+<li><p>Compared to shapefiles, the column headers in a geopackage can be full names and right by providing the correct context for each column. A shapefile can only have 10 characters to define the column header.</p></li>
+<li><p>Geopackages run faster on algorithm outputs compared to shapefiles.</p></li>
+<li><p>In a geopackage, there is no limit on the file size and can handle large number of features in a smaller file size. A shapefile can handle maximum size of 2 GB and cannot export a vector layer with more features.</p></li>
+<li><p>A Geopackage stores both raster and vector files whereas, shapefiles can store only vector files.</p></li>
+<li><p>Geopackages are lightweight and compatible across environments specially in mobile devices. It is 1.1-1.3x lighter in file size compared to shapefiles.</p></li>
+</ol>
+</section>
+<section id="load-libraries" class="level3">
+<h3 class="anchored" data-anchor-id="load-libraries">Load libraries</h3>
+<p>Several packages in R are dealing with spatial data, but in this post we are going to use funtions from <strong>tidyverse</strong> <span class="citation" data-cites="tidyverse">(Wickham and Wickham 2017)</span> and <strong>sf</strong> <span class="citation" data-cites="sf">(Pebesma 2018)</span> packages. We can load these packages with a <code>library</code> function as as;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">library</span>(tidyverse)</span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;">library</span>(sf)</span></code></pre></div>
+</div>
+</section>
+<section id="load-file" class="level3">
+<h3 class="anchored" data-anchor-id="load-file">Load file</h3>
+<p>We first need to import spatial data into the session. For this case we are going to load the boundary layer of Africa. The file has boundary for 67 polygons representing feature in Africa. We can load the file into the session using <code>st_read</code> function from <strong>sf</strong> package <span class="citation" data-cites="sf">(Pebesma 2018)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">africa <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">st_read</span>(<span class="st" style="color: #20794D;">"../data/africa.gpkg"</span>, <span class="at" style="color: #657422;">quiet =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)</span></code></pre></div>
+</div>
+<p>Next I’ll extract the polygon for WIO region countries from from the <code>Africa</code> package using the <code>filter</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">wio <span class="ot" style="color: #003B4F;">=</span> africa  <span class="sc" style="color: #5E5E5E;">|&gt;</span>  </span>
+<span id="cb3-2">  <span class="fu" style="color: #4758AB;">filter</span>(</span>
+<span id="cb3-3">    country <span class="sc" style="color: #5E5E5E;">%in%</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"Tanzania"</span>, <span class="st" style="color: #20794D;">"Kenya"</span>, <span class="st" style="color: #20794D;">"Mozambique"</span>, <span class="st" style="color: #20794D;">"South Africa"</span>, </span>
+<span id="cb3-4">                   <span class="st" style="color: #20794D;">"Somalia"</span>, <span class="st" style="color: #20794D;">"Madagascar"</span>, <span class="st" style="color: #20794D;">"Seychelles"</span>, <span class="st" style="color: #20794D;">"Reunion"</span>, <span class="st" style="color: #20794D;">"Mauritius"</span>))</span>
+<span id="cb3-5"></span>
+<span id="cb3-6">wio.point.country <span class="ot" style="color: #003B4F;">=</span> wio <span class="sc" style="color: #5E5E5E;">%&gt;%</span> wior<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">polygon_tb</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">distinct</span>(country, <span class="at" style="color: #657422;">.keep_all =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)</span></code></pre></div>
+</div>
+<p>Then we load study points that were sampled off the coast of Madagascar.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">sampling.points <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">st_read</span>(<span class="st" style="color: #20794D;">"../data/madagascar_points.gpkg"</span>, <span class="at" style="color: #657422;">quiet =</span> <span class="cn" style="color: #8f5902;">TRUE</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb4-2">  <span class="fu" style="color: #4758AB;">filter</span>(state <span class="sc" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"Ocean"</span>)</span>
+<span id="cb4-3"></span>
+<span id="cb4-4">madagascar <span class="ot" style="color: #003B4F;">=</span> wio <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">filter</span>(country <span class="sc" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"Madagascar"</span>)</span></code></pre></div>
+</div>
+</section>
+<section id="focus-map" class="level2">
+<h2 class="anchored" data-anchor-id="focus-map">Focus Map</h2>
+<p>Now, I’ll plot a focused map of Madagascar. We need to define the geographical extent of the area. For that purpose, we first need to identify the extent of the study sites and we can do that using <code>extent</code> function from **sf package;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">madagascar <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">st_bbox</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     xmin      ymin      xmax      ymax 
+ 42.71862 -25.60895  50.48378 -11.94543 </code></pre>
+</div>
+</div>
+<p>The printed results indicates tha maxima and minima of longitude and latitude, which define the geographical extent of the area. Using the <code>min</code> and <code>max</code> values of coordinates from the previous map, we can draw a polygon over the study sites and see if this extent can best visualize the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">map.site <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">ggplot</span>() <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-2">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">layer_spatial</span>(<span class="at" style="color: #657422;">data =</span> madagascar, <span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"cyan4"</span>, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"black"</span>,<span class="at" style="color: #657422;">size =</span> .<span class="dv" style="color: #AD0000;">4</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-3">  <span class="fu" style="color: #4758AB;">geom_sf</span>(<span class="at" style="color: #657422;">data =</span> sampling.points, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"red"</span>, <span class="at" style="color: #657422;">size =</span> <span class="dv" style="color: #AD0000;">2</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-4">  ggsci<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">scale_color_lancet</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-5">  <span class="fu" style="color: #4758AB;">theme_bw</span>(<span class="at" style="color: #657422;">base_size =</span> <span class="dv" style="color: #AD0000;">12</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-6">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">axis.title =</span> <span class="fu" style="color: #4758AB;">element_blank</span>())<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-7">  <span class="fu" style="color: #4758AB;">coord_sf</span>(<span class="at" style="color: #657422;">xlim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">43</span>, <span class="dv" style="color: #AD0000;">51</span>), <span class="at" style="color: #657422;">ylim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">18</span>,<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">11</span>))</span>
+<span id="cb7-8"></span>
+<span id="cb7-9">map.site</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://semba.github.io/semba/posts/inset_main_map/index_files/figure-html/focus-1.png" class="img-fluid figure-img" width="576"></p>
+<p></p><figcaption class="figure-caption">Sampling points in the coastal waters of Madagascar Island</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As you can see, the study sites are located on the northern part of Madagascar Island. However, to make a better sense of the study locations with reference to WIO region, we need to plot them on a focused scale.</p>
+</section>
+<section id="add-map-elements" class="level2">
+<h2 class="anchored" data-anchor-id="add-map-elements">Add Map elements</h2>
+<p>Professional maps also include some elements like <code>North Arrow</code> and <code>scale</code> etc. We’ll add these components to our map as well. Besides that, I’ll also fill the non-land area with <code>lightblue</code> color for reference and distinction respectively Figure&nbsp;1.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">map.site <span class="ot" style="color: #003B4F;">=</span> map.site <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb8-2">      <span class="fu" style="color: #4758AB;">guides</span>(<span class="at" style="color: #657422;">size =</span> <span class="st" style="color: #20794D;">"none"</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb8-3">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">annotation_north_arrow</span>(<span class="at" style="color: #657422;">location =</span> <span class="st" style="color: #20794D;">"tr"</span>, </span>
+<span id="cb8-4">                                    <span class="at" style="color: #657422;">height =</span> <span class="fu" style="color: #4758AB;">unit</span>(<span class="fl" style="color: #AD0000;">1.2</span>, <span class="st" style="color: #20794D;">"cm"</span>),  </span>
+<span id="cb8-5">                                    <span class="at" style="color: #657422;">width =</span> <span class="fu" style="color: #4758AB;">unit</span>(.<span class="dv" style="color: #AD0000;">75</span>, <span class="st" style="color: #20794D;">"cm"</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb8-6">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">annotation_scale</span>(<span class="at" style="color: #657422;">location =</span> <span class="st" style="color: #20794D;">"br"</span>)</span>
+<span id="cb8-7"></span>
+<span id="cb8-8">map.site</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-focus1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://semba.github.io/semba/posts/inset_main_map/index_files/figure-html/fig-focus1-1.png" class="img-fluid figure-img" width="576"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Sampling points in the coastal waters of Madagascar Island</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="inset-map" class="level2">
+<h2 class="anchored" data-anchor-id="inset-map">Inset Map</h2>
+<p>Now, I’ll create a full-scale map of WIO region with a red polygon showing the extent of study sites and the focused map. The code below produce Figure&nbsp;2;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">inset.map <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">ggplot</span>() <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-2">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">layer_spatial</span>(<span class="at" style="color: #657422;">data =</span> africa, <span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"grey90"</span>, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"grey90"</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-3">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">layer_spatial</span>(<span class="at" style="color: #657422;">data =</span> wio, <span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"grey60"</span>, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"ivory"</span>,<span class="at" style="color: #657422;">size =</span> .<span class="dv" style="color: #AD0000;">4</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-4">  <span class="co" style="color: #5E5E5E;"># geom_sf_text(data = wio, aes(label = country))+</span></span>
+<span id="cb9-5">  ggrepel<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">geom_text_repel</span>(<span class="at" style="color: #657422;">data =</span> wio.point.country, </span>
+<span id="cb9-6">                           <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> lon, <span class="at" style="color: #657422;">y =</span> lat, <span class="at" style="color: #657422;">label =</span> country), <span class="at" style="color: #657422;">size =</span> <span class="dv" style="color: #AD0000;">3</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-7">  <span class="fu" style="color: #4758AB;">theme_bw</span>(<span class="at" style="color: #657422;">base_size =</span> <span class="dv" style="color: #AD0000;">12</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-8">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">axis.title =</span> <span class="fu" style="color: #4758AB;">element_blank</span>())<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-9">  <span class="fu" style="color: #4758AB;">geom_rect</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">xmin =</span> <span class="dv" style="color: #AD0000;">43</span>, <span class="at" style="color: #657422;">xmax =</span> <span class="dv" style="color: #AD0000;">51</span>, <span class="at" style="color: #657422;">ymin =</span> <span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">18</span>, <span class="at" style="color: #657422;">ymax =</span> <span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">11</span>), </span>
+<span id="cb9-10">            <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"red"</span>, <span class="at" style="color: #657422;">fill =</span> <span class="cn" style="color: #8f5902;">NA</span>, <span class="at" style="color: #657422;">size =</span> <span class="fl" style="color: #AD0000;">1.2</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-11">  <span class="fu" style="color: #4758AB;">coord_sf</span>(<span class="at" style="color: #657422;">xlim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">20</span>, <span class="dv" style="color: #AD0000;">60</span>), <span class="at" style="color: #657422;">ylim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">40</span>,<span class="dv" style="color: #AD0000;">15</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-12">  <span class="fu" style="color: #4758AB;">theme_test</span>() <span class="sc" style="color: #5E5E5E;">+</span> </span>
+<span id="cb9-13">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">axis.text =</span> <span class="fu" style="color: #4758AB;">element_blank</span>(),</span>
+<span id="cb9-14">        <span class="at" style="color: #657422;">axis.ticks =</span> <span class="fu" style="color: #4758AB;">element_blank</span>(),</span>
+<span id="cb9-15">        <span class="at" style="color: #657422;">axis.ticks.length =</span> <span class="fu" style="color: #4758AB;">unit</span>(<span class="dv" style="color: #AD0000;">0</span>, <span class="st" style="color: #20794D;">"pt"</span>),</span>
+<span id="cb9-16">        <span class="at" style="color: #657422;">axis.title=</span><span class="fu" style="color: #4758AB;">element_blank</span>(),</span>
+<span id="cb9-17">        <span class="at" style="color: #657422;">plot.margin =</span> <span class="fu" style="color: #4758AB;">margin</span>(<span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">0</span>, <span class="st" style="color: #20794D;">"cm"</span>),</span>
+<span id="cb9-18">        <span class="at" style="color: #657422;">panel.background =</span> <span class="fu" style="color: #4758AB;">element_rect</span>(<span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"lightblue"</span>))</span>
+<span id="cb9-19"></span>
+<span id="cb9-20">inset.map</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-inset" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://semba.github.io/semba/posts/inset_main_map/index_files/figure-html/fig-inset-1.png" class="img-fluid figure-img" width="576"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: An inset map of the WIO region</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This version looks better compared to the previous one. However, we need to add some information to give it a reference.</p>
+</section>
+<section id="final-map" class="level2">
+<h2 class="anchored" data-anchor-id="final-map">Final Map</h2>
+<p>Now, to combine both maps where the map of WIO region is inset on the upper left corner we use the function from <strong>cowplot</strong> package. a <code>draw_plot</code> function allow to places a plot somewhere onto the drawing canvas that is established using <code>ggdraw</code> function also from <strong>cowplot</strong> package <span class="citation" data-cites="cowplot">(Wilke 2018)</span>. By default, coordinates run from 0 to 1, and the point (0, 0) is in the lower left corner of the canvas. The function also allows us to specify the size of the inset map using the <code>width</code> and <code>height</code> functions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">cowplot<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">ggdraw</span>(<span class="at" style="color: #657422;">plot =</span> map.site) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb10-2">  cowplot<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">draw_plot</span>(inset.map, <span class="at" style="color: #657422;">x =</span> .<span class="dv" style="color: #AD0000;">1</span>, <span class="at" style="color: #657422;">y =</span> .<span class="dv" style="color: #AD0000;">13</span>, <span class="at" style="color: #657422;">width =</span> .<span class="dv" style="color: #AD0000;">4</span>, <span class="at" style="color: #657422;">height =</span> .<span class="dv" style="color: #AD0000;">5</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-map2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://semba.github.io/semba/posts/inset_main_map/index_files/figure-html/fig-map2-1.png" class="img-fluid figure-img" width="576"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: Map of the northwest side of Madagascar. An inset map indicate the location of the study area in the Western Indian Ocean region</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="summary" class="level3">
+<h3 class="anchored" data-anchor-id="summary">Summary</h3>
+<p>Therefore , a final map shown in Figure&nbsp;3 shows the locations of study sites with reference to the country and provinces and is more professional.</p>
+</section>
+</section>
+<section id="cited-materials" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-sf" class="csl-entry">
+Pebesma, Edzer. 2018. <span>“<span class="nocase">Simple Features for R: Standardized Support for Spatial Vector Data</span>.”</span> <em><span>The R Journal</span></em> 10 (1): 439–46. <a href="https://doi.org/10.32614/RJ-2018-009">https://doi.org/10.32614/RJ-2018-009</a>.
+</div>
+<div id="ref-ggplot" class="csl-entry">
+Wickham, Hadley. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
+</div>
+<div id="ref-tidyverse" class="csl-entry">
+Wickham, Hadley, and Maintainer Hadley Wickham. 2017. <em>Tidyverse: Easily Install and Load the ’Tidyverse’</em>. <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>.
+</div>
+<div id="ref-cowplot" class="csl-entry">
+Wilke, Claus O. 2018. <em>Cowplot: Streamlined Plot Theme and Plot Annotations for ’Ggplot2’</em>. <a href="https://CRAN.R-project.org/package=cowplot">https://CRAN.R-project.org/package=cowplot</a>.
+</div>
+</div></section></div> ]]></description>
+  <category>Analysis</category>
+  <category>Visualization</category>
+  <guid>https://semba.github.io/semba/posts/inset_main_map/index.html</guid>
+  <pubDate>Sun, 19 Feb 2023 21:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Inferential statistics in R:ttest</title>
+  <dc:creator>Masumbuko Semba</dc:creator>
+  <link>https://semba.github.io/semba/posts/ttest/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<p>A formal statistical test called a hypothesis test is used to confirm or disprove a statistical hypothesis. The following R hypothesis tests are demonstrated in this course.</p>
+<ul>
+<li><em>T-test with one sample</em></li>
+<li><em>T-Test of two samples</em></li>
+<li><em>T-test for paired samples</em></li>
+</ul>
+<p>Each type of test can be run using the R function <code>t.test()</code>.The function comes with the following arguments;</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">t.test</span>(x, <span class="at" style="color: #657422;">y =</span> <span class="cn" style="color: #8f5902;">NULL</span>, </span>
+<span id="cb1-2">       <span class="at" style="color: #657422;">alternative =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"two-sided"</span>, <span class="st" style="color: #20794D;">"less"</span>, <span class="st" style="color: #20794D;">"greater"</span>),</span>
+<span id="cb1-3">       <span class="at" style="color: #657422;">mu =</span> <span class="dv" style="color: #AD0000;">0</span>, <span class="at" style="color: #657422;">paired =</span>  <span class="cn" style="color: #8f5902;">FALSE</span>, <span class="at" style="color: #657422;">var.equal =</span> <span class="cn" style="color: #8f5902;">FALSE</span>, <span class="at" style="color: #657422;">conf.level =</span> <span class="fl" style="color: #AD0000;">0.95</span>, ...)</span></code></pre></div>
+<p>where: <img src="https://latex.codecogs.com/png.latex?x"> and <img src="https://latex.codecogs.com/png.latex?y"> are the vectors of data elements <img src="https://latex.codecogs.com/png.latex?alternative">: the stated alternative hypothesis <img src="https://latex.codecogs.com/png.latex?mu">: the true value of the mean <img src="https://latex.codecogs.com/png.latex?paired">: whether or not to run a paired test <img src="https://latex.codecogs.com/png.latex?var.equal">: whether to assume that the vaarinaces between the values in the vector are equal <img src="https://latex.codecogs.com/png.latex?con.level">: The confidence level to use</p>
+<p>Before we proceed, we need functions from various packages and accessing these functions when needed may render this task tedious. Therefore, lets load the packages in advance. These packages include <strong>tidyverse</strong> <span class="citation" data-cites="tidyverse">(Wickham and Wickham 2017)</span>, <strong>patchwork</strong><span class="citation" data-cites="patchwork">(Pedersen 2020)</span> and <strong>magrittr</strong><span class="citation" data-cites="magrittr">(Bache and Wickham 2014)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">require</span>(tidyverse)</span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;">require</span>(patchwork)</span>
+<span id="cb2-3"><span class="fu" style="color: #4758AB;">require</span>(magrittr)</span></code></pre></div>
+</div>
+<section id="one-sample-t-test" class="level2">
+<h2 class="anchored" data-anchor-id="one-sample-t-test">One sample t-test</h2>
+<p>One sample t-test is widely used in statistical analysis to determine whether the population’s mean is equal to given mean value. The given mean value can be the sample mean for instance. A <code>t.test</code> function in R is used to test one sample parametric test. Let’s consider a situation where we want to determine whether the total length of Nile perch collected during a survey conducted in December 2022 is not equal to a long term mean length of 61cm. Let’s generate a sample by creating a data frame that contain sample of 350 individual of nile perch. Using a <code>run_if</code> function help us simulate weight of nile perch once given the minimum and maximum values. The code for simulating the total length is highlighted in the code chunk below;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">sample <span class="ot" style="color: #003B4F;">=</span> tibble<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">tibble</span>(</span>
+<span id="cb3-2">  <span class="at" style="color: #657422;">id =</span> <span class="dv" style="color: #AD0000;">1</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">350</span>,</span>
+<span id="cb3-3">  <span class="at" style="color: #657422;">tl =</span> <span class="fu" style="color: #4758AB;">runif</span>(<span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">350</span>, <span class="at" style="color: #657422;">min =</span> <span class="dv" style="color: #AD0000;">48</span>, <span class="at" style="color: #657422;">max =</span> <span class="dv" style="color: #AD0000;">65</span>)</span>
+<span id="cb3-4">  )</span>
+<span id="cb3-5"></span>
+<span id="cb3-6">sample</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 350 x 2
+      id    tl
+   &lt;int&gt; &lt;dbl&gt;
+ 1     1  61.3
+ 2     2  49.7
+ 3     3  50.4
+ 4     4  48.5
+ 5     5  54.9
+ 6     6  57.3
+ 7     7  60.6
+ 8     8  61.9
+ 9     9  50.4
+10    10  49.0
+# ... with 340 more rows</code></pre>
+</div>
+</div>
+<p>Let’s use a histogram to check the distribution of the data and add a vertical line of the population mean to identify whether the data is leading away is around the population</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">sample <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb5-2">  <span class="fu" style="color: #4758AB;">ggplot</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> tl)) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb5-3">  <span class="fu" style="color: #4758AB;">geom_histogram</span>(<span class="at" style="color: #657422;">bins =</span> <span class="dv" style="color: #AD0000;">30</span>, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"ivory"</span>, <span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"cyan4"</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb5-4">  <span class="fu" style="color: #4758AB;">geom_vline</span>(<span class="at" style="color: #657422;">xintercept =</span> <span class="dv" style="color: #AD0000;">61</span>, <span class="at" style="color: #657422;">linetype =</span> <span class="dv" style="color: #AD0000;">2</span>, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"red"</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb5-5">  <span class="fu" style="color: #4758AB;">scale_x_continuous</span>(<span class="at" style="color: #657422;">name =</span> <span class="st" style="color: #20794D;">"Total length (cm.)"</span>, <span class="at" style="color: #657422;">breaks =</span> <span class="fu" style="color: #4758AB;">seq</span>(<span class="dv" style="color: #AD0000;">40</span>,<span class="dv" style="color: #AD0000;">80</span>,<span class="dv" style="color: #AD0000;">4</span>)) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb5-6">  <span class="fu" style="color: #4758AB;">scale_y_continuous</span>(<span class="at" style="color: #657422;">name =</span> <span class="st" style="color: #20794D;">"Frequency"</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb5-7">  <span class="fu" style="color: #4758AB;">theme_minimal</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-hist" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://semba.github.io/semba/posts/ttest/index_files/figure-html/fig-hist-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: <strong>?(caption)</strong></figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now we notice that the position of the population mean of the sample dataset, we can not test to determine whether the sample mean total length is lower than the sample mean</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">sample <span class="sc" style="color: #5E5E5E;">%$%</span></span>
+<span id="cb6-2">  <span class="fu" style="color: #4758AB;">t.test</span>(<span class="at" style="color: #657422;">x =</span> tl, <span class="at" style="color: #657422;">mu =</span> <span class="dv" style="color: #AD0000;">61</span>, <span class="at" style="color: #657422;">alternative =</span> <span class="st" style="color: #20794D;">"less"</span>) </span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  tl
+t = -17.907, df = 349, p-value &lt; 2.2e-16
+alternative hypothesis: true mean is less than 61
+95 percent confidence interval:
+     -Inf 56.50406
+sample estimates:
+mean of x 
+ 56.04797 </code></pre>
+</div>
+</div>
+<p>The one sample t-test determine the whether the sample mean total length of nile perch was less than the long-term mean length suggest that the sample total length (56.68cm) was less than the population mean (61cm) and the difference was statistically significant (t(349) = -18.19, p &lt; 0.001). Lets try change the alternative to <code>greater</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">sample <span class="sc" style="color: #5E5E5E;">%$%</span></span>
+<span id="cb8-2">  <span class="fu" style="color: #4758AB;">t.test</span>(<span class="at" style="color: #657422;">x =</span> tl, <span class="at" style="color: #657422;">mu =</span> <span class="dv" style="color: #AD0000;">61</span>, <span class="at" style="color: #657422;">alternative =</span> <span class="st" style="color: #20794D;">"greater"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  tl
+t = -17.907, df = 349, p-value = 1
+alternative hypothesis: true mean is greater than 61
+95 percent confidence interval:
+ 55.59189      Inf
+sample estimates:
+mean of x 
+ 56.04797 </code></pre>
+</div>
+</div>
+<p>Notice that the test is not statistically significant (t(349) = 18.91, p = 1) because the population mean (61cm) is greater than the sample mean (56.68).</p>
+</section>
+<section id="two-sample-t-test" class="level2">
+<h2 class="anchored" data-anchor-id="two-sample-t-test">Two Sample t-test</h2>
+<p>A two sample t-test is used to determine whether the means of two independent samples are equal. Lets consider that two independent survey to measure the stock of nile perch was conducted in two independent period. The first survey was conducted in June 2001 and the subsequency survey was conducted in July 2021. The two survey were conducted during the cool and dry season but with a 20 years time difference. Therefore, we want to determine whether the mean sample of nile perch collected in 2021 is smaller than the those sampled in 2001</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;">set.seed</span>(<span class="dv" style="color: #AD0000;">1254</span>)</span>
+<span id="cb10-2"></span>
+<span id="cb10-3">sample2 <span class="ot" style="color: #003B4F;">=</span> tibble<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">tibble</span>(</span>
+<span id="cb10-4">  <span class="at" style="color: #657422;">id =</span> <span class="dv" style="color: #AD0000;">1</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">350</span>,</span>
+<span id="cb10-5">  <span class="at" style="color: #657422;">tl21 =</span> <span class="fu" style="color: #4758AB;">rnorm</span>(<span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">350</span>,<span class="at" style="color: #657422;">mean =</span> <span class="dv" style="color: #AD0000;">52</span>, <span class="at" style="color: #657422;">sd =</span> <span class="dv" style="color: #AD0000;">18</span>),</span>
+<span id="cb10-6">  <span class="at" style="color: #657422;">tl01 =</span> <span class="fu" style="color: #4758AB;">rnorm</span>(<span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">350</span>, <span class="at" style="color: #657422;">mean =</span> <span class="dv" style="color: #AD0000;">61</span>, <span class="at" style="color: #657422;">sd =</span> <span class="dv" style="color: #AD0000;">20</span>)</span>
+<span id="cb10-7">  )</span>
+<span id="cb10-8"></span>
+<span id="cb10-9">sample2</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 350 x 3
+      id  tl21  tl01
+   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 41.7   54.4
+ 2     2 68.4   52.2
+ 3     3 47.1   69.1
+ 4     4 38.7   43.2
+ 5     5  3.41  46.9
+ 6     6 42.6   64.3
+ 7     7 67.3   70.4
+ 8     8 65.7   72.9
+ 9     9 26.3   25.0
+10    10 56.2   64.5
+# ... with 340 more rows</code></pre>
+</div>
+</div>
+<p>Once we have created a dataframe with values for the two sampling survey, it’s a good practice to visualize the value to see the patterns.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">sample2 <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb12-2">  <span class="fu" style="color: #4758AB;">pivot_longer</span>(<span class="at" style="color: #657422;">cols =</span> tl21<span class="sc" style="color: #5E5E5E;">:</span>tl01) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb12-3">  <span class="fu" style="color: #4758AB;">ggplot</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> value, <span class="at" style="color: #657422;">fill =</span> name))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb12-4">  <span class="fu" style="color: #4758AB;">geom_density</span>(<span class="at" style="color: #657422;">position =</span> <span class="st" style="color: #20794D;">"identity"</span>, <span class="at" style="color: #657422;">alpha =</span> .<span class="dv" style="color: #AD0000;">4</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb12-5">  <span class="fu" style="color: #4758AB;">scale_fill_brewer</span>(<span class="at" style="color: #657422;">name =</span><span class="st" style="color: #20794D;">"Surveys"</span> ,<span class="at" style="color: #657422;">palette =</span> <span class="st" style="color: #20794D;">"Set2"</span>, <span class="at" style="color: #657422;">label =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"2001"</span>, <span class="st" style="color: #20794D;">"2021"</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb12-6">  <span class="fu" style="color: #4758AB;">scale_x_continuous</span>(<span class="at" style="color: #657422;">name =</span> <span class="st" style="color: #20794D;">"Total length (cm)"</span>, <span class="at" style="color: #657422;">breaks =</span> <span class="fu" style="color: #4758AB;">seq</span>(<span class="dv" style="color: #AD0000;">20</span>,<span class="dv" style="color: #AD0000;">150</span>,<span class="dv" style="color: #AD0000;">20</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb12-7">  <span class="fu" style="color: #4758AB;">scale_y_continuous</span>(<span class="at" style="color: #657422;">name =</span> <span class="st" style="color: #20794D;">"Density"</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb12-8">  <span class="fu" style="color: #4758AB;">theme_minimal</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/ttest/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We notice from a figure above a slight difference in the density shape with the median value for 2001 far east from the 2021, suggesting the size of 2001 is relatively higher than 2001. Let’s perform two sample t-test to determine whether that difference is significant;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">sample2 <span class="sc" style="color: #5E5E5E;">%$%</span></span>
+<span id="cb13-2">  <span class="fu" style="color: #4758AB;">t.test</span>(<span class="at" style="color: #657422;">x =</span> tl21, <span class="at" style="color: #657422;">y =</span> tl01, <span class="at" style="color: #657422;">alternative =</span> <span class="st" style="color: #20794D;">"less"</span>) </span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  tl21 and tl01
+t = -6.4619, df = 690.02, p-value = 9.771e-11
+alternative hypothesis: true difference in means is less than 0
+95 percent confidence interval:
+      -Inf -6.905485
+sample estimates:
+mean of x mean of y 
+ 51.80015  61.06788 </code></pre>
+</div>
+</div>
+<p>The output display the Welch Two Sample t-test to determine whether the total length of nile perch sampled in 2021 is less than those of 2001. The result suggest that the sample mean in 2021 was 51.8 cm which is less than 61.07 cm of nile perch sampled in 2001. The result suggest that the 2021 nile perch were small in size than those of 2001, and the difference was significant (t(690) = 6.46, p &lt; 0.01).</p>
+</section>
+<section id="paired-sample-t-test" class="level2">
+<h2 class="anchored" data-anchor-id="paired-sample-t-test">Paired sample t-test</h2>
+<p>This test is normally used to determine whether the values in paired dataset have different mean. For instance, the weight in nile perch measured after captured and kept in cage for three months and measured again. Therefore, the nile perch individuals were measured before taken to cage and then measured after three months. This means we have measurement before and after. Let’s create a dataframe and simulate before and after total length of nile perch.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;">set.seed</span>(<span class="dv" style="color: #AD0000;">1254</span>)</span>
+<span id="cb15-2"></span>
+<span id="cb15-3">sample3 <span class="ot" style="color: #003B4F;">=</span> tibble<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">tibble</span>(</span>
+<span id="cb15-4">  <span class="at" style="color: #657422;">id =</span> <span class="dv" style="color: #AD0000;">1</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">50</span>,</span>
+<span id="cb15-5">  <span class="at" style="color: #657422;">before =</span> <span class="fu" style="color: #4758AB;">rnorm</span>(<span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">50</span>,<span class="at" style="color: #657422;">mean =</span> <span class="dv" style="color: #AD0000;">52</span>, <span class="at" style="color: #657422;">sd =</span> <span class="dv" style="color: #AD0000;">12</span>),</span>
+<span id="cb15-6">  <span class="at" style="color: #657422;">after =</span> before <span class="sc" style="color: #5E5E5E;">+</span> <span class="fu" style="color: #4758AB;">rnorm</span>(<span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">50</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">abs</span>()</span>
+<span id="cb15-7">  )</span>
+<span id="cb15-8"></span>
+<span id="cb15-9">sample3</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 50 x 3
+      id before after
+   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;
+ 1     1   45.1  46.2
+ 2     2   62.9  64.7
+ 3     3   48.7  49.3
+ 4     4   43.2  43.6
+ 5     5   19.6  20.4
+ 6     6   45.7  46.1
+ 7     7   62.2  63.2
+ 8     8   61.1  62.5
+ 9     9   34.9  35.2
+10    10   54.8  56.0
+# ... with 40 more rows</code></pre>
+</div>
+</div>
+<p>Then we perform paired sample t-test</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">sample3 <span class="sc" style="color: #5E5E5E;">%$%</span></span>
+<span id="cb17-2">  <span class="fu" style="color: #4758AB;">t.test</span>(<span class="at" style="color: #657422;">x =</span> before, <span class="at" style="color: #657422;">y =</span> after, <span class="at" style="color: #657422;">paired =</span> <span class="cn" style="color: #8f5902;">TRUE</span>) </span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Paired t-test
+
+data:  before and after
+t = -11.171, df = 49, p-value = 4.484e-15
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.9512640 -0.6612062
+sample estimates:
+mean of the differences 
+             -0.8062351 </code></pre>
+</div>
+</div>
+<p>Since the p &lt; 0.05, we reject the null hypothesis that the mean total length before and after is significant. Therefore, fattening nile perch in cage for three months increased the total length and that increase is significant (t(49) = -11.17, p &lt; 0.001)</p>
+</section>
+<section id="cited-materials" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-magrittr" class="csl-entry">
+Bache, Stefan Milton, and Hadley Wickham. 2014. <em>Magrittr: A Forward-Pipe Operator for r</em>. <a href="https://CRAN.R-project.org/package=magrittr">https://CRAN.R-project.org/package=magrittr</a>.
+</div>
+<div id="ref-patchwork" class="csl-entry">
+Pedersen, Thomas Lin. 2020. <em>Patchwork: The Composer of Plots</em>. <a href="https://CRAN.R-project.org/package=patchwork">https://CRAN.R-project.org/package=patchwork</a>.
+</div>
+<div id="ref-tidyverse" class="csl-entry">
+Wickham, Hadley, and Maintainer Hadley Wickham. 2017. <em>Tidyverse: Easily Install and Load the ’Tidyverse’</em>. <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>.
+</div>
+</div></section></div> ]]></description>
+  <category>Analysis</category>
+  <category>Visualization</category>
+  <guid>https://semba.github.io/semba/posts/ttest/index.html</guid>
+  <pubDate>Tue, 14 Feb 2023 21:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Combining plots in R</title>
+  <dc:creator>Masumbuko Semba</dc:creator>
+  <dc:creator>Nyamisi Peter</dc:creator>
+  <link>https://semba.github.io/semba/posts/combining_plots/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<p>The ggplot2 package doesn’t provide a function to arrange multiple plots in a single figure <span class="citation" data-cites="ggplot">(Wickham 2016)</span>. Still, some packages allow combining multiple plots into a single figure with custom layouts, width, and height, such as cowplot <span class="citation" data-cites="cowplot">(Wilke 2018)</span>, gridExtra, and patchwork <span class="citation" data-cites="patchwork">(Pedersen 2020)</span>. In this post we are going to use several packages, let’us load them in our session</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">require</span>(tidyverse)</span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;">require</span>(patchwork)</span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;">require</span>(cowplot)</span></code></pre></div>
+</div>
+<p>Sample datasets</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;"># tuna = tibble(</span></span>
+<span id="cb2-2"><span class="co" style="color: #5E5E5E;">#   tl = runif(n = 120, min = 30, max = 120),</span></span>
+<span id="cb2-3"><span class="co" style="color: #5E5E5E;">#   seasons = rep(c("Northeast", "Southeast", "Inter"), each = 40)</span></span>
+<span id="cb2-4"><span class="co" style="color: #5E5E5E;"># )</span></span>
+<span id="cb2-5"></span>
+<span id="cb2-6">tuna <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">tibble</span>(</span>
+<span id="cb2-7">  <span class="at" style="color: #657422;">tl =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="fu" style="color: #4758AB;">rnorm</span>(<span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">40</span>, <span class="at" style="color: #657422;">mean =</span> <span class="dv" style="color: #AD0000;">80</span>, <span class="at" style="color: #657422;">sd =</span> <span class="dv" style="color: #AD0000;">30</span>), </span>
+<span id="cb2-8">            <span class="fu" style="color: #4758AB;">rnorm</span>(<span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">40</span>, <span class="at" style="color: #657422;">mean =</span> <span class="dv" style="color: #AD0000;">61</span>,<span class="dv" style="color: #AD0000;">10</span>),</span>
+<span id="cb2-9">            <span class="fu" style="color: #4758AB;">rnorm</span>(<span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">40</span>, <span class="at" style="color: #657422;">mean =</span> <span class="dv" style="color: #AD0000;">96</span>, <span class="dv" style="color: #AD0000;">25</span>)),</span>
+<span id="cb2-10">  <span class="at" style="color: #657422;">seasons =</span> <span class="fu" style="color: #4758AB;">rep</span>(<span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"Northeast"</span>, <span class="st" style="color: #20794D;">"Southeast"</span>, <span class="st" style="color: #20794D;">"Inter"</span>), <span class="at" style="color: #657422;">each =</span> <span class="dv" style="color: #AD0000;">40</span>)</span>
+<span id="cb2-11">)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">ridges <span class="ot" style="color: #003B4F;">=</span> tuna <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb3-2">  <span class="fu" style="color: #4758AB;">ggplot</span>() <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb3-3">  ggridges<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">geom_density_ridges</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> tl, <span class="at" style="color: #657422;">y =</span> seasons, <span class="at" style="color: #657422;">fill =</span> seasons), <span class="at" style="color: #657422;">position =</span> <span class="st" style="color: #20794D;">"identity"</span>, <span class="at" style="color: #657422;">alpha =</span> .<span class="dv" style="color: #AD0000;">6</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb3-4">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">legend.position =</span> <span class="st" style="color: #20794D;">"none"</span>)</span>
+<span id="cb3-5"></span>
+<span id="cb3-6">ridges</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">box <span class="ot" style="color: #003B4F;">=</span> tuna <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb4-2">  <span class="fu" style="color: #4758AB;">ggplot</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> seasons, <span class="at" style="color: #657422;">y =</span> tl)) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb4-3">  <span class="fu" style="color: #4758AB;">geom_boxplot</span>(<span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"cyan4"</span>)</span>
+<span id="cb4-4"></span>
+<span id="cb4-5">  box</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">hist <span class="ot" style="color: #003B4F;">=</span> tuna <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb5-2">  <span class="fu" style="color: #4758AB;">ggplot</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> tl, <span class="at" style="color: #657422;">fill =</span> seasons, <span class="at" style="color: #657422;">color =</span> seasons)) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb5-3">  <span class="fu" style="color: #4758AB;">geom_histogram</span>(<span class="at" style="color: #657422;">bins =</span> <span class="dv" style="color: #AD0000;">8</span>,<span class="at" style="color: #657422;">position =</span> <span class="st" style="color: #20794D;">"identity"</span>, <span class="at" style="color: #657422;">alpha =</span> .<span class="dv" style="color: #AD0000;">4</span>)</span>
+<span id="cb5-4"></span>
+<span id="cb5-5">hist</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="gridextra" class="level2">
+<h2 class="anchored" data-anchor-id="gridextra">gridExtra</h2>
+<p>The gridExtra package provides the <code>grid.arrange</code> function to combine several plots on a single figure.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">gridExtra<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">grid.arrange</span>(hist, box, ridges)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can also specify the number of rows with nrow, the number of columns with ncol, and the sizes with widths and heights, and also we can add labels at the top, bottom, left, and right of the figures.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">gridExtra<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">grid.arrange</span>(hist, box, ridges, <span class="at" style="color: #657422;">nrow =</span> <span class="dv" style="color: #AD0000;">2</span>, <span class="at" style="color: #657422;">top =</span> <span class="st" style="color: #20794D;">"Top Panel"</span>, <span class="at" style="color: #657422;">bottom =</span> <span class="st" style="color: #20794D;">"Bottom Panel"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="patchwork" class="level1">
+<h1>Patchwork</h1>
+<p><strong>patchwork</strong> is designed to combine ggplot2 plots into the same figure easily. You only need to call the package in the session and then do the manipulation</p>
+<p>For instance, we combine plots using <code>+</code> operator</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">hist <span class="sc" style="color: #5E5E5E;">+</span> box <span class="sc" style="color: #5E5E5E;">+</span> ridges</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The | operator places plots in a row. This operator is similar to + when you have two plots but | will place all plots in a single row while + will try to create a square layout if possible.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">hist <span class="sc" style="color: #5E5E5E;">|</span> ridges</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>if we want to arrange plots along a column (stack), then we use the <code>/</code> operator</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">hist <span class="sc" style="color: #5E5E5E;">/</span> ridges</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can create complex layouts. The | and / operators can be used to create complex layouts combining plots. In the following example, we are creating a layout with two plots at the top and one wider at the bottom.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">(hist <span class="sc" style="color: #5E5E5E;">/</span> ridges)<span class="sc" style="color: #5E5E5E;">|</span> box</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Similary, we can swap the operator and see the different of the figure below as compared to the previous one</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">(hist <span class="sc" style="color: #5E5E5E;">|</span> ridges)<span class="sc" style="color: #5E5E5E;">/</span> box</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>You can add a title, subtitle, and captions to all plots with the plot_annotation function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">(hist <span class="sc" style="color: #5E5E5E;">|</span> ridges)<span class="sc" style="color: #5E5E5E;">/</span> box <span class="sc" style="color: #5E5E5E;">+</span> <span class="fu" style="color: #4758AB;">plot_annotation</span>(<span class="at" style="color: #657422;">tag_levels =</span> <span class="st" style="color: #20794D;">"A"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The labels can be customized with the tag_prefix, tag_suffix, and tag_sep arguments.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">(hist <span class="sc" style="color: #5E5E5E;">|</span> ridges)<span class="sc" style="color: #5E5E5E;">/</span> box <span class="sc" style="color: #5E5E5E;">+</span> <span class="fu" style="color: #4758AB;">plot_annotation</span>(<span class="at" style="color: #657422;">tag_levels =</span> <span class="st" style="color: #20794D;">"A"</span>, <span class="at" style="color: #657422;">tag_prefix =</span> <span class="st" style="color: #20794D;">"Plot "</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">box <span class="sc" style="color: #5E5E5E;">+</span><span class="fu" style="color: #4758AB;">geom_jitter</span>(<span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"cyan3"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>patchwork also provides the &amp; operator to modify all the plots at the same time to set the same theme for all plots at the same time.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">(hist <span class="sc" style="color: #5E5E5E;">|</span> box)<span class="sc" style="color: #5E5E5E;">/</span> ridges   <span class="sc" style="color: #5E5E5E;">&amp;</span> <span class="fu" style="color: #4758AB;">theme_classic</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>If you want to label each plot individually you can make use of the labels argument of the function, where you can specify a vector of labels or use the “A” or “a” keywords for automatic labels in uppercase or lowercase, respectively. The function also provides several arguments to customize the style of the texts.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><span class="fu" style="color: #4758AB;">plot_grid</span>(hist, box, ridges, <span class="at" style="color: #657422;">labels =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"A"</span>, <span class="st" style="color: #20794D;">"B"</span>, <span class="st" style="color: #20794D;">"C"</span>), <span class="at" style="color: #657422;">label_fontfamily =</span> <span class="st" style="color: #20794D;">"serif"</span>, <span class="at" style="color: #657422;">label_fontface =</span> <span class="st" style="color: #20794D;">"bold"</span>, <span class="at" style="color: #657422;">label_colour =</span> <span class="st" style="color: #20794D;">"dodgerblue2"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>With cowplot you can also create more complex layouts combining <code>plot_grid</code> functions, as shown in the example below, where we are creating a layout with two plots at the bottom and one at the top.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><span class="fu" style="color: #4758AB;">plot_grid</span>(<span class="fu" style="color: #4758AB;">plot_grid</span>(hist, ridges), box, <span class="at" style="color: #657422;">rows =</span> <span class="dv" style="color: #AD0000;">2</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://semba.github.io/semba/posts/combining_plots/index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="cited-materials" class="level2">
+
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-patchwork" class="csl-entry">
+Pedersen, Thomas Lin. 2020. <em>Patchwork: The Composer of Plots</em>. <a href="https://CRAN.R-project.org/package=patchwork">https://CRAN.R-project.org/package=patchwork</a>.
+</div>
+<div id="ref-ggplot" class="csl-entry">
+Wickham, Hadley. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
+</div>
+<div id="ref-cowplot" class="csl-entry">
+Wilke, Claus O. 2018. <em>Cowplot: Streamlined Plot Theme and Plot Annotations for ’Ggplot2’</em>. <a href="https://CRAN.R-project.org/package=cowplot">https://CRAN.R-project.org/package=cowplot</a>.
+</div>
+</div></section></div> ]]></description>
+  <category>Analysis</category>
+  <category>Visualization</category>
+  <guid>https://semba.github.io/semba/posts/combining_plots/index.html</guid>
+  <pubDate>Fri, 03 Feb 2023 21:00:00 GMT</pubDate>
+  <media:content url="https://semba.github.io/semba/posts/combining_plots/combine_plot.png" medium="image" type="image/png" height="81" width="144"/>
+</item>
+</channel>
+</rss>

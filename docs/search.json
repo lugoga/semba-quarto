@@ -1,0 +1,107 @@
+[
+  {
+    "objectID": "archive.html",
+    "href": "archive.html",
+    "title": "Archive",
+    "section": "",
+    "text": "Main and Inset maps with R\n\n\n\n\n\n\n\n\n\nFeb 20, 2023\n\n\n\n\n\n\n\n\nInferential statistics in R:ttest\n\n\n\n\n\n\n\n\n\nFeb 15, 2023\n\n\n\n\n\n\n\n\nCombining plots in R\n\n\n\n\n\n\n\n\n\nFeb 4, 2023\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "Semba's blog",
+    "section": "",
+    "text": "Main and Inset maps with R\n\n\n\n\n\n\n\nAnalysis\n\n\nVisualization\n\n\n\n\n\n\n\n\n\n\n\nFeb 20, 2023\n\n\nMasumbuko Semba\n\n\n8 min\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nInferential statistics in R:ttest\n\n\n\n\n\n\n\nAnalysis\n\n\nVisualization\n\n\n\n\n\n\n\n\n\n\n\nFeb 15, 2023\n\n\nMasumbuko Semba\n\n\n5 min\n\n\n\n\n\n\n  \n\n\n\n\nCombining plots in R\n\n\n\n\n\n\n\nAnalysis\n\n\nVisualization\n\n\n\n\n\n\n\n\n\n\n\nFeb 4, 2023\n\n\nMasumbuko Semba, Nyamisi Peter\n\n\n3 min\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Semba's blog",
+    "section": "",
+    "text": "Hi, I’m Masumbuko Semba, a data scientist and spatial analyst. With experience in programming, I have found ways to melding theory and applications to solve critical issues with data. I use several programming languages including MATLAB and Python to automate data processing and analysis and share the results in either presentations, reports, blogs, websites and interactive applications like shiny. The code and some of the work that I do on daily basis are open and free and can be accessed through my blog, website and github accounts."
+  },
+  {
+    "objectID": "index.html#references",
+    "href": "index.html#references",
+    "title": "Semba's blog",
+    "section": "References",
+    "text": "References\n\nPeter, N., Semba, M., Lugomela, C., & Kyewalyanga, M. S. (2018). The influence of physical-chemical variables on the spatial and seasonal variation of Chlorophyll-a in coastal waters of Unguja, Zanzibar, Tanzania. Western Indian Ocean Journal of Marine Science, 17(2), 25-34.\nPeter, N., Semba, M., Lugomela, C., & Kyewalyanga, M. (2021). Seasonal variability of vertical patterns in chlorophyll-a fluorescence in the coastal waters off Kimbiji, Tanzania. Western Indian Ocean Journal of Marine Science, 20(1), 21-33.\nSemba, M., Kimirei, I., Kyewalyanga, M., Peter, N., Brendonck, L., & Somers, B. (2016). The decline in phytoplankton biomass and prawn catches in the Rufiji-Mafia Channel, Tanzania. Western Indian Ocean Journal of Marine Science, 15(1), 15-29."
+  },
+  {
+    "objectID": "posts/combining_plots/index.html",
+    "href": "posts/combining_plots/index.html",
+    "title": "Combining plots in R",
+    "section": "",
+    "text": "The ggplot2 package doesn’t provide a function to arrange multiple plots in a single figure (Wickham 2016). Still, some packages allow combining multiple plots into a single figure with custom layouts, width, and height, such as cowplot (Wilke 2018), gridExtra, and patchwork (Pedersen 2020). In this post we are going to use several packages, let’us load them in our session\nSample datasets"
+  },
+  {
+    "objectID": "posts/combining_plots/index.html#gridextra",
+    "href": "posts/combining_plots/index.html#gridextra",
+    "title": "Combining plots in R",
+    "section": "gridExtra",
+    "text": "gridExtra\nThe gridExtra package provides the grid.arrange function to combine several plots on a single figure.\n\ngridExtra::grid.arrange(hist, box, ridges)\n\n\n\n\nWe can also specify the number of rows with nrow, the number of columns with ncol, and the sizes with widths and heights, and also we can add labels at the top, bottom, left, and right of the figures.\n\ngridExtra::grid.arrange(hist, box, ridges, nrow = 2, top = \"Top Panel\", bottom = \"Bottom Panel\")"
+  },
+  {
+    "objectID": "posts/inset_main_map/index.html",
+    "href": "posts/inset_main_map/index.html",
+    "title": "Main and Inset maps with R",
+    "section": "",
+    "text": "In this post, We learn how we can make publication quality inset maps in R using ggplot2 package (Wickham 2016). When publishing scientific research in journals or presenting research work at a conference, showing maps of data collection sites or experimental locations is one of the key visualization elements. Maps of study sites or sampling locations can help the audience and readers to fathom the data in a better way. Mapping sounds fancy, but it needs substantial training and skill set to make high-quality maps that are reader-friendly and visually aesthetic.\nSometimes, the study sites are more dispersed and are easy to visualize in large geographic areas. However, in some cases, study sites are clustered, which makes it hard to show them on a broader scale. In that case, inset maps help us show the locations with reference to familiar geographical regions. An inset map is a smaller map featured on the same page as the main map. Traditionally, inset maps are shown at a larger scale (smaller area) than the main map. Often, an inset map is used as a locator map that shows the area of the main map in a broader, more familiar geographical frame of reference."
+  },
+  {
+    "objectID": "posts/inset_main_map/index.html#focus-map",
+    "href": "posts/inset_main_map/index.html#focus-map",
+    "title": "Main and Inset maps with R",
+    "section": "Focus Map",
+    "text": "Focus Map\nNow, I’ll plot a focused map of Madagascar. We need to define the geographical extent of the area. For that purpose, we first need to identify the extent of the study sites and we can do that using extent function from **sf package;\n\nmadagascar %>% st_bbox()\n\n     xmin      ymin      xmax      ymax \n 42.71862 -25.60895  50.48378 -11.94543 \n\n\nThe printed results indicates tha maxima and minima of longitude and latitude, which define the geographical extent of the area. Using the min and max values of coordinates from the previous map, we can draw a polygon over the study sites and see if this extent can best visualize the data.\n\nmap.site = ggplot() +\n  ggspatial::layer_spatial(data = madagascar, fill = \"cyan4\", color = \"black\",size = .4)+\n  geom_sf(data = sampling.points, color = \"red\", size = 2)+\n  ggsci::scale_color_lancet()+\n  theme_bw(base_size = 12)+\n  theme(axis.title = element_blank())+\n  coord_sf(xlim = c(43, 51), ylim = c(-18,-11))\n\nmap.site\n\n\n\n\nSampling points in the coastal waters of Madagascar Island\n\n\n\n\nAs you can see, the study sites are located on the northern part of Madagascar Island. However, to make a better sense of the study locations with reference to WIO region, we need to plot them on a focused scale."
+  },
+  {
+    "objectID": "posts/inset_main_map/index.html#add-map-elements",
+    "href": "posts/inset_main_map/index.html#add-map-elements",
+    "title": "Main and Inset maps with R",
+    "section": "Add Map elements",
+    "text": "Add Map elements\nProfessional maps also include some elements like North Arrow and scale etc. We’ll add these components to our map as well. Besides that, I’ll also fill the non-land area with lightblue color for reference and distinction respectively Figure 1.\n\nmap.site = map.site +\n      guides(size = \"none\") +\n  ggspatial::annotation_north_arrow(location = \"tr\", \n                                    height = unit(1.2, \"cm\"),  \n                                    width = unit(.75, \"cm\"))+\n  ggspatial::annotation_scale(location = \"br\")\n\nmap.site\n\n\n\n\nFigure 1: Sampling points in the coastal waters of Madagascar Island"
+  },
+  {
+    "objectID": "posts/inset_main_map/index.html#inset-map",
+    "href": "posts/inset_main_map/index.html#inset-map",
+    "title": "Main and Inset maps with R",
+    "section": "Inset Map",
+    "text": "Inset Map\nNow, I’ll create a full-scale map of WIO region with a red polygon showing the extent of study sites and the focused map. The code below produce Figure 2;\n\ninset.map = ggplot() +\n  ggspatial::layer_spatial(data = africa, fill = \"grey90\", color = \"grey90\") +\n  ggspatial::layer_spatial(data = wio, fill = \"grey60\", color = \"ivory\",size = .4)+\n  # geom_sf_text(data = wio, aes(label = country))+\n  ggrepel::geom_text_repel(data = wio.point.country, \n                           aes(x = lon, y = lat, label = country), size = 3)+\n  theme_bw(base_size = 12)+\n  theme(axis.title = element_blank())+\n  geom_rect(aes(xmin = 43, xmax = 51, ymin = -18, ymax = -11), \n            color = \"red\", fill = NA, size = 1.2)+\n  coord_sf(xlim = c(20, 60), ylim = c(-40,15))+\n  theme_test() + \n  theme(axis.text = element_blank(),\n        axis.ticks = element_blank(),\n        axis.ticks.length = unit(0, \"pt\"),\n        axis.title=element_blank(),\n        plot.margin = margin(0, 0, 0, 0, \"cm\"),\n        panel.background = element_rect(fill = \"lightblue\"))\n\ninset.map\n\n\n\n\nFigure 2: An inset map of the WIO region\n\n\n\n\nThis version looks better compared to the previous one. However, we need to add some information to give it a reference."
+  },
+  {
+    "objectID": "posts/inset_main_map/index.html#final-map",
+    "href": "posts/inset_main_map/index.html#final-map",
+    "title": "Main and Inset maps with R",
+    "section": "Final Map",
+    "text": "Final Map\nNow, to combine both maps where the map of WIO region is inset on the upper left corner we use the function from cowplot package. a draw_plot function allow to places a plot somewhere onto the drawing canvas that is established using ggdraw function also from cowplot package (Wilke 2018). By default, coordinates run from 0 to 1, and the point (0, 0) is in the lower left corner of the canvas. The function also allows us to specify the size of the inset map using the width and height functions.\n\ncowplot::ggdraw(plot = map.site) +\n  cowplot::draw_plot(inset.map, x = .1, y = .13, width = .4, height = .5)\n\n\n\n\nFigure 3: Map of the northwest side of Madagascar. An inset map indicate the location of the study area in the Western Indian Ocean region\n\n\n\n\n\nSummary\nTherefore , a final map shown in Figure 3 shows the locations of study sites with reference to the country and provinces and is more professional."
+  },
+  {
+    "objectID": "posts/ttest/index.html",
+    "href": "posts/ttest/index.html",
+    "title": "Inferential statistics in R:ttest",
+    "section": "",
+    "text": "A formal statistical test called a hypothesis test is used to confirm or disprove a statistical hypothesis. The following R hypothesis tests are demonstrated in this course.\nEach type of test can be run using the R function t.test().The function comes with the following arguments;\nwhere: \\(x\\) and \\(y\\) are the vectors of data elements \\(alternative\\): the stated alternative hypothesis \\(mu\\): the true value of the mean \\(paired\\): whether or not to run a paired test \\(var.equal\\): whether to assume that the vaarinaces between the values in the vector are equal \\(con.level\\): The confidence level to use\nBefore we proceed, we need functions from various packages and accessing these functions when needed may render this task tedious. Therefore, lets load the packages in advance. These packages include tidyverse (Wickham and Wickham 2017), patchwork(Pedersen 2020) and magrittr(Bache and Wickham 2014)"
+  },
+  {
+    "objectID": "posts/ttest/index.html#one-sample-t-test",
+    "href": "posts/ttest/index.html#one-sample-t-test",
+    "title": "Inferential statistics in R:ttest",
+    "section": "One sample t-test",
+    "text": "One sample t-test\nOne sample t-test is widely used in statistical analysis to determine whether the population’s mean is equal to given mean value. The given mean value can be the sample mean for instance. A t.test function in R is used to test one sample parametric test. Let’s consider a situation where we want to determine whether the total length of Nile perch collected during a survey conducted in December 2022 is not equal to a long term mean length of 61cm. Let’s generate a sample by creating a data frame that contain sample of 350 individual of nile perch. Using a run_if function help us simulate weight of nile perch once given the minimum and maximum values. The code for simulating the total length is highlighted in the code chunk below;\n\nsample = tibble::tibble(\n  id = 1:350,\n  tl = runif(n = 350, min = 48, max = 65)\n  )\n\nsample\n\n# A tibble: 350 x 2\n      id    tl\n   <int> <dbl>\n 1     1  61.3\n 2     2  49.7\n 3     3  50.4\n 4     4  48.5\n 5     5  54.9\n 6     6  57.3\n 7     7  60.6\n 8     8  61.9\n 9     9  50.4\n10    10  49.0\n# ... with 340 more rows\n\n\nLet’s use a histogram to check the distribution of the data and add a vertical line of the population mean to identify whether the data is leading away is around the population\n\nsample %>% \n  ggplot(aes(x = tl)) +\n  geom_histogram(bins = 30, color = \"ivory\", fill = \"cyan4\")+\n  geom_vline(xintercept = 61, linetype = 2, color = \"red\")+\n  scale_x_continuous(name = \"Total length (cm.)\", breaks = seq(40,80,4)) +\n  scale_y_continuous(name = \"Frequency\") +\n  theme_minimal()\n\n\n\n\nFigure 1: ?(caption)\n\n\n\n\nNow we notice that the position of the population mean of the sample dataset, we can not test to determine whether the sample mean total length is lower than the sample mean\n\nsample %$%\n  t.test(x = tl, mu = 61, alternative = \"less\") \n\n\n    One Sample t-test\n\ndata:  tl\nt = -17.907, df = 349, p-value < 2.2e-16\nalternative hypothesis: true mean is less than 61\n95 percent confidence interval:\n     -Inf 56.50406\nsample estimates:\nmean of x \n 56.04797 \n\n\nThe one sample t-test determine the whether the sample mean total length of nile perch was less than the long-term mean length suggest that the sample total length (56.68cm) was less than the population mean (61cm) and the difference was statistically significant (t(349) = -18.19, p < 0.001). Lets try change the alternative to greater\n\nsample %$%\n  t.test(x = tl, mu = 61, alternative = \"greater\")\n\n\n    One Sample t-test\n\ndata:  tl\nt = -17.907, df = 349, p-value = 1\nalternative hypothesis: true mean is greater than 61\n95 percent confidence interval:\n 55.59189      Inf\nsample estimates:\nmean of x \n 56.04797 \n\n\nNotice that the test is not statistically significant (t(349) = 18.91, p = 1) because the population mean (61cm) is greater than the sample mean (56.68)."
+  },
+  {
+    "objectID": "posts/ttest/index.html#two-sample-t-test",
+    "href": "posts/ttest/index.html#two-sample-t-test",
+    "title": "Inferential statistics in R:ttest",
+    "section": "Two Sample t-test",
+    "text": "Two Sample t-test\nA two sample t-test is used to determine whether the means of two independent samples are equal. Lets consider that two independent survey to measure the stock of nile perch was conducted in two independent period. The first survey was conducted in June 2001 and the subsequency survey was conducted in July 2021. The two survey were conducted during the cool and dry season but with a 20 years time difference. Therefore, we want to determine whether the mean sample of nile perch collected in 2021 is smaller than the those sampled in 2001\n\nset.seed(1254)\n\nsample2 = tibble::tibble(\n  id = 1:350,\n  tl21 = rnorm(n = 350,mean = 52, sd = 18),\n  tl01 = rnorm(n = 350, mean = 61, sd = 20)\n  )\n\nsample2\n\n# A tibble: 350 x 3\n      id  tl21  tl01\n   <int> <dbl> <dbl>\n 1     1 41.7   54.4\n 2     2 68.4   52.2\n 3     3 47.1   69.1\n 4     4 38.7   43.2\n 5     5  3.41  46.9\n 6     6 42.6   64.3\n 7     7 67.3   70.4\n 8     8 65.7   72.9\n 9     9 26.3   25.0\n10    10 56.2   64.5\n# ... with 340 more rows\n\n\nOnce we have created a dataframe with values for the two sampling survey, it’s a good practice to visualize the value to see the patterns.\n\nsample2 %>% \n  pivot_longer(cols = tl21:tl01) %>% \n  ggplot(aes(x = value, fill = name))+\n  geom_density(position = \"identity\", alpha = .4)+\n  scale_fill_brewer(name =\"Surveys\" ,palette = \"Set2\", label = c(\"2001\", \"2021\"))+\n  scale_x_continuous(name = \"Total length (cm)\", breaks = seq(20,150,20))+\n  scale_y_continuous(name = \"Density\")+\n  theme_minimal()\n\n\n\n\nWe notice from a figure above a slight difference in the density shape with the median value for 2001 far east from the 2021, suggesting the size of 2001 is relatively higher than 2001. Let’s perform two sample t-test to determine whether that difference is significant;\n\nsample2 %$%\n  t.test(x = tl21, y = tl01, alternative = \"less\") \n\n\n    Welch Two Sample t-test\n\ndata:  tl21 and tl01\nt = -6.4619, df = 690.02, p-value = 9.771e-11\nalternative hypothesis: true difference in means is less than 0\n95 percent confidence interval:\n      -Inf -6.905485\nsample estimates:\nmean of x mean of y \n 51.80015  61.06788 \n\n\nThe output display the Welch Two Sample t-test to determine whether the total length of nile perch sampled in 2021 is less than those of 2001. The result suggest that the sample mean in 2021 was 51.8 cm which is less than 61.07 cm of nile perch sampled in 2001. The result suggest that the 2021 nile perch were small in size than those of 2001, and the difference was significant (t(690) = 6.46, p < 0.01)."
+  },
+  {
+    "objectID": "posts/ttest/index.html#paired-sample-t-test",
+    "href": "posts/ttest/index.html#paired-sample-t-test",
+    "title": "Inferential statistics in R:ttest",
+    "section": "Paired sample t-test",
+    "text": "Paired sample t-test\nThis test is normally used to determine whether the values in paired dataset have different mean. For instance, the weight in nile perch measured after captured and kept in cage for three months and measured again. Therefore, the nile perch individuals were measured before taken to cage and then measured after three months. This means we have measurement before and after. Let’s create a dataframe and simulate before and after total length of nile perch.\n\nset.seed(1254)\n\nsample3 = tibble::tibble(\n  id = 1:50,\n  before = rnorm(n = 50,mean = 52, sd = 12),\n  after = before + rnorm(n = 50) %>% abs()\n  )\n\nsample3\n\n# A tibble: 50 x 3\n      id before after\n   <int>  <dbl> <dbl>\n 1     1   45.1  46.2\n 2     2   62.9  64.7\n 3     3   48.7  49.3\n 4     4   43.2  43.6\n 5     5   19.6  20.4\n 6     6   45.7  46.1\n 7     7   62.2  63.2\n 8     8   61.1  62.5\n 9     9   34.9  35.2\n10    10   54.8  56.0\n# ... with 40 more rows\n\n\nThen we perform paired sample t-test\n\nsample3 %$%\n  t.test(x = before, y = after, paired = TRUE) \n\n\n    Paired t-test\n\ndata:  before and after\nt = -11.171, df = 49, p-value = 4.484e-15\nalternative hypothesis: true difference in means is not equal to 0\n95 percent confidence interval:\n -0.9512640 -0.6612062\nsample estimates:\nmean of the differences \n             -0.8062351 \n\n\nSince the p < 0.05, we reject the null hypothesis that the mean total length before and after is significant. Therefore, fattening nile perch in cage for three months increased the total length and that increase is significant (t(49) = -11.17, p < 0.001)"
+  }
+]

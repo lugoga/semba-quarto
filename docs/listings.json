@@ -1,0 +1,18 @@
+[
+  {
+    "listing": "/archive.html",
+    "items": [
+      "/posts/inset_main_map/index.html",
+      "/posts/ttest/index.html",
+      "/posts/combining_plots/index.html"
+    ]
+  },
+  {
+    "listing": "/blog.html",
+    "items": [
+      "/posts/inset_main_map/index.html",
+      "/posts/ttest/index.html",
+      "/posts/combining_plots/index.html"
+    ]
+  }
+]
