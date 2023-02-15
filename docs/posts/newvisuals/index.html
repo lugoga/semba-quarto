@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Masjumbuko Semba">
+<meta name="dcterms.date" content="2022-08-11">
+
+<title>Semba’s blog - Teacher’s Employment Allocations by LGA</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=14521548"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '14521548', { 'anonymize_ip': true});
+</script>
+<script src="../../site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="../../site_libs/jquery-3.5.1/jquery.min.js"></script>
+<script src="../../site_libs/proj4js-2.3.15/proj4.js"></script>
+<link href="../../site_libs/highcharts-9.3.1/css/motion.css" rel="stylesheet">
+<script src="../../site_libs/highcharts-9.3.1/highcharts.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/highcharts-3d.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/highcharts-more.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/stock.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/map.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/data.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/exporting.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/offline-exporting.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/drilldown.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/item-series.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/overlapping-datalabels.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/annotations.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/export-data.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/funnel.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/heatmap.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/treemap.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/sankey.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/dependency-wheel.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/organization.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/solid-gauge.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/streamgraph.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/sunburst.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/vector.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/wordcloud.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/xrange.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/tilemap.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/venn.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/gantt.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/timeline.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/parallel-coordinates.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/bullet.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/coloraxis.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/dumbbell.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/lollipop.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/series-label.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/plugins/motion.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/custom/reset.js"></script>
+<script src="../../site_libs/highcharts-9.3.1/modules/boost.js"></script>
+<script src="../../site_libs/highchart-binding-0.9.4/highchart.js"></script>
+<script src="../../site_libs/d3-4.9.1/d3.min.js"></script>
+<script src="../../site_libs/sankey-1/sankey.js"></script>
+<script src="../../site_libs/sankeyNetwork-binding-0.4.9000/sankeyNetwork.js"></script>
+
+
+<meta name="twitter:title" content="Semba’s blog - Teacher’s Employment Allocations by LGA">
+<meta name="twitter:description" content="On April, 2022, the government of the United Republic of Tanzania approved permission of TAMISEMI to recruit and employ 9,800 primary and secondary school teachers, and 7,612 health experts.">
+<meta name="twitter:image" content="https://lugoga.github.io/semba-quarto/posts\newvisuals\thumbnail_blog.png">
+<meta name="twitter:creator" content="@rappa753">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Semba’s blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html">
+ <span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/lugoga"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/semba2020"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/channel/UC9uZ1KPyo7zIzI4BnUtHPfA"><i class="bi bi-youtube" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../blog.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-apps--links" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Apps &amp; Links</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-apps--links">    
+        <li>
+    <a class="dropdown-item" href="https://semba.netlify.app/">
+ <span class="dropdown-text">Semba-blog Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba-blog.netlify.app/">
+ <span class="dropdown-text">Semba Data Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/kwala/">
+ <span class="dropdown-text">Kwala commercial CIty</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/coastal_dashboard/">
+ <span class="dropdown-text">Marine Hub</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://nemp.shinyapps.io/nemp/">
+ <span class="dropdown-text">Environmental Master Plan</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/OceanWebApp/">
+ <span class="dropdown-text">Hydrographic Data Hub</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/marineTz/">
+ <span class="dropdown-text">Potential Fishing Zones</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://lugoga.github.io/msp/">
+ <span class="dropdown-text">Marine Spatial Planning</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://rweekly.org/">
+ <span class="dropdown-text">R Weekly</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://www.r-bloggers.com/">
+ <span class="dropdown-text">R Bloggers</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../archive.html">
+ <span class="menu-text">Archive</span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#tilemap" id="toc-tilemap" class="nav-link active" data-scroll-target="#tilemap">Tilemap</a></li>
+  <li><a href="#packedbubble" id="toc-packedbubble" class="nav-link" data-scroll-target="#packedbubble">packedbubble</a></li>
+  <li><a href="#sankey" id="toc-sankey" class="nav-link" data-scroll-target="#sankey">Sankey</a></li>
+  <li><a href="#cited-references" id="toc-cited-references" class="nav-link" data-scroll-target="#cited-references">Cited references</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Teacher’s Employment Allocations by LGA</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Visualization</div>
+    <div class="quarto-category">Analysis</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Masjumbuko Semba </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 11, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>On April, 2022, the government of the United Republic of Tanzania approved permission of TAMISEMI to recruit and employ 9,800 primary and secondary school teachers, and 7,612 health experts. A total of 165,948 applied for the positions where for Health Cadres is 42,558, and the Teaching Cadre is 123,390.</p>
+<p>Allocation of health and Teaching position in Centers of providing health services and schools have considered the requirements of employees in the respective regions. The allocation of new employees was based on the needs of employees in Councils with new Hospitals, Centers New health, and new completed clinics that faced shortage of medical staffs.</p>
+<p>In addition, teachers were allocated to councils based on the division of space for each subject, and the qualifications. In this post, we are going to discuss</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(sf)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(highcharter)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(chorddiag)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(treemapify)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>districts <span class="ot">=</span> <span class="fu">st_read</span>(<span class="st">"data/spatial/Districts and TC as 2020.shp"</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> janitor<span class="sc">::</span><span class="fu">clean_names</span>()</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>district.tb <span class="ot">=</span> districts <span class="sc">%&gt;%</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_point_on_surface</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  wior<span class="sc">::</span><span class="fu">point_tb</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(is.numeric, round, <span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(new_dist20, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"district"</span>, <span class="st">"lga"</span>), <span class="at">sep =</span> <span class="st">" "</span>)<span class="sc">%&gt;%</span> </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(district, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"code"</span>, <span class="st">"aa"</span>), <span class="at">sep =</span> <span class="dv">3</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">code =</span> <span class="fu">str_to_upper</span>(code),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">zone =</span> <span class="fu">case_when</span>(region_nam <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'Tanga'</span>, <span class="st">'Morogoro'</span>, <span class="st">'Pwani'</span>,<span class="st">'Dar-es-salaam'</span>)<span class="sc">~</span><span class="st">"Coast"</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                          region_nam <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Arusha"</span>,<span class="st">"Kilimanjaro"</span>, <span class="st">"Manyara"</span>)<span class="sc">~</span><span class="st">"Northern"</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                          region_nam <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'Tabora'</span>, <span class="st">'Kigoma'</span>, <span class="st">'Shinyanga'</span>, <span class="st">'Kagera'</span>, <span class="st">'Mwanza'</span>,<span class="st">"Geita"</span>, <span class="st">'Mara'</span>, <span class="st">"Simiyu"</span>, <span class="st">"Katavi"</span>)<span class="sc">~</span><span class="st">"Lake"</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                          region_nam <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Dodoma"</span>, <span class="st">"Singida"</span>)<span class="sc">~</span><span class="st">"Central"</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                          region_nam <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Iringa"</span>, <span class="st">"Mbeya"</span>, <span class="st">"Songwe"</span>, <span class="st">"Ruvuma"</span>, <span class="st">"Rukwa"</span>, <span class="st">"Njombe"</span>)<span class="sc">~</span><span class="st">"Southern Highland"</span>,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>                          region_nam <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'Lindi'</span>, <span class="st">'Mtwara'</span>,<span class="st">'Ruvuma'</span>)<span class="sc">~</span><span class="st">"Southern"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(zone))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="tilemap" class="level2">
+<h2 class="anchored" data-anchor-id="tilemap">Tilemap</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>district.tb <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hchart</span>(<span class="at">type =</span> <span class="st">"tilemap"</span>, <span class="fu">hcaes</span>(<span class="at">x =</span> lon, <span class="at">y =</span> lat, <span class="at">name =</span> district, <span class="at">group =</span> zone)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hc_chart</span>(<span class="at">type =</span> <span class="st">"tilemap"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hc_plotOptions</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">series =</span> <span class="fu">list</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">dataLabels =</span> <span class="fu">list</span>(</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">enabled =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">format =</span> <span class="st">"{point.code}"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">style =</span> <span class="fu">list</span>(<span class="at">textOutline =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hc_tooltip</span>(</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">headerFormat =</span> <span class="st">""</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">pointFormat =</span> <span class="st">"&lt;b&gt;{point.name}&lt;/b&gt; is in &lt;b&gt;{point.region_nam}&lt;/b&gt;"</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hc_xAxis</span>(<span class="at">visible =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hc_yAxis</span>(<span class="at">visible =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hc_size</span>(<span class="at">height =</span> <span class="dv">800</span>, <span class="at">width =</span> <span class="dv">600</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="htmlwidget-e0bbc13a619c6812b255" style="width:100%;height:866px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e0bbc13a619c6812b255">{"x":{"hc_opts":{"chart":{"reflow":true,"type":"tilemap","width":600,"height":800},"title":{"text":null},"yAxis":{"title":{"text":"lat"},"type":"linear","visible":false},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0,"showInLegend":true,"dataLabels":{"enabled":true,"format":"{point.code}","color":"white","style":{"textOutline":false}}},"treemap":{"layoutAlgorithm":"squarified"},"scatter":{"marker":{"symbol":"circle"}}},"series":[{"name":"Central","data":[{"lon":35,"lat":-6,"region_nam":"Dodoma","region_cod":1,"district_c":6,"district":"Bahi","code":"BAH","aa":"i","lga":"DC","zone":"Central","x":35,"y":-6,"name":"Bahi"},{"lon":36,"lat":-6,"region_nam":"Dodoma","region_cod":1,"district_c":4,"district":"Chamwino","code":"CHA","aa":"mwino","lga":"DC","zone":"Central","x":36,"y":-6,"name":"Chamwino"},{"lon":36,"lat":-5,"region_nam":"Dodoma","region_cod":1,"district_c":7,"district":"Chemba","code":"CHE","aa":"mba","lga":"DC","zone":"Central","x":36,"y":-5,"name":"Chemba"},{"lon":36,"lat":-6,"region_nam":"Dodoma","region_cod":1,"district_c":5,"district":"Dodoma","code":"DOD","aa":"oma","lga":"CC","zone":"Central","x":36,"y":-6,"name":"Dodoma"},{"lon":36,"lat":-5,"region_nam":"Dodoma","region_cod":1,"district_c":1,"district":"Kondoa","code":"KON","aa":"doa","lga":"DC","zone":"Central","x":36,"y":-5,"name":"Kondoa"},{"lon":37,"lat":-6,"region_nam":"Dodoma","region_cod":1,"district_c":3,"district":"Kongwa","code":"KON","aa":"gwa","lga":"DC","zone":"Central","x":37,"y":-6,"name":"Kongwa"},{"lon":36,"lat":-7,"region_nam":"Dodoma","region_cod":1,"district_c":2,"district":"Mpwapwa","code":"MPW","aa":"apwa","lga":"DC","zone":"Central","x":36,"y":-7,"name":"Mpwapwa"},{"lon":35,"lat":-5,"region_nam":"Singida","region_cod":13,"district_c":5,"district":"Ikungi","code":"IKU","aa":"ngi","lga":"DC","zone":"Central","x":35,"y":-5,"name":"Ikungi"},{"lon":34,"lat":-4,"region_nam":"Singida","region_cod":13,"district_c":1,"district":"Iramba","code":"IRA","aa":"mba","lga":"DC","zone":"Central","x":34,"y":-4,"name":"Iramba"},{"lon":35,"lat":-6,"region_nam":"Singida","region_cod":13,"district_c":3,"district":"Manyoni","code":"MAN","aa":"yoni","lga":"DC","zone":"Central","x":35,"y":-6,"name":"Manyoni"},{"lon":35,"lat":-4,"region_nam":"Singida","region_cod":13,"district_c":6,"district":"Mkalama","code":"MKA","aa":"lama","lga":"DC","zone":"Central","x":35,"y":-4,"name":"Mkalama"},{"lon":35,"lat":-5,"region_nam":"Singida","region_cod":13,"district_c":2,"district":"Singida","code":"SIN","aa":"gida","lga":"DC","zone":"Central","x":35,"y":-5,"name":"Singida"},{"lon":35,"lat":-5,"region_nam":"Singida","region_cod":13,"district_c":4,"district":"Singida","code":"SIN","aa":"gida","lga":"MC","zone":"Central","x":35,"y":-5,"name":"Singida"},{"lon":34,"lat":-6,"region_nam":"Singida","region_cod":13,"district_c":7,"district":"Itigi","code":"ITI","aa":"gi","lga":"DC","zone":"Central","x":34,"y":-6,"name":"Itigi"},{"lon":36,"lat":-5,"region_nam":"Dodoma","region_cod":1,"district_c":8,"district":"Kondoa","code":"KON","aa":"doa","lga":"TC","zone":"Central","x":36,"y":-5,"name":"Kondoa"}],"type":"tilemap"},{"name":"Coast","data":[{"lon":39,"lat":-7,"region_nam":"Dar-es-salaam","region_cod":7,"district_c":2,"district":"Dar","code":"DAR","aa":"","lga":"es","zone":"Coast","x":39,"y":-7,"name":"Dar"},{"lon":39,"lat":-7,"region_nam":"Dar-es-salaam","region_cod":7,"district_c":1,"district":"Kinondoni","code":"KIN","aa":"ondoni","lga":"MC","zone":"Coast","x":39,"y":-7,"name":"Kinondoni"},{"lon":39,"lat":-7,"region_nam":"Dar-es-salaam","region_cod":7,"district_c":3,"district":"Temeke","code":"TEM","aa":"eke","lga":"MC","zone":"Coast","x":39,"y":-7,"name":"Temeke"},{"lon":37,"lat":-6,"region_nam":"Morogoro","region_cod":5,"district_c":7,"district":"Gairo","code":"GAI","aa":"ro","lga":"DC","zone":"Coast","x":37,"y":-6,"name":"Gairo"},{"lon":37,"lat":-8,"region_nam":"Morogoro","region_cod":5,"district_c":3,"district":"Mlimba","code":"MLI","aa":"mba","lga":"DC","zone":"Coast","x":37,"y":-8,"name":"Mlimba"},{"lon":37,"lat":-7,"region_nam":"Morogoro","region_cod":5,"district_c":1,"district":"Kilosa","code":"KIL","aa":"osa","lga":"DC","zone":"Coast","x":37,"y":-7,"name":"Kilosa"},{"lon":38,"lat":-7,"region_nam":"Morogoro","region_cod":5,"district_c":2,"district":"Morogoro","code":"MOR","aa":"ogoro","lga":"DC","zone":"Coast","x":38,"y":-7,"name":"Morogoro"},{"lon":38,"lat":-7,"region_nam":"Morogoro","region_cod":5,"district_c":5,"district":"Morogoro","code":"MOR","aa":"ogoro","lga":"MC","zone":"Coast","x":38,"y":-7,"name":"Morogoro"},{"lon":38,"lat":-7,"region_nam":"Morogoro","region_cod":5,"district_c":6,"district":"Mvomero","code":"MVO","aa":"mero","lga":"DC","zone":"Coast","x":38,"y":-7,"name":"Mvomero"},{"lon":37,"lat":-9,"region_nam":"Morogoro","region_cod":5,"district_c":4,"district":"Ulanga","code":"ULA","aa":"nga","lga":"DC","zone":"Coast","x":37,"y":-9,"name":"Ulanga"},{"lon":38,"lat":-6,"region_nam":"Pwani","region_cod":6,"district_c":9,"district":"Chalinze","code":"CHA","aa":"linze","lga":"DC","zone":"Coast","x":38,"y":-6,"name":"Chalinze"},{"lon":39,"lat":-7,"region_nam":"Pwani","region_cod":6,"district_c":2,"district":"Kibaha","code":"KIB","aa":"aha","lga":"DC","zone":"Coast","x":39,"y":-7,"name":"Kibaha"},{"lon":39,"lat":-7,"region_nam":"Pwani","region_cod":6,"district_c":7,"district":"Kibaha","code":"KIB","aa":"aha","lga":"TC","zone":"Coast","x":39,"y":-7,"name":"Kibaha"},{"lon":39,"lat":-7,"region_nam":"Pwani","region_cod":6,"district_c":3,"district":"Kisarawe","code":"KIS","aa":"arawe","lga":"DC","zone":"Coast","x":39,"y":-7,"name":"Kisarawe"},{"lon":40,"lat":-8,"region_nam":"Pwani","region_cod":6,"district_c":6,"district":"Mafia","code":"MAF","aa":"ia","lga":"DC","zone":"Coast","x":40,"y":-8,"name":"Mafia"},{"lon":39,"lat":-7,"region_nam":"Pwani","region_cod":6,"district_c":4,"district":"Mkuranga","code":"MKU","aa":"ranga","lga":"DC","zone":"Coast","x":39,"y":-7,"name":"Mkuranga"},{"lon":38,"lat":-8,"region_nam":"Pwani","region_cod":6,"district_c":5,"district":"Rufiji","code":"RUF","aa":"iji","lga":"DC","zone":"Coast","x":38,"y":-8,"name":"Rufiji"},{"lon":38,"lat":-5,"region_nam":"Tanga","region_cod":4,"district_c":6,"district":"Handeni","code":"HAN","aa":"deni","lga":"DC","zone":"Coast","x":38,"y":-5,"name":"Handeni"},{"lon":38,"lat":-5,"region_nam":"Tanga","region_cod":4,"district_c":10,"district":"Handeni","code":"HAN","aa":"deni","lga":"TC","zone":"Coast","x":38,"y":-5,"name":"Handeni"},{"lon":38,"lat":-6,"region_nam":"Tanga","region_cod":4,"district_c":7,"district":"Kilindi","code":"KIL","aa":"indi","lga":"DC","zone":"Coast","x":38,"y":-6,"name":"Kilindi"},{"lon":38,"lat":-5,"region_nam":"Tanga","region_cod":4,"district_c":2,"district":"Korogwe","code":"KOR","aa":"ogwe","lga":"DC","zone":"Coast","x":38,"y":-5,"name":"Korogwe"},{"lon":38,"lat":-5,"region_nam":"Tanga","region_cod":4,"district_c":9,"district":"Korogwe","code":"KOR","aa":"ogwe","lga":"TC","zone":"Coast","x":38,"y":-5,"name":"Korogwe"},{"lon":38,"lat":-4,"region_nam":"Tanga","region_cod":4,"district_c":1,"district":"Lushoto","code":"LUS","aa":"hoto","lga":"DC","zone":"Coast","x":38,"y":-4,"name":"Lushoto"},{"lon":39,"lat":-5,"region_nam":"Tanga","region_cod":4,"district_c":8,"district":"Mkinga","code":"MKI","aa":"nga","lga":"DC","zone":"Coast","x":39,"y":-5,"name":"Mkinga"},{"lon":39,"lat":-5,"region_nam":"Tanga","region_cod":4,"district_c":3,"district":"Muheza","code":"MUH","aa":"eza","lga":"DC","zone":"Coast","x":39,"y":-5,"name":"Muheza"},{"lon":39,"lat":-6,"region_nam":"Tanga","region_cod":4,"district_c":5,"district":"Pangani","code":"PAN","aa":"gani","lga":"DC","zone":"Coast","x":39,"y":-6,"name":"Pangani"},{"lon":39,"lat":-5,"region_nam":"Tanga","region_cod":4,"district_c":4,"district":"Tanga","code":"TAN","aa":"ga","lga":"CC","zone":"Coast","x":39,"y":-5,"name":"Tanga"},{"lon":38,"lat":-5,"region_nam":"Tanga","region_cod":4,"district_c":11,"district":"Bumbuli","code":"BUM","aa":"buli","lga":"DC","zone":"Coast","x":38,"y":-5,"name":"Bumbuli"},{"lon":39,"lat":-6,"region_nam":"Pwani","region_cod":6,"district_c":1,"district":"Bagamoyo","code":"BAG","aa":"amoyo","lga":"DC","zone":"Coast","x":39,"y":-6,"name":"Bagamoyo"},{"lon":37,"lat":-8,"region_nam":"Morogoro","region_cod":5,"district_c":9,"district":"Ifakara","code":"IFA","aa":"kara","lga":"TC","zone":"Coast","x":37,"y":-8,"name":"Ifakara"},{"lon":39,"lat":-8,"region_nam":"Pwani","region_cod":6,"district_c":8,"district":"Kibiti","code":"KIB","aa":"iti","lga":"DC","zone":"Coast","x":39,"y":-8,"name":"Kibiti"},{"lon":39,"lat":-7,"region_nam":"Dar-es-salaam","region_cod":7,"district_c":5,"district":"Kigamboni","code":"KIG","aa":"amboni","lga":"MC","zone":"Coast","x":39,"y":-7,"name":"Kigamboni"},{"lon":36,"lat":-9,"region_nam":"Morogoro","region_cod":5,"district_c":8,"district":"Malinyi","code":"MAL","aa":"inyi","lga":"DC","zone":"Coast","x":36,"y":-9,"name":"Malinyi"},{"lon":39,"lat":-7,"region_nam":"Dar-es-salaam","region_cod":7,"district_c":4,"district":"Ubungo","code":"UBU","aa":"ngo","lga":"MC","zone":"Coast","x":39,"y":-7,"name":"Ubungo"}],"type":"tilemap"},{"name":"Lake","data":[{"lon":32,"lat":-4,"region_nam":"Geita","region_cod":25,"district_c":4,"district":"Bukombe","code":"BUK","aa":"ombe","lga":"DC","zone":"Lake","x":32,"y":-4,"name":"Bukombe"},{"lon":32,"lat":-3,"region_nam":"Geita","region_cod":25,"district_c":5,"district":"Chato","code":"CHA","aa":"to","lga":"DC","zone":"Lake","x":32,"y":-3,"name":"Chato"},{"lon":32,"lat":-3,"region_nam":"Geita","region_cod":25,"district_c":1,"district":"Geita","code":"GEI","aa":"ta","lga":"DC","zone":"Lake","x":32,"y":-3,"name":"Geita"},{"lon":32,"lat":-3,"region_nam":"Geita","region_cod":25,"district_c":3,"district":"Mbogwe","code":"MBO","aa":"gwe","lga":"DC","zone":"Lake","x":32,"y":-3,"name":"Mbogwe"},{"lon":33,"lat":-3,"region_nam":"Geita","region_cod":25,"district_c":2,"district":"Nyang'wale","code":"NYA","aa":"ng'wale","lga":"DC","zone":"Lake","x":33,"y":-3,"name":"Nyang'wale"},{"lon":31,"lat":-3,"region_nam":"Kagera","region_cod":18,"district_c":4,"district":"Biharamulo","code":"BIH","aa":"aramulo","lga":"DC","zone":"Lake","x":31,"y":-3,"name":"Biharamulo"},{"lon":32,"lat":-1,"region_nam":"Kagera","region_cod":18,"district_c":2,"district":"Bukoba","code":"BUK","aa":"oba","lga":"DC","zone":"Lake","x":32,"y":-1,"name":"Bukoba"},{"lon":32,"lat":-1,"region_nam":"Kagera","region_cod":18,"district_c":6,"district":"Bukoba","code":"BUK","aa":"oba","lga":"MC","zone":"Lake","x":32,"y":-1,"name":"Bukoba"},{"lon":31,"lat":-2,"region_nam":"Kagera","region_cod":18,"district_c":1,"district":"Karagwe","code":"KAR","aa":"agwe","lga":"DC","zone":"Lake","x":31,"y":-2,"name":"Karagwe"},{"lon":31,"lat":-1,"region_nam":"Kagera","region_cod":18,"district_c":8,"district":"Kyerwa","code":"KYE","aa":"rwa","lga":"DC","zone":"Lake","x":31,"y":-1,"name":"Kyerwa"},{"lon":31,"lat":-1,"region_nam":"Kagera","region_cod":18,"district_c":7,"district":"Missenyi","code":"MIS","aa":"senyi","lga":"DC","zone":"Lake","x":31,"y":-1,"name":"Missenyi"},{"lon":32,"lat":-2,"region_nam":"Kagera","region_cod":18,"district_c":3,"district":"Muleba","code":"MUL","aa":"eba","lga":"DC","zone":"Lake","x":32,"y":-2,"name":"Muleba"},{"lon":31,"lat":-3,"region_nam":"Kagera","region_cod":18,"district_c":5,"district":"Ngara","code":"NGA","aa":"ra","lga":"DC","zone":"Lake","x":31,"y":-3,"name":"Ngara"},{"lon":32,"lat":-6,"region_nam":"Katavi","region_cod":23,"district_c":3,"district":"Mlele","code":"MLE","aa":"le","lga":"DC","zone":"Lake","x":32,"y":-6,"name":"Mlele"},{"lon":31,"lat":-6,"region_nam":"Katavi","region_cod":23,"district_c":2,"district":"Mpanda","code":"MPA","aa":"nda","lga":"DC","zone":"Lake","x":31,"y":-6,"name":"Mpanda"},{"lon":31,"lat":-6,"region_nam":"Katavi","region_cod":23,"district_c":1,"district":"Mpanda","code":"MPA","aa":"nda","lga":"MC","zone":"Lake","x":31,"y":-6,"name":"Mpanda"},{"lon":30,"lat":-4,"region_nam":"Kigoma","region_cod":16,"district_c":6,"district":"Buhigwe","code":"BUH","aa":"igwe","lga":"DC","zone":"Lake","x":30,"y":-4,"name":"Buhigwe"},{"lon":31,"lat":-3,"region_nam":"Kigoma","region_cod":16,"district_c":7,"district":"Kakonko","code":"KAK","aa":"onko","lga":"DC","zone":"Lake","x":31,"y":-3,"name":"Kakonko"},{"lon":30,"lat":-4,"region_nam":"Kigoma","region_cod":16,"district_c":2,"district":"Kasulu","code":"KAS","aa":"ulu","lga":"DC","zone":"Lake","x":30,"y":-4,"name":"Kasulu"},{"lon":30,"lat":-5,"region_nam":"Kigoma","region_cod":16,"district_c":8,"district":"Kasulu","code":"KAS","aa":"ulu","lga":"TC","zone":"Lake","x":30,"y":-5,"name":"Kasulu"},{"lon":31,"lat":-4,"region_nam":"Kigoma","region_cod":16,"district_c":1,"district":"Kibondo","code":"KIB","aa":"ondo","lga":"DC","zone":"Lake","x":31,"y":-4,"name":"Kibondo"},{"lon":30,"lat":-5,"region_nam":"Kigoma","region_cod":16,"district_c":4,"district":"Kigoma","code":"KIG","aa":"oma","lga":"MC","zone":"Lake","x":30,"y":-5,"name":"Kigoma"},{"lon":30,"lat":-5,"region_nam":"Kigoma","region_cod":16,"district_c":3,"district":"Kigoma","code":"KIG","aa":"oma","lga":"DC","zone":"Lake","x":30,"y":-5,"name":"Kigoma"},{"lon":30,"lat":-6,"region_nam":"Kigoma","region_cod":16,"district_c":5,"district":"Uvinza","code":"UVI","aa":"nza","lga":"DC","zone":"Lake","x":30,"y":-6,"name":"Uvinza"},{"lon":33,"lat":-2,"region_nam":"Mara","region_cod":20,"district_c":4,"district":"Bunda","code":"BUN","aa":"da","lga":"DC","zone":"Lake","x":33,"y":-2,"name":"Bunda"},{"lon":34,"lat":-2,"region_nam":"Mara","region_cod":20,"district_c":3,"district":"Musoma","code":"MUS","aa":"oma","lga":"DC","zone":"Lake","x":34,"y":-2,"name":"Musoma"},{"lon":34,"lat":-2,"region_nam":"Mara","region_cod":20,"district_c":5,"district":"Musoma","code":"MUS","aa":"oma","lga":"MC","zone":"Lake","x":34,"y":-2,"name":"Musoma"},{"lon":34,"lat":-1,"region_nam":"Mara","region_cod":20,"district_c":6,"district":"Rorya","code":"ROR","aa":"ya","lga":"DC","zone":"Lake","x":34,"y":-1,"name":"Rorya"},{"lon":35,"lat":-2,"region_nam":"Mara","region_cod":20,"district_c":2,"district":"Serengeti","code":"SER","aa":"engeti","lga":"DC","zone":"Lake","x":35,"y":-2,"name":"Serengeti"},{"lon":35,"lat":-1,"region_nam":"Mara","region_cod":20,"district_c":1,"district":"Tarime","code":"TAR","aa":"ime","lga":"DC","zone":"Lake","x":35,"y":-1,"name":"Tarime"},{"lon":33,"lat":-2,"region_nam":"Mwanza","region_cod":19,"district_c":6,"district":"Ilemela","code":"ILE","aa":"mela","lga":"MC","zone":"Lake","x":33,"y":-2,"name":"Ilemela"},{"lon":33,"lat":-3,"region_nam":"Mwanza","region_cod":19,"district_c":4,"district":"Kwimba","code":"KWI","aa":"mba","lga":"DC","zone":"Lake","x":33,"y":-3,"name":"Kwimba"},{"lon":33,"lat":-3,"region_nam":"Mwanza","region_cod":19,"district_c":2,"district":"Magu","code":"MAG","aa":"u","lga":"DC","zone":"Lake","x":33,"y":-3,"name":"Magu"},{"lon":33,"lat":-3,"region_nam":"Mwanza","region_cod":19,"district_c":7,"district":"Misungwi","code":"MIS","aa":"ungwi","lga":"DC","zone":"Lake","x":33,"y":-3,"name":"Misungwi"},{"lon":33,"lat":-3,"region_nam":"Mwanza","region_cod":19,"district_c":3,"district":"Mwanza","code":"MWA","aa":"nza","lga":"CC","zone":"Lake","x":33,"y":-3,"name":"Mwanza"},{"lon":33,"lat":-3,"region_nam":"Mwanza","region_cod":19,"district_c":5,"district":"Sengerema","code":"SEN","aa":"gerema","lga":"DC","zone":"Lake","x":33,"y":-3,"name":"Sengerema"},{"lon":33,"lat":-2,"region_nam":"Mwanza","region_cod":19,"district_c":1,"district":"Ukerewe","code":"UKE","aa":"rewe","lga":"DC","zone":"Lake","x":33,"y":-2,"name":"Ukerewe"},{"lon":33,"lat":-4,"region_nam":"Shinyanga","region_cod":17,"district_c":4,"district":"Msalala","code":"MSA","aa":"lala","lga":"DC","zone":"Lake","x":33,"y":-4,"name":"Msalala"},{"lon":33,"lat":-4,"region_nam":"Shinyanga","region_cod":17,"district_c":5,"district":"Kahama","code":"KAH","aa":"ama","lga":"MC","zone":"Lake","x":33,"y":-4,"name":"Kahama"},{"lon":34,"lat":-4,"region_nam":"Shinyanga","region_cod":17,"district_c":2,"district":"Kishapu","code":"KIS","aa":"hapu","lga":"DC","zone":"Lake","x":34,"y":-4,"name":"Kishapu"},{"lon":33,"lat":-4,"region_nam":"Shinyanga","region_cod":17,"district_c":3,"district":"Shinyanga","code":"SHI","aa":"nyanga","lga":"DC","zone":"Lake","x":33,"y":-4,"name":"Shinyanga"},{"lon":33,"lat":-4,"region_nam":"Shinyanga","region_cod":17,"district_c":1,"district":"Shinyanga","code":"SHI","aa":"nyanga","lga":"MC","zone":"Lake","x":33,"y":-4,"name":"Shinyanga"},{"lon":35,"lat":-3,"region_nam":"Simiyu","region_cod":24,"district_c":1,"district":"Bariadi","code":"BAR","aa":"iadi","lga":"DC","zone":"Lake","x":35,"y":-3,"name":"Bariadi"},{"lon":34,"lat":-2,"region_nam":"Simiyu","region_cod":24,"district_c":5,"district":"Busega","code":"BUS","aa":"ega","lga":"DC","zone":"Lake","x":34,"y":-2,"name":"Busega"},{"lon":35,"lat":-3,"region_nam":"Simiyu","region_cod":24,"district_c":2,"district":"Itilima","code":"ITI","aa":"lima","lga":"DC","zone":"Lake","x":35,"y":-3,"name":"Itilima"},{"lon":34,"lat":-3,"region_nam":"Simiyu","region_cod":24,"district_c":4,"district":"Maswa","code":"MAS","aa":"wa","lga":"DC","zone":"Lake","x":34,"y":-3,"name":"Maswa"},{"lon":34,"lat":-4,"region_nam":"Simiyu","region_cod":24,"district_c":3,"district":"Meatu","code":"MEA","aa":"tu","lga":"DC","zone":"Lake","x":34,"y":-4,"name":"Meatu"},{"lon":34,"lat":-4,"region_nam":"Tabora","region_cod":14,"district_c":2,"district":"Igunga","code":"IGU","aa":"nga","lga":"DC","zone":"Lake","x":34,"y":-4,"name":"Igunga"},{"lon":32,"lat":-5,"region_nam":"Tabora","region_cod":14,"district_c":7,"district":"Kaliua","code":"KAL","aa":"iua","lga":"DC","zone":"Lake","x":32,"y":-5,"name":"Kaliua"},{"lon":33,"lat":-4,"region_nam":"Tabora","region_cod":14,"district_c":1,"district":"Nzega","code":"NZE","aa":"ga","lga":"DC","zone":"Lake","x":33,"y":-4,"name":"Nzega"},{"lon":33,"lat":-6,"region_nam":"Tabora","region_cod":14,"district_c":5,"district":"Sikonge","code":"SIK","aa":"onge","lga":"DC","zone":"Lake","x":33,"y":-6,"name":"Sikonge"},{"lon":33,"lat":-5,"region_nam":"Tabora","region_cod":14,"district_c":6,"district":"Tabora","code":"TAB","aa":"ora","lga":"MC","zone":"Lake","x":33,"y":-5,"name":"Tabora"},{"lon":32,"lat":-5,"region_nam":"Tabora","region_cod":14,"district_c":4,"district":"Urambo","code":"URA","aa":"mbo","lga":"DC","zone":"Lake","x":32,"y":-5,"name":"Urambo"},{"lon":33,"lat":-5,"region_nam":"Tabora","region_cod":14,"district_c":3,"district":"Uyui","code":"UYU","aa":"i","lga":"DC","zone":"Lake","x":33,"y":-5,"name":"Uyui"},{"lon":34,"lat":-3,"region_nam":"Simiyu","region_cod":24,"district_c":6,"district":"Bariadi","code":"BAR","aa":"iadi","lga":"TC","zone":"Lake","x":34,"y":-3,"name":"Bariadi"},{"lon":32,"lat":-2,"region_nam":"Mwanza","region_cod":19,"district_c":8,"district":"Buchosa","code":"BUC","aa":"hosa","lga":"DC","zone":"Lake","x":32,"y":-2,"name":"Buchosa"},{"lon":34,"lat":-2,"region_nam":"Mara","region_cod":20,"district_c":8,"district":"Bunda","code":"BUN","aa":"da","lga":"TC","zone":"Lake","x":34,"y":-2,"name":"Bunda"},{"lon":32,"lat":-3,"region_nam":"Geita","region_cod":25,"district_c":6,"district":"Geita","code":"GEI","aa":"ta","lga":"TC","zone":"Lake","x":32,"y":-3,"name":"Geita"},{"lon":32,"lat":-4,"region_nam":"Shinyanga","region_cod":17,"district_c":6,"district":"Ushetu","code":"USH","aa":"etu","lga":"DC","zone":"Lake","x":32,"y":-4,"name":"Ushetu"},{"lon":32,"lat":-7,"region_nam":"Katavi","region_cod":23,"district_c":4,"district":"Mpimbwe","code":"MPI","aa":"mbwe","lga":"DC","zone":"Lake","x":32,"y":-7,"name":"Mpimbwe"},{"lon":31,"lat":-6,"region_nam":"Katavi","region_cod":23,"district_c":5,"district":"Nsimbo","code":"NSI","aa":"mbo","lga":"DC","zone":"Lake","x":31,"y":-6,"name":"Nsimbo"},{"lon":33,"lat":-4,"region_nam":"Tabora","region_cod":14,"district_c":8,"district":"Nzega","code":"NZE","aa":"ga","lga":"TC","zone":"Lake","x":33,"y":-4,"name":"Nzega"},{"lon":34,"lat":-1,"region_nam":"Mara","region_cod":20,"district_c":9,"district":"Tarime","code":"TAR","aa":"ime","lga":"TC","zone":"Lake","x":34,"y":-1,"name":"Tarime"},{"lon":34,"lat":-2,"region_nam":"Mara","region_cod":20,"district_c":7,"district":"Butiama","code":"BUT","aa":"iama","lga":"DC","zone":"Lake","x":34,"y":-2,"name":"Butiama"}],"type":"tilemap"},{"name":"Northern","data":[{"lon":37,"lat":-4,"region_nam":"Arusha","region_cod":2,"district_c":6,"district":"Arusha","code":"ARU","aa":"sha","lga":"DC","zone":"Northern","x":37,"y":-4,"name":"Arusha"},{"lon":37,"lat":-3,"region_nam":"Arusha","region_cod":2,"district_c":3,"district":"Arusha","code":"ARU","aa":"sha","lga":"CC","zone":"Northern","x":37,"y":-3,"name":"Arusha"},{"lon":36,"lat":-3,"region_nam":"Arusha","region_cod":2,"district_c":4,"district":"Karatu","code":"KAR","aa":"atu","lga":"DC","zone":"Northern","x":36,"y":-3,"name":"Karatu"},{"lon":36,"lat":-3,"region_nam":"Arusha","region_cod":2,"district_c":7,"district":"Longido","code":"LON","aa":"gido","lga":"DC","zone":"Northern","x":36,"y":-3,"name":"Longido"},{"lon":37,"lat":-3,"region_nam":"Arusha","region_cod":2,"district_c":2,"district":"Meru","code":"MER","aa":"u","lga":"DC","zone":"Northern","x":37,"y":-3,"name":"Meru"},{"lon":36,"lat":-3,"region_nam":"Arusha","region_cod":2,"district_c":1,"district":"Monduli","code":"MON","aa":"duli","lga":"DC","zone":"Northern","x":36,"y":-3,"name":"Monduli"},{"lon":36,"lat":-3,"region_nam":"Arusha","region_cod":2,"district_c":5,"district":"Ngorongoro","code":"NGO","aa":"rongoro","lga":"DC","zone":"Northern","x":36,"y":-3,"name":"Ngorongoro"},{"lon":37,"lat":-3,"region_nam":"Kilimanjaro","region_cod":3,"district_c":5,"district":"Hai","code":"HAI","aa":"","lga":"DC","zone":"Northern","x":37,"y":-3,"name":"Hai"},{"lon":37,"lat":-3,"region_nam":"Kilimanjaro","region_cod":3,"district_c":4,"district":"Moshi","code":"MOS","aa":"hi","lga":"DC","zone":"Northern","x":37,"y":-3,"name":"Moshi"},{"lon":37,"lat":-3,"region_nam":"Kilimanjaro","region_cod":3,"district_c":6,"district":"Moshi","code":"MOS","aa":"hi","lga":"MC","zone":"Northern","x":37,"y":-3,"name":"Moshi"},{"lon":38,"lat":-4,"region_nam":"Kilimanjaro","region_cod":3,"district_c":2,"district":"Mwanga","code":"MWA","aa":"nga","lga":"DC","zone":"Northern","x":38,"y":-4,"name":"Mwanga"},{"lon":38,"lat":-3,"region_nam":"Kilimanjaro","region_cod":3,"district_c":1,"district":"Rombo","code":"ROM","aa":"bo","lga":"DC","zone":"Northern","x":38,"y":-3,"name":"Rombo"},{"lon":38,"lat":-4,"region_nam":"Kilimanjaro","region_cod":3,"district_c":3,"district":"Same","code":"SAM","aa":"e","lga":"DC","zone":"Northern","x":38,"y":-4,"name":"Same"},{"lon":37,"lat":-3,"region_nam":"Kilimanjaro","region_cod":3,"district_c":7,"district":"Siha","code":"SIH","aa":"a","lga":"DC","zone":"Northern","x":37,"y":-3,"name":"Siha"},{"lon":36,"lat":-4,"region_nam":"Manyara","region_cod":21,"district_c":1,"district":"Babati","code":"BAB","aa":"ati","lga":"DC","zone":"Northern","x":36,"y":-4,"name":"Babati"},{"lon":36,"lat":-4,"region_nam":"Manyara","region_cod":21,"district_c":6,"district":"Babati","code":"BAB","aa":"ati","lga":"TC","zone":"Northern","x":36,"y":-4,"name":"Babati"},{"lon":35,"lat":-5,"region_nam":"Manyara","region_cod":21,"district_c":2,"district":"Hanang","code":"HAN","aa":"ang","lga":"DC","zone":"Northern","x":35,"y":-5,"name":"Hanang"},{"lon":37,"lat":-5,"region_nam":"Manyara","region_cod":21,"district_c":5,"district":"Kiteto","code":"KIT","aa":"eto","lga":"DC","zone":"Northern","x":37,"y":-5,"name":"Kiteto"},{"lon":35,"lat":-4,"region_nam":"Manyara","region_cod":21,"district_c":3,"district":"Mbulu","code":"MBU","aa":"lu","lga":"DC","zone":"Northern","x":35,"y":-4,"name":"Mbulu"},{"lon":37,"lat":-4,"region_nam":"Manyara","region_cod":21,"district_c":4,"district":"Simanjiro","code":"SIM","aa":"anjiro","lga":"DC","zone":"Northern","x":37,"y":-4,"name":"Simanjiro"},{"lon":36,"lat":-4,"region_nam":"Manyara","region_cod":21,"district_c":7,"district":"Mbulu","code":"MBU","aa":"lu","lga":"TC","zone":"Northern","x":36,"y":-4,"name":"Mbulu"}],"type":"tilemap"},{"name":"Southern","data":[{"lon":39,"lat":-9,"region_nam":"Lindi","region_cod":8,"district_c":1,"district":"Kilwa","code":"KIL","aa":"wa","lga":"DC","zone":"Southern","x":39,"y":-9,"name":"Kilwa"},{"lon":39,"lat":-10,"region_nam":"Lindi","region_cod":8,"district_c":2,"district":"Lindi","code":"LIN","aa":"di","lga":"DC","zone":"Southern","x":39,"y":-10,"name":"Lindi"},{"lon":40,"lat":-10,"region_nam":"Lindi","region_cod":8,"district_c":6,"district":"Lindi","code":"LIN","aa":"di","lga":"MC","zone":"Southern","x":40,"y":-10,"name":"Lindi"},{"lon":38,"lat":-9,"region_nam":"Lindi","region_cod":8,"district_c":4,"district":"Liwale","code":"LIW","aa":"ale","lga":"DC","zone":"Southern","x":38,"y":-9,"name":"Liwale"},{"lon":38,"lat":-10,"region_nam":"Lindi","region_cod":8,"district_c":3,"district":"Nachingwea","code":"NAC","aa":"hingwea","lga":"DC","zone":"Southern","x":38,"y":-10,"name":"Nachingwea"},{"lon":39,"lat":-10,"region_nam":"Lindi","region_cod":8,"district_c":5,"district":"Ruangwa","code":"RUA","aa":"ngwa","lga":"DC","zone":"Southern","x":39,"y":-10,"name":"Ruangwa"},{"lon":39,"lat":-11,"region_nam":"Mtwara","region_cod":9,"district_c":3,"district":"Masasi","code":"MAS","aa":"asi","lga":"DC","zone":"Southern","x":39,"y":-11,"name":"Masasi"},{"lon":39,"lat":-11,"region_nam":"Mtwara","region_cod":9,"district_c":7,"district":"Masasi","code":"MAS","aa":"asi","lga":"TC","zone":"Southern","x":39,"y":-11,"name":"Masasi"},{"lon":40,"lat":-10,"region_nam":"Mtwara","region_cod":9,"district_c":1,"district":"Mtwara","code":"MTW","aa":"ara","lga":"DC","zone":"Southern","x":40,"y":-10,"name":"Mtwara"},{"lon":40,"lat":-10,"region_nam":"Mtwara","region_cod":9,"district_c":5,"district":"Mtwara","code":"MTW","aa":"ara","lga":"MC","zone":"Southern","x":40,"y":-10,"name":"Mtwara"},{"lon":38,"lat":-11,"region_nam":"Mtwara","region_cod":9,"district_c":6,"district":"Nanyumbu","code":"NAN","aa":"yumbu","lga":"DC","zone":"Southern","x":38,"y":-11,"name":"Nanyumbu"},{"lon":39,"lat":-11,"region_nam":"Mtwara","region_cod":9,"district_c":2,"district":"Newala","code":"NEW","aa":"ala","lga":"DC","zone":"Southern","x":39,"y":-11,"name":"Newala"},{"lon":40,"lat":-11,"region_nam":"Mtwara","region_cod":9,"district_c":4,"district":"Tandahimba","code":"TAN","aa":"dahimba","lga":"DC","zone":"Southern","x":40,"y":-11,"name":"Tandahimba"},{"lon":40,"lat":-11,"region_nam":"Mtwara","region_cod":9,"district_c":8,"district":"Nanyamba","code":"NAN","aa":"yamba","lga":"TC","zone":"Southern","x":40,"y":-11,"name":"Nanyamba"},{"lon":39,"lat":-11,"region_nam":"Mtwara","region_cod":9,"district_c":9,"district":"Newala","code":"NEW","aa":"ala","lga":"TC","zone":"Southern","x":39,"y":-11,"name":"Newala"}],"type":"tilemap"},{"name":"Southern Highland","data":[{"lon":35,"lat":-8,"region_nam":"Iringa","region_cod":11,"district_c":1,"district":"Iringa","code":"IRI","aa":"nga","lga":"DC","zone":"Southern Highland","x":35,"y":-8,"name":"Iringa"},{"lon":36,"lat":-8,"region_nam":"Iringa","region_cod":11,"district_c":3,"district":"Iringa","code":"IRI","aa":"nga","lga":"MC","zone":"Southern Highland","x":36,"y":-8,"name":"Iringa"},{"lon":36,"lat":-8,"region_nam":"Iringa","region_cod":11,"district_c":4,"district":"Kilolo","code":"KIL","aa":"olo","lga":"DC","zone":"Southern Highland","x":36,"y":-8,"name":"Kilolo"},{"lon":35,"lat":-8,"region_nam":"Iringa","region_cod":11,"district_c":5,"district":"Mafinga","code":"MAF","aa":"inga","lga":"TC","zone":"Southern Highland","x":35,"y":-8,"name":"Mafinga"},{"lon":35,"lat":-9,"region_nam":"Iringa","region_cod":11,"district_c":2,"district":"Mufindi","code":"MUF","aa":"indi","lga":"DC","zone":"Southern Highland","x":35,"y":-9,"name":"Mufindi"},{"lon":33,"lat":-8,"region_nam":"Mbeya","region_cod":12,"district_c":1,"district":"Chunya","code":"CHU","aa":"nya","lga":"DC","zone":"Southern Highland","x":33,"y":-8,"name":"Chunya"},{"lon":33,"lat":-9,"region_nam":"Songwe","region_cod":26,"district_c":1,"district":"Ileje","code":"ILE","aa":"je","lga":"DC","zone":"Southern Highland","x":33,"y":-9,"name":"Ileje"},{"lon":34,"lat":-10,"region_nam":"Mbeya","region_cod":12,"district_c":3,"district":"Kyela","code":"KYE","aa":"la","lga":"DC","zone":"Southern Highland","x":34,"y":-10,"name":"Kyela"},{"lon":34,"lat":-8,"region_nam":"Mbeya","region_cod":12,"district_c":6,"district":"Mbarali","code":"MBA","aa":"rali","lga":"DC","zone":"Southern Highland","x":34,"y":-8,"name":"Mbarali"},{"lon":33,"lat":-9,"region_nam":"Mbeya","region_cod":12,"district_c":2,"district":"Mbeya","code":"MBE","aa":"ya","lga":"DC","zone":"Southern Highland","x":33,"y":-9,"name":"Mbeya"},{"lon":33,"lat":-9,"region_nam":"Mbeya","region_cod":12,"district_c":5,"district":"Mbeya","code":"MBE","aa":"ya","lga":"CC","zone":"Southern Highland","x":33,"y":-9,"name":"Mbeya"},{"lon":33,"lat":-9,"region_nam":"Songwe","region_cod":26,"district_c":2,"district":"Mbozi","code":"MBO","aa":"zi","lga":"DC","zone":"Southern Highland","x":33,"y":-9,"name":"Mbozi"},{"lon":32,"lat":-9,"region_nam":"Songwe","region_cod":26,"district_c":3,"district":"Momba","code":"MOM","aa":"ba","lga":"DC","zone":"Southern Highland","x":32,"y":-9,"name":"Momba"},{"lon":34,"lat":-9,"region_nam":"Mbeya","region_cod":12,"district_c":4,"district":"Rungwe","code":"RUN","aa":"gwe","lga":"DC","zone":"Southern Highland","x":34,"y":-9,"name":"Rungwe"},{"lon":33,"lat":-9,"region_nam":"Songwe","region_cod":26,"district_c":4,"district":"Tunduma","code":"TUN","aa":"duma","lga":"TC","zone":"Southern Highland","x":33,"y":-9,"name":"Tunduma"},{"lon":35,"lat":-10,"region_nam":"Njombe","region_cod":22,"district_c":5,"district":"Ludewa","code":"LUD","aa":"ewa","lga":"DC","zone":"Southern Highland","x":35,"y":-10,"name":"Ludewa"},{"lon":35,"lat":-9,"region_nam":"Njombe","region_cod":22,"district_c":6,"district":"Makambako","code":"MAK","aa":"ambako","lga":"TC","zone":"Southern Highland","x":35,"y":-9,"name":"Makambako"},{"lon":34,"lat":-9,"region_nam":"Njombe","region_cod":22,"district_c":3,"district":"Makete","code":"MAK","aa":"ete","lga":"DC","zone":"Southern Highland","x":34,"y":-9,"name":"Makete"},{"lon":35,"lat":-9,"region_nam":"Njombe","region_cod":22,"district_c":4,"district":"Njombe","code":"NJO","aa":"mbe","lga":"DC","zone":"Southern Highland","x":35,"y":-9,"name":"Njombe"},{"lon":35,"lat":-9,"region_nam":"Njombe","region_cod":22,"district_c":1,"district":"Njombe","code":"NJO","aa":"mbe","lga":"TC","zone":"Southern Highland","x":35,"y":-9,"name":"Njombe"},{"lon":35,"lat":-9,"region_nam":"Njombe","region_cod":22,"district_c":2,"district":"Wanging'ombe","code":"WAN","aa":"ging'ombe","lga":"DC","zone":"Southern Highland","x":35,"y":-9,"name":"Wanging'ombe"},{"lon":32,"lat":-9,"region_nam":"Rukwa","region_cod":15,"district_c":1,"district":"Kalambo","code":"KAL","aa":"ambo","lga":"DC","zone":"Southern Highland","x":32,"y":-9,"name":"Kalambo"},{"lon":31,"lat":-8,"region_nam":"Rukwa","region_cod":15,"district_c":3,"district":"Nkasi","code":"NKA","aa":"si","lga":"DC","zone":"Southern Highland","x":31,"y":-8,"name":"Nkasi"},{"lon":32,"lat":-8,"region_nam":"Rukwa","region_cod":15,"district_c":2,"district":"Sumbawanga","code":"SUM","aa":"bawanga","lga":"DC","zone":"Southern Highland","x":32,"y":-8,"name":"Sumbawanga"},{"lon":32,"lat":-8,"region_nam":"Rukwa","region_cod":15,"district_c":4,"district":"Sumbawanga","code":"SUM","aa":"bawanga","lga":"MC","zone":"Southern Highland","x":32,"y":-8,"name":"Sumbawanga"},{"lon":35,"lat":-11,"region_nam":"Ruvuma","region_cod":10,"district_c":3,"district":"Mbinga","code":"MBI","aa":"nga","lga":"DC","zone":"Southern Highland","x":35,"y":-11,"name":"Mbinga"},{"lon":36,"lat":-11,"region_nam":"Ruvuma","region_cod":10,"district_c":5,"district":"Namtumbo","code":"NAM","aa":"tumbo","lga":"DC","zone":"Southern Highland","x":36,"y":-11,"name":"Namtumbo"},{"lon":35,"lat":-11,"region_nam":"Ruvuma","region_cod":10,"district_c":6,"district":"Nyasa","code":"NYA","aa":"sa","lga":"DC","zone":"Southern Highland","x":35,"y":-11,"name":"Nyasa"},{"lon":36,"lat":-11,"region_nam":"Ruvuma","region_cod":10,"district_c":2,"district":"Songea","code":"SON","aa":"gea","lga":"DC","zone":"Southern Highland","x":36,"y":-11,"name":"Songea"},{"lon":36,"lat":-11,"region_nam":"Ruvuma","region_cod":10,"district_c":4,"district":"Songea","code":"SON","aa":"gea","lga":"MC","zone":"Southern Highland","x":36,"y":-11,"name":"Songea"},{"lon":37,"lat":-11,"region_nam":"Ruvuma","region_cod":10,"district_c":1,"district":"Tunduru","code":"TUN","aa":"duru","lga":"DC","zone":"Southern Highland","x":37,"y":-11,"name":"Tunduru"},{"lon":34,"lat":-9,"region_nam":"Mbeya","region_cod":12,"district_c":7,"district":"Busokelo","code":"BUS","aa":"okelo","lga":"DC","zone":"Southern Highland","x":34,"y":-9,"name":"Busokelo"},{"lon":35,"lat":-10,"region_nam":"Ruvuma","region_cod":10,"district_c":7,"district":"Madaba","code":"MAD","aa":"aba","lga":"DC","zone":"Southern Highland","x":35,"y":-10,"name":"Madaba"},{"lon":35,"lat":-11,"region_nam":"Ruvuma","region_cod":10,"district_c":8,"district":"Mbinga","code":"MBI","aa":"nga","lga":"TC","zone":"Southern Highland","x":35,"y":-11,"name":"Mbinga"},{"lon":33,"lat":-8,"region_nam":"Songwe","region_cod":26,"district_c":5,"district":"Songwe","code":"SON","aa":"gwe","lga":"DC","zone":"Southern Highland","x":33,"y":-8,"name":"Songwe"}],"type":"tilemap"}],"xAxis":{"type":"linear","title":{"text":"lon"},"visible":false},"tooltip":{"headerFormat":"","pointFormat":"<b>{point.name}<\/b> is in <b>{point.region_nam}<\/b>"}},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="packedbubble" class="level2">
+<h2 class="anchored" data-anchor-id="packedbubble">packedbubble</h2>
+<p>A bubble chart requires three dimensions of data; the x-value and y-value to position the bubble along the value axes and a third value for its volume. Packed Bubble charts have a simpler data structure, a flat, one-dimensional array with volumes is sufficient. The bubble’s x/y position is automatically calculated using an algorithm that packs the bubbles in a cluster. The series data point configuration has support for setting colors and label values. Drag’n drop feature was also added to give the user a chance to quickly move one bubble between series and then check how their relations will change.</p>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>walimu.lga <span class="ot">=</span> walimu.clean <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(halmashauri, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"district"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>), <span class="at">sep =</span> <span class="st">" "</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(<span class="at">col =</span> code, b<span class="sc">:</span>c, <span class="at">sep =</span> <span class="st">" "</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lga =</span> <span class="fu">case_when</span>(code <span class="sc">==</span> <span class="st">"District Council"</span><span class="sc">~</span><span class="st">"DC"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                         code <span class="sc">==</span> <span class="st">"Municipal Council"</span><span class="sc">~</span><span class="st">"MC"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                         code <span class="sc">==</span> <span class="st">"City Council"</span><span class="sc">~</span><span class="st">"CC"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                         code <span class="sc">==</span> <span class="st">"Town Council"</span><span class="sc">~</span><span class="st">"TC"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                         code <span class="sc">==</span> <span class="st">"Mikindani Municipal"</span><span class="sc">~</span><span class="st">"MC"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                         code <span class="sc">==</span> <span class="st">"Ujiji Municipal"</span><span class="sc">~</span><span class="st">"MC"</span>))</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>walimu.lga.freq <span class="ot">=</span> walimu.lga <span class="sc">%&gt;%</span> </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(district, lga) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>district.walimu <span class="ot">=</span> district.tb <span class="sc">%&gt;%</span> </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(walimu.lga.freq) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region_nam, zone, n, district)<span class="sc">%&gt;%</span> </span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(district, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"code"</span>, <span class="st">"aa"</span>), <span class="at">sep =</span> <span class="dv">3</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">code =</span> <span class="fu">str_to_upper</span>(code)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>aa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hc <span class="ot">=</span> district.walimu <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">hchart</span>(<span class="at">type =</span> <span class="st">"packedbubble"</span>, <span class="fu">hcaes</span>(<span class="at">name =</span> district, <span class="at">value =</span> n, <span class="at">group =</span> zone))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>q95 <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">quantile</span>(district.walimu<span class="sc">$</span>n, .<span class="dv">95</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>hc <span class="sc">%&gt;%</span> </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hc_tooltip</span>(</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">useHTML =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">pointFormat =</span> <span class="st">"&lt;b&gt;{point.name}:&lt;/b&gt; {point.n}"</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hc_plotOptions</span>(</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">packedbubble =</span> <span class="fu">list</span>(</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">maxSize =</span> <span class="st">"150%"</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">zMin =</span> <span class="dv">0</span>,</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">layoutAlgorithm =</span> <span class="fu">list</span>(</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">gravitationalConstant =</span>  <span class="fl">0.05</span>,</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">splitSeries =</span>  <span class="cn">TRUE</span>, <span class="co"># TRUE to group points</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">seriesInteraction =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">dragBetweenSeries =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">parentNodeLimit =</span> <span class="cn">TRUE</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">dataLabels =</span> <span class="fu">list</span>(</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">enabled =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">format =</span> <span class="st">"{point.code}"</span>,</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">filter =</span> <span class="fu">list</span>(</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>          <span class="at">property =</span> <span class="st">"y"</span>,</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>          <span class="at">operator =</span> <span class="st">"&gt;"</span>,</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>          <span class="at">value =</span> q95</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">style =</span> <span class="fu">list</span>(</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>          <span class="at">textOutline =</span> <span class="st">"none"</span>,</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>          <span class="at">fontWeight =</span> <span class="st">"normal"</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="htmlwidget-36a18b2682cff5dbf001" style="width:100%;height:464px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-36a18b2682cff5dbf001">{"x":{"hc_opts":{"chart":{"reflow":true},"title":{"text":null},"yAxis":{"title":{"text":[]}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0,"showInLegend":true},"treemap":{"layoutAlgorithm":"squarified"},"scatter":{"marker":{"symbol":"circle"}},"packedbubble":{"maxSize":"150%","zMin":0,"layoutAlgorithm":{"gravitationalConstant":0.05,"splitSeries":true,"seriesInteraction":true,"dragBetweenSeries":true,"parentNodeLimit":true},"dataLabels":{"enabled":true,"format":"{point.code}","filter":{"property":"y","operator":">","value":116.3},"style":{"color":"black","textOutline":"none","fontWeight":"normal"}}}},"series":[{"name":"Central","data":[{"region_nam":"Dodoma","zone":"Central","n":65,"district":"Bahi","code":"BAH","name":"Bahi","value":65},{"region_nam":"Dodoma","zone":"Central","n":100,"district":"Chamwino","code":"CHA","name":"Chamwino","value":100},{"region_nam":"Dodoma","zone":"Central","n":95,"district":"Chemba","code":"CHE","name":"Chemba","value":95},{"region_nam":"Dodoma","zone":"Central","n":57,"district":"Dodoma","code":"DOD","name":"Dodoma","value":57},{"region_nam":"Dodoma","zone":"Central","n":86,"district":"Kondoa","code":"KON","name":"Kondoa","value":86},{"region_nam":"Dodoma","zone":"Central","n":113,"district":"Kongwa","code":"KON","name":"Kongwa","value":113},{"region_nam":"Dodoma","zone":"Central","n":95,"district":"Mpwapwa","code":"MPW","name":"Mpwapwa","value":95},{"region_nam":"Singida","zone":"Central","n":145,"district":"Ikungi","code":"IKU","name":"Ikungi","value":145},{"region_nam":"Singida","zone":"Central","n":75,"district":"Iramba","code":"IRA","name":"Iramba","value":75},{"region_nam":"Singida","zone":"Central","n":45,"district":"Manyoni","code":"MAN","name":"Manyoni","value":45},{"region_nam":"Singida","zone":"Central","n":70,"district":"Mkalama","code":"MKA","name":"Mkalama","value":70},{"region_nam":"Singida","zone":"Central","n":68,"district":"Singida","code":"SIN","name":"Singida","value":68},{"region_nam":"Singida","zone":"Central","n":21,"district":"Singida","code":"SIN","name":"Singida","value":21},{"region_nam":"Singida","zone":"Central","n":78,"district":"Itigi","code":"ITI","name":"Itigi","value":78},{"region_nam":"Dodoma","zone":"Central","n":8,"district":"Kondoa","code":"KON","name":"Kondoa","value":8}],"type":"packedbubble"},{"name":"Coast","data":[{"region_nam":"Dar-es-salaam","zone":"Coast","n":null,"district":"Dar","code":"DAR","name":"Dar","value":null},{"region_nam":"Dar-es-salaam","zone":"Coast","n":32,"district":"Kinondoni","code":"KIN","name":"Kinondoni","value":32},{"region_nam":"Dar-es-salaam","zone":"Coast","n":25,"district":"Temeke","code":"TEM","name":"Temeke","value":25},{"region_nam":"Morogoro","zone":"Coast","n":58,"district":"Gairo","code":"GAI","name":"Gairo","value":58},{"region_nam":"Morogoro","zone":"Coast","n":69,"district":"Mlimba","code":"MLI","name":"Mlimba","value":69},{"region_nam":"Morogoro","zone":"Coast","n":129,"district":"Kilosa","code":"KIL","name":"Kilosa","value":129},{"region_nam":"Morogoro","zone":"Coast","n":78,"district":"Morogoro","code":"MOR","name":"Morogoro","value":78},{"region_nam":"Morogoro","zone":"Coast","n":27,"district":"Morogoro","code":"MOR","name":"Morogoro","value":27},{"region_nam":"Morogoro","zone":"Coast","n":88,"district":"Mvomero","code":"MVO","name":"Mvomero","value":88},{"region_nam":"Morogoro","zone":"Coast","n":18,"district":"Ulanga","code":"ULA","name":"Ulanga","value":18},{"region_nam":"Pwani","zone":"Coast","n":43,"district":"Chalinze","code":"CHA","name":"Chalinze","value":43},{"region_nam":"Pwani","zone":"Coast","n":6,"district":"Kibaha","code":"KIB","name":"Kibaha","value":6},{"region_nam":"Pwani","zone":"Coast","n":7,"district":"Kibaha","code":"KIB","name":"Kibaha","value":7},{"region_nam":"Pwani","zone":"Coast","n":18,"district":"Kisarawe","code":"KIS","name":"Kisarawe","value":18},{"region_nam":"Pwani","zone":"Coast","n":2,"district":"Mafia","code":"MAF","name":"Mafia","value":2},{"region_nam":"Pwani","zone":"Coast","n":73,"district":"Mkuranga","code":"MKU","name":"Mkuranga","value":73},{"region_nam":"Pwani","zone":"Coast","n":29,"district":"Rufiji","code":"RUF","name":"Rufiji","value":29},{"region_nam":"Tanga","zone":"Coast","n":71,"district":"Handeni","code":"HAN","name":"Handeni","value":71},{"region_nam":"Tanga","zone":"Coast","n":14,"district":"Handeni","code":"HAN","name":"Handeni","value":14},{"region_nam":"Tanga","zone":"Coast","n":61,"district":"Kilindi","code":"KIL","name":"Kilindi","value":61},{"region_nam":"Tanga","zone":"Coast","n":38,"district":"Korogwe","code":"KOR","name":"Korogwe","value":38},{"region_nam":"Tanga","zone":"Coast","n":11,"district":"Korogwe","code":"KOR","name":"Korogwe","value":11},{"region_nam":"Tanga","zone":"Coast","n":160,"district":"Lushoto","code":"LUS","name":"Lushoto","value":160},{"region_nam":"Tanga","zone":"Coast","n":39,"district":"Mkinga","code":"MKI","name":"Mkinga","value":39},{"region_nam":"Tanga","zone":"Coast","n":46,"district":"Muheza","code":"MUH","name":"Muheza","value":46},{"region_nam":"Tanga","zone":"Coast","n":13,"district":"Pangani","code":"PAN","name":"Pangani","value":13},{"region_nam":"Tanga","zone":"Coast","n":18,"district":"Tanga","code":"TAN","name":"Tanga","value":18},{"region_nam":"Tanga","zone":"Coast","n":36,"district":"Bumbuli","code":"BUM","name":"Bumbuli","value":36},{"region_nam":"Pwani","zone":"Coast","n":12,"district":"Bagamoyo","code":"BAG","name":"Bagamoyo","value":12},{"region_nam":"Morogoro","zone":"Coast","n":32,"district":"Ifakara","code":"IFA","name":"Ifakara","value":32},{"region_nam":"Pwani","zone":"Coast","n":36,"district":"Kibiti","code":"KIB","name":"Kibiti","value":36},{"region_nam":"Dar-es-salaam","zone":"Coast","n":15,"district":"Kigamboni","code":"KIG","name":"Kigamboni","value":15},{"region_nam":"Morogoro","zone":"Coast","n":20,"district":"Malinyi","code":"MAL","name":"Malinyi","value":20},{"region_nam":"Dar-es-salaam","zone":"Coast","n":30,"district":"Ubungo","code":"UBU","name":"Ubungo","value":30}],"type":"packedbubble"},{"name":"Lake","data":[{"region_nam":"Geita","zone":"Lake","n":100,"district":"Bukombe","code":"BUK","name":"Bukombe","value":100},{"region_nam":"Geita","zone":"Lake","n":188,"district":"Chato","code":"CHA","name":"Chato","value":188},{"region_nam":"Geita","zone":"Lake","n":122,"district":"Geita","code":"GEI","name":"Geita","value":122},{"region_nam":"Geita","zone":"Lake","n":61,"district":"Mbogwe","code":"MBO","name":"Mbogwe","value":61},{"region_nam":"Geita","zone":"Lake","n":null,"district":"Nyang'wale","code":"NYA","name":"Nyang'wale","value":null},{"region_nam":"Kagera","zone":"Lake","n":100,"district":"Biharamulo","code":"BIH","name":"Biharamulo","value":100},{"region_nam":"Kagera","zone":"Lake","n":78,"district":"Bukoba","code":"BUK","name":"Bukoba","value":78},{"region_nam":"Kagera","zone":"Lake","n":18,"district":"Bukoba","code":"BUK","name":"Bukoba","value":18},{"region_nam":"Kagera","zone":"Lake","n":82,"district":"Karagwe","code":"KAR","name":"Karagwe","value":82},{"region_nam":"Kagera","zone":"Lake","n":85,"district":"Kyerwa","code":"KYE","name":"Kyerwa","value":85},{"region_nam":"Kagera","zone":"Lake","n":37,"district":"Missenyi","code":"MIS","name":"Missenyi","value":37},{"region_nam":"Kagera","zone":"Lake","n":148,"district":"Muleba","code":"MUL","name":"Muleba","value":148},{"region_nam":"Kagera","zone":"Lake","n":99,"district":"Ngara","code":"NGA","name":"Ngara","value":99},{"region_nam":"Katavi","zone":"Lake","n":49,"district":"Mlele","code":"MLE","name":"Mlele","value":49},{"region_nam":"Katavi","zone":"Lake","n":null,"district":"Mpanda","code":"MPA","name":"Mpanda","value":null},{"region_nam":"Katavi","zone":"Lake","n":55,"district":"Mpanda","code":"MPA","name":"Mpanda","value":55},{"region_nam":"Kigoma","zone":"Lake","n":55,"district":"Buhigwe","code":"BUH","name":"Buhigwe","value":55},{"region_nam":"Kigoma","zone":"Lake","n":72,"district":"Kakonko","code":"KAK","name":"Kakonko","value":72},{"region_nam":"Kigoma","zone":"Lake","n":147,"district":"Kasulu","code":"KAS","name":"Kasulu","value":147},{"region_nam":"Kigoma","zone":"Lake","n":45,"district":"Kasulu","code":"KAS","name":"Kasulu","value":45},{"region_nam":"Kigoma","zone":"Lake","n":51,"district":"Kibondo","code":"KIB","name":"Kibondo","value":51},{"region_nam":"Kigoma","zone":"Lake","n":26,"district":"Kigoma","code":"KIG","name":"Kigoma","value":26},{"region_nam":"Kigoma","zone":"Lake","n":60,"district":"Kigoma","code":"KIG","name":"Kigoma","value":60},{"region_nam":"Kigoma","zone":"Lake","n":156,"district":"Uvinza","code":"UVI","name":"Uvinza","value":156},{"region_nam":"Mara","zone":"Lake","n":44,"district":"Bunda","code":"BUN","name":"Bunda","value":44},{"region_nam":"Mara","zone":"Lake","n":61,"district":"Musoma","code":"MUS","name":"Musoma","value":61},{"region_nam":"Mara","zone":"Lake","n":19,"district":"Musoma","code":"MUS","name":"Musoma","value":19},{"region_nam":"Mara","zone":"Lake","n":113,"district":"Rorya","code":"ROR","name":"Rorya","value":113},{"region_nam":"Mara","zone":"Lake","n":99,"district":"Serengeti","code":"SER","name":"Serengeti","value":99},{"region_nam":"Mara","zone":"Lake","n":111,"district":"Tarime","code":"TAR","name":"Tarime","value":111},{"region_nam":"Mwanza","zone":"Lake","n":26,"district":"Ilemela","code":"ILE","name":"Ilemela","value":26},{"region_nam":"Mwanza","zone":"Lake","n":72,"district":"Kwimba","code":"KWI","name":"Kwimba","value":72},{"region_nam":"Mwanza","zone":"Lake","n":72,"district":"Magu","code":"MAG","name":"Magu","value":72},{"region_nam":"Mwanza","zone":"Lake","n":97,"district":"Misungwi","code":"MIS","name":"Misungwi","value":97},{"region_nam":"Mwanza","zone":"Lake","n":33,"district":"Mwanza","code":"MWA","name":"Mwanza","value":33},{"region_nam":"Mwanza","zone":"Lake","n":52,"district":"Sengerema","code":"SEN","name":"Sengerema","value":52},{"region_nam":"Mwanza","zone":"Lake","n":72,"district":"Ukerewe","code":"UKE","name":"Ukerewe","value":72},{"region_nam":"Shinyanga","zone":"Lake","n":59,"district":"Msalala","code":"MSA","name":"Msalala","value":59},{"region_nam":"Shinyanga","zone":"Lake","n":58,"district":"Kahama","code":"KAH","name":"Kahama","value":58},{"region_nam":"Shinyanga","zone":"Lake","n":145,"district":"Kishapu","code":"KIS","name":"Kishapu","value":145},{"region_nam":"Shinyanga","zone":"Lake","n":53,"district":"Shinyanga","code":"SHI","name":"Shinyanga","value":53},{"region_nam":"Shinyanga","zone":"Lake","n":28,"district":"Shinyanga","code":"SHI","name":"Shinyanga","value":28},{"region_nam":"Simiyu","zone":"Lake","n":69,"district":"Bariadi","code":"BAR","name":"Bariadi","value":69},{"region_nam":"Simiyu","zone":"Lake","n":56,"district":"Busega","code":"BUS","name":"Busega","value":56},{"region_nam":"Simiyu","zone":"Lake","n":69,"district":"Itilima","code":"ITI","name":"Itilima","value":69},{"region_nam":"Simiyu","zone":"Lake","n":107,"district":"Maswa","code":"MAS","name":"Maswa","value":107},{"region_nam":"Simiyu","zone":"Lake","n":51,"district":"Meatu","code":"MEA","name":"Meatu","value":51},{"region_nam":"Tabora","zone":"Lake","n":98,"district":"Igunga","code":"IGU","name":"Igunga","value":98},{"region_nam":"Tabora","zone":"Lake","n":116,"district":"Kaliua","code":"KAL","name":"Kaliua","value":116},{"region_nam":"Tabora","zone":"Lake","n":96,"district":"Nzega","code":"NZE","name":"Nzega","value":96},{"region_nam":"Tabora","zone":"Lake","n":53,"district":"Sikonge","code":"SIK","name":"Sikonge","value":53},{"region_nam":"Tabora","zone":"Lake","n":41,"district":"Tabora","code":"TAB","name":"Tabora","value":41},{"region_nam":"Tabora","zone":"Lake","n":48,"district":"Urambo","code":"URA","name":"Urambo","value":48},{"region_nam":"Tabora","zone":"Lake","n":101,"district":"Uyui","code":"UYU","name":"Uyui","value":101},{"region_nam":"Simiyu","zone":"Lake","n":25,"district":"Bariadi","code":"BAR","name":"Bariadi","value":25},{"region_nam":"Mwanza","zone":"Lake","n":36,"district":"Buchosa","code":"BUC","name":"Buchosa","value":36},{"region_nam":"Mara","zone":"Lake","n":29,"district":"Bunda","code":"BUN","name":"Bunda","value":29},{"region_nam":"Geita","zone":"Lake","n":39,"district":"Geita","code":"GEI","name":"Geita","value":39},{"region_nam":"Shinyanga","zone":"Lake","n":61,"district":"Ushetu","code":"USH","name":"Ushetu","value":61},{"region_nam":"Katavi","zone":"Lake","n":55,"district":"Mpimbwe","code":"MPI","name":"Mpimbwe","value":55},{"region_nam":"Katavi","zone":"Lake","n":78,"district":"Nsimbo","code":"NSI","name":"Nsimbo","value":78},{"region_nam":"Tabora","zone":"Lake","n":12,"district":"Nzega","code":"NZE","name":"Nzega","value":12},{"region_nam":"Mara","zone":"Lake","n":7,"district":"Tarime","code":"TAR","name":"Tarime","value":7},{"region_nam":"Mara","zone":"Lake","n":48,"district":"Butiama","code":"BUT","name":"Butiama","value":48}],"type":"packedbubble"},{"name":"Northern","data":[{"region_nam":"Arusha","zone":"Northern","n":25,"district":"Arusha","code":"ARU","name":"Arusha","value":25},{"region_nam":"Arusha","zone":"Northern","n":33,"district":"Arusha","code":"ARU","name":"Arusha","value":33},{"region_nam":"Arusha","zone":"Northern","n":27,"district":"Karatu","code":"KAR","name":"Karatu","value":27},{"region_nam":"Arusha","zone":"Northern","n":28,"district":"Longido","code":"LON","name":"Longido","value":28},{"region_nam":"Arusha","zone":"Northern","n":52,"district":"Meru","code":"MER","name":"Meru","value":52},{"region_nam":"Arusha","zone":"Northern","n":7,"district":"Monduli","code":"MON","name":"Monduli","value":7},{"region_nam":"Arusha","zone":"Northern","n":63,"district":"Ngorongoro","code":"NGO","name":"Ngorongoro","value":63},{"region_nam":"Kilimanjaro","zone":"Northern","n":30,"district":"Hai","code":"HAI","name":"Hai","value":30},{"region_nam":"Kilimanjaro","zone":"Northern","n":65,"district":"Moshi","code":"MOS","name":"Moshi","value":65},{"region_nam":"Kilimanjaro","zone":"Northern","n":13,"district":"Moshi","code":"MOS","name":"Moshi","value":13},{"region_nam":"Kilimanjaro","zone":"Northern","n":34,"district":"Mwanga","code":"MWA","name":"Mwanga","value":34},{"region_nam":"Kilimanjaro","zone":"Northern","n":54,"district":"Rombo","code":"ROM","name":"Rombo","value":54},{"region_nam":"Kilimanjaro","zone":"Northern","n":61,"district":"Same","code":"SAM","name":"Same","value":61},{"region_nam":"Kilimanjaro","zone":"Northern","n":20,"district":"Siha","code":"SIH","name":"Siha","value":20},{"region_nam":"Manyara","zone":"Northern","n":94,"district":"Babati","code":"BAB","name":"Babati","value":94},{"region_nam":"Manyara","zone":"Northern","n":8,"district":"Babati","code":"BAB","name":"Babati","value":8},{"region_nam":"Manyara","zone":"Northern","n":95,"district":"Hanang","code":"HAN","name":"Hanang","value":95},{"region_nam":"Manyara","zone":"Northern","n":37,"district":"Kiteto","code":"KIT","name":"Kiteto","value":37},{"region_nam":"Manyara","zone":"Northern","n":23,"district":"Mbulu","code":"MBU","name":"Mbulu","value":23},{"region_nam":"Manyara","zone":"Northern","n":35,"district":"Simanjiro","code":"SIM","name":"Simanjiro","value":35},{"region_nam":"Manyara","zone":"Northern","n":27,"district":"Mbulu","code":"MBU","name":"Mbulu","value":27}],"type":"packedbubble"},{"name":"Southern","data":[{"region_nam":"Lindi","zone":"Southern","n":80,"district":"Kilwa","code":"KIL","name":"Kilwa","value":80},{"region_nam":"Lindi","zone":"Southern","n":null,"district":"Lindi","code":"LIN","name":"Lindi","value":null},{"region_nam":"Lindi","zone":"Southern","n":59,"district":"Lindi","code":"LIN","name":"Lindi","value":59},{"region_nam":"Lindi","zone":"Southern","n":23,"district":"Liwale","code":"LIW","name":"Liwale","value":23},{"region_nam":"Lindi","zone":"Southern","n":41,"district":"Nachingwea","code":"NAC","name":"Nachingwea","value":41},{"region_nam":"Lindi","zone":"Southern","n":30,"district":"Ruangwa","code":"RUA","name":"Ruangwa","value":30},{"region_nam":"Mtwara","zone":"Southern","n":60,"district":"Masasi","code":"MAS","name":"Masasi","value":60},{"region_nam":"Mtwara","zone":"Southern","n":18,"district":"Masasi","code":"MAS","name":"Masasi","value":18},{"region_nam":"Mtwara","zone":"Southern","n":39,"district":"Mtwara","code":"MTW","name":"Mtwara","value":39},{"region_nam":"Mtwara","zone":"Southern","n":14,"district":"Mtwara","code":"MTW","name":"Mtwara","value":14},{"region_nam":"Mtwara","zone":"Southern","n":48,"district":"Nanyumbu","code":"NAN","name":"Nanyumbu","value":48},{"region_nam":"Mtwara","zone":"Southern","n":20,"district":"Newala","code":"NEW","name":"Newala","value":20},{"region_nam":"Mtwara","zone":"Southern","n":30,"district":"Tandahimba","code":"TAN","name":"Tandahimba","value":30},{"region_nam":"Mtwara","zone":"Southern","n":30,"district":"Nanyamba","code":"NAN","name":"Nanyamba","value":30},{"region_nam":"Mtwara","zone":"Southern","n":24,"district":"Newala","code":"NEW","name":"Newala","value":24}],"type":"packedbubble"},{"name":"Southern Highland","data":[{"region_nam":"Iringa","zone":"Southern Highland","n":39,"district":"Iringa","code":"IRI","name":"Iringa","value":39},{"region_nam":"Iringa","zone":"Southern Highland","n":14,"district":"Iringa","code":"IRI","name":"Iringa","value":14},{"region_nam":"Iringa","zone":"Southern Highland","n":31,"district":"Kilolo","code":"KIL","name":"Kilolo","value":31},{"region_nam":"Iringa","zone":"Southern Highland","n":14,"district":"Mafinga","code":"MAF","name":"Mafinga","value":14},{"region_nam":"Iringa","zone":"Southern Highland","n":22,"district":"Mufindi","code":"MUF","name":"Mufindi","value":22},{"region_nam":"Mbeya","zone":"Southern Highland","n":79,"district":"Chunya","code":"CHU","name":"Chunya","value":79},{"region_nam":"Songwe","zone":"Southern Highland","n":23,"district":"Ileje","code":"ILE","name":"Ileje","value":23},{"region_nam":"Mbeya","zone":"Southern Highland","n":22,"district":"Kyela","code":"KYE","name":"Kyela","value":22},{"region_nam":"Mbeya","zone":"Southern Highland","n":66,"district":"Mbarali","code":"MBA","name":"Mbarali","value":66},{"region_nam":"Mbeya","zone":"Southern Highland","n":84,"district":"Mbeya","code":"MBE","name":"Mbeya","value":84},{"region_nam":"Mbeya","zone":"Southern Highland","n":50,"district":"Mbeya","code":"MBE","name":"Mbeya","value":50},{"region_nam":"Songwe","zone":"Southern Highland","n":84,"district":"Mbozi","code":"MBO","name":"Mbozi","value":84},{"region_nam":"Songwe","zone":"Southern Highland","n":42,"district":"Momba","code":"MOM","name":"Momba","value":42},{"region_nam":"Mbeya","zone":"Southern Highland","n":24,"district":"Rungwe","code":"RUN","name":"Rungwe","value":24},{"region_nam":"Songwe","zone":"Southern Highland","n":56,"district":"Tunduma","code":"TUN","name":"Tunduma","value":56},{"region_nam":"Njombe","zone":"Southern Highland","n":12,"district":"Ludewa","code":"LUD","name":"Ludewa","value":12},{"region_nam":"Njombe","zone":"Southern Highland","n":16,"district":"Makambako","code":"MAK","name":"Makambako","value":16},{"region_nam":"Njombe","zone":"Southern Highland","n":21,"district":"Makete","code":"MAK","name":"Makete","value":21},{"region_nam":"Njombe","zone":"Southern Highland","n":13,"district":"Njombe","code":"NJO","name":"Njombe","value":13},{"region_nam":"Njombe","zone":"Southern Highland","n":15,"district":"Njombe","code":"NJO","name":"Njombe","value":15},{"region_nam":"Njombe","zone":"Southern Highland","n":28,"district":"Wanging'ombe","code":"WAN","name":"Wanging'ombe","value":28},{"region_nam":"Rukwa","zone":"Southern Highland","n":39,"district":"Kalambo","code":"KAL","name":"Kalambo","value":39},{"region_nam":"Rukwa","zone":"Southern Highland","n":64,"district":"Nkasi","code":"NKA","name":"Nkasi","value":64},{"region_nam":"Rukwa","zone":"Southern Highland","n":37,"district":"Sumbawanga","code":"SUM","name":"Sumbawanga","value":37},{"region_nam":"Rukwa","zone":"Southern Highland","n":14,"district":"Sumbawanga","code":"SUM","name":"Sumbawanga","value":14},{"region_nam":"Ruvuma","zone":"Southern Highland","n":88,"district":"Mbinga","code":"MBI","name":"Mbinga","value":88},{"region_nam":"Ruvuma","zone":"Southern Highland","n":53,"district":"Namtumbo","code":"NAM","name":"Namtumbo","value":53},{"region_nam":"Ruvuma","zone":"Southern Highland","n":44,"district":"Nyasa","code":"NYA","name":"Nyasa","value":44},{"region_nam":"Ruvuma","zone":"Southern Highland","n":44,"district":"Songea","code":"SON","name":"Songea","value":44},{"region_nam":"Ruvuma","zone":"Southern Highland","n":37,"district":"Songea","code":"SON","name":"Songea","value":37},{"region_nam":"Ruvuma","zone":"Southern Highland","n":85,"district":"Tunduru","code":"TUN","name":"Tunduru","value":85},{"region_nam":"Mbeya","zone":"Southern Highland","n":26,"district":"Busokelo","code":"BUS","name":"Busokelo","value":26},{"region_nam":"Ruvuma","zone":"Southern Highland","n":8,"district":"Madaba","code":"MAD","name":"Madaba","value":8},{"region_nam":"Ruvuma","zone":"Southern Highland","n":30,"district":"Mbinga","code":"MBI","name":"Mbinga","value":30},{"region_nam":"Songwe","zone":"Southern Highland","n":41,"district":"Songwe","code":"SON","name":"Songwe","value":41}],"type":"packedbubble"}],"xAxis":{"type":null,"title":{"text":[]},"categories":null},"tooltip":{"useHTML":true,"pointFormat":"<b>{point.name}:<\/b> {point.n}"}},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="sankey" class="level2">
+<h2 class="anchored" data-anchor-id="sankey">Sankey</h2>
+<p>A sankey diagram is a visualization used to depict a flow from one set of values to another. The things being connected are called nodes and the connections are called links.Sankey diagrams can also visualize the energy accounts, material flow accounts on a regional or national level, and cost breakdowns.[1] The diagrams are often used in the visualization of material flow analysis.</p>
+<p>Sankey diagrams emphasize the major transfers or flows within a system. They help locate the most important contributions to a flow. They often show conserved quantities within defined system boundaries.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>   quest.tb <span class="ot">=</span>  walimu.clean <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">group_by</span>(kiwango_cha_elimu, jinsi) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">summarise</span>(<span class="at">value =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename</span>(<span class="at">source =</span> <span class="dv">2</span>, <span class="at">target =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(value <span class="sc">&gt;</span> <span class="dv">100</span>)<span class="sc">%&gt;%</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as.data.frame</span>()</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># From these flows we need to create a node data frame: it lists every entities involved in the flow</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    nodes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">name=</span><span class="fu">c</span>(<span class="fu">as.character</span>(quest.tb<span class="sc">$</span>source), </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                               <span class="fu">as.character</span>(quest.tb<span class="sc">$</span>target)) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">unique</span>())</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    nodes <span class="ot">=</span> quest.tb <span class="sc">%&gt;%</span> </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="sc">-</span>value) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pivot_longer</span>(<span class="at">cols =</span> source<span class="sc">:</span>target) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">distinct</span>(value) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename</span>(<span class="at">name =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as.data.frame</span>()</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># With networkD3, connection must be provided using id, not using real name like in the links dataframe.. So we need to reformat it.</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    quest.tb<span class="sc">$</span>IDsource<span class="ot">=</span><span class="fu">match</span>(quest.tb<span class="sc">$</span>source, nodes<span class="sc">$</span>name)<span class="sc">-</span><span class="dv">1</span> </span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    quest.tb<span class="sc">$</span>IDtarget<span class="ot">=</span><span class="fu">match</span>(quest.tb<span class="sc">$</span>target, nodes<span class="sc">$</span>name)<span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Make the Network </span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    networkD3<span class="sc">::</span><span class="fu">sankeyNetwork</span>(<span class="at">Links =</span> quest.tb, </span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>                             <span class="at">Nodes =</span> nodes,</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>                             <span class="at">Source =</span> <span class="st">"IDsource"</span>, </span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>                             <span class="at">Target =</span> <span class="st">"IDtarget"</span>,</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>                             <span class="at">Value =</span> <span class="st">"value"</span>, </span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>                             <span class="at">NodeID =</span> <span class="st">"name"</span>, </span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>                             <span class="at">fontFamily =</span> <span class="st">"Myriad Pro"</span>,</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>                             <span class="at">LinkGroup =</span> <span class="st">"source"</span>,</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>                             <span class="at">sinksRight=</span><span class="cn">FALSE</span>,</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>                             <span class="co"># height = 600, width = 800,</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>                             <span class="co"># colourScale=ColourScal,</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>                             <span class="at">nodeWidth=</span><span class="dv">30</span>, </span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>                             <span class="at">iterations =</span> <span class="dv">5</span>,</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>                             <span class="at">fontSize=</span><span class="dv">14</span>, </span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>                             <span class="at">nodePadding=</span><span class="dv">30</span>, </span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>                             <span class="at">width =</span> <span class="dv">1000</span>, </span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>                             <span class="at">height =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="htmlwidget-bc8085eb0808b4056d52" style="width:100%;height:260px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bc8085eb0808b4056d52">{"x":{"links":{"source":[0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2],"target":[1,1,3,3,4,4,5,5,6,6,7,7,8,8,9,9],"value":[406,1362,266,488,250,250,943,1252,500,500,500,501,229,207,425,1478],"group":["Female","Male","Female","Male","Female","Male","Female","Male","Female","Male","Female","Male","Female","Male","Female","Male"]},"nodes":{"name":["Female","Bachelor Degree Education  (Science)","Male","Bachelor Degree Education (Arts)","Bachelor of Education in Early Childhood Education","Certificate in Primary Education","Diploma in Early Child Education","Diploma in Primary School","Diploma in Secondary Education (Arts)","Diploma in Secondary Education (Science)"],"group":["Female","Bachelor Degree Education  (Science)","Male","Bachelor Degree Education (Arts)","Bachelor of Education in Early Childhood Education","Certificate in Primary Education","Diploma in Early Child Education","Diploma in Primary School","Diploma in Secondary Education (Arts)","Diploma in Secondary Education (Science)"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":"source","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":14,"fontFamily":"Myriad Pro","nodeWidth":30,"nodePadding":30,"units":"","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":5,"sinksRight":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="cited-references" class="level2">
+<h2 class="anchored" data-anchor-id="cited-references">Cited references</h2>
+
+
+</section>
+
+</main> <!-- /main -->
+<div>
+<hr>
+
+<h3> Stay in touch </h3>
+
+<p> If you enjoyed this post, then don't miss out on any future posts by subscribing to my email newsletter. </p>
+
+<iframe id="beehiiv-form" src="https://embeds.beehiiv.com/9232d2a2-6e85-4beb-b8ed-1de94e9e4f01?slim=true" data-test-id="beehiiv-embed" frameborder="0" scrolling="no" style="margin: 0; border-radius: 0px !important; background-color: transparent; height: 55px;"></iframe>
+
+
+<h3> Support my work with a coffee </h3>
+
+<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="rappa753" data-color="#06436e" data-emoji="☕" data-font="Lato" data-text="Support me" data-outline-color="#ffffff" data-font-color="#ffffff" data-coffee-color="#FFDD00" data-height="40px"></script>
+
+<h3> Share </h3>
+
+<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-hashtags="#rstats" data-show-count="false">Tweet</a><script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<hr>
+</div>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="lugoga/semba-quarto" data-repo-id="R_kgDOI-Hp4A" data-category="General" data-category-id="DIC_kwDOI-Hp4M4CUOdf" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

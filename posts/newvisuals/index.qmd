@@ -1,0 +1,256 @@
+---
+title: "Teacher's Employment Allocations by LGA"
+author: "Masjumbuko Semba"
+date: "2022-08-11"
+categories: [Visualization, Analysis]
+image: packedbubble.png
+bibliography: ../ref.bib
+execute: 
+  warning: false
+---
+
+## Introduction
+
+On April, 2022, the government of the United Republic of Tanzania approved permission of TAMISEMI to recruit and employ 9,800 primary and secondary school teachers, and 7,612 health experts. A total of 165,948 applied for the positions where for Health Cadres is 42,558, and the Teaching Cadre is 123,390.
+
+Allocation of health and Teaching position in Centers of providing health services and schools have considered the requirements of employees in the respective regions. The allocation of new employees was based on the needs of employees in Councils with new Hospitals, Centers New health, and new completed clinics that faced shortage of medical staffs. 
+
+In addition, teachers were allocated to councils based  on the division of space for each subject, and the qualifications. In this post, we are going to discuss
+
+
+```{r}
+require(sf)
+require(highcharter)
+require(tidyverse)
+require(chorddiag)
+require(treemapify)
+library(RColorBrewer)
+
+
+```
+
+
+```{r, echo=FALSE}
+
+districts = st_read("d:/semba/vpo/nemp/data/spatial/Districts and TC as 2020.shp", quiet = TRUE) %>% janitor::clean_names()
+
+district.tb = districts %>% 
+  st_point_on_surface() %>% 
+  wior::point_tb() %>% 
+  mutate(across(is.numeric, round, 0)) %>% 
+  separate(new_dist20, into = c("district", "lga"), sep = " ")%>% 
+  separate(district, into = c("code", "aa"), sep = 3, remove = FALSE) %>% 
+  mutate(code = str_to_upper(code),
+         zone = case_when(region_nam %in% c('Tanga', 'Morogoro', 'Pwani','Dar-es-salaam')~"Coast",
+                          region_nam %in% c("Arusha","Kilimanjaro", "Manyara")~"Northern",
+                          region_nam %in% c('Tabora', 'Kigoma', 'Shinyanga', 'Kagera', 'Mwanza',"Geita", 'Mara', "Simiyu", "Katavi")~"Lake",
+                          region_nam %in% c("Dodoma", "Singida")~"Central",
+                          region_nam %in% c("Iringa", "Mbeya", "Songwe", "Ruvuma", "Rukwa", "Njombe")~"Southern Highland",
+                          region_nam %in% c('Lindi', 'Mtwara','Ruvuma')~"Southern")) %>% 
+  filter(!is.na(zone))
+
+```
+
+```{r, eval=FALSE}
+districts = st_read("data/spatial/Districts and TC as 2020.shp", quiet = TRUE) %>% janitor::clean_names()
+
+
+district.tb = districts %>% 
+  st_point_on_surface() %>% 
+  wior::point_tb() %>% 
+  mutate(across(is.numeric, round, 0)) %>% 
+  separate(new_dist20, into = c("district", "lga"), sep = " ")%>% 
+  separate(district, into = c("code", "aa"), sep = 3, remove = FALSE) %>% 
+  mutate(code = str_to_upper(code),
+         zone = case_when(region_nam %in% c('Tanga', 'Morogoro', 'Pwani','Dar-es-salaam')~"Coast",
+                          region_nam %in% c("Arusha","Kilimanjaro", "Manyara")~"Northern",
+                          region_nam %in% c('Tabora', 'Kigoma', 'Shinyanga', 'Kagera', 'Mwanza',"Geita", 'Mara', "Simiyu", "Katavi")~"Lake",
+                          region_nam %in% c("Dodoma", "Singida")~"Central",
+                          region_nam %in% c("Iringa", "Mbeya", "Songwe", "Ruvuma", "Rukwa", "Njombe")~"Southern Highland",
+                          region_nam %in% c('Lindi', 'Mtwara','Ruvuma')~"Southern")) %>% 
+  filter(!is.na(zone))
+```
+
+
+## Tilemap
+
+```{r}
+
+district.tb %>% 
+  hchart(type = "tilemap", hcaes(x = lon, y = lat, name = district, group = zone)) %>% 
+  hc_chart(type = "tilemap") %>% 
+  hc_plotOptions(
+    series = list(
+      dataLabels = list(
+        enabled = TRUE,
+        format = "{point.code}",
+        color = "white",
+        style = list(textOutline = FALSE)
+      )
+    )
+  ) %>% 
+  hc_tooltip(
+    headerFormat = "",
+    pointFormat = "<b>{point.name}</b> is in <b>{point.region_nam}</b>"
+    ) %>% 
+  hc_xAxis(visible = FALSE) %>% 
+  hc_yAxis(visible = FALSE) %>% 
+  hc_size(height = 800, width = 600)
+
+```
+
+
+## packedbubble
+
+A bubble chart requires three dimensions of data; the x-value and y-value to position the bubble along the value axes and a third value for its volume. Packed Bubble charts have a simpler data structure, a flat, one-dimensional array with volumes is sufficient. The bubble’s x/y position is automatically calculated using an algorithm that packs the bubbles in a cluster. The series data point configuration has support for setting colors and label values. Drag’n drop feature was also added to give the user a chance to quickly move one bubble between series and then check how their relations will change.
+
+
+
+```{r, echo=FALSE}
+walimu = readxl::read_excel("ELIMU_AJIRA_JUNI2022_compressed.xlsx") %>% 
+  janitor::clean_names()
+
+walimu.clean = walimu %>% 
+  drop_na()%>% 
+  mutate(year = as.integer(mwaka_kuhitimu_chuo), 
+         jinsi = str_to_title(jinsi)) %>% 
+  relocate(year, .after = mwaka_kuhitimu_chuo)
+```
+
+
+```{r}
+walimu.lga = walimu.clean %>% 
+  separate(halmashauri, into = c("district", "b", "c"), sep = " ") %>% 
+  unite(col = code, b:c, sep = " ") %>% 
+  mutate(lga = case_when(code == "District Council"~"DC",
+                         code == "Municipal Council"~"MC",
+                         code == "City Council"~"CC",
+                         code == "Town Council"~"TC",
+                         code == "Mikindani Municipal"~"MC",
+                         code == "Ujiji Municipal"~"MC"))
+
+  
+walimu.lga.freq = walimu.lga %>% 
+  group_by(district, lga) %>% 
+  count()
+
+district.walimu = district.tb %>% 
+  left_join(walimu.lga.freq) %>% 
+  select(region_nam, zone, n, district)%>% 
+  separate(district, into = c("code", "aa"), sep = 3, remove = FALSE) %>% 
+  mutate(code = str_to_upper(code)) %>% 
+  select(-aa)
+
+```
+
+
+```{r}
+
+
+
+hc = district.walimu %>% 
+   hchart(type = "packedbubble", hcaes(name = district, value = n, group = zone))
+
+
+
+q95 <- as.numeric(quantile(district.walimu$n, .95, na.rm = TRUE))
+
+hc %>% 
+  hc_tooltip(
+    useHTML = TRUE,
+    pointFormat = "<b>{point.name}:</b> {point.n}"
+  ) %>% 
+  hc_plotOptions(
+    packedbubble = list(
+      maxSize = "150%",
+      zMin = 0,
+      layoutAlgorithm = list(
+        gravitationalConstant =  0.05,
+        splitSeries =  TRUE, # TRUE to group points
+        seriesInteraction = TRUE,
+        dragBetweenSeries = TRUE,
+        parentNodeLimit = TRUE
+      ),
+      dataLabels = list(
+        enabled = TRUE,
+        format = "{point.code}",
+        filter = list(
+          property = "y",
+          operator = ">",
+          value = q95
+        ),
+        style = list(
+          color = "black",
+          textOutline = "none",
+          fontWeight = "normal"
+        )
+      )
+    )
+  )
+                         
+      
+  
+```
+
+
+## Sankey
+
+A sankey diagram is a visualization used to depict a flow from one set of values to another. The things being connected are called nodes and the connections are called links.Sankey diagrams can also visualize the energy accounts, material flow accounts on a regional or national level, and cost breakdowns.[1] The diagrams are often used in the visualization of material flow analysis.
+
+Sankey diagrams emphasize the major transfers or flows within a system. They help locate the most important contributions to a flow. They often show conserved quantities within defined system boundaries.
+
+
+```{r}
+
+   
+   quest.tb =  walimu.clean %>% 
+      group_by(kiwango_cha_elimu, jinsi) %>% 
+      summarise(value = n(), .groups = "drop") %>% 
+      rename(source = 2, target = 1) %>% 
+      filter(value > 100)%>% 
+      as.data.frame()
+        
+    
+    # From these flows we need to create a node data frame: it lists every entities involved in the flow
+    nodes <- data.frame(name=c(as.character(quest.tb$source), 
+                               as.character(quest.tb$target)) %>% 
+                          unique())
+    
+    nodes = quest.tb %>% 
+      select(-value) %>% 
+      pivot_longer(cols = source:target) %>% 
+      distinct(value) %>% 
+      rename(name = 1) %>% 
+      as.data.frame()
+    
+    # With networkD3, connection must be provided using id, not using real name like in the links dataframe.. So we need to reformat it.
+    quest.tb$IDsource=match(quest.tb$source, nodes$name)-1 
+    quest.tb$IDtarget=match(quest.tb$target, nodes$name)-1
+    
+    
+    # Make the Network 
+    networkD3::sankeyNetwork(Links = quest.tb, 
+                             Nodes = nodes,
+                             Source = "IDsource", 
+                             Target = "IDtarget",
+                             Value = "value", 
+                             NodeID = "name", 
+                             fontFamily = "Myriad Pro",
+                             LinkGroup = "source",
+                             sinksRight=FALSE,
+                             # height = 600, width = 800,
+                             # colourScale=ColourScal,
+                             nodeWidth=30, 
+                             iterations = 5,
+                             fontSize=14, 
+                             nodePadding=30, 
+                             width = 1000, 
+                             height = 400)
+  
+```
+
+
+
+## Cited references
+
+

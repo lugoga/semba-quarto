@@ -1,27 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://semba.github.io/semba/archive.html</loc>
-    <lastmod>2023-02-15T10:10:09.321Z</lastmod>
+    <loc>https://lugoga.github.io/semba-quarto/archive.html</loc>
+    <lastmod>2023-02-15T12:53:09.778Z</lastmod>
   </url>
   <url>
-    <loc>https://semba.github.io/semba/blog.html</loc>
-    <lastmod>2023-02-15T10:10:36.133Z</lastmod>
+    <loc>https://lugoga.github.io/semba-quarto/blog.html</loc>
+    <lastmod>2023-02-15T12:55:46.127Z</lastmod>
   </url>
   <url>
-    <loc>https://semba.github.io/semba/index.html</loc>
-    <lastmod>2023-02-15T10:10:13.923Z</lastmod>
+    <loc>https://lugoga.github.io/semba-quarto/index.html</loc>
+    <lastmod>2023-02-15T12:50:35.264Z</lastmod>
   </url>
   <url>
-    <loc>https://semba.github.io/semba/posts/combining_plots/index.html</loc>
-    <lastmod>2023-02-15T10:10:16.203Z</lastmod>
+    <loc>https://lugoga.github.io/semba-quarto/posts/combining_plots/index.html</loc>
+    <lastmod>2023-02-15T12:50:37.496Z</lastmod>
   </url>
   <url>
-    <loc>https://semba.github.io/semba/posts/inset_main_map/index.html</loc>
-    <lastmod>2023-02-15T10:10:18.899Z</lastmod>
+    <loc>https://lugoga.github.io/semba-quarto/posts/forecastingTimeseries/index.html</loc>
+    <lastmod>2023-02-15T12:53:28.834Z</lastmod>
   </url>
   <url>
-    <loc>https://semba.github.io/semba/posts/ttest/index.html</loc>
-    <lastmod>2023-02-15T10:10:20.700Z</lastmod>
+    <loc>https://lugoga.github.io/semba-quarto/posts/inset_main_map/index.html</loc>
+    <lastmod>2023-02-15T12:50:41.682Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lugoga.github.io/semba-quarto/posts/newvisuals/index.html</loc>
+    <lastmod>2023-02-15T12:50:43.780Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lugoga.github.io/semba-quarto/posts/spatialState/index.html</loc>
+    <lastmod>2023-02-15T12:50:45.600Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lugoga.github.io/semba-quarto/posts/ttest/index.html</loc>
+    <lastmod>2023-02-15T12:50:48.170Z</lastmod>
   </url>
 </urlset>

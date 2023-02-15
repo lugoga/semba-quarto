@@ -2,7 +2,7 @@
 # title: "Nyamisi"
 # image: michi.jpg
 about:
-  template: jolla
+  template: marquee
   links:
     # - icon: twitter
     #   text: Twitter
@@ -15,19 +15,21 @@ about:
       href: https://github.com/lugoga
 ---
 
-::: {.grid}
+<!-- ::: {.grid} -->
 
-::: {.g-col-12 .g-col-md-6}
-![](michi.jpg)
-:::
+<!-- ::: {.g-col-12 .g-col-md-6} -->
+<!-- ![](sembaProfile3.jpg) -->
+<!-- ::: -->
 
-::: {.g-col-12 .g-col-md-6}
-Hi, I'm Masumbuko Semba,  a data scientist and spatial analyst. With experience in programming, I have found ways to melding theory and applications to solve critical issues with data. I use several programming languages including MATLAB and Python to automate data processing and analysis and share the results in either presentations, reports, blogs, websites and interactive applications like shiny. The code and some of the work that I do on daily basis are open and free and can be accessed through my [blog](https://semba.netlify.app/), [website](https://semba-blog.netlify.app/) and [github](https://github.com/lugoga/) accounts. 
+<!-- ::: {.g-col-12 .g-col-md-6} -->
+Hi, I'm Masumbuko Semba,  a data scientist and spatial analyst and oceanographer. With experience in programming, I have developed tools, algorithms and techniques, and analytical workflows that makes easy to organize, manage, analyse, model data and share the findings and insights with modern web-tehnology media. I'm multi-lingual --- use several programming languages -- MATLAB, Python, javascript, and R to automate data processing and analysis and generate reports in either PDF or html documents. The scripts and tools allows reproducibility of data analysis worklow and reporting to support in decision making. These code and some of the work that I do on daily basis are freely available to the public to use at the my [blog](https://semba.netlify.app/), [website](https://semba-blog.netlify.app/) and [github](https://github.com/lugoga/) accounts. 
 
-:::
-:::
+![](sembaProfile3.jpg)
 
-## References
+<!-- ::: -->
+<!-- ::: -->
+
+## Peer Review Articles
 
 1.  <a href="https://www.ajol.info/index.php/wiojms/article/view/175825/">Peter, N., Semba, M., Lugomela, C., & Kyewalyanga, M. S. (2018). The influence of physical-chemical variables on the spatial and seasonal variation of Chlorophyll-a in coastal waters of Unguja, Zanzibar, Tanzania. Western Indian Ocean Journal of Marine Science, 17(2), 25-34.</a>
 
@@ -35,12 +37,63 @@ Hi, I'm Masumbuko Semba,  a data scientist and spatial analyst. With experience 
 
 1. [Semba, M., Kimirei, I., Kyewalyanga, M., Peter, N., Brendonck, L., & Somers, B. (2016). The decline in phytoplankton biomass and prawn catches in the Rufiji-Mafia Channel, Tanzania. Western Indian Ocean Journal of Marine Science, 15(1), 15-29.](https://www.ajol.info/index.php/wiojms/article/view/138510)
 
-<!-- 1. <a href="https://www.ajol.info/index.php/wiojms/article/view/175825/">name</a> -->
 
-<!-- 1. <a href="https://www.ajol.info/index.php/wiojms/article/view/175825/">name</a> -->
+1. [Semba, M., Lumpkin, R., Kimirei, I., Shaghude, Y., & Nyandwi, N. (2019). Seasonal and spatial variation of surface current in the Pemba Channel, Tanzania. PloS one, 14(1), e0210303](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0210303)
 
-<!-- 1. <a href="https://www.ajol.info/index.php/wiojms/article/view/175825/">name</a> -->
+1. [Crawford, B., Herrera, M. D., Hernandez, N., Leclair, C. R., Jiddawi, N., Masumbuko, S., & Haws, M. (2010). Small scale fisheries management: lessons from cockle harvesters in Nicaragua and Tanzania. Coastal Management, 38(3), 195-215.](https://www.tandfonline.com/doi/abs/10.1080/08920753.2010.483174)
 
-<!-- 1. <a href="https://www.ajol.info/index.php/wiojms/article/view/175825/">name</a> -->
+1. [Kyewalyanga, M. S., Peter, N., Semba, M., & Mahongo, S. B. (2020). Coastal upwelling and seasonal variation in phytoplankton biomass in the Pemba Channel. Western Indian Ocean Journal of Marine Science, (1/2020), 19-32.](https://www.ajol.info/index.php/wiojms/article/view/174215)
 
-<!-- 1. <a href="https://www.ajol.info/index.php/wiojms/article/view/175825/">name</a> -->
+1. [Silas, M. O., Kishe, M. A., Mshana, J. G., Semba, M. L., Mgeleka, S. S., Kuboja, B. N., ... & Matiku, P. (2021). Growth, mortality, exploitation rate and recruitment pattern of Octopus cyanea (Mollusca: Cephalopoda) in the WIO region: A case study from the Mafia Archipelago, Tanzania. Western Indian Ocean Journal of Marine Science, 20(1), 71-79.](https://www.ajol.info/index.php/wiojms/article/view/198108)
+
+1. [Silas, M. O., Semba, M. L., Mgeleka, S., Linderholm, H. W., & Gullström, M. (2022). Fishers’ ecological knowledge for management in data-poor fisheries: a case of East African small-scale fisheries in a changing climate.](https://www.diva-portal.org/smash/record.jsf?pid=diva2:1638631)
+
+## Book chapters
+
+1. [Kimirei, I. A., Igulu, M. M., Semba, M., & Lugendo, B. R. (2016). Small estuarine and non-estuarine mangrove ecosystems of Tanzania: overlooked coastal habitats?. Estuaries: A Lifeline of Ecosystem Services in the Western Indian Ocean, 209-226.](https://link.springer.com/chapter/10.1007/978-3-319-25370-1_13)
+
+1. [Kimirei, I. A., Semba, M., Mwakosya, C., Mgaya, Y. D., & Mahongo, S. B. (2017). Environmental Changes in the Tanzanian Part of Lake Victoria. Lake Victoria fisheries resources: Research and management in Tanzania, 37-59.](https://link.springer.com/chapter/10.1007/978-3-319-69656-0_3)
+
+1. [Mahatane, A., Mgaya, Y. D., Hoza, R. B., Onyango, P. O., & Semba, M. (2017). Co-management of Lake Victoria Fisheries. Lake Victoria Fisheries Resources: Research and Management in Tanzania, 219-239.](https://link.springer.com/chapter/10.1007/978-3-319-69656-0_11)
+
+1. [Sobo, F., Mgaya, Y. D., Kayanda, R. J., & Semba, M. (2017). Fisheries Statistics for Lake Victoria, Tanzania. Lake Victoria Fisheries Resources: Research and Management in Tanzania, 241-253.](https://link.springer.com/chapter/10.1007/978-3-319-69656-0_12)
+
+1. [Semba, M., Ndebele-Murisa, M., Mubaya, C. P., Kimirei, I. A., Chavula, G., Mwedzi, T., ... & Zenda, S. (2021). Historical and Future Climate Scenarios of the Zambezi River Basin. Ecological Changes in the Zambezi River Basin, 115.]()
+
+1. [Ndebele-Murisa, M., Kimirei, I. A., Mubaya, C. P., Chavula, G., Mwedzi, T., Mutimukuru-Maravanyika, T., & Semba, M. (2021). A Review of the Comparative Research Method. Ecological Changes in the Zambezi River Basin, 15.]()
+
+1. [Ndebele-Murisa, M. (Ed.). (2021). Ecological Changes in the Zambezi River Basin. African Books Collective.]()
+
+1. [Mgaya, Y. D., & Mahongo, S. B. (2017). Lake victoria fisheries resources. Springer.](https://www.jstor.org/stable/pdf/j.ctv1grbbq5.8.pdf)
+
+
+## Digital books
+
+1. [Semba M, Peter N. & I. Kimirei (2020). Developing packages in R](https://lugoga.github.io/r-package/)
+
+1. [Semba M. (2018). A gentle Introduction of Coding with R](https://lugoga.github.io/learning_r/)
+
+1. [Semba M., Silas M., Matiku P., & Chande M. (2019) Spatial distribution of *octopus* fishery in Kilwa District](https://lugoga.github.io/octopus/)
+
+1. [Semba M. (2018). Putting fishing landing sites and their instranstructure on spatial aspect](https://lugoga.github.io/master_thesis/)
+
+1. Semba M. (2023). Fisheries Data Management in Modern R and Excel. Manual with Applications in the Western Indian Ocean Region]. Food and Agriculture Organization and the Western Indian Ocean Marine Science Association
+
+## Interactive Apps
+
+1. [Kwala Commercial and Investment City](https://https//semba.shinyapps.io/kwala/)
+
+1. [The Exclusive Economic Zone Tool](https://semba.shinyapps.io/marineTz/)
+
+1. [The Pemba Channel Hydrographic Hub](https://semba.shinyapps.io/OceanWebApp/)
+
+1. [The coastal and Marine Data Visualization tool](https://semba.shinyapps.io/coastal_dashboard/)
+
+1. [The National Environmenal Master Plan](https://nemp.shinyapps.io/nemp/)
+
+1. [The Dashboard for Marine Spatial planning](https://lugoga.github.io/msp/)
+
+## Packages
+
+A **wior** packaged built by Masumbuko Semba and Nyamisi Peter focusing on Easy Tidy and Process Oceanographic Data. The packages is basically developed to help marine and freshwater scientist access a large and varied format of in-situ and satellite data in easy way. In fact the package has made data access in much easy way. The authors are trying to remove the barrier of data access and leave a space for scientists to focus in much deeper thinking of their field rather than spending several days to understand codes for a specific data download. The package contains several tools that allows scientist to get a wide array of datasets. And the funny things is that you get a tidy format result of the download, which is easy to handle in R and also to share it out of R environment. The tidy format is in form that many scientist familiar with Excel spreadsheet will find it handy. You can access this package through this link: https://github.com/lugoga/wior
+

@@ -4,7 +4,10 @@
     "items": [
       "/posts/inset_main_map/index.html",
       "/posts/ttest/index.html",
-      "/posts/combining_plots/index.html"
+      "/posts/combining_plots/index.html",
+      "/posts/forecastingTimeseries/index.html",
+      "/posts/newvisuals/index.html",
+      "/posts/spatialState/index.html"
     ]
   },
   {
@@ -12,7 +15,10 @@
     "items": [
       "/posts/inset_main_map/index.html",
       "/posts/ttest/index.html",
-      "/posts/combining_plots/index.html"
+      "/posts/combining_plots/index.html",
+      "/posts/forecastingTimeseries/index.html",
+      "/posts/newvisuals/index.html",
+      "/posts/spatialState/index.html"
     ]
   }
 ]

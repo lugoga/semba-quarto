@@ -4,7 +4,7 @@ project:
 
 website:
   title: "Semba's blog"
-  site-url: https://semba.github.io/semba/
+  site-url: https://lugoga.github.io/semba-quarto/
   description: "Coding for all for better today and tommorow"
   
   navbar:
@@ -67,6 +67,6 @@ comments:
 format:
   html:
     theme: solar
-  
+
  
 
