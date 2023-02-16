@@ -1,6 +1,6 @@
 ---
-# title: "Nyamisi"
-# image: michi.jpg
+# title: "Semba"
+# image: semba.jpg
 about:
   template: marquee
   links:

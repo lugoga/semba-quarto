@@ -3,7 +3,8 @@ project:
   output-dir: docs
 
 website:
-  title: "Semba's blog"
+  title: "NG'ARA"
+  favicon: ngara.png
   site-url: https://lugoga.github.io/semba-quarto/
   description: "Coding for all for better today and tommorow"
   

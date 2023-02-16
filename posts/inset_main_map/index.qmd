@@ -234,5 +234,14 @@ cowplot::ggdraw(plot = map.site) +
 ### Summary
 Therefore , a final map shown in @fig-map2 shows the locations of study sites with reference to the country and provinces and is more professional.
 
+## Last updated {.appendix}
+```{r}
+#| echo: false
+
+today = Sys.Date()
+format(today, format = "%d %B %Y")
+```
+
+
 
 ## Cited Materials
