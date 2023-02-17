@@ -8,7 +8,7 @@ listing:
   sort: "date desc"
   sort-ui: [title, date]
   type: default
-  categories: true
+  categories: cloud
   filter-ui: false
   fields: [date, title, reading-time, description, categories, image, author]
   feed: true

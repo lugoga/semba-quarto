@@ -22,7 +22,7 @@ about:
 <!-- ::: -->
 
 <!-- ::: {.g-col-12 .g-col-md-6} -->
-Hi, I'm Masumbuko Semba,  a data scientist and spatial analyst and oceanographer. With experience in programming, I have developed tools, algorithms and techniques, and analytical workflows that makes easy to organize, manage, analyse, model data and share the findings and insights with modern web-tehnology media. I'm multi-lingual --- use several programming languages -- MATLAB, Python, javascript, and R to automate data processing and analysis and generate reports in either PDF or html documents. The scripts and tools allows reproducibility of data analysis worklow and reporting to support in decision making. These code and some of the work that I do on daily basis are freely available to the public to use at the my [blog](https://semba.netlify.app/), [website](https://semba-blog.netlify.app/) and [github](https://github.com/lugoga/) accounts. 
+Hi, I'm Masumbuko Semba,  a data scientist and spatial analyst and oceanographer. With experience in programming, I have developed tools, algorithms and techniques, and analytical workflows that makes easy to organize, manage, analyse, model data and share the findings and insights with modern web-tehnology media. I'm multi-lingual --- use several programming languages -- [MATLAB](https://www.mathworks.com/products/matlab.html), [Python](https://www.python.org/), [Observable JavaScript](https://observablehq.com/@observablehq/observable-javascript), and R to automate data processing and analysis and generate reports in either PDF or html documents. The scripts and tools allows reproducibility of data analysis worklow and reporting to support in decision making. These code and some of the work that I do on daily basis are freely available to the public to use at the my [blog](https://semba.netlify.app/), [website](https://semba-blog.netlify.app/) and [github](https://github.com/lugoga/) accounts. 
 
 ![](sembaProfile3.jpg)
 
@@ -68,6 +68,8 @@ Hi, I'm Masumbuko Semba,  a data scientist and spatial analyst and oceanographer
 
 
 ## Digital books
+
+1. [Semba M (2021). Practical Spatial Data Coastal and Marine Environment in R](https://lugoga.github.io/geomarine/)
 
 1. [Semba M, Peter N. & I. Kimirei (2020). Developing packages in R](https://lugoga.github.io/r-package/)
 

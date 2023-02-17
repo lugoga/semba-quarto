@@ -5,7 +5,7 @@
       xmlns:dc="http://purl.org/dc/elements/1.1/" 
       version="2.0">
 <channel>
-<title>NG&#39;ARA</title>
+<title>ng&#39;ara</title>
 <link>https://lugoga.github.io/semba-quarto/blog.html</link>
 <atom:link href="https://lugoga.github.io/semba-quarto/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Coding for all for better today and tommorow</description>
@@ -250,6 +250,357 @@ Wilke, Claus O. 2018. <em>Cowplot: Streamlined Plot Theme and Plot Annotations f
   <category>Visualization</category>
   <guid>https://lugoga.github.io/semba-quarto/posts/inset_main_map/index.html</guid>
   <pubDate>Sun, 19 Feb 2023 21:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Multi-lingual: R and Python for Data Science</title>
+  <dc:creator>Masumbuko Semba</dc:creator>
+  <link>https://lugoga.github.io/semba-quarto/posts/r_python/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>If you work with data science, <code>R</code> and <code>Python</code> must be the two programming languages that you use the most. Both <code>R</code> and <code>Python</code> are quite robust languages and either one of them is actually sufficient to carry out the data analysis task. However, instead of considering them as tools that supplement each other, more often you will find people dealing with data claim one language to be better than the other. Truth be told, <code>R</code> and <code>Python</code> are excellent tools in ther own right but are often conceived as rivals. One major reason for such view lies on the experts. Because data analysts have divided the data science field into camps based on the choice of the programming language they are familiar with.</p>
+<p>There major two camps—<em>R camp</em> and <em>Python camp</em>—and history is the testimony that camps can not live in <em>harmony</em>. Members of both camps believe that their choice of language . Honestly, I do not hold to their opinion, but rather wish I have skills for both languages. So, whether you have in R or Python camp, one thing you will notice is that the problem we have in data science is simply that divergence does not lie with the tools but with the people using those tools.</p>
+<p>I believe there are few people in the Data Science community who use both R and Python in their analytical workflow. But majority are committed to only one programming language, but wish they had access to some functions from other language. Therefore, there is no reason that hold us to stick using this programming language or the other. Our ultimate goal should be to do better analytics and derive better insights and choice of which programming language to use should not hinder us from reaching our goals.</p>
+<p>The questions that always resolute in my mind is whether can we utilize the statistical power of R along with the programming capabilities of Python?. Its undeniable truth that there are definitely some high and low points for both languages and if we can utilize the strength of both, we can end up dong a much better job. Thanks to Kevin Ushey and his colleges <span class="citation" data-cites="reticulate">(2020)</span> for developing a reticulate package. <strong>reticulate</strong> package provides a comprehensive set of tools that allows to work with R and Python in the same environment. The <strong>reticulate</strong> package provide the following facilities;</p>
+<ul>
+<li><p>Calling Python from R in a variety of ways including <code>rmarkdown</code>, <code>sourcing</code>, <code>Python scripts</code>, importing Python modules and using Python interactively within and R session.</p></li>
+<li><p>Translation between R and Python objects—for example <code>r_to_py</code> function allows to construct R to Pandas data frame and <code>py_to_r()</code> function convert python object like data frame, matrix and etc to R</p></li>
+<li><p>Flexible binding to different versions of Python including virtual environments and conda environment.</p></li>
+</ul>
+</section>
+<section id="tibble-to-pandas-dataframe" class="level2">
+<h2 class="anchored" data-anchor-id="tibble-to-pandas-dataframe">Tibble to Pandas Dataframe</h2>
+<p>We are going to use a <code>penguin</code> dataset from <strong>palmerpenguins</strong> package <span class="citation" data-cites="horst2022palmer">(<strong>horst2022palmer?</strong>)</span>. We first need to import the dataset from the package where is stored into the R session. let us load the packages that we are glint to use in this post.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">require</span>(tidyverse)</span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;">require</span>(reticulate)</span></code></pre></div>
+</div>
+<p>Once we have loaded the package, we then import the dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">peng <span class="ot" style="color: #003B4F;">=</span> palmerpenguins<span class="sc" style="color: #5E5E5E;">::</span>penguins</span>
+<span id="cb2-2">peng</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 x 8
+   species island    bill_length_mm bill_depth_mm flipper_~1 body_~2 sex    year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;      &lt;int&gt;   &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7        181    3750 male   2007
+ 2 Adelie  Torgersen           39.5          17.4        186    3800 fema~  2007
+ 3 Adelie  Torgersen           40.3          18          195    3250 fema~  2007
+ 4 Adelie  Torgersen           NA            NA           NA      NA &lt;NA&gt;   2007
+ 5 Adelie  Torgersen           36.7          19.3        193    3450 fema~  2007
+ 6 Adelie  Torgersen           39.3          20.6        190    3650 male   2007
+ 7 Adelie  Torgersen           38.9          17.8        181    3625 fema~  2007
+ 8 Adelie  Torgersen           39.2          19.6        195    4675 male   2007
+ 9 Adelie  Torgersen           34.1          18.1        193    3475 &lt;NA&gt;   2007
+10 Adelie  Torgersen           42            20.2        190    4250 &lt;NA&gt;   2007
+# ... with 334 more rows, and abbreviated variable names 1: flipper_length_mm,
+#   2: body_mass_g</code></pre>
+</div>
+</div>
+<p>The printed result suggest that this dataset is a <em>tibble</em> format—a modern data frame from the tidyverse ecosystem <span class="citation" data-cites="tidyverse">(Wickham and Wickham 2017)</span>. Let’s visualize the dataset with pair plot in <strong>GGally</strong> package <span class="citation" data-cites="ggally">(Schloerke et al. 2020)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">peng <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb4-2">  <span class="fu" style="color: #4758AB;">filter</span>(<span class="sc" style="color: #5E5E5E;">!</span><span class="fu" style="color: #4758AB;">is.na</span>(sex)) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb4-3">  GGally<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">ggpairs</span>(<span class="at" style="color: #657422;">columns =</span> <span class="dv" style="color: #AD0000;">3</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">6</span>, <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">color =</span> sex))</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-ggpair" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/r_python/index_files/figure-html/fig-ggpair-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Matrix of numerical variable in the penguins dataset</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>However, our interest in this post is plotting this dataset using python. Therefore, we need to first import three key libraries that we will use throughtout this post. The chunk below highlight these packages and how to import them inside the python chunk.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;">import</span> pandas <span class="im" style="color: #00769E;">as</span> pd</span>
+<span id="cb5-2"><span class="im" style="color: #00769E;">import</span> numpy <span class="im" style="color: #00769E;">as</span> np</span>
+<span id="cb5-3"><span class="im" style="color: #00769E;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;">as</span> plt</span>
+<span id="cb5-4"><span class="im" style="color: #00769E;">import</span> seaborn <span class="im" style="color: #00769E;">as</span> sns</span></code></pre></div>
+</div>
+<p>Once the tibble file is in the environment, we need to convert from tibble data frame into pandas dataframe. Make a copy of pandas dataframe from tible with the <code>r.</code> function</p>
+<div class="callout-info callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Info
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>note that conversion from tibble to pandas data frame must be done in the Python chunk and not R chunk</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">peng <span class="op" style="color: #5E5E5E;">=</span> r.peng</span>
+<span id="cb6-2">peng</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       species     island  bill_length_mm  ...  body_mass_g     sex  year
+0       Adelie  Torgersen            39.1  ...         3750    male  2007
+1       Adelie  Torgersen            39.5  ...         3800  female  2007
+2       Adelie  Torgersen            40.3  ...         3250  female  2007
+3       Adelie  Torgersen             NaN  ...  -2147483648     NaN  2007
+4       Adelie  Torgersen            36.7  ...         3450  female  2007
+..         ...        ...             ...  ...          ...     ...   ...
+339  Chinstrap      Dream            55.8  ...         4000    male  2009
+340  Chinstrap      Dream            43.5  ...         3400  female  2009
+341  Chinstrap      Dream            49.6  ...         3775    male  2009
+342  Chinstrap      Dream            50.8  ...         4100    male  2009
+343  Chinstrap      Dream            50.2  ...         3775  female  2009
+
+[344 rows x 8 columns]</code></pre>
+</div>
+</div>
+</section>
+<section id="plotting" class="level2">
+<h2 class="anchored" data-anchor-id="plotting">Plotting</h2>
+<section id="pairplot" class="level3">
+<h3 class="anchored" data-anchor-id="pairplot">Pairplot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb8-2">sns.pairplot(data <span class="op" style="color: #5E5E5E;">=</span> peng, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-pairplot-1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/r_python/index_files/figure-html/fig-pairplot-1.png" class="img-fluid figure-img" width="680"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: The pairplot of penguins dataset</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-pairplot-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/r_python/index_files/figure-html/fig-pairplot-2.png" class="img-fluid figure-img" width="1312"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: The pairplot of penguins dataset</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="scatter-plot" class="level3">
+<h3 class="anchored" data-anchor-id="scatter-plot">Scatter plot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"></span>
+<span id="cb10-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb10-3"></span>
+<span id="cb10-4">sns.scatterplot(</span>
+<span id="cb10-5">  data <span class="op" style="color: #5E5E5E;">=</span> peng, </span>
+<span id="cb10-6">  x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, </span>
+<span id="cb10-7">  y <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_depth_mm"</span>, </span>
+<span id="cb10-8">  hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"island"</span></span>
+<span id="cb10-9">  )</span>
+<span id="cb10-10">  </span>
+<span id="cb10-11"></span>
+<span id="cb10-12">plt.xlabel(<span class="st" style="color: #20794D;">"Length (mm)"</span>)</span>
+<span id="cb10-13">plt.ylabel(<span class="st" style="color: #20794D;">"Depth (mm)"</span>)</span>
+<span id="cb10-14">plt.legend(loc <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"lower right"</span>)</span>
+<span id="cb10-15">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-scatter" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/r_python/index_files/figure-html/fig-scatter-5.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: Scatterplot of length and depth of penguins</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="histogram" class="level3">
+<h3 class="anchored" data-anchor-id="histogram">Histogram</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb11-2">sns.histplot(data <span class="op" style="color: #5E5E5E;">=</span> peng, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_depth_mm"</span>, color <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"steelblue"</span>)</span>
+<span id="cb11-3">plt.xlabel(<span class="st" style="color: #20794D;">"Bill depth (mm)"</span>)</span>
+<span id="cb11-4">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb11-5">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-hist" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/r_python/index_files/figure-html/fig-hist-7.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5: Histogram of bill depth</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb12-2">sns.histplot(data <span class="op" style="color: #5E5E5E;">=</span> peng[peng.island <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"Dream"</span>], x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_depth_mm"</span>, color <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"steelblue"</span>, label <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"Dream"</span>)</span>
+<span id="cb12-3">sns.histplot(data <span class="op" style="color: #5E5E5E;">=</span> peng[peng.island <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"Biscoe"</span>], x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_depth_mm"</span>, color <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"darkorchid"</span>, label <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"Biscoe"</span>)</span>
+<span id="cb12-4">sns.histplot(data <span class="op" style="color: #5E5E5E;">=</span> peng[peng.island <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"Torgersen"</span>], x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_depth_mm"</span>, color <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"lightblue"</span>, label <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"Torgersen"</span>)</span>
+<span id="cb12-5">plt.xlabel(<span class="st" style="color: #20794D;">"Bill depth (mm)"</span>)</span>
+<span id="cb12-6">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb12-7">plt.legend(loc <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"upper right"</span>)</span>
+<span id="cb12-8">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-hist-mult" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/r_python/index_files/figure-html/fig-hist-mult-9.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;6: Histogram of bill depth</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>##3 Density</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb13-2">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> peng, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, shade <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"steelblue"</span>)</span>
+<span id="cb13-3">plt.axvline(<span class="fl" style="color: #AD0000;">43.40</span>, color<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"k"</span>, linestyle<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"--"</span>)</span>
+<span id="cb13-4">plt.ylabel(<span class="st" style="color: #20794D;">"Density"</span>)</span>
+<span id="cb13-5">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb13-6">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-dens" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/r_python/index_files/figure-html/fig-dens-11.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;7: Density distribution of of bill depth</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The difference of bill length among the three species is interesting. Let’s look at the density plots of these species:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb14-2">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> peng[peng.species <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"Adelie"</span>], x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, label <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"Adelie"</span>, shade <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"steelblue"</span>)</span>
+<span id="cb14-3">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> peng[peng.species <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"Chinstrap"</span>], x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, label <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"Chinstrap"</span>, shade <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"orange"</span>)</span>
+<span id="cb14-4">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> peng[peng.species <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"Gentoo"</span>], x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, label <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"Gentoo"</span>, shade <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"green"</span>)</span>
+<span id="cb14-5">plt.legend(loc <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"upper right"</span>)</span>
+<span id="cb14-6">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb14-7"></span>
+<span id="cb14-8">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-density-mul" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/r_python/index_files/figure-html/fig-density-mul-13.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;8: Density plot of bill length by species</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="boxplot" class="level3">
+<h3 class="anchored" data-anchor-id="boxplot">Boxplot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"></span>
+<span id="cb15-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb15-3">sns.boxplot(data <span class="op" style="color: #5E5E5E;">=</span> peng, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"island"</span>, y <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_depth_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>)</span>
+<span id="cb15-4">plt.xlabel(<span class="st" style="color: #20794D;">""</span>)</span>
+<span id="cb15-5">plt.ylabel(<span class="st" style="color: #20794D;">"Bill depth (mm)"</span>)</span>
+<span id="cb15-6">plt.legend(loc <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"lower right"</span>)</span>
+<span id="cb15-7"><span class="co" style="color: #5E5E5E;"># plt.gca().legend_.remove() # uncomment to remove legend</span></span>
+<span id="cb15-8">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-box" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/r_python/index_files/figure-html/fig-box-15.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;9: Boxplot of bill depth by island and species</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"></span>
+<span id="cb16-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb16-3">sns.violinplot(data <span class="op" style="color: #5E5E5E;">=</span> peng, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"island"</span>, y <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_depth_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>)</span>
+<span id="cb16-4">plt.xlabel(<span class="st" style="color: #20794D;">""</span>)</span>
+<span id="cb16-5">plt.ylabel(<span class="st" style="color: #20794D;">"Bill depth (mm)"</span>)</span>
+<span id="cb16-6">plt.legend(loc <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"lower right"</span>)</span>
+<span id="cb16-7"><span class="co" style="color: #5E5E5E;"># plt.gca().legend_.remove() # uncomment to remove legend</span></span>
+<span id="cb16-8">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-vio" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/r_python/index_files/figure-html/fig-vio-17.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;10: Violin plots of bill depth by island and species</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"></span>
+<span id="cb17-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb17-3">sns.violinplot(data <span class="op" style="color: #5E5E5E;">=</span> peng, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"island"</span>, y <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_depth_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>)</span>
+<span id="cb17-4">sns.boxplot(data <span class="op" style="color: #5E5E5E;">=</span> peng, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"island"</span>, y <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_depth_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>)</span>
+<span id="cb17-5">plt.xlabel(<span class="st" style="color: #20794D;">""</span>)</span>
+<span id="cb17-6">plt.ylabel(<span class="st" style="color: #20794D;">"Bill depth (mm)"</span>)</span>
+<span id="cb17-7">plt.legend(loc <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"lower right"</span>)</span>
+<span id="cb17-8"><span class="co" style="color: #5E5E5E;"># plt.gca().legend_.remove() # uncomment to remove legend</span></span>
+<span id="cb17-9">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-vio-box" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/r_python/index_files/figure-html/fig-vio-box-19.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;11: Violin and Boxplot of bill depth by island and species</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="pandas-dataframe-to-tibble" class="level2">
+<h2 class="anchored" data-anchor-id="pandas-dataframe-to-tibble">Pandas Dataframe to Tibble</h2>
+<p>The power of multilingual is clearly demonstrated with Rstudio, which allows you to swap dataset between R and python. In the previous section we created a <code>peng</code> dataset in python from R. In this session we are going to use this python dataset and convert it back to R. A <code>py</code> function from <strong>reticulate</strong> package is used as the chunk below illustrates:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">peng.r <span class="ot" style="color: #003B4F;">=</span> reticulate<span class="sc" style="color: #5E5E5E;">::</span>py<span class="sc" style="color: #5E5E5E;">$</span>peng</span>
+<span id="cb18-2">peng.r <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">as_tibble</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 x 8
+   species island    bill_length_mm bill_depth_mm flipper_~1 body_~2 sex    year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;
+ 1 Adelie  Torgersen           39.1          18.7     1.81e2  3.75e3 male   2007
+ 2 Adelie  Torgersen           39.5          17.4     1.86e2  3.8 e3 fema~  2007
+ 3 Adelie  Torgersen           40.3          18       1.95e2  3.25e3 fema~  2007
+ 4 Adelie  Torgersen           NA            NA      -2.15e9 -2.15e9 &lt;NA&gt;   2007
+ 5 Adelie  Torgersen           36.7          19.3     1.93e2  3.45e3 fema~  2007
+ 6 Adelie  Torgersen           39.3          20.6     1.9 e2  3.65e3 male   2007
+ 7 Adelie  Torgersen           38.9          17.8     1.81e2  3.62e3 fema~  2007
+ 8 Adelie  Torgersen           39.2          19.6     1.95e2  4.68e3 male   2007
+ 9 Adelie  Torgersen           34.1          18.1     1.93e2  3.48e3 &lt;NA&gt;   2007
+10 Adelie  Torgersen           42            20.2     1.9 e2  4.25e3 &lt;NA&gt;   2007
+# ... with 334 more rows, and abbreviated variable names 1: flipper_length_mm,
+#   2: body_mass_g</code></pre>
+</div>
+</div>
+<div class="callout-info callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Info
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>note that conversion from pandas to tibble data frame must be done in the R chunk and not Python chunk</p>
+</div>
+</div>
+</section>
+<section id="cited-references" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited references</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-ggally" class="csl-entry">
+Schloerke, Barret, Jason Crowley, Di Cook, Francois Briatte, Moritz Marbach, Edwin Thoen, Amos Elberg, and Joseph Larmarange. 2020. <em>GGally: Extension to ’Ggplot2’</em>. <a href="https://CRAN.R-project.org/package=GGally">https://CRAN.R-project.org/package=GGally</a>.
+</div>
+<div id="ref-reticulate" class="csl-entry">
+Ushey, Kevin, JJ Allaire, and Yuan Tang. 2020. <em>Reticulate: Interface to ’Python’</em>. <a href="https://CRAN.R-project.org/package=reticulate">https://CRAN.R-project.org/package=reticulate</a>.
+</div>
+<div id="ref-tidyverse" class="csl-entry">
+Wickham, Hadley, and Maintainer Hadley Wickham. 2017. <em>Tidyverse: Easily Install and Load the ’Tidyverse’</em>. <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>.
+</div>
+</div></section></div> ]]></description>
+  <category>Analysis</category>
+  <category>Visualization</category>
+  <guid>https://lugoga.github.io/semba-quarto/posts/r_python/index.html</guid>
+  <pubDate>Fri, 17 Feb 2023 21:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Inferential statistics in R:ttest</title>

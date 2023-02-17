@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Masumbuko Semba">
+<meta name="dcterms.date" content="2023-02-18">
+
+<title>ng’ara - Multi-lingual: R and Python for Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../ngara.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=14521548"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '14521548', { 'anonymize_ip': true});
+</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta name="twitter:title" content="ng’ara - Multi-lingual: R and Python for Data Science">
+<meta name="twitter:description" content="If you work with data science, R and Python must be the two programming languages that you use the most.">
+<meta name="twitter:image" content="https://lugoga.github.io/semba-quarto/posts\r_python\thumbnail_blog.png">
+<meta name="twitter:creator" content="@semba753">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">ng’ara</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html">
+ <span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/lugoga"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/semba2020"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/channel/UC9uZ1KPyo7zIzI4BnUtHPfA"><i class="bi bi-youtube" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../blog.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-apps--links" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Apps &amp; Links</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-apps--links">    
+        <li>
+    <a class="dropdown-item" href="https://semba.netlify.app/">
+ <span class="dropdown-text">Semba-blog Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba-blog.netlify.app/">
+ <span class="dropdown-text">Semba Data Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/kwala/">
+ <span class="dropdown-text">Kwala commercial CIty</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/coastal_dashboard/">
+ <span class="dropdown-text">Marine Hub</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://nemp.shinyapps.io/nemp/">
+ <span class="dropdown-text">Environmental Master Plan</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/OceanWebApp/">
+ <span class="dropdown-text">Hydrographic Data Hub</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/marineTz/">
+ <span class="dropdown-text">Potential Fishing Zones</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://lugoga.github.io/msp/">
+ <span class="dropdown-text">Marine Spatial Planning</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://rweekly.org/">
+ <span class="dropdown-text">R Weekly</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://www.r-bloggers.com/">
+ <span class="dropdown-text">R Bloggers</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../archive.html">
+ <span class="menu-text">Archive</span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#tibble-to-pandas-dataframe" id="toc-tibble-to-pandas-dataframe" class="nav-link" data-scroll-target="#tibble-to-pandas-dataframe">Tibble to Pandas Dataframe</a></li>
+  <li><a href="#plotting" id="toc-plotting" class="nav-link" data-scroll-target="#plotting">Plotting</a>
+  <ul class="collapse">
+  <li><a href="#pairplot" id="toc-pairplot" class="nav-link" data-scroll-target="#pairplot">Pairplot</a></li>
+  <li><a href="#scatter-plot" id="toc-scatter-plot" class="nav-link" data-scroll-target="#scatter-plot">Scatter plot</a></li>
+  <li><a href="#histogram" id="toc-histogram" class="nav-link" data-scroll-target="#histogram">Histogram</a></li>
+  <li><a href="#boxplot" id="toc-boxplot" class="nav-link" data-scroll-target="#boxplot">Boxplot</a></li>
+  </ul></li>
+  <li><a href="#pandas-dataframe-to-tibble" id="toc-pandas-dataframe-to-tibble" class="nav-link" data-scroll-target="#pandas-dataframe-to-tibble">Pandas Dataframe to Tibble</a></li>
+  <li><a href="#cited-references" id="toc-cited-references" class="nav-link" data-scroll-target="#cited-references">Cited references</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Multi-lingual: R and Python for Data Science</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Analysis</div>
+    <div class="quarto-category">Visualization</div>
+  </div>
+  </div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <a href="https://semba.netlify.app">Masumbuko Semba</a> <a href="https://orcid.org/0000-0002-5002-9747" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://semba.netlify.app/">
+            Nelson Mandela African Institution of Science and Technology
+            </a>
+          </p>
+      </div>
+    </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 18, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>If you work with data science, <code>R</code> and <code>Python</code> must be the two programming languages that you use the most. Both <code>R</code> and <code>Python</code> are quite robust languages and either one of them is actually sufficient to carry out the data analysis task. However, instead of considering them as tools that supplement each other, more often you will find people dealing with data claim one language to be better than the other. Truth be told, <code>R</code> and <code>Python</code> are excellent tools in ther own right but are often conceived as rivals. One major reason for such view lies on the experts. Because data analysts have divided the data science field into camps based on the choice of the programming language they are familiar with.</p>
+<p>There major two camps—<em>R camp</em> and <em>Python camp</em>—and history is the testimony that camps can not live in <em>harmony</em>. Members of both camps believe that their choice of language . Honestly, I do not hold to their opinion, but rather wish I have skills for both languages. So, whether you have in R or Python camp, one thing you will notice is that the problem we have in data science is simply that divergence does not lie with the tools but with the people using those tools.</p>
+<p>I believe there are few people in the Data Science community who use both R and Python in their analytical workflow. But majority are committed to only one programming language, but wish they had access to some functions from other language. Therefore, there is no reason that hold us to stick using this programming language or the other. Our ultimate goal should be to do better analytics and derive better insights and choice of which programming language to use should not hinder us from reaching our goals.</p>
+<p>The questions that always resolute in my mind is whether can we utilize the statistical power of R along with the programming capabilities of Python?. Its undeniable truth that there are definitely some high and low points for both languages and if we can utilize the strength of both, we can end up dong a much better job. Thanks to Kevin Ushey and his colleges <span class="citation" data-cites="reticulate">(<a href="#ref-reticulate" role="doc-biblioref">2020</a>)</span> for developing a reticulate package. <strong>reticulate</strong> package provides a comprehensive set of tools that allows to work with R and Python in the same environment. The <strong>reticulate</strong> package provide the following facilities;</p>
+<ul>
+<li><p>Calling Python from R in a variety of ways including <code>rmarkdown</code>, <code>sourcing</code>, <code>Python scripts</code>, importing Python modules and using Python interactively within and R session.</p></li>
+<li><p>Translation between R and Python objects—for example <code>r_to_py</code> function allows to construct R to Pandas data frame and <code>py_to_r()</code> function convert python object like data frame, matrix and etc to R</p></li>
+<li><p>Flexible binding to different versions of Python including virtual environments and conda environment.</p></li>
+</ul>
+</section>
+<section id="tibble-to-pandas-dataframe" class="level2">
+<h2 class="anchored" data-anchor-id="tibble-to-pandas-dataframe">Tibble to Pandas Dataframe</h2>
+<p>We are going to use a <code>penguin</code> dataset from <strong>palmerpenguins</strong> package <span class="citation" data-cites="horst2022palmer">(<a href="#ref-horst2022palmer" role="doc-biblioref"><strong>horst2022palmer?</strong></a>)</span>. We first need to import the dataset from the package where is stored into the R session. let us load the packages that we are glint to use in this post.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(reticulate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Once we have loaded the package, we then import the dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>peng <span class="ot">=</span> palmerpenguins<span class="sc">::</span>penguins</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>peng</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 x 8
+   species island    bill_length_mm bill_depth_mm flipper_~1 body_~2 sex    year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;      &lt;int&gt;   &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7        181    3750 male   2007
+ 2 Adelie  Torgersen           39.5          17.4        186    3800 fema~  2007
+ 3 Adelie  Torgersen           40.3          18          195    3250 fema~  2007
+ 4 Adelie  Torgersen           NA            NA           NA      NA &lt;NA&gt;   2007
+ 5 Adelie  Torgersen           36.7          19.3        193    3450 fema~  2007
+ 6 Adelie  Torgersen           39.3          20.6        190    3650 male   2007
+ 7 Adelie  Torgersen           38.9          17.8        181    3625 fema~  2007
+ 8 Adelie  Torgersen           39.2          19.6        195    4675 male   2007
+ 9 Adelie  Torgersen           34.1          18.1        193    3475 &lt;NA&gt;   2007
+10 Adelie  Torgersen           42            20.2        190    4250 &lt;NA&gt;   2007
+# ... with 334 more rows, and abbreviated variable names 1: flipper_length_mm,
+#   2: body_mass_g</code></pre>
+</div>
+</div>
+<p>The printed result suggest that this dataset is a <em>tibble</em> format—a modern data frame from the tidyverse ecosystem <span class="citation" data-cites="tidyverse">(<a href="#ref-tidyverse" role="doc-biblioref">Wickham and Wickham 2017</a>)</span>. Let’s visualize the dataset with pair plot in <strong>GGally</strong> package <span class="citation" data-cites="ggally">(<a href="#ref-ggally" role="doc-biblioref">Schloerke et al. 2020</a>)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>peng <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sex)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  GGally<span class="sc">::</span><span class="fu">ggpairs</span>(<span class="at">columns =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>, <span class="fu">aes</span>(<span class="at">color =</span> sex))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-ggpair" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-ggpair-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Matrix of numerical variable in the penguins dataset</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>However, our interest in this post is plotting this dataset using python. Therefore, we need to first import three key libraries that we will use throughtout this post. The chunk below highlight these packages and how to import them inside the python chunk.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Once the tibble file is in the environment, we need to convert from tibble data frame into pandas dataframe. Make a copy of pandas dataframe from tible with the <code>r.</code> function</p>
+<div class="callout-info callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Info
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>note that conversion from tibble to pandas data frame must be done in the Python chunk and not R chunk</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>peng <span class="op">=</span> r.peng</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>peng</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       species     island  bill_length_mm  ...  body_mass_g     sex  year
+0       Adelie  Torgersen            39.1  ...         3750    male  2007
+1       Adelie  Torgersen            39.5  ...         3800  female  2007
+2       Adelie  Torgersen            40.3  ...         3250  female  2007
+3       Adelie  Torgersen             NaN  ...  -2147483648     NaN  2007
+4       Adelie  Torgersen            36.7  ...         3450  female  2007
+..         ...        ...             ...  ...          ...     ...   ...
+339  Chinstrap      Dream            55.8  ...         4000    male  2009
+340  Chinstrap      Dream            43.5  ...         3400  female  2009
+341  Chinstrap      Dream            49.6  ...         3775    male  2009
+342  Chinstrap      Dream            50.8  ...         4100    male  2009
+343  Chinstrap      Dream            50.2  ...         3775  female  2009
+
+[344 rows x 8 columns]</code></pre>
+</div>
+</div>
+</section>
+<section id="plotting" class="level2">
+<h2 class="anchored" data-anchor-id="plotting">Plotting</h2>
+<section id="pairplot" class="level3">
+<h3 class="anchored" data-anchor-id="pairplot">Pairplot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sns.pairplot(data <span class="op">=</span> peng, hue <span class="op">=</span> <span class="st">"species"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-pairplot-1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-pairplot-1.png" class="img-fluid figure-img" width="680"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: The pairplot of penguins dataset</figcaption><p></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-pairplot-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-pairplot-2.png" class="img-fluid figure-img" width="1312"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: The pairplot of penguins dataset</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="scatter-plot" class="level3">
+<h3 class="anchored" data-anchor-id="scatter-plot">Scatter plot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  data <span class="op">=</span> peng, </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> <span class="st">"bill_length_mm"</span>, </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> <span class="st">"bill_depth_mm"</span>, </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  hue <span class="op">=</span> <span class="st">"island"</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Length (mm)"</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Depth (mm)"</span>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>plt.legend(loc <span class="op">=</span> <span class="st">"lower right"</span>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-scatter" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-scatter-5.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: Scatterplot of length and depth of penguins</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="histogram" class="level3">
+<h3 class="anchored" data-anchor-id="histogram">Histogram</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>sns.histplot(data <span class="op">=</span> peng, x <span class="op">=</span> <span class="st">"bill_depth_mm"</span>, color <span class="op">=</span> <span class="st">"steelblue"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Bill depth (mm)"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-hist" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-hist-7.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5: Histogram of bill depth</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>sns.histplot(data <span class="op">=</span> peng[peng.island <span class="op">==</span> <span class="st">"Dream"</span>], x <span class="op">=</span> <span class="st">"bill_depth_mm"</span>, color <span class="op">=</span> <span class="st">"steelblue"</span>, label <span class="op">=</span> <span class="st">"Dream"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>sns.histplot(data <span class="op">=</span> peng[peng.island <span class="op">==</span> <span class="st">"Biscoe"</span>], x <span class="op">=</span> <span class="st">"bill_depth_mm"</span>, color <span class="op">=</span> <span class="st">"darkorchid"</span>, label <span class="op">=</span> <span class="st">"Biscoe"</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>sns.histplot(data <span class="op">=</span> peng[peng.island <span class="op">==</span> <span class="st">"Torgersen"</span>], x <span class="op">=</span> <span class="st">"bill_depth_mm"</span>, color <span class="op">=</span> <span class="st">"lightblue"</span>, label <span class="op">=</span> <span class="st">"Torgersen"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Bill depth (mm)"</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>plt.legend(loc <span class="op">=</span> <span class="st">"upper right"</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-hist-mult" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-hist-mult-9.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;6: Histogram of bill depth</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>##3 Density</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>sns.kdeplot(data <span class="op">=</span> peng, x <span class="op">=</span> <span class="st">"bill_length_mm"</span>, shade <span class="op">=</span> <span class="st">"steelblue"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.axvline(<span class="fl">43.40</span>, color<span class="op">=</span><span class="st">"k"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Density"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Bill length (mm)"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-dens" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-dens-11.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;7: Density distribution of of bill depth</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The difference of bill length among the three species is interesting. Let’s look at the density plots of these species:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>sns.kdeplot(data <span class="op">=</span> peng[peng.species <span class="op">==</span> <span class="st">"Adelie"</span>], x <span class="op">=</span> <span class="st">"bill_length_mm"</span>, label <span class="op">=</span> <span class="st">"Adelie"</span>, shade <span class="op">=</span> <span class="st">"steelblue"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>sns.kdeplot(data <span class="op">=</span> peng[peng.species <span class="op">==</span> <span class="st">"Chinstrap"</span>], x <span class="op">=</span> <span class="st">"bill_length_mm"</span>, label <span class="op">=</span> <span class="st">"Chinstrap"</span>, shade <span class="op">=</span> <span class="st">"orange"</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>sns.kdeplot(data <span class="op">=</span> peng[peng.species <span class="op">==</span> <span class="st">"Gentoo"</span>], x <span class="op">=</span> <span class="st">"bill_length_mm"</span>, label <span class="op">=</span> <span class="st">"Gentoo"</span>, shade <span class="op">=</span> <span class="st">"green"</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>plt.legend(loc <span class="op">=</span> <span class="st">"upper right"</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Bill length (mm)"</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-density-mul" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-density-mul-13.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;8: Density plot of bill length by species</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="boxplot" class="level3">
+<h3 class="anchored" data-anchor-id="boxplot">Boxplot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>sns.boxplot(data <span class="op">=</span> peng, x <span class="op">=</span> <span class="st">"island"</span>, y <span class="op">=</span> <span class="st">"bill_depth_mm"</span>, hue <span class="op">=</span> <span class="st">"species"</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">""</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Bill depth (mm)"</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>plt.legend(loc <span class="op">=</span> <span class="st">"lower right"</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.gca().legend_.remove() # uncomment to remove legend</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-box" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-box-15.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;9: Boxplot of bill depth by island and species</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>sns.violinplot(data <span class="op">=</span> peng, x <span class="op">=</span> <span class="st">"island"</span>, y <span class="op">=</span> <span class="st">"bill_depth_mm"</span>, hue <span class="op">=</span> <span class="st">"species"</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">""</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Bill depth (mm)"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>plt.legend(loc <span class="op">=</span> <span class="st">"lower right"</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.gca().legend_.remove() # uncomment to remove legend</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-vio" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-vio-17.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;10: Violin plots of bill depth by island and species</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>sns.violinplot(data <span class="op">=</span> peng, x <span class="op">=</span> <span class="st">"island"</span>, y <span class="op">=</span> <span class="st">"bill_depth_mm"</span>, hue <span class="op">=</span> <span class="st">"species"</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>sns.boxplot(data <span class="op">=</span> peng, x <span class="op">=</span> <span class="st">"island"</span>, y <span class="op">=</span> <span class="st">"bill_depth_mm"</span>, hue <span class="op">=</span> <span class="st">"species"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">""</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Bill depth (mm)"</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>plt.legend(loc <span class="op">=</span> <span class="st">"lower right"</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.gca().legend_.remove() # uncomment to remove legend</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-vio-box" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-vio-box-19.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;11: Violin and Boxplot of bill depth by island and species</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="pandas-dataframe-to-tibble" class="level2">
+<h2 class="anchored" data-anchor-id="pandas-dataframe-to-tibble">Pandas Dataframe to Tibble</h2>
+<p>The power of multilingual is clearly demonstrated with Rstudio, which allows you to swap dataset between R and python. In the previous section we created a <code>peng</code> dataset in python from R. In this session we are going to use this python dataset and convert it back to R. A <code>py</code> function from <strong>reticulate</strong> package is used as the chunk below illustrates:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>peng.r <span class="ot">=</span> reticulate<span class="sc">::</span>py<span class="sc">$</span>peng</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>peng.r <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 x 8
+   species island    bill_length_mm bill_depth_mm flipper_~1 body_~2 sex    year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;
+ 1 Adelie  Torgersen           39.1          18.7     1.81e2  3.75e3 male   2007
+ 2 Adelie  Torgersen           39.5          17.4     1.86e2  3.8 e3 fema~  2007
+ 3 Adelie  Torgersen           40.3          18       1.95e2  3.25e3 fema~  2007
+ 4 Adelie  Torgersen           NA            NA      -2.15e9 -2.15e9 &lt;NA&gt;   2007
+ 5 Adelie  Torgersen           36.7          19.3     1.93e2  3.45e3 fema~  2007
+ 6 Adelie  Torgersen           39.3          20.6     1.9 e2  3.65e3 male   2007
+ 7 Adelie  Torgersen           38.9          17.8     1.81e2  3.62e3 fema~  2007
+ 8 Adelie  Torgersen           39.2          19.6     1.95e2  4.68e3 male   2007
+ 9 Adelie  Torgersen           34.1          18.1     1.93e2  3.48e3 &lt;NA&gt;   2007
+10 Adelie  Torgersen           42            20.2     1.9 e2  4.25e3 &lt;NA&gt;   2007
+# ... with 334 more rows, and abbreviated variable names 1: flipper_length_mm,
+#   2: body_mass_g</code></pre>
+</div>
+</div>
+<div class="callout-info callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Info
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>note that conversion from pandas to tibble data frame must be done in the R chunk and not Python chunk</p>
+</div>
+</div>
+</section>
+<section id="cited-references" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">Cited references</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-ggally" class="csl-entry" role="doc-biblioentry">
+Schloerke, Barret, Jason Crowley, Di Cook, Francois Briatte, Moritz Marbach, Edwin Thoen, Amos Elberg, and Joseph Larmarange. 2020. <em>GGally: Extension to ’Ggplot2’</em>. <a href="https://CRAN.R-project.org/package=GGally">https://CRAN.R-project.org/package=GGally</a>.
+</div>
+<div id="ref-reticulate" class="csl-entry" role="doc-biblioentry">
+Ushey, Kevin, JJ Allaire, and Yuan Tang. 2020. <em>Reticulate: Interface to ’Python’</em>. <a href="https://CRAN.R-project.org/package=reticulate">https://CRAN.R-project.org/package=reticulate</a>.
+</div>
+<div id="ref-tidyverse" class="csl-entry" role="doc-biblioentry">
+Wickham, Hadley, and Maintainer Hadley Wickham. 2017. <em>Tidyverse: Easily Install and Load the ’Tidyverse’</em>. <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="lugoga/semba-quarto" data-repo-id="R_kgDOI-Hp4A" data-category="General" data-category-id="DIC_kwDOI-Hp4M4CUOdf" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

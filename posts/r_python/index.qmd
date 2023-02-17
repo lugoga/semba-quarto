@@ -1,0 +1,244 @@
+---
+title: "Multi-lingual: R and Python for Data Science"
+author: 
+  - name: Masumbuko Semba
+    url: https://semba.netlify.app
+    orcid: 0000-0002-5002-9747
+    affiliation: Nelson Mandela African Institution of Science and Technology
+    affiliation-url: https://semba.netlify.app/ 
+date: "2023-02-18"
+categories: [Analysis, Visualization]
+# image: "family.jpg"
+draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
+bibliography: ../blog.bib
+execute: 
+  warning: false
+---
+
+
+## Introduction
+
+If you work with data science, `R` and `Python` must be the two programming languages that you use the most. Both `R` and `Python` are quite robust languages and either one of them is actually sufficient to carry out the data analysis task. However, instead of considering them as tools that supplement each other, more often you will find people dealing with data claim one language to be better than the other. Truth be told, `R` and `Python` are excellent tools in ther own right but are often conceived as rivals. One major reason for such view lies on the experts. Because data analysts have divided the data science field into camps based on the choice of the programming language they are familiar with.
+
+There major two camps---*R camp* and *Python camp*---and history is the testimony that camps can not live in *harmony*. Members of both camps believe that their choice of language . Honestly, I do not hold to their opinion, but rather wish I have skills for both languages. So, whether you have in R or Python camp, one thing you will notice is that the problem we have in data science is simply that divergence does not lie with the tools but with the people using those tools.
+
+I believe there are few people in the Data Science community who use both R and Python in their analytical workflow. But majority are committed to only one programming language, but wish they had access to some functions from other language. Therefore, there is no reason that hold us to stick using this programming language or the other. Our ultimate goal should be to do better analytics and derive better insights and choice of which programming language to use should not hinder us from reaching our goals.
+
+The questions that always resolute in my mind is whether can we utilize the statistical power of R along with the programming capabilities of Python?. Its undeniable truth that there are definitely some high and low points for both languages and if we can utilize the strength of both, we can end up dong a much better job. Thanks to Kevin Ushey and his colleges [-@reticulate] for developing a reticulate package. **reticulate** package provides a comprehensive set of tools that allows to work with R and Python in the same environment. The **reticulate** package provide the following facilities;
+
+-   Calling Python from R in a variety of ways including `rmarkdown`, `sourcing`, `Python scripts`, importing Python modules and using Python interactively within and R session.
+
+-   Translation between R and Python objects---for example `r_to_py` function allows to construct R to Pandas data frame and `py_to_r()` function convert python object like data frame, matrix and etc to R
+
+-   Flexible binding to different versions of Python including virtual environments and conda environment.
+
+## Tibble to Pandas Dataframe
+
+We are going to use a `penguin` dataset from **palmerpenguins** package [@horst2022palmer]. We first need to import the dataset from the package where is stored into the R session. let us load the packages that we are glint to use in this post. 
+
+
+```{r}
+require(tidyverse)
+require(reticulate)
+```
+
+Once we have loaded the package, we then import the dataset.
+
+```{r}
+peng = palmerpenguins::penguins
+peng
+```
+
+The printed result suggest that this dataset is a *tibble* format---a modern data frame from the tidyverse ecosystem [@tidyverse]. Let's visualize the dataset with pair plot in **GGally** package [@ggally]
+
+
+```{r}
+#| warning: false
+#| message: false
+#| comment: ""
+#| label: fig-ggpair
+#| fig-cap: Matrix of numerical variable in the penguins dataset
+#| 
+peng %>% 
+  filter(!is.na(sex)) %>% 
+  GGally::ggpairs(columns = 3:6, aes(color = sex))
+```
+
+
+However, our interest in this post is plotting this dataset using python. Therefore, we need to first import three key libraries that we will use throughtout this post. The chunk below highlight these packages and how to import them inside the python chunk.
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+Once the tibble file is in the environment, we need to convert from tibble data frame into pandas dataframe. Make a copy of pandas dataframe from tible with the `r.` function
+
+::: callout-info
+note that conversion from tibble to pandas data frame must be done in the Python chunk and not R chunk
+:::
+
+```{python}
+peng = r.peng
+peng
+```
+
+## Plotting
+
+### Pairplot
+
+```{python}
+#| warning: false
+#| message: false
+#| label: fig-pairplot
+#| fig-cap: The pairplot of penguins dataset
+
+fig = plt.figure()
+sns.pairplot(data = peng, hue = "species")
+plt.show()
+```
+
+### Scatter plot
+
+```{python}
+#| label: fig-scatter
+#| fig-cap: Scatterplot of length and depth of penguins
+#| fig-pos: H
+
+
+fig = plt.figure()
+
+sns.scatterplot(
+  data = peng, 
+  x = "bill_length_mm", 
+  y = "bill_depth_mm", 
+  hue = "island"
+  )
+  
+
+plt.xlabel("Length (mm)")
+plt.ylabel("Depth (mm)")
+plt.legend(loc = "lower right")
+plt.show()
+```
+
+### Histogram
+
+```{python}
+#| label: fig-hist
+#| fig-cap: Histogram of bill depth
+#| 
+fig = plt.figure()
+sns.histplot(data = peng, x = "bill_depth_mm", color = "steelblue")
+plt.xlabel("Bill depth (mm)")
+plt.ylabel("Frequency")
+plt.show()
+```
+
+```{python}
+#| label: fig-hist-mult
+#| fig-cap: Histogram of bill depth
+#| 
+fig = plt.figure()
+sns.histplot(data = peng[peng.island == "Dream"], x = "bill_depth_mm", color = "steelblue", label = "Dream")
+sns.histplot(data = peng[peng.island == "Biscoe"], x = "bill_depth_mm", color = "darkorchid", label = "Biscoe")
+sns.histplot(data = peng[peng.island == "Torgersen"], x = "bill_depth_mm", color = "lightblue", label = "Torgersen")
+plt.xlabel("Bill depth (mm)")
+plt.ylabel("Frequency")
+plt.legend(loc = "upper right")
+plt.show()
+```
+
+##3 Density
+
+```{python}
+#| label: fig-dens
+#| fig-cap: Density distribution of  of bill depth
+fig = plt.figure()
+sns.kdeplot(data = peng, x = "bill_length_mm", shade = "steelblue")
+plt.axvline(43.40, color="k", linestyle="--")
+plt.ylabel("Density")
+plt.xlabel("Bill length (mm)")
+plt.show()
+```
+
+The difference of bill length among the three species is interesting. Let's look at the density plots of these species:
+
+```{python}
+#| label: fig-density-mul
+#| fig-cap: Density plot of bill length by species
+fig = plt.figure()
+sns.kdeplot(data = peng[peng.species == "Adelie"], x = "bill_length_mm", label = "Adelie", shade = "steelblue")
+sns.kdeplot(data = peng[peng.species == "Chinstrap"], x = "bill_length_mm", label = "Chinstrap", shade = "orange")
+sns.kdeplot(data = peng[peng.species == "Gentoo"], x = "bill_length_mm", label = "Gentoo", shade = "green")
+plt.legend(loc = "upper right")
+plt.xlabel("Bill length (mm)")
+
+plt.show()
+
+```
+
+### Boxplot
+
+```{python}
+#| label: fig-box
+#| fig-cap: Boxplot of bill depth by island and species
+
+
+fig = plt.figure()
+sns.boxplot(data = peng, x = "island", y = "bill_depth_mm", hue = "species")
+plt.xlabel("")
+plt.ylabel("Bill depth (mm)")
+plt.legend(loc = "lower right")
+# plt.gca().legend_.remove() # uncomment to remove legend
+plt.show()
+```
+
+```{python}
+#| label: fig-vio
+#| fig-cap: Violin plots of bill depth by island and species
+
+
+fig = plt.figure()
+sns.violinplot(data = peng, x = "island", y = "bill_depth_mm", hue = "species")
+plt.xlabel("")
+plt.ylabel("Bill depth (mm)")
+plt.legend(loc = "lower right")
+# plt.gca().legend_.remove() # uncomment to remove legend
+plt.show()
+```
+
+```{python}
+#| label: fig-vio-box
+#| fig-cap: Violin and Boxplot of bill depth by island and species
+
+
+fig = plt.figure()
+sns.violinplot(data = peng, x = "island", y = "bill_depth_mm", hue = "species")
+sns.boxplot(data = peng, x = "island", y = "bill_depth_mm", hue = "species")
+plt.xlabel("")
+plt.ylabel("Bill depth (mm)")
+plt.legend(loc = "lower right")
+# plt.gca().legend_.remove() # uncomment to remove legend
+plt.show()
+```
+
+## Pandas Dataframe to Tibble
+
+The power of multilingual is clearly demonstrated with Rstudio, which allows you to swap dataset between R and python. In the previous section we created a `peng` dataset in python from R. In this session we are going to use this python dataset and convert it back to R.  A `py` function from **reticulate** package is used as the chunk below illustrates:
+
+```{r}
+peng.r = reticulate::py$peng
+peng.r %>% as_tibble()
+```
+
+::: callout-info
+note that conversion from pandas to tibble data frame must be done in the R chunk and not Python chunk
+:::
+
+
+
+## Cited references
+

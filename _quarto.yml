@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "NG'ARA"
+  title: "ng'ara"
   favicon: ngara.png
   site-url: https://lugoga.github.io/semba-quarto/
   description: "Coding for all for better today and tommorow"
@@ -56,7 +56,7 @@ website:
   twitter-card: 
     image: thumbnail_blog.png
     card-style: summary_large_image
-    creator: "@rappa753"
+    creator: "@semba753"
 comments:
   giscus:
     repo: lugoga/semba-quarto
@@ -68,6 +68,7 @@ comments:
 format:
   html:
     theme: solar
+    css: styles.css
 
  
 
