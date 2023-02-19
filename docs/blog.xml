@@ -21,7 +21,7 @@
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>In <a href="www.ims.org.tz">part I</a> of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going learn how to plot boxplot in seaborn. The boxplot is used to plot the quantile information of numeric variables in a dataset. To plot a box plot, the <code>boxplot()</code> function is used. To plot a horizontal boxplot, the variable name of the dataset is passed to the x-axis.</p>
+<p>In <a href="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/">Visualization with Seaborn</a> of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going learn how to plot boxplot in seaborn. The boxplot is used to plot the quantile information of numeric variables in a dataset. To plot a box plot, the <code>boxplot()</code> function is used. To plot a horizontal boxplot, the variable name of the dataset is passed to the x-axis.</p>
 </section>
 <section id="loading-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="loading-libraries">Loading libraries</h2>
@@ -177,7 +177,7 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>In <a href="www.ims.org.tz">part I</a> of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going learn barplot. The bar plot is used to capture the relationship between a categorical and numerical column. For each unique value in a categorical column, a bar is plotted, which by default, displays the mean value for the data in a numeric column specified by the bar plot. Seaborn has nifty function called <code>barplot()</code>, which is dedicated for this type of plot.</p>
+<p>In <a href="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/">Visualization with Seaborn</a> of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going learn barplot. The bar plot is used to capture the relationship between a categorical and numerical column. For each unique value in a categorical column, a bar is plotted, which by default, displays the mean value for the data in a numeric column specified by the bar plot. Seaborn has nifty function called <code>barplot()</code>, which is dedicated for this type of plot.</p>
 </section>
 <section id="loading-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="loading-libraries">Loading libraries</h2>
@@ -237,34 +237,6 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 <span id="cb6-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
 <span id="cb6-3">sns.barplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"species"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"sex"</span>)</span>
 <span id="cb6-4">plt.show()</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Traceback (most recent call last):
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\backends\backend_qt5.py", line 475, in _draw_idle
-    self.draw()
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\backends\backend_agg.py", line 406, in draw
-    self.figure.draw(self.renderer)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 74, in draw_wrapper
-    result = draw(artist, renderer, *args, **kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 51, in draw_wrapper
-    return draw(artist, renderer, *args, **kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\figure.py", line 2790, in draw
-    mimage._draw_list_compositing_images(
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\image.py", line 132, in _draw_list_compositing_images
-    a.draw(renderer)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 51, in draw_wrapper
-    return draw(artist, renderer, *args, **kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\_api\deprecation.py", line 431, in wrapper
-    return func(*inner_args, **inner_kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axes\_base.py", line 2881, in draw
-    self._update_title_position(renderer)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axes\_base.py", line 2810, in _update_title_position
-    if (ax.xaxis.get_ticks_position() in ['top', 'unknown']
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axis.py", line 2234, in get_ticks_position
-    self._get_ticks_position()]
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axis.py", line 1938, in _get_ticks_position
-    major = self.majorTicks[0]
-IndexError: list index out of range</code></pre>
-</div>
 <div class="cell-output-display">
 <div id="fig-fig2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -304,7 +276,7 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>In <a href="www.ims.org.tz">part I</a> of this series, we were introduced on the power visualization and dove into distripubtion plot. In this post we are going focus on jointplot. <code>jointplot</code> is used to plot the histogram distribution of two columns, one on the <code>x-axis</code> and the other on the <code>y-axis</code>. A scatter plot is by default drawn for the points in the two columns. Seborn has nifty function called <code>jointplot()</code>, which is dedicated for this type of plot.</p>
+<p>In <a href="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/">Visualization with Seaborn</a> of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going focus on jointplot. <code>jointplot</code> is used to plot the histogram distribution of two columns, one on the <code>x-axis</code> and the other on the <code>y-axis</code>. A scatter plot is by default drawn for the points in the two columns. Seaborn has nifty function called <code>jointplot()</code>, which is dedicated for this type of plot.</p>
 </section>
 <section id="loading-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="loading-libraries">Loading libraries</h2>
@@ -349,7 +321,7 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
 <span id="cb5-2">sns.jointplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_depth_mm"</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005A834D00&gt;</code></pre>
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005A814D00&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">plt.show()</span></code></pre></div>
 <div class="cell-output-display">
@@ -361,7 +333,7 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
 <span id="cb8-2">sns.jointplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_depth_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"island"</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005AF3A5E0&gt;</code></pre>
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005D55D160&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1">plt.show()</span></code></pre></div>
 <div class="cell-output-display">
@@ -373,7 +345,7 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 <div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
 <span id="cb11-2">sns.jointplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_depth_mm"</span>, hue<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"species"</span>, kind<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"kde"</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005DA740A0&gt;</code></pre>
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005D707310&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1">plt.show()</span></code></pre></div>
 <div class="cell-output-display">
@@ -386,7 +358,7 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 <span id="cb14-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
 <span id="cb14-3">sns.jointplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_depth_mm"</span>, kind<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"reg"</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005DA74220&gt;</code></pre>
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005D8163D0&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1">plt.show()</span></code></pre></div>
 <div class="cell-output-display">
@@ -398,7 +370,7 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 <span id="cb17-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
 <span id="cb17-3">sns.jointplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_depth_mm"</span>, kind<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hex"</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005E48A6D0&gt;</code></pre>
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005DC64610&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1">plt.show()</span></code></pre></div>
 <div class="cell-output-display">
@@ -497,8 +469,8 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 <p>The pengp dataset comprise various measurements of three different penguin species — Adelie, Gentoo, and Chinstrap. The dataset contains eight variables – species, island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex, and year. You do not need to download this dataset as it comes with the palmerpenguin library in R. We will use this dataset to plot some of the seaborn plots. Lets begin plotting</p>
 <p>Alternatively, you can load the package as</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">df <span class="op" style="color: #5E5E5E;">=</span> sns.load_dataset(<span class="st" style="color: #20794D;">"penguins"</span>)</span>
-<span id="cb7-2"></span>
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"></span>
+<span id="cb7-2">df <span class="op" style="color: #5E5E5E;">=</span> sns.load_dataset(<span class="st" style="color: #20794D;">"penguins"</span>)</span>
 <span id="cb7-3">df.head()</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  species     island  bill_length_mm  ...  flipper_length_mm  body_mass_g     sex
@@ -511,14 +483,14 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 [5 rows x 7 columns]</code></pre>
 </div>
 </div>
-<section id="univariable-distribution" class="level3">
-<h3 class="anchored" data-anchor-id="univariable-distribution">Univariable distribution</h3>
+</section>
+<section id="univariable-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="univariable-distribution">Univariable distribution</h2>
 <p>The distplot, also commonly refers as the distribution plot, is widely used to plot a histogram of data for a specific variable in a dataset. To make this plot seaborn has a dedicated function called <code>displot</code></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"></span>
 <span id="cb9-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
-<span id="cb9-3"></span>
-<span id="cb9-4">sns.displot(pengp.bill_length_mm)</span></code></pre></div>
+<span id="cb9-3">sns.displot(pengp.bill_length_mm)</span></code></pre></div>
 <div class="cell-output-display">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="242"></p>
 </div>
@@ -533,8 +505,7 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"></span>
 <span id="cb11-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
-<span id="cb11-3"></span>
-<span id="cb11-4">sns.displot(pengp.bill_length_mm, kde <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>)</span></code></pre></div>
+<span id="cb11-3">sns.displot(pengp.bill_length_mm, kde <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>)</span></code></pre></div>
 <div class="cell-output-display">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-7-5.png" class="img-fluid" width="242"></p>
 </div>
@@ -549,8 +520,7 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"></span>
 <span id="cb13-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
-<span id="cb13-3"></span>
-<span id="cb13-4">sns.displot(pengp.bill_length_mm, kde <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>, stat <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"density"</span>)</span></code></pre></div>
+<span id="cb13-3">sns.displot(pengp.bill_length_mm, kde <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>, stat <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"density"</span>)</span></code></pre></div>
 <div class="cell-output-display">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-8-9.png" class="img-fluid" width="242"></p>
 </div>
@@ -562,17 +532,16 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 </div>
 </div>
 </section>
-<section id="kdeplot" class="level3">
-<h3 class="anchored" data-anchor-id="kdeplot">kdeplot</h3>
+<section id="kdeplot" class="level2">
+<h2 class="anchored" data-anchor-id="kdeplot">kdeplot</h2>
 <p>When you want to draw the density plot alone without overlay it to the histogram as presented using the displot function, seaboarn has a <code>kdeplot</code> function</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"></span>
 <span id="cb15-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
-<span id="cb15-3"></span>
-<span id="cb15-4">sns.kdeplot(pengp.bill_length_mm)</span>
-<span id="cb15-5">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
-<span id="cb15-6">plt.ylabel(<span class="st" style="color: #20794D;">"Density"</span>)</span>
-<span id="cb15-7">plt.show()</span></code></pre></div>
+<span id="cb15-3">sns.kdeplot(pengp.bill_length_mm)</span>
+<span id="cb15-4">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb15-5">plt.ylabel(<span class="st" style="color: #20794D;">"Density"</span>)</span>
+<span id="cb15-6">plt.show()</span></code></pre></div>
 <div class="cell-output-display">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-9-13.png" class="img-fluid" width="672"></p>
 </div>
@@ -581,8 +550,7 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"></span>
 <span id="cb16-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
-<span id="cb16-3"></span>
-<span id="cb16-4">sns.displot(pengp.bill_length_mm, kind <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kde"</span>, rug <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>)</span></code></pre></div>
+<span id="cb16-3">sns.displot(pengp.bill_length_mm, kind <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kde"</span>, rug <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>)</span></code></pre></div>
 <div class="cell-output-display">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-10-15.png" class="img-fluid" width="242"></p>
 </div>
@@ -597,8 +565,7 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"></span>
 <span id="cb18-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
-<span id="cb18-3"></span>
-<span id="cb18-4">sns.displot(pengp.bill_length_mm, kind <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kde"</span>, rug <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>)</span></code></pre></div>
+<span id="cb18-3">sns.displot(pengp.bill_length_mm, kind <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kde"</span>, rug <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>)</span></code></pre></div>
 <div class="cell-output-display">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-11-19.png" class="img-fluid" width="242"></p>
 </div>
@@ -610,15 +577,13 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"></span>
-<span id="cb20-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
-<span id="cb20-3"></span>
-<span id="cb20-4">aa <span class="op" style="color: #5E5E5E;">=</span> pengp[[<span class="st" style="color: #20794D;">"bill_length_mm"</span>, <span class="st" style="color: #20794D;">"bill_depth_mm"</span>]]</span>
-<span id="cb20-5"></span>
-<span id="cb20-6">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> aa)</span>
-<span id="cb20-7">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
-<span id="cb20-8">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
-<span id="cb20-9">plt.show()</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1">aa <span class="op" style="color: #5E5E5E;">=</span> pengp[[<span class="st" style="color: #20794D;">"bill_length_mm"</span>, <span class="st" style="color: #20794D;">"bill_depth_mm"</span>]]</span>
+<span id="cb20-2"></span>
+<span id="cb20-3">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb20-4">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> aa)</span>
+<span id="cb20-5">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb20-6">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb20-7">plt.show()</span></code></pre></div>
 <div class="cell-output-display">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-12-23.png" class="img-fluid" width="672"></p>
 </div>
@@ -627,12 +592,10 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"></span>
 <span id="cb21-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
-<span id="cb21-3"></span>
-<span id="cb21-4"></span>
-<span id="cb21-5">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> pengp, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>)</span>
-<span id="cb21-6">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
-<span id="cb21-7">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
-<span id="cb21-8">plt.show()</span></code></pre></div>
+<span id="cb21-3">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> pengp, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>)</span>
+<span id="cb21-4">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb21-5">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb21-6">plt.show()</span></code></pre></div>
 <div class="cell-output-display">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-13-25.png" class="img-fluid" width="672"></p>
 </div>
@@ -641,12 +604,10 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"></span>
 <span id="cb22-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
-<span id="cb22-3"></span>
-<span id="cb22-4"></span>
-<span id="cb22-5">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> pengp, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>, multiple <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"stack"</span>)</span>
-<span id="cb22-6">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
-<span id="cb22-7">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
-<span id="cb22-8">plt.show()</span></code></pre></div>
+<span id="cb22-3">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> pengp, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>, multiple <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"stack"</span>)</span>
+<span id="cb22-4">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb22-5">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb22-6">plt.show()</span></code></pre></div>
 <div class="cell-output-display">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-14-27.png" class="img-fluid" width="672"></p>
 </div>
@@ -655,12 +616,10 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"></span>
 <span id="cb23-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
-<span id="cb23-3"></span>
-<span id="cb23-4"></span>
-<span id="cb23-5">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> pengp, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>, multiple <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"fill"</span>)</span>
-<span id="cb23-6">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
-<span id="cb23-7">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
-<span id="cb23-8">plt.show()</span></code></pre></div>
+<span id="cb23-3">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> pengp, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>, multiple <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"fill"</span>)</span>
+<span id="cb23-4">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb23-5">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb23-6">plt.show()</span></code></pre></div>
 <div class="cell-output-display">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-15-29.png" class="img-fluid" width="672"></p>
 </div>
@@ -670,16 +629,14 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 <div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"></span>
 <span id="cb24-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
 <span id="cb24-3"></span>
-<span id="cb24-4"></span>
-<span id="cb24-5">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> pengp, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>,  cumulative<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>, common_norm<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>, common_grid<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>)</span>
-<span id="cb24-6">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
-<span id="cb24-7">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
-<span id="cb24-8">plt.show()</span></code></pre></div>
+<span id="cb24-4">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> pengp, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>,  cumulative<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>, common_norm<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>, common_grid<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>)</span>
+<span id="cb24-5">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb24-6">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb24-7">plt.show()</span></code></pre></div>
 <div class="cell-output-display">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-16-31.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-</section>
 </section>
 <section id="bivariate-distribution" class="level2">
 <h2 class="anchored" data-anchor-id="bivariate-distribution">Bivariate distribution</h2>
@@ -697,72 +654,39 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"></span>
-<span id="cb27-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
-<span id="cb27-3"></span>
-<span id="cb27-4">sns.kdeplot(data<span class="op" style="color: #5E5E5E;">=</span>geyser, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"waiting"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"duration"</span>)</span>
-<span id="cb27-5">plt.show()</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Traceback (most recent call last):
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\backends\backend_qt5.py", line 475, in _draw_idle
-    self.draw()
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\backends\backend_agg.py", line 406, in draw
-    self.figure.draw(self.renderer)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 74, in draw_wrapper
-    result = draw(artist, renderer, *args, **kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 51, in draw_wrapper
-    return draw(artist, renderer, *args, **kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\figure.py", line 2790, in draw
-    mimage._draw_list_compositing_images(
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\image.py", line 132, in _draw_list_compositing_images
-    a.draw(renderer)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 51, in draw_wrapper
-    return draw(artist, renderer, *args, **kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\_api\deprecation.py", line 431, in wrapper
-    return func(*inner_args, **inner_kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axes\_base.py", line 2881, in draw
-    self._update_title_position(renderer)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axes\_base.py", line 2810, in _update_title_position
-    if (ax.xaxis.get_ticks_position() in ['top', 'unknown']
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axis.py", line 2234, in get_ticks_position
-    self._get_ticks_position()]
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axis.py", line 1938, in _get_ticks_position
-    major = self.majorTicks[0]
-IndexError: list index out of range</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb27-2">sns.kdeplot(data<span class="op" style="color: #5E5E5E;">=</span>geyser, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"waiting"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"duration"</span>)</span>
+<span id="cb27-3">plt.show()</span></code></pre></div>
 <div class="cell-output-display">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-18-33.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Map a third variable with a hue semantic to show conditional distributions:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"></span>
-<span id="cb29-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
-<span id="cb29-3"></span>
-<span id="cb29-4">sns.kdeplot(data<span class="op" style="color: #5E5E5E;">=</span>geyser, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"waiting"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"duration"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kind"</span>)</span>
-<span id="cb29-5">plt.show()</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"></span>
+<span id="cb28-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb28-3">sns.kdeplot(data<span class="op" style="color: #5E5E5E;">=</span>geyser, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"waiting"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"duration"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kind"</span>)</span>
+<span id="cb28-4">plt.show()</span></code></pre></div>
 <div class="cell-output-display">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-19-35.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Fill the contour by parsing <code>fill = True</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"></span>
-<span id="cb30-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
-<span id="cb30-3"></span>
-<span id="cb30-4">sns.kdeplot(data<span class="op" style="color: #5E5E5E;">=</span>geyser, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"waiting"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"duration"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kind"</span>, fill <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>)</span>
-<span id="cb30-5">plt.show()</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"></span>
+<span id="cb29-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb29-3">sns.kdeplot(data<span class="op" style="color: #5E5E5E;">=</span>geyser, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"waiting"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"duration"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kind"</span>, fill <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>)</span>
+<span id="cb29-4">plt.show()</span></code></pre></div>
 <div class="cell-output-display">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-20-37.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Show fewer contour levels, covering less of the distribution by parsing a <code>levels</code> and <code>thresh</code> functions in the kdeplot:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"></span>
-<span id="cb31-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
-<span id="cb31-3"></span>
-<span id="cb31-4">sns.kdeplot(data<span class="op" style="color: #5E5E5E;">=</span>geyser, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"waiting"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"duration"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kind"</span>, levels <span class="op" style="color: #5E5E5E;">=</span> <span class="dv" style="color: #AD0000;">5</span>, thresh <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">.2</span>)</span>
-<span id="cb31-5">plt.show()</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"></span>
+<span id="cb30-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb30-3">sns.kdeplot(data<span class="op" style="color: #5E5E5E;">=</span>geyser, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"waiting"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"duration"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kind"</span>, levels <span class="op" style="color: #5E5E5E;">=</span> <span class="dv" style="color: #AD0000;">5</span>, thresh <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">.2</span>)</span>
+<span id="cb30-4">plt.show()</span></code></pre></div>
 <div class="cell-output-display">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-21-39.png" class="img-fluid" width="672"></p>
 </div>

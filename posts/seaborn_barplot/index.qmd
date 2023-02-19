@@ -21,7 +21,7 @@ code-line-numbers: true
 
 ## Introduction
 
-In [part I](www.ims.org.tz) of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going learn barplot. The bar plot is used to capture the relationship between a categorical and numerical column. For each unique value in a categorical column, a bar is plotted, which by default, displays the mean value for the data in a numeric column specified by the bar plot. Seaborn has nifty function called `barplot()`, which is dedicated for this type of plot. 
+In [Visualization with Seaborn](https://lugoga.github.io/semba-quarto/posts/seabornVisualization/) of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going learn barplot. The bar plot is used to capture the relationship between a categorical and numerical column. For each unique value in a categorical column, a bar is plotted, which by default, displays the mean value for the data in a numeric column specified by the bar plot. Seaborn has nifty function called `barplot()`, which is dedicated for this type of plot. 
 
 
 ## Loading libraries

@@ -156,7 +156,7 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 
 <link rel="stylesheet" href="../../styles.css">
 <meta name="twitter:title" content="ng’ara - plotting in Python with Seaborn: Joint plot">
-<meta name="twitter:description" content="In part I of this series, we were introduced on the power visualization and dove into distripubtion plot. In this post we are going focus on jointplot.">
+<meta name="twitter:description" content="In Visualization with Seaborn of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going focus on jointplot.">
 <meta name="twitter:image" content="https://lugoga.github.io/semba-quarto/posts\seabornjointplot\thumbnail_blog.png">
 <meta name="twitter:creator" content="@semba753">
 <meta name="twitter:card" content="summary_large_image">
@@ -327,7 +327,7 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>In <a href="www.ims.org.tz">part I</a> of this series, we were introduced on the power visualization and dove into distripubtion plot. In this post we are going focus on jointplot. <code>jointplot</code> is used to plot the histogram distribution of two columns, one on the <code>x-axis</code> and the other on the <code>y-axis</code>. A scatter plot is by default drawn for the points in the two columns. Seborn has nifty function called <code>jointplot()</code>, which is dedicated for this type of plot.</p>
+<p>In <a href="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/">Visualization with Seaborn</a> of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going focus on jointplot. <code>jointplot</code> is used to plot the histogram distribution of two columns, one on the <code>x-axis</code> and the other on the <code>y-axis</code>. A scatter plot is by default drawn for the points in the two columns. Seaborn has nifty function called <code>jointplot()</code>, which is dedicated for this type of plot.</p>
 </section>
 <section id="loading-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="loading-libraries">Loading libraries</h2>
@@ -372,7 +372,7 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>fig <span class="op">=</span> plt.figure()</span>
 <span id="cb5-2"><a href="#cb5-2"></a>sns.jointplot(data<span class="op">=</span>df, x<span class="op">=</span><span class="st">"bill_length_mm"</span>, y<span class="op">=</span><span class="st">"bill_depth_mm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005A834D00&gt;</code></pre>
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005A814D00&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -384,7 +384,7 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>fig <span class="op">=</span> plt.figure()</span>
 <span id="cb8-2"><a href="#cb8-2"></a>sns.jointplot(data<span class="op">=</span>df, x<span class="op">=</span><span class="st">"bill_length_mm"</span>, y<span class="op">=</span><span class="st">"bill_depth_mm"</span>, hue <span class="op">=</span> <span class="st">"island"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005AF3A5E0&gt;</code></pre>
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005D55D160&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -396,7 +396,7 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>fig <span class="op">=</span> plt.figure()</span>
 <span id="cb11-2"><a href="#cb11-2"></a>sns.jointplot(data<span class="op">=</span>df, x<span class="op">=</span><span class="st">"bill_length_mm"</span>, y<span class="op">=</span><span class="st">"bill_depth_mm"</span>, hue<span class="op">=</span><span class="st">"species"</span>, kind<span class="op">=</span><span class="st">"kde"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005DA740A0&gt;</code></pre>
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005D707310&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -409,7 +409,7 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 <span id="cb14-2"><a href="#cb14-2"></a>fig <span class="op">=</span> plt.figure()</span>
 <span id="cb14-3"><a href="#cb14-3"></a>sns.jointplot(data<span class="op">=</span>df, x<span class="op">=</span><span class="st">"bill_length_mm"</span>, y<span class="op">=</span><span class="st">"bill_depth_mm"</span>, kind<span class="op">=</span><span class="st">"reg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005DA74220&gt;</code></pre>
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005D8163D0&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -421,7 +421,7 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 <span id="cb17-2"><a href="#cb17-2"></a>fig <span class="op">=</span> plt.figure()</span>
 <span id="cb17-3"><a href="#cb17-3"></a>sns.jointplot(data<span class="op">=</span>df, x<span class="op">=</span><span class="st">"bill_length_mm"</span>, y<span class="op">=</span><span class="st">"bill_depth_mm"</span>, kind<span class="op">=</span><span class="st">"hex"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005E48A6D0&gt;</code></pre>
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005DC64610&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">

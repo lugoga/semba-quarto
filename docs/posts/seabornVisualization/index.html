@@ -274,11 +274,9 @@ gtag('config', '14521548', { 'anonymize_ip': true});
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#loading-libraries" id="toc-loading-libraries" class="nav-link" data-scroll-target="#loading-libraries">Loading libraries</a></li>
-  <li><a href="#dataset" id="toc-dataset" class="nav-link" data-scroll-target="#dataset">Dataset</a>
-  <ul class="collapse">
+  <li><a href="#dataset" id="toc-dataset" class="nav-link" data-scroll-target="#dataset">Dataset</a></li>
   <li><a href="#univariable-distribution" id="toc-univariable-distribution" class="nav-link" data-scroll-target="#univariable-distribution">Univariable distribution</a></li>
   <li><a href="#kdeplot" id="toc-kdeplot" class="nav-link" data-scroll-target="#kdeplot">kdeplot</a></li>
-  </ul></li>
   <li><a href="#bivariate-distribution" id="toc-bivariate-distribution" class="nav-link" data-scroll-target="#bivariate-distribution">Bivariate distribution</a></li>
   <li><a href="#cited-materials" id="toc-cited-materials" class="nav-link" data-scroll-target="#cited-materials">Cited Materials</a></li>
   </ul>
@@ -394,8 +392,8 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 <p>The pengp dataset comprise various measurements of three different penguin species — Adelie, Gentoo, and Chinstrap. The dataset contains eight variables – species, island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex, and year. You do not need to download this dataset as it comes with the palmerpenguin library in R. We will use this dataset to plot some of the seaborn plots. Lets begin plotting</p>
 <p>Alternatively, you can load the package as</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>df <span class="op">=</span> sns.load_dataset(<span class="st">"penguins"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a></span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2"></a>df <span class="op">=</span> sns.load_dataset(<span class="st">"penguins"</span>)</span>
 <span id="cb7-3"><a href="#cb7-3"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  species     island  bill_length_mm  ...  flipper_length_mm  body_mass_g     sex
@@ -408,14 +406,14 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 [5 rows x 7 columns]</code></pre>
 </div>
 </div>
-<section id="univariable-distribution" class="level3">
-<h3 class="anchored" data-anchor-id="univariable-distribution">Univariable distribution</h3>
+</section>
+<section id="univariable-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="univariable-distribution">Univariable distribution</h2>
 <p>The distplot, also commonly refers as the distribution plot, is widely used to plot a histogram of data for a specific variable in a dataset. To make this plot seaborn has a dedicated function called <code>displot</code></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a></span>
 <span id="cb9-2"><a href="#cb9-2"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb9-3"><a href="#cb9-3"></a></span>
-<span id="cb9-4"><a href="#cb9-4"></a>sns.displot(pengp.bill_length_mm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-3"><a href="#cb9-3"></a>sns.displot(pengp.bill_length_mm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="242"></p>
 </div>
@@ -430,8 +428,7 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a></span>
 <span id="cb11-2"><a href="#cb11-2"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb11-3"><a href="#cb11-3"></a></span>
-<span id="cb11-4"><a href="#cb11-4"></a>sns.displot(pengp.bill_length_mm, kde <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-3"><a href="#cb11-3"></a>sns.displot(pengp.bill_length_mm, kde <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-7-5.png" class="img-fluid" width="242"></p>
 </div>
@@ -446,8 +443,7 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a></span>
 <span id="cb13-2"><a href="#cb13-2"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb13-3"><a href="#cb13-3"></a></span>
-<span id="cb13-4"><a href="#cb13-4"></a>sns.displot(pengp.bill_length_mm, kde <span class="op">=</span> <span class="va">True</span>, stat <span class="op">=</span> <span class="st">"density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-3"><a href="#cb13-3"></a>sns.displot(pengp.bill_length_mm, kde <span class="op">=</span> <span class="va">True</span>, stat <span class="op">=</span> <span class="st">"density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-8-9.png" class="img-fluid" width="242"></p>
 </div>
@@ -459,17 +455,16 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 </div>
 </div>
 </section>
-<section id="kdeplot" class="level3">
-<h3 class="anchored" data-anchor-id="kdeplot">kdeplot</h3>
+<section id="kdeplot" class="level2">
+<h2 class="anchored" data-anchor-id="kdeplot">kdeplot</h2>
 <p>When you want to draw the density plot alone without overlay it to the histogram as presented using the displot function, seaboarn has a <code>kdeplot</code> function</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a></span>
 <span id="cb15-2"><a href="#cb15-2"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb15-3"><a href="#cb15-3"></a></span>
-<span id="cb15-4"><a href="#cb15-4"></a>sns.kdeplot(pengp.bill_length_mm)</span>
-<span id="cb15-5"><a href="#cb15-5"></a>plt.xlabel(<span class="st">"Bill length (mm)"</span>)</span>
-<span id="cb15-6"><a href="#cb15-6"></a>plt.ylabel(<span class="st">"Density"</span>)</span>
-<span id="cb15-7"><a href="#cb15-7"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-3"><a href="#cb15-3"></a>sns.kdeplot(pengp.bill_length_mm)</span>
+<span id="cb15-4"><a href="#cb15-4"></a>plt.xlabel(<span class="st">"Bill length (mm)"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5"></a>plt.ylabel(<span class="st">"Density"</span>)</span>
+<span id="cb15-6"><a href="#cb15-6"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-9-13.png" class="img-fluid" width="672"></p>
 </div>
@@ -478,8 +473,7 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a></span>
 <span id="cb16-2"><a href="#cb16-2"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb16-3"><a href="#cb16-3"></a></span>
-<span id="cb16-4"><a href="#cb16-4"></a>sns.displot(pengp.bill_length_mm, kind <span class="op">=</span> <span class="st">"kde"</span>, rug <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-3"><a href="#cb16-3"></a>sns.displot(pengp.bill_length_mm, kind <span class="op">=</span> <span class="st">"kde"</span>, rug <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-10-15.png" class="img-fluid" width="242"></p>
 </div>
@@ -494,8 +488,7 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a></span>
 <span id="cb18-2"><a href="#cb18-2"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb18-3"><a href="#cb18-3"></a></span>
-<span id="cb18-4"><a href="#cb18-4"></a>sns.displot(pengp.bill_length_mm, kind <span class="op">=</span> <span class="st">"kde"</span>, rug <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-3"><a href="#cb18-3"></a>sns.displot(pengp.bill_length_mm, kind <span class="op">=</span> <span class="st">"kde"</span>, rug <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-11-19.png" class="img-fluid" width="242"></p>
 </div>
@@ -507,15 +500,13 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a></span>
-<span id="cb20-2"><a href="#cb20-2"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb20-3"><a href="#cb20-3"></a></span>
-<span id="cb20-4"><a href="#cb20-4"></a>aa <span class="op">=</span> pengp[[<span class="st">"bill_length_mm"</span>, <span class="st">"bill_depth_mm"</span>]]</span>
-<span id="cb20-5"><a href="#cb20-5"></a></span>
-<span id="cb20-6"><a href="#cb20-6"></a>sns.kdeplot(data <span class="op">=</span> aa)</span>
-<span id="cb20-7"><a href="#cb20-7"></a>plt.xlabel(<span class="st">"Bill length (mm)"</span>)</span>
-<span id="cb20-8"><a href="#cb20-8"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
-<span id="cb20-9"><a href="#cb20-9"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>aa <span class="op">=</span> pengp[[<span class="st">"bill_length_mm"</span>, <span class="st">"bill_depth_mm"</span>]]</span>
+<span id="cb20-2"><a href="#cb20-2"></a></span>
+<span id="cb20-3"><a href="#cb20-3"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb20-4"><a href="#cb20-4"></a>sns.kdeplot(data <span class="op">=</span> aa)</span>
+<span id="cb20-5"><a href="#cb20-5"></a>plt.xlabel(<span class="st">"Bill length (mm)"</span>)</span>
+<span id="cb20-6"><a href="#cb20-6"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
+<span id="cb20-7"><a href="#cb20-7"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-12-23.png" class="img-fluid" width="672"></p>
 </div>
@@ -524,12 +515,10 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a></span>
 <span id="cb21-2"><a href="#cb21-2"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb21-3"><a href="#cb21-3"></a></span>
-<span id="cb21-4"><a href="#cb21-4"></a></span>
-<span id="cb21-5"><a href="#cb21-5"></a>sns.kdeplot(data <span class="op">=</span> pengp, x <span class="op">=</span> <span class="st">"bill_length_mm"</span>, hue <span class="op">=</span> <span class="st">"species"</span>)</span>
-<span id="cb21-6"><a href="#cb21-6"></a>plt.xlabel(<span class="st">"Bill length (mm)"</span>)</span>
-<span id="cb21-7"><a href="#cb21-7"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
-<span id="cb21-8"><a href="#cb21-8"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-3"><a href="#cb21-3"></a>sns.kdeplot(data <span class="op">=</span> pengp, x <span class="op">=</span> <span class="st">"bill_length_mm"</span>, hue <span class="op">=</span> <span class="st">"species"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4"></a>plt.xlabel(<span class="st">"Bill length (mm)"</span>)</span>
+<span id="cb21-5"><a href="#cb21-5"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
+<span id="cb21-6"><a href="#cb21-6"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-13-25.png" class="img-fluid" width="672"></p>
 </div>
@@ -538,12 +527,10 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a></span>
 <span id="cb22-2"><a href="#cb22-2"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb22-3"><a href="#cb22-3"></a></span>
-<span id="cb22-4"><a href="#cb22-4"></a></span>
-<span id="cb22-5"><a href="#cb22-5"></a>sns.kdeplot(data <span class="op">=</span> pengp, x <span class="op">=</span> <span class="st">"bill_length_mm"</span>, hue <span class="op">=</span> <span class="st">"species"</span>, multiple <span class="op">=</span> <span class="st">"stack"</span>)</span>
-<span id="cb22-6"><a href="#cb22-6"></a>plt.xlabel(<span class="st">"Bill length (mm)"</span>)</span>
-<span id="cb22-7"><a href="#cb22-7"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
-<span id="cb22-8"><a href="#cb22-8"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-3"><a href="#cb22-3"></a>sns.kdeplot(data <span class="op">=</span> pengp, x <span class="op">=</span> <span class="st">"bill_length_mm"</span>, hue <span class="op">=</span> <span class="st">"species"</span>, multiple <span class="op">=</span> <span class="st">"stack"</span>)</span>
+<span id="cb22-4"><a href="#cb22-4"></a>plt.xlabel(<span class="st">"Bill length (mm)"</span>)</span>
+<span id="cb22-5"><a href="#cb22-5"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
+<span id="cb22-6"><a href="#cb22-6"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-14-27.png" class="img-fluid" width="672"></p>
 </div>
@@ -552,12 +539,10 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a></span>
 <span id="cb23-2"><a href="#cb23-2"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb23-3"><a href="#cb23-3"></a></span>
-<span id="cb23-4"><a href="#cb23-4"></a></span>
-<span id="cb23-5"><a href="#cb23-5"></a>sns.kdeplot(data <span class="op">=</span> pengp, x <span class="op">=</span> <span class="st">"bill_length_mm"</span>, hue <span class="op">=</span> <span class="st">"species"</span>, multiple <span class="op">=</span> <span class="st">"fill"</span>)</span>
-<span id="cb23-6"><a href="#cb23-6"></a>plt.xlabel(<span class="st">"Bill length (mm)"</span>)</span>
-<span id="cb23-7"><a href="#cb23-7"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
-<span id="cb23-8"><a href="#cb23-8"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-3"><a href="#cb23-3"></a>sns.kdeplot(data <span class="op">=</span> pengp, x <span class="op">=</span> <span class="st">"bill_length_mm"</span>, hue <span class="op">=</span> <span class="st">"species"</span>, multiple <span class="op">=</span> <span class="st">"fill"</span>)</span>
+<span id="cb23-4"><a href="#cb23-4"></a>plt.xlabel(<span class="st">"Bill length (mm)"</span>)</span>
+<span id="cb23-5"><a href="#cb23-5"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
+<span id="cb23-6"><a href="#cb23-6"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-15-29.png" class="img-fluid" width="672"></p>
 </div>
@@ -567,16 +552,14 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a></span>
 <span id="cb24-2"><a href="#cb24-2"></a>fig <span class="op">=</span> plt.figure()</span>
 <span id="cb24-3"><a href="#cb24-3"></a></span>
-<span id="cb24-4"><a href="#cb24-4"></a></span>
-<span id="cb24-5"><a href="#cb24-5"></a>sns.kdeplot(data <span class="op">=</span> pengp, x <span class="op">=</span> <span class="st">"bill_length_mm"</span>, hue <span class="op">=</span> <span class="st">"species"</span>,  cumulative<span class="op">=</span><span class="va">True</span>, common_norm<span class="op">=</span><span class="va">False</span>, common_grid<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb24-6"><a href="#cb24-6"></a>plt.xlabel(<span class="st">"Bill length (mm)"</span>)</span>
-<span id="cb24-7"><a href="#cb24-7"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
-<span id="cb24-8"><a href="#cb24-8"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-4"><a href="#cb24-4"></a>sns.kdeplot(data <span class="op">=</span> pengp, x <span class="op">=</span> <span class="st">"bill_length_mm"</span>, hue <span class="op">=</span> <span class="st">"species"</span>,  cumulative<span class="op">=</span><span class="va">True</span>, common_norm<span class="op">=</span><span class="va">False</span>, common_grid<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb24-5"><a href="#cb24-5"></a>plt.xlabel(<span class="st">"Bill length (mm)"</span>)</span>
+<span id="cb24-6"><a href="#cb24-6"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
+<span id="cb24-7"><a href="#cb24-7"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-16-31.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-</section>
 </section>
 <section id="bivariate-distribution" class="level2">
 <h2 class="anchored" data-anchor-id="bivariate-distribution">Bivariate distribution</h2>
@@ -594,72 +577,39 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a></span>
-<span id="cb27-2"><a href="#cb27-2"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb27-3"><a href="#cb27-3"></a></span>
-<span id="cb27-4"><a href="#cb27-4"></a>sns.kdeplot(data<span class="op">=</span>geyser, x<span class="op">=</span><span class="st">"waiting"</span>, y<span class="op">=</span><span class="st">"duration"</span>)</span>
-<span id="cb27-5"><a href="#cb27-5"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Traceback (most recent call last):
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\backends\backend_qt5.py", line 475, in _draw_idle
-    self.draw()
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\backends\backend_agg.py", line 406, in draw
-    self.figure.draw(self.renderer)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 74, in draw_wrapper
-    result = draw(artist, renderer, *args, **kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 51, in draw_wrapper
-    return draw(artist, renderer, *args, **kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\figure.py", line 2790, in draw
-    mimage._draw_list_compositing_images(
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\image.py", line 132, in _draw_list_compositing_images
-    a.draw(renderer)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 51, in draw_wrapper
-    return draw(artist, renderer, *args, **kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\_api\deprecation.py", line 431, in wrapper
-    return func(*inner_args, **inner_kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axes\_base.py", line 2881, in draw
-    self._update_title_position(renderer)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axes\_base.py", line 2810, in _update_title_position
-    if (ax.xaxis.get_ticks_position() in ['top', 'unknown']
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axis.py", line 2234, in get_ticks_position
-    self._get_ticks_position()]
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axis.py", line 1938, in _get_ticks_position
-    major = self.majorTicks[0]
-IndexError: list index out of range</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb27-2"><a href="#cb27-2"></a>sns.kdeplot(data<span class="op">=</span>geyser, x<span class="op">=</span><span class="st">"waiting"</span>, y<span class="op">=</span><span class="st">"duration"</span>)</span>
+<span id="cb27-3"><a href="#cb27-3"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-18-33.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Map a third variable with a hue semantic to show conditional distributions:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a></span>
-<span id="cb29-2"><a href="#cb29-2"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb29-3"><a href="#cb29-3"></a></span>
-<span id="cb29-4"><a href="#cb29-4"></a>sns.kdeplot(data<span class="op">=</span>geyser, x<span class="op">=</span><span class="st">"waiting"</span>, y<span class="op">=</span><span class="st">"duration"</span>, hue <span class="op">=</span> <span class="st">"kind"</span>)</span>
-<span id="cb29-5"><a href="#cb29-5"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a></span>
+<span id="cb28-2"><a href="#cb28-2"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb28-3"><a href="#cb28-3"></a>sns.kdeplot(data<span class="op">=</span>geyser, x<span class="op">=</span><span class="st">"waiting"</span>, y<span class="op">=</span><span class="st">"duration"</span>, hue <span class="op">=</span> <span class="st">"kind"</span>)</span>
+<span id="cb28-4"><a href="#cb28-4"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-19-35.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Fill the contour by parsing <code>fill = True</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a></span>
-<span id="cb30-2"><a href="#cb30-2"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb30-3"><a href="#cb30-3"></a></span>
-<span id="cb30-4"><a href="#cb30-4"></a>sns.kdeplot(data<span class="op">=</span>geyser, x<span class="op">=</span><span class="st">"waiting"</span>, y<span class="op">=</span><span class="st">"duration"</span>, hue <span class="op">=</span> <span class="st">"kind"</span>, fill <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb30-5"><a href="#cb30-5"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a></span>
+<span id="cb29-2"><a href="#cb29-2"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb29-3"><a href="#cb29-3"></a>sns.kdeplot(data<span class="op">=</span>geyser, x<span class="op">=</span><span class="st">"waiting"</span>, y<span class="op">=</span><span class="st">"duration"</span>, hue <span class="op">=</span> <span class="st">"kind"</span>, fill <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb29-4"><a href="#cb29-4"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-20-37.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Show fewer contour levels, covering less of the distribution by parsing a <code>levels</code> and <code>thresh</code> functions in the kdeplot:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a></span>
-<span id="cb31-2"><a href="#cb31-2"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb31-3"><a href="#cb31-3"></a></span>
-<span id="cb31-4"><a href="#cb31-4"></a>sns.kdeplot(data<span class="op">=</span>geyser, x<span class="op">=</span><span class="st">"waiting"</span>, y<span class="op">=</span><span class="st">"duration"</span>, hue <span class="op">=</span> <span class="st">"kind"</span>, levels <span class="op">=</span> <span class="dv">5</span>, thresh <span class="op">=</span> <span class="fl">.2</span>)</span>
-<span id="cb31-5"><a href="#cb31-5"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a></span>
+<span id="cb30-2"><a href="#cb30-2"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb30-3"><a href="#cb30-3"></a>sns.kdeplot(data<span class="op">=</span>geyser, x<span class="op">=</span><span class="st">"waiting"</span>, y<span class="op">=</span><span class="st">"duration"</span>, hue <span class="op">=</span> <span class="st">"kind"</span>, levels <span class="op">=</span> <span class="dv">5</span>, thresh <span class="op">=</span> <span class="fl">.2</span>)</span>
+<span id="cb30-4"><a href="#cb30-4"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-21-39.png" class="img-fluid" width="672"></p>
 </div>

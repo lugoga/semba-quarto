@@ -21,7 +21,7 @@ code-line-numbers: true
 
 ## Introduction
 
-In [part I](www.ims.org.tz) of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going learn how to plot boxplot in seaborn. The boxplot is used to plot the quantile information of numeric variables in a dataset. To plot a box plot, the `boxplot()` function is used. To plot a horizontal boxplot, the variable name of the dataset is passed to the x-axis. 
+In [Visualization with Seaborn](https://lugoga.github.io/semba-quarto/posts/seabornVisualization/) of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going learn how to plot boxplot in seaborn. The boxplot is used to plot the quantile information of numeric variables in a dataset. To plot a box plot, the `boxplot()` function is used. To plot a horizontal boxplot, the variable name of the dataset is passed to the x-axis. 
 
 
 ## Loading libraries

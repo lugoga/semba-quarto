@@ -156,7 +156,7 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 
 <link rel="stylesheet" href="../../styles.css">
 <meta name="twitter:title" content="ng’ara - plotting in Python with Seaborn: bar plot">
-<meta name="twitter:description" content="In part I of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going learn barplot.">
+<meta name="twitter:description" content="In Visualization with Seaborn of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going learn barplot.">
 <meta name="twitter:image" content="https://lugoga.github.io/semba-quarto/posts\seaborn_barplot\thumbnail_blog.png">
 <meta name="twitter:creator" content="@semba753">
 <meta name="twitter:card" content="summary_large_image">
@@ -327,7 +327,7 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>In <a href="www.ims.org.tz">part I</a> of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going learn barplot. The bar plot is used to capture the relationship between a categorical and numerical column. For each unique value in a categorical column, a bar is plotted, which by default, displays the mean value for the data in a numeric column specified by the bar plot. Seaborn has nifty function called <code>barplot()</code>, which is dedicated for this type of plot.</p>
+<p>In <a href="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/">Visualization with Seaborn</a> of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going learn barplot. The bar plot is used to capture the relationship between a categorical and numerical column. For each unique value in a categorical column, a bar is plotted, which by default, displays the mean value for the data in a numeric column specified by the bar plot. Seaborn has nifty function called <code>barplot()</code>, which is dedicated for this type of plot.</p>
 </section>
 <section id="loading-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="loading-libraries">Loading libraries</h2>
@@ -387,34 +387,6 @@ gtag('config', '14521548', { 'anonymize_ip': true});
 <span id="cb6-2"><a href="#cb6-2"></a>fig <span class="op">=</span> plt.figure()</span>
 <span id="cb6-3"><a href="#cb6-3"></a>sns.barplot(data<span class="op">=</span>df, x<span class="op">=</span><span class="st">"species"</span>, y<span class="op">=</span><span class="st">"bill_length_mm"</span>, hue <span class="op">=</span> <span class="st">"sex"</span>)</span>
 <span id="cb6-4"><a href="#cb6-4"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Traceback (most recent call last):
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\backends\backend_qt5.py", line 475, in _draw_idle
-    self.draw()
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\backends\backend_agg.py", line 406, in draw
-    self.figure.draw(self.renderer)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 74, in draw_wrapper
-    result = draw(artist, renderer, *args, **kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 51, in draw_wrapper
-    return draw(artist, renderer, *args, **kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\figure.py", line 2790, in draw
-    mimage._draw_list_compositing_images(
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\image.py", line 132, in _draw_list_compositing_images
-    a.draw(renderer)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 51, in draw_wrapper
-    return draw(artist, renderer, *args, **kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\_api\deprecation.py", line 431, in wrapper
-    return func(*inner_args, **inner_kwargs)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axes\_base.py", line 2881, in draw
-    self._update_title_position(renderer)
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axes\_base.py", line 2810, in _update_title_position
-    if (ax.xaxis.get_ticks_position() in ['top', 'unknown']
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axis.py", line 2234, in get_ticks_position
-    self._get_ticks_position()]
-  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axis.py", line 1938, in _get_ticks_position
-    major = self.majorTicks[0]
-IndexError: list index out of range</code></pre>
-</div>
 <div class="cell-output-display">
 <div id="fig-fig2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
