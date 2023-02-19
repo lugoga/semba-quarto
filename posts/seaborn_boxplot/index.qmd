@@ -1,0 +1,149 @@
+---
+title: "plotting in Python with Seaborn: box plot"
+author: 
+  - name: Masumbuko Semba
+    url: https://semba.netlify.app
+    orcid: 0000-0002-5002-9747
+    affiliation: Nelson Mandela African Institution of Science and Technology
+    affiliation-url: https://semba.netlify.app/ 
+date: "2023-02-24"
+categories: [Analysis, Visualization, Python]
+image: "boxplot.jpg"
+draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
+bibliography: ../blog.bib
+execute: 
+  warning: false
+fig-width: 7
+fig-height: 5
+code-line-numbers: true
+
+---
+
+## Introduction
+
+In [part I](www.ims.org.tz) of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going learn how to plot boxplot in seaborn. The boxplot is used to plot the quantile information of numeric variables in a dataset. To plot a box plot, the `boxplot()` function is used. To plot a horizontal boxplot, the variable name of the dataset is passed to the x-axis. 
+
+
+## Loading libraries
+
+Though most people are familiar with plotting using matplot, as it inherited most of the functions from MatLab. Python has an extremely nady library for data visualiztion called seaborn. The Seaborn library is based on the Matplotlib library. Therefore, you will also need to import the Matplotlib library.
+
+```{python}
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import numpy as np
+
+sns.set_theme()
+
+```
+
+## Dataset
+
+We are going to use a penguin dataset from palmerpenguins package [@horst2022palmer]. We do not need to download this dataset as it comes with the seaborn package. We only need to load it from the package into our session using `sns.load_dataset` function and specify the `penguins` as the name of the dataset and assign it as df;
+
+```{r}
+#| echo: false
+df = palmerpenguins::penguins
+
+```
+
+```{python}
+#| echo: false
+
+df = r.df
+```
+
+
+```{python}
+#| eval: false
+df = sns.load_dataset("penguins")
+```
+
+
+```{python}
+df.head()
+```
+
+A printed `df` dataset shows that is made up of various measurements of three different penguin species --- Adelie, Gentoo, and Chinstrap. The dataset contains seven variables -- species, island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex, and year.
+
+
+## Boxplot
+
+Next, we will call the `boxplot()` function from the Seaborn library to plot a bar plot that displays the average length of penguin species.
+
+
+```{python}
+#| label: fig-fig1
+#| fig-cap: Boxplot length by species
+
+fig = plt.figure()
+sns.boxplot(data=df, x="species", y="bill_length_mm")
+plt.ylabel("Bill length (mm)")
+plt.show()
+
+```
+
+The @fig-fig1 shows that the average length of penguins from the three island. We can parse an argument `hue = "sex"` to stack the plot as @fig-fig2 shows.
+
+
+```{python}
+#| label: fig-fig2
+#| fig-cap: Boxplot of length by species and island
+
+
+fig = plt.figure()
+sns.boxplot(data=df, x="species", y="bill_length_mm", hue = "sex")
+plt.ylabel("Bill length (mm)")
+plt.show()
+
+```
+Draw a vertical boxplot with nested grouping by two variables:
+
+
+```{python}
+#| label: fig-fig3
+#| fig-cap: Boxplot of length by species and island
+
+
+fig = plt.figure()
+sns.boxplot(data=df, y="species", x="bill_length_mm", hue = "sex")
+plt.xlabel("Bill length (mm)")
+plt.show()
+
+```
+## Violin
+
+Violin plots are similar to Box plots. However, unlike Box plots that plot quantile information, the Violin plots plot the overall distribution of values in the numeric columns. The following script plots two Violin plots for the passengers traveling alone and for the passengers traveling along with another passenger. The `violinplot()` function is used to plot a swarm plot with Seaborn.
+
+
+
+```{python}
+#| label: fig-fig4
+#| fig-cap: Violin plot of length by species and island
+
+
+fig = plt.figure()
+sns.violinplot(data=df, x="species", y="bill_length_mm", hue = "sex")
+plt.ylabel("Bill length (mm)")
+plt.show()
+
+```
+
+We can split the violin plot with `split = True` argument. One key advantage of splited violins is that take up less space (@fig-fig5):
+
+
+```{python}
+#| label: fig-fig5
+#| fig-cap: Violin plot of length by species and island
+
+
+fig = plt.figure()
+sns.violinplot(data=df, x="species", y="bill_length_mm", hue = "sex", 
+split = True)
+plt.ylabel("Bill length (mm)")
+plt.show()
+
+```
+
+## Cited Materials

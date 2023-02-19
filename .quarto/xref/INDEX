@@ -68,5 +68,8 @@
   },
   "posts/seaborn_barplot/index.qmd": {
     "index.html": "b089bdba"
+  },
+  "posts/seaborn_boxplot/index.qmd": {
+    "index.html": "b147a4d1"
   }
 }

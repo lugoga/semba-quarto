@@ -2,6 +2,7 @@
   {
     "listing": "/archive.html",
     "items": [
+      "/posts/seaborn_boxplot/index.html",
       "/posts/seaborn_barplot/index.html",
       "/posts/seabornjointplot/index.html",
       "/posts/seabornVisualization/index.html",
@@ -17,6 +18,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/seaborn_boxplot/index.html",
       "/posts/seaborn_barplot/index.html",
       "/posts/seabornjointplot/index.html",
       "/posts/seabornVisualization/index.html",

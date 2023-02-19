@@ -10,7 +10,163 @@
 <atom:link href="https://lugoga.github.io/semba-quarto/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Coding for all for better today and tommorow</description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Wed, 22 Feb 2023 21:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 23 Feb 2023 21:00:00 GMT</lastBuildDate>
+<item>
+  <title>plotting in Python with Seaborn: box plot</title>
+  <dc:creator>Masumbuko Semba</dc:creator>
+  <link>https://lugoga.github.io/semba-quarto/posts/seaborn_boxplot/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>In <a href="www.ims.org.tz">part I</a> of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going learn how to plot boxplot in seaborn. The boxplot is used to plot the quantile information of numeric variables in a dataset. To plot a box plot, the <code>boxplot()</code> function is used. To plot a horizontal boxplot, the variable name of the dataset is passed to the x-axis.</p>
+</section>
+<section id="loading-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="loading-libraries">Loading libraries</h2>
+<p>Though most people are familiar with plotting using matplot, as it inherited most of the functions from MatLab. Python has an extremely nady library for data visualiztion called seaborn. The Seaborn library is based on the Matplotlib library. Therefore, you will also need to import the Matplotlib library.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;">as</span> plt</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;">import</span> seaborn <span class="im" style="color: #00769E;">as</span> sns</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;">import</span> pandas <span class="im" style="color: #00769E;">as</span> pd</span>
+<span id="cb1-4"><span class="im" style="color: #00769E;">import</span> numpy <span class="im" style="color: #00769E;">as</span> np</span>
+<span id="cb1-5"></span>
+<span id="cb1-6">sns.set_theme()</span></code></pre></div>
+</div>
+</section>
+<section id="dataset" class="level2">
+<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
+<p>We are going to use a penguin dataset from palmerpenguins package <span class="citation" data-cites="horst2022palmer">(Horst, Hill, and Gorman 2020)</span>. We do not need to download this dataset as it comes with the seaborn package. We only need to load it from the package into our session using <code>sns.load_dataset</code> function and specify the <code>penguins</code> as the name of the dataset and assign it as df;</p>
+<div class="cell">
+
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1">df <span class="op" style="color: #5E5E5E;">=</span> sns.load_dataset(<span class="st" style="color: #20794D;">"penguins"</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1">df.head()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  species     island  bill_length_mm  ...  body_mass_g     sex  year
+0  Adelie  Torgersen            39.1  ...         3750    male  2007
+1  Adelie  Torgersen            39.5  ...         3800  female  2007
+2  Adelie  Torgersen            40.3  ...         3250  female  2007
+3  Adelie  Torgersen             NaN  ...  -2147483648     NaN  2007
+4  Adelie  Torgersen            36.7  ...         3450  female  2007
+
+[5 rows x 8 columns]</code></pre>
+</div>
+</div>
+<p>A printed <code>df</code> dataset shows that is made up of various measurements of three different penguin species — Adelie, Gentoo, and Chinstrap. The dataset contains seven variables – species, island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex, and year.</p>
+</section>
+<section id="boxplot" class="level2">
+<h2 class="anchored" data-anchor-id="boxplot">Boxplot</h2>
+<p>Next, we will call the <code>boxplot()</code> function from the Seaborn library to plot a bar plot that displays the average length of penguin species.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb5-2">sns.boxplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"species"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>)</span>
+<span id="cb5-3">plt.ylabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb5-4">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-fig1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seaborn_boxplot/index_files/figure-html/fig-fig1-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Boxplot length by species</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The Figure&nbsp;1 shows that the average length of penguins from the three island. We can parse an argument <code>hue = "sex"</code> to stack the plot as Figure&nbsp;2 shows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"></span>
+<span id="cb6-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb6-3">sns.boxplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"species"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"sex"</span>)</span>
+<span id="cb6-4">plt.ylabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb6-5">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-fig2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seaborn_boxplot/index_files/figure-html/fig-fig2-3.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Boxplot of length by species and island</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Draw a vertical boxplot with nested grouping by two variables:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"></span>
+<span id="cb7-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb7-3">sns.boxplot(data<span class="op" style="color: #5E5E5E;">=</span>df, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"species"</span>, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"sex"</span>)</span>
+<span id="cb7-4">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb7-5">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-fig3" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seaborn_boxplot/index_files/figure-html/fig-fig3-5.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: Boxplot of length by species and island</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="violin" class="level2">
+<h2 class="anchored" data-anchor-id="violin">Violin</h2>
+<p>Violin plots are similar to Box plots. However, unlike Box plots that plot quantile information, the Violin plots plot the overall distribution of values in the numeric columns. The following script plots two Violin plots for the passengers traveling alone and for the passengers traveling along with another passenger. The <code>violinplot()</code> function is used to plot a swarm plot with Seaborn.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"></span>
+<span id="cb8-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb8-3">sns.violinplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"species"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"sex"</span>)</span>
+<span id="cb8-4">plt.ylabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb8-5">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-fig4" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seaborn_boxplot/index_files/figure-html/fig-fig4-7.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: Violin plot of length by species and island</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can split the violin plot with <code>split = True</code> argument. One key advantage of splited violins is that take up less space (Figure&nbsp;5):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"></span>
+<span id="cb9-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb9-3">sns.violinplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"species"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"sex"</span>, </span>
+<span id="cb9-4">split <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>)</span>
+<span id="cb9-5">plt.ylabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb9-6">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-fig5" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seaborn_boxplot/index_files/figure-html/fig-fig5-9.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5: Violin plot of length by species and island</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="cited-materials" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-horst2022palmer" class="csl-entry">
+Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data</em>. <a href="https://doi.org/10.5281/zenodo.3960218">https://doi.org/10.5281/zenodo.3960218</a>.
+</div>
+</div></section></div> ]]></description>
+  <category>Analysis</category>
+  <category>Visualization</category>
+  <category>Python</category>
+  <guid>https://lugoga.github.io/semba-quarto/posts/seaborn_boxplot/index.html</guid>
+  <pubDate>Thu, 23 Feb 2023 21:00:00 GMT</pubDate>
+  <media:content url="https://lugoga.github.io/semba-quarto/posts/seaborn_boxplot/boxplot.jpg" medium="image" type="image/jpeg"/>
+</item>
 <item>
   <title>plotting in Python with Seaborn: bar plot</title>
   <dc:creator>Masumbuko Semba</dc:creator>
