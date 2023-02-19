@@ -24,27 +24,49 @@
     "archive.html": "8e7837c1"
   },
   "posts/ttest/index.qmd": {
-    "index.html": "06c4a794"
+    "index.html": "06c4a794",
+    "index.tex": "3a41b51a"
   },
   "posts/data/rmarkdown_learning.Rmd": {
     "rmarkdown_learning.html": "92e827aa"
   },
   "posts/inset_main_map/index.qmd": {
-    "index.html": "ade1d639"
+    "index.html": "ade1d639",
+    "index.tex": "4f70200d"
   },
   "posts/combining_plots/index.qmd": {
-    "index.html": "997efa69"
+    "index.html": "997efa69",
+    "index.tex": "49370732"
   },
   "posts/forecastingTimeseries/index.qmd": {
-    "index.html": "1cfa833e"
+    "index.html": "1cfa833e",
+    "index.tex": "49a527b7"
   },
   "posts/newvisuals/index.qmd": {
-    "index.html": "0ae76afa"
+    "index.html": "0ae76afa",
+    "index.tex": "9d187604"
   },
   "posts/spatialState/index.qmd": {
-    "index.html": "b4050513"
+    "index.html": "b4050513",
+    "index.tex": "d713439a"
   },
   "posts/r_python/index.qmd": {
-    "index.html": "999cd47e"
+    "index.html": "999cd47e",
+    "index.tex": "3b7db52f"
+  },
+  "draft/shiny_qmd.qmd": {
+    "shiny_qmd.html": "4de4cb8c"
+  },
+  "posts/shiny_docs/index.qmd": {
+    "index.html": "31c070f7"
+  },
+  "posts/seabornVisualization/index.qmd": {
+    "index.html": "e7b3062d"
+  },
+  "posts/seabornjointplot/index.qmd": {
+    "index.html": "32d71b9e"
+  },
+  "posts/seaborn_barplot/index.qmd": {
+    "index.html": "b089bdba"
   }
 }

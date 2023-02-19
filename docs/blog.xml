@@ -10,214 +10,115 @@
 <atom:link href="https://lugoga.github.io/semba-quarto/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Coding for all for better today and tommorow</description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sun, 19 Feb 2023 21:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 22 Feb 2023 21:00:00 GMT</lastBuildDate>
 <item>
-  <title>Main and Inset maps with R</title>
+  <title>plotting in Python with Seaborn: bar plot</title>
   <dc:creator>Masumbuko Semba</dc:creator>
-  <link>https://lugoga.github.io/semba-quarto/posts/inset_main_map/index.html</link>
+  <link>https://lugoga.github.io/semba-quarto/posts/seaborn_barplot/index.html</link>
   <description><![CDATA[ 
 
 
 
-<section id="introduction" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="introduction">Introduction</h3>
-<p>In this post, We learn how we can make publication quality inset maps in R using <code>ggplot2</code> package <span class="citation" data-cites="ggplot">(Wickham 2016)</span>. When publishing scientific research in journals or presenting research work at a conference, showing maps of data collection sites or experimental locations is one of the key visualization elements. Maps of study sites or sampling locations can help the audience and readers to fathom the data in a better way. Mapping sounds fancy, but it needs substantial training and skill set to make high-quality maps that are reader-friendly and visually aesthetic.</p>
-<p>Sometimes, the study sites are more dispersed and are easy to visualize in large geographic areas. However, in some cases, study sites are clustered, which makes it hard to show them on a broader scale. In that case, inset maps help us show the locations with reference to familiar geographical regions. An inset map is a smaller map featured on the same page as the main map. Traditionally, inset maps are shown at a larger scale (smaller area) than the main map. Often, an inset map is used as a locator map that shows the area of the main map in a broader, more familiar geographical frame of reference.</p>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>In <a href="www.ims.org.tz">part I</a> of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going learn barplot. The bar plot is used to capture the relationship between a categorical and numerical column. For each unique value in a categorical column, a bar is plotted, which by default, displays the mean value for the data in a numeric column specified by the bar plot. Seaborn has nifty function called <code>barplot()</code>, which is dedicated for this type of plot.</p>
 </section>
-<section id="spatial-vector-data-storage" class="level3">
-<h3 class="anchored" data-anchor-id="spatial-vector-data-storage">Spatial Vector Data Storage</h3>
-<p>If you have been using the vector data and doing spatial analysis, you know shapefile. Shapefile is the most commonly used vector data formats to store data and carry out any spatial analysis.</p>
-</section>
-<section id="characteristics-of-a-shapefile" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="characteristics-of-a-shapefile">Characteristics of a shapefile</h3>
-<p>Shapefiles are vector data storage models for storing feature classes composed of points, lines and polygons, but never a mixture. It stores information of the location, shape and attributes of geographical features. Each item in a shapefile has attributes that describe it composed of rows, called records and columns called fields and can also store multipart features, in which a single feature includes multiple objects which includes</p>
-<ul>
-<li><strong>.shp</strong> file stores coordinate data</li>
-<li><strong>.dbf</strong> file stores attribute data</li>
-<li><strong>.shx</strong> file stores a spatial index that speeds drawing and analysis</li>
-<li><strong>.prj</strong> file stores projection information</li>
-<li><strong>.avl</strong> file stores legend</li>
-<li><strong>.xml</strong> file contains metadata</li>
-</ul>
-</section>
-<section id="characteristics-of-a-shapefile-1" class="level3">
-<h3 class="anchored" data-anchor-id="characteristics-of-a-shapefile-1">Characteristics of a shapefile</h3>
-<ul>
-<li>Takes up more storage space on your system</li>
-<li>Shapefiles have a minimum size of 2GB</li>
-<li>Do not support names in fields longer than 10 characters</li>
-<li>A shapefile cannot have more than one geometry type in a file.</li>
-<li>Cannot store data and time in the same field</li>
-<li>Do not support raster files</li>
-<li>Do not store NULL values in a field; when a value is NULL, a shapefile will use 0 instead.</li>
-</ul>
-<p>But, shapefile has a lot of disadvantages when you wish to scale your work and build integrated &amp; automated workflows for large-scale deployments. Geopackage format offers a variety of features in this regard. And that’s why you need to use Geopackage files instead of shapefile. Let’s dive deeper into the details.</p>
-</section>
-<section id="geopackage" class="level3">
-<h3 class="anchored" data-anchor-id="geopackage">Geopackage</h3>
-<p>A Geopackage is platform-independent format for storing and transferring geospatial information. It is a SQLite based standard format designed for stand-alone databases that holds both raster data and multiple vector data layers in a single file and can be accessible by non-GIS software.</p>
-</section>
-<section id="characteristics-of-a-geopackage" class="level3">
-<h3 class="anchored" data-anchor-id="characteristics-of-a-geopackage">Characteristics of a Geopackage</h3>
-<ul>
-<li>Geopackages are open source, SQLite based database</li>
-<li>No limitation on the file size and can handle large number of features</li>
-<li>Can store both raster as well as vector data layers</li>
-<li>A single Geopackage file can have multiple vector layers with each layer having a different geometry type.</li>
-</ul>
-</section>
-<section id="why-choose-geopackages-and-not-shapefiles" class="level3">
-<h3 class="anchored" data-anchor-id="why-choose-geopackages-and-not-shapefiles">Why choose Geopackages and not Shapefiles?</h3>
-<ol type="1">
-<li><p>Shapefile is a multi-file format with minimum of 3 files and several other attached files with different extensions. Sharing a shapefile with someone would be complicated as all the other files attached will also have to be shared. Whereas, Geopackages includes all the information of the layer in a file and is easier to transfer or share.</p></li>
-<li><p>Compared to shapefiles, the column headers in a geopackage can be full names and right by providing the correct context for each column. A shapefile can only have 10 characters to define the column header.</p></li>
-<li><p>Geopackages run faster on algorithm outputs compared to shapefiles.</p></li>
-<li><p>In a geopackage, there is no limit on the file size and can handle large number of features in a smaller file size. A shapefile can handle maximum size of 2 GB and cannot export a vector layer with more features.</p></li>
-<li><p>A Geopackage stores both raster and vector files whereas, shapefiles can store only vector files.</p></li>
-<li><p>Geopackages are lightweight and compatible across environments specially in mobile devices. It is 1.1-1.3x lighter in file size compared to shapefiles.</p></li>
-</ol>
-</section>
-<section id="load-libraries" class="level3">
-<h3 class="anchored" data-anchor-id="load-libraries">Load libraries</h3>
-<p>Several packages in R are dealing with spatial data, but in this post we are going to use funtions from <strong>tidyverse</strong> <span class="citation" data-cites="tidyverse">(Wickham and Wickham 2017)</span> and <strong>sf</strong> <span class="citation" data-cites="sf">(Pebesma 2018)</span> packages. We can load these packages with a <code>library</code> function as as;</p>
+<section id="loading-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="loading-libraries">Loading libraries</h2>
+<p>Though most people are familiar with plotting using matplot, as it inherited most of the functions from MatLab. Python has an extremely nady library for data visualiztion called seaborn. The Seaborn library is based on the Matplotlib library. Therefore, you will also need to import the Matplotlib library.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">library</span>(tidyverse)</span>
-<span id="cb1-2"><span class="fu" style="color: #4758AB;">library</span>(sf)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;">as</span> plt</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;">import</span> seaborn <span class="im" style="color: #00769E;">as</span> sns</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;">import</span> pandas <span class="im" style="color: #00769E;">as</span> pd</span>
+<span id="cb1-4"><span class="im" style="color: #00769E;">import</span> numpy <span class="im" style="color: #00769E;">as</span> np</span>
+<span id="cb1-5"></span>
+<span id="cb1-6">sns.set_theme()</span></code></pre></div>
 </div>
 </section>
-<section id="load-file" class="level3">
-<h3 class="anchored" data-anchor-id="load-file">Load file</h3>
-<p>We first need to import spatial data into the session. For this case we are going to load the boundary layer of Africa. The file has boundary for 67 polygons representing feature in Africa. We can load the file into the session using <code>st_read</code> function from <strong>sf</strong> package <span class="citation" data-cites="sf">(Pebesma 2018)</span>.</p>
+<section id="dataset" class="level2">
+<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
+<p>We are going to use a penguin dataset from palmerpenguins package <span class="citation" data-cites="horst2022palmer">(Horst, Hill, and Gorman 2020)</span>. We do not need to download this dataset as it comes with the seaborn package. We only need to load it from the package into our session using <code>sns.load_dataset</code> function and specify the <code>penguins</code> as the name of the dataset and assign it as df;</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">africa <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">st_read</span>(<span class="st" style="color: #20794D;">"../data/africa.gpkg"</span>, <span class="at" style="color: #657422;">quiet =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)</span></code></pre></div>
-</div>
-<p>Next I’ll extract the polygon for WIO region countries from from the <code>Africa</code> package using the <code>filter</code> function.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">wio <span class="ot" style="color: #003B4F;">=</span> africa  <span class="sc" style="color: #5E5E5E;">|&gt;</span>  </span>
-<span id="cb3-2">  <span class="fu" style="color: #4758AB;">filter</span>(</span>
-<span id="cb3-3">    country <span class="sc" style="color: #5E5E5E;">%in%</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"Tanzania"</span>, <span class="st" style="color: #20794D;">"Kenya"</span>, <span class="st" style="color: #20794D;">"Mozambique"</span>, <span class="st" style="color: #20794D;">"South Africa"</span>, </span>
-<span id="cb3-4">                   <span class="st" style="color: #20794D;">"Somalia"</span>, <span class="st" style="color: #20794D;">"Madagascar"</span>, <span class="st" style="color: #20794D;">"Seychelles"</span>, <span class="st" style="color: #20794D;">"Reunion"</span>, <span class="st" style="color: #20794D;">"Mauritius"</span>))</span>
-<span id="cb3-5"></span>
-<span id="cb3-6">wio.point.country <span class="ot" style="color: #003B4F;">=</span> wio <span class="sc" style="color: #5E5E5E;">%&gt;%</span> wior<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">polygon_tb</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">distinct</span>(country, <span class="at" style="color: #657422;">.keep_all =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)</span></code></pre></div>
-</div>
-<p>Then we load study points that were sampled off the coast of Madagascar.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">sampling.points <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">st_read</span>(<span class="st" style="color: #20794D;">"../data/madagascar_points.gpkg"</span>, <span class="at" style="color: #657422;">quiet =</span> <span class="cn" style="color: #8f5902;">TRUE</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb4-2">  <span class="fu" style="color: #4758AB;">filter</span>(state <span class="sc" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"Ocean"</span>)</span>
-<span id="cb4-3"></span>
-<span id="cb4-4">madagascar <span class="ot" style="color: #003B4F;">=</span> wio <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">filter</span>(country <span class="sc" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"Madagascar"</span>)</span></code></pre></div>
-</div>
-</section>
-<section id="focus-map" class="level2">
-<h2 class="anchored" data-anchor-id="focus-map">Focus Map</h2>
-<p>Now, I’ll plot a focused map of Madagascar. We need to define the geographical extent of the area. For that purpose, we first need to identify the extent of the study sites and we can do that using <code>extent</code> function from **sf package;</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">madagascar <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">st_bbox</span>()</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     xmin      ymin      xmax      ymax 
- 42.71862 -25.60895  50.48378 -11.94543 </code></pre>
-</div>
-</div>
-<p>The printed results indicates tha maxima and minima of longitude and latitude, which define the geographical extent of the area. Using the <code>min</code> and <code>max</code> values of coordinates from the previous map, we can draw a polygon over the study sites and see if this extent can best visualize the data.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">map.site <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">ggplot</span>() <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb7-2">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">layer_spatial</span>(<span class="at" style="color: #657422;">data =</span> madagascar, <span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"cyan4"</span>, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"black"</span>,<span class="at" style="color: #657422;">size =</span> .<span class="dv" style="color: #AD0000;">4</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb7-3">  <span class="fu" style="color: #4758AB;">geom_sf</span>(<span class="at" style="color: #657422;">data =</span> sampling.points, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"red"</span>, <span class="at" style="color: #657422;">size =</span> <span class="dv" style="color: #AD0000;">2</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb7-4">  ggsci<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">scale_color_lancet</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb7-5">  <span class="fu" style="color: #4758AB;">theme_bw</span>(<span class="at" style="color: #657422;">base_size =</span> <span class="dv" style="color: #AD0000;">12</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb7-6">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">axis.title =</span> <span class="fu" style="color: #4758AB;">element_blank</span>())<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb7-7">  <span class="fu" style="color: #4758AB;">coord_sf</span>(<span class="at" style="color: #657422;">xlim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">43</span>, <span class="dv" style="color: #AD0000;">51</span>), <span class="at" style="color: #657422;">ylim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">18</span>,<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">11</span>))</span>
-<span id="cb7-8"></span>
-<span id="cb7-9">map.site</span></code></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://lugoga.github.io/semba-quarto/posts/inset_main_map/index_files/figure-html/focus-1.png" class="img-fluid figure-img" width="576"></p>
-<p></p><figcaption class="figure-caption">Sampling points in the coastal waters of Madagascar Island</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<p>As you can see, the study sites are located on the northern part of Madagascar Island. However, to make a better sense of the study locations with reference to WIO region, we need to plot them on a focused scale.</p>
-</section>
-<section id="add-map-elements" class="level2">
-<h2 class="anchored" data-anchor-id="add-map-elements">Add Map elements</h2>
-<p>Professional maps also include some elements like <code>North Arrow</code> and <code>scale</code> etc. We’ll add these components to our map as well. Besides that, I’ll also fill the non-land area with <code>lightblue</code> color for reference and distinction respectively Figure&nbsp;1.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">map.site <span class="ot" style="color: #003B4F;">=</span> map.site <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb8-2">      <span class="fu" style="color: #4758AB;">guides</span>(<span class="at" style="color: #657422;">size =</span> <span class="st" style="color: #20794D;">"none"</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb8-3">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">annotation_north_arrow</span>(<span class="at" style="color: #657422;">location =</span> <span class="st" style="color: #20794D;">"tr"</span>, </span>
-<span id="cb8-4">                                    <span class="at" style="color: #657422;">height =</span> <span class="fu" style="color: #4758AB;">unit</span>(<span class="fl" style="color: #AD0000;">1.2</span>, <span class="st" style="color: #20794D;">"cm"</span>),  </span>
-<span id="cb8-5">                                    <span class="at" style="color: #657422;">width =</span> <span class="fu" style="color: #4758AB;">unit</span>(.<span class="dv" style="color: #AD0000;">75</span>, <span class="st" style="color: #20794D;">"cm"</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb8-6">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">annotation_scale</span>(<span class="at" style="color: #657422;">location =</span> <span class="st" style="color: #20794D;">"br"</span>)</span>
-<span id="cb8-7"></span>
-<span id="cb8-8">map.site</span></code></pre></div>
-<div class="cell-output-display">
-<div id="fig-focus1" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="https://lugoga.github.io/semba-quarto/posts/inset_main_map/index_files/figure-html/fig-focus1-1.png" class="img-fluid figure-img" width="576"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: Sampling points in the coastal waters of Madagascar Island</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="inset-map" class="level2">
-<h2 class="anchored" data-anchor-id="inset-map">Inset Map</h2>
-<p>Now, I’ll create a full-scale map of WIO region with a red polygon showing the extent of study sites and the focused map. The code below produce Figure&nbsp;2;</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">inset.map <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">ggplot</span>() <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb9-2">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">layer_spatial</span>(<span class="at" style="color: #657422;">data =</span> africa, <span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"grey90"</span>, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"grey90"</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb9-3">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">layer_spatial</span>(<span class="at" style="color: #657422;">data =</span> wio, <span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"grey60"</span>, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"ivory"</span>,<span class="at" style="color: #657422;">size =</span> .<span class="dv" style="color: #AD0000;">4</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb9-4">  <span class="co" style="color: #5E5E5E;"># geom_sf_text(data = wio, aes(label = country))+</span></span>
-<span id="cb9-5">  ggrepel<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">geom_text_repel</span>(<span class="at" style="color: #657422;">data =</span> wio.point.country, </span>
-<span id="cb9-6">                           <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> lon, <span class="at" style="color: #657422;">y =</span> lat, <span class="at" style="color: #657422;">label =</span> country), <span class="at" style="color: #657422;">size =</span> <span class="dv" style="color: #AD0000;">3</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb9-7">  <span class="fu" style="color: #4758AB;">theme_bw</span>(<span class="at" style="color: #657422;">base_size =</span> <span class="dv" style="color: #AD0000;">12</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb9-8">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">axis.title =</span> <span class="fu" style="color: #4758AB;">element_blank</span>())<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb9-9">  <span class="fu" style="color: #4758AB;">geom_rect</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">xmin =</span> <span class="dv" style="color: #AD0000;">43</span>, <span class="at" style="color: #657422;">xmax =</span> <span class="dv" style="color: #AD0000;">51</span>, <span class="at" style="color: #657422;">ymin =</span> <span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">18</span>, <span class="at" style="color: #657422;">ymax =</span> <span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">11</span>), </span>
-<span id="cb9-10">            <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"red"</span>, <span class="at" style="color: #657422;">fill =</span> <span class="cn" style="color: #8f5902;">NA</span>, <span class="at" style="color: #657422;">size =</span> <span class="fl" style="color: #AD0000;">1.2</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb9-11">  <span class="fu" style="color: #4758AB;">coord_sf</span>(<span class="at" style="color: #657422;">xlim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">20</span>, <span class="dv" style="color: #AD0000;">60</span>), <span class="at" style="color: #657422;">ylim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">40</span>,<span class="dv" style="color: #AD0000;">15</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb9-12">  <span class="fu" style="color: #4758AB;">theme_test</span>() <span class="sc" style="color: #5E5E5E;">+</span> </span>
-<span id="cb9-13">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">axis.text =</span> <span class="fu" style="color: #4758AB;">element_blank</span>(),</span>
-<span id="cb9-14">        <span class="at" style="color: #657422;">axis.ticks =</span> <span class="fu" style="color: #4758AB;">element_blank</span>(),</span>
-<span id="cb9-15">        <span class="at" style="color: #657422;">axis.ticks.length =</span> <span class="fu" style="color: #4758AB;">unit</span>(<span class="dv" style="color: #AD0000;">0</span>, <span class="st" style="color: #20794D;">"pt"</span>),</span>
-<span id="cb9-16">        <span class="at" style="color: #657422;">axis.title=</span><span class="fu" style="color: #4758AB;">element_blank</span>(),</span>
-<span id="cb9-17">        <span class="at" style="color: #657422;">plot.margin =</span> <span class="fu" style="color: #4758AB;">margin</span>(<span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">0</span>, <span class="st" style="color: #20794D;">"cm"</span>),</span>
-<span id="cb9-18">        <span class="at" style="color: #657422;">panel.background =</span> <span class="fu" style="color: #4758AB;">element_rect</span>(<span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"lightblue"</span>))</span>
-<span id="cb9-19"></span>
-<span id="cb9-20">inset.map</span></code></pre></div>
-<div class="cell-output-display">
-<div id="fig-inset" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="https://lugoga.github.io/semba-quarto/posts/inset_main_map/index_files/figure-html/fig-inset-1.png" class="img-fluid figure-img" width="576"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;2: An inset map of the WIO region</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<p>This version looks better compared to the previous one. However, we need to add some information to give it a reference.</p>
-</section>
-<section id="final-map" class="level2">
-<h2 class="anchored" data-anchor-id="final-map">Final Map</h2>
-<p>Now, to combine both maps where the map of WIO region is inset on the upper left corner we use the function from <strong>cowplot</strong> package. a <code>draw_plot</code> function allow to places a plot somewhere onto the drawing canvas that is established using <code>ggdraw</code> function also from <strong>cowplot</strong> package <span class="citation" data-cites="cowplot">(Wilke 2018)</span>. By default, coordinates run from 0 to 1, and the point (0, 0) is in the lower left corner of the canvas. The function also allows us to specify the size of the inset map using the <code>width</code> and <code>height</code> functions.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">cowplot<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">ggdraw</span>(<span class="at" style="color: #657422;">plot =</span> map.site) <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb10-2">  cowplot<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">draw_plot</span>(inset.map, <span class="at" style="color: #657422;">x =</span> .<span class="dv" style="color: #AD0000;">1</span>, <span class="at" style="color: #657422;">y =</span> .<span class="dv" style="color: #AD0000;">13</span>, <span class="at" style="color: #657422;">width =</span> .<span class="dv" style="color: #AD0000;">4</span>, <span class="at" style="color: #657422;">height =</span> .<span class="dv" style="color: #AD0000;">5</span>)</span></code></pre></div>
-<div class="cell-output-display">
-<div id="fig-map2" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="https://lugoga.github.io/semba-quarto/posts/inset_main_map/index_files/figure-html/fig-map2-1.png" class="img-fluid figure-img" width="576"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3: Map of the northwest side of Madagascar. An inset map indicate the location of the study area in the Western Indian Ocean region</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<section id="summary" class="level3">
-<h3 class="anchored" data-anchor-id="summary">Summary</h3>
-<p>Therefore , a final map shown in Figure&nbsp;3 shows the locations of study sites with reference to the country and provinces and is more professional.</p>
-</section>
-</section>
 
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1">df <span class="op" style="color: #5E5E5E;">=</span> sns.load_dataset(<span class="st" style="color: #20794D;">"penguins"</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1">df.head()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  species     island  bill_length_mm  ...  body_mass_g     sex  year
+0  Adelie  Torgersen            39.1  ...         3750    male  2007
+1  Adelie  Torgersen            39.5  ...         3800  female  2007
+2  Adelie  Torgersen            40.3  ...         3250  female  2007
+3  Adelie  Torgersen             NaN  ...  -2147483648     NaN  2007
+4  Adelie  Torgersen            36.7  ...         3450  female  2007
+
+[5 rows x 8 columns]</code></pre>
+</div>
+</div>
+<p>A printed <code>df</code> dataset shows that is made up of various measurements of three different penguin species — Adelie, Gentoo, and Chinstrap. The dataset contains seven variables – species, island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex, and year.</p>
+<p>Next, we will call the <code>barplot()</code> function from the Seaborn library to plot a bar plot that displays the average length of penguin species.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb5-2">sns.barplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"species"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>)</span>
+<span id="cb5-3">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-fig1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seaborn_barplot/index_files/figure-html/fig-fig1-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Average length by island</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The Figure&nbsp;1 shows that the average length of penguins from the three island. We can parse an argument <code>hue = "sex"</code> to stack the plot as Figure&nbsp;2 shows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"></span>
+<span id="cb6-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb6-3">sns.barplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"species"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"sex"</span>)</span>
+<span id="cb6-4">plt.show()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Traceback (most recent call last):
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\backends\backend_qt5.py", line 475, in _draw_idle
+    self.draw()
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\backends\backend_agg.py", line 406, in draw
+    self.figure.draw(self.renderer)
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 74, in draw_wrapper
+    result = draw(artist, renderer, *args, **kwargs)
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 51, in draw_wrapper
+    return draw(artist, renderer, *args, **kwargs)
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\figure.py", line 2790, in draw
+    mimage._draw_list_compositing_images(
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\image.py", line 132, in _draw_list_compositing_images
+    a.draw(renderer)
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 51, in draw_wrapper
+    return draw(artist, renderer, *args, **kwargs)
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\_api\deprecation.py", line 431, in wrapper
+    return func(*inner_args, **inner_kwargs)
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axes\_base.py", line 2881, in draw
+    self._update_title_position(renderer)
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axes\_base.py", line 2810, in _update_title_position
+    if (ax.xaxis.get_ticks_position() in ['top', 'unknown']
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axis.py", line 2234, in get_ticks_position
+    self._get_ticks_position()]
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axis.py", line 1938, in _get_ticks_position
+    major = self.majorTicks[0]
+IndexError: list index out of range</code></pre>
+</div>
+<div class="cell-output-display">
+<div id="fig-fig2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seaborn_barplot/index_files/figure-html/fig-fig2-3.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Average length by species and island</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 <section id="cited-materials" class="level2">
 
 
@@ -225,31 +126,522 @@
 
 </section>
 
-<div id="quarto-appendix" class="default"><section id="last-updated" class="level2 appendix"><h2 class="quarto-appendix-heading">Last updated</h2><div class="quarto-appendix-contents">
-
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "16 February 2023"</code></pre>
-</div>
-</div>
-</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent">
-<div id="ref-sf" class="csl-entry">
-Pebesma, Edzer. 2018. <span>“<span class="nocase">Simple Features for R: Standardized Support for Spatial Vector Data</span>.”</span> <em><span>The R Journal</span></em> 10 (1): 439–46. <a href="https://doi.org/10.32614/RJ-2018-009">https://doi.org/10.32614/RJ-2018-009</a>.
-</div>
-<div id="ref-ggplot" class="csl-entry">
-Wickham, Hadley. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
-</div>
-<div id="ref-tidyverse" class="csl-entry">
-Wickham, Hadley, and Maintainer Hadley Wickham. 2017. <em>Tidyverse: Easily Install and Load the ’Tidyverse’</em>. <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>.
-</div>
-<div id="ref-cowplot" class="csl-entry">
-Wilke, Claus O. 2018. <em>Cowplot: Streamlined Plot Theme and Plot Annotations for ’Ggplot2’</em>. <a href="https://CRAN.R-project.org/package=cowplot">https://CRAN.R-project.org/package=cowplot</a>.
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-horst2022palmer" class="csl-entry">
+Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data</em>. <a href="https://doi.org/10.5281/zenodo.3960218">https://doi.org/10.5281/zenodo.3960218</a>.
 </div>
 </div></section></div> ]]></description>
   <category>Analysis</category>
   <category>Visualization</category>
-  <guid>https://lugoga.github.io/semba-quarto/posts/inset_main_map/index.html</guid>
-  <pubDate>Sun, 19 Feb 2023 21:00:00 GMT</pubDate>
+  <category>Python</category>
+  <guid>https://lugoga.github.io/semba-quarto/posts/seaborn_barplot/index.html</guid>
+  <pubDate>Wed, 22 Feb 2023 21:00:00 GMT</pubDate>
+  <media:content url="https://lugoga.github.io/semba-quarto/posts/seaborn_barplot/barplot.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>plotting in Python with Seaborn: Joint plot</title>
+  <dc:creator>Masumbuko Semba</dc:creator>
+  <link>https://lugoga.github.io/semba-quarto/posts/seabornjointplot/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>In <a href="www.ims.org.tz">part I</a> of this series, we were introduced on the power visualization and dove into distripubtion plot. In this post we are going focus on jointplot. <code>jointplot</code> is used to plot the histogram distribution of two columns, one on the <code>x-axis</code> and the other on the <code>y-axis</code>. A scatter plot is by default drawn for the points in the two columns. Seborn has nifty function called <code>jointplot()</code>, which is dedicated for this type of plot.</p>
+</section>
+<section id="loading-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="loading-libraries">Loading libraries</h2>
+<p>Though most people are familiar with plotting using matplot, as it inherited most of the functions from MatLab. Python has an extremely nady library for data visualiztion called seaborn. The Seaborn library is based on the Matplotlib library. Therefore, you will also need to import the Matplotlib library.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;">as</span> plt</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;">import</span> seaborn <span class="im" style="color: #00769E;">as</span> sns</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;">import</span> pandas <span class="im" style="color: #00769E;">as</span> pd</span>
+<span id="cb1-4"><span class="im" style="color: #00769E;">import</span> numpy <span class="im" style="color: #00769E;">as</span> np</span>
+<span id="cb1-5"></span>
+<span id="cb1-6">sns.set_theme()</span></code></pre></div>
+</div>
+</section>
+<section id="dataset" class="level2">
+<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
+<p>We are going to use a penguin dataset from palmerpenguins package <span class="citation" data-cites="horst2022palmer">(Horst, Hill, and Gorman 2020)</span>. We do not need to download this dataset as it comes with the seaborn package. We only need to load it from the package into our session using <code>sns.load_dataset</code> function and specify the <code>penguins</code> as the name of the dataset and assign it as df;</p>
+<div class="cell">
+
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1">df <span class="op" style="color: #5E5E5E;">=</span> sns.load_dataset(<span class="st" style="color: #20794D;">"penguins"</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1">df.head()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  species     island  bill_length_mm  ...  body_mass_g     sex  year
+0  Adelie  Torgersen            39.1  ...         3750    male  2007
+1  Adelie  Torgersen            39.5  ...         3800  female  2007
+2  Adelie  Torgersen            40.3  ...         3250  female  2007
+3  Adelie  Torgersen             NaN  ...  -2147483648     NaN  2007
+4  Adelie  Torgersen            36.7  ...         3450  female  2007
+
+[5 rows x 8 columns]</code></pre>
+</div>
+</div>
+<p>A printed <code>df</code> dataset shows that is made up of various measurements of three different penguin species — Adelie, Gentoo, and Chinstrap. The dataset contains seven variables – species, island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex, and year.</p>
+<p>The joint plot is used to plot the histogram distribution of two columns, one on the x-axis and the other on the y-axis. A scatter plot is by default drawn for the points in the two columns. To plot a joint plot, you need to call the <code>jointplot()</code> function. The following script plots a joint plot for <code>bill_length_mm</code> and <code>bill_depth_mm</code> columns of the df dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb5-2">sns.jointplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_depth_mm"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005A834D00&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornjointplot/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>Assigning a hue variable will add conditional colors to the scatter plot and draw separate density curves (using <code>kdeplot()</code>) on the marginal axes. In this case we specify <code>hue = "island"</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb8-2">sns.jointplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_depth_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"island"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005AF3A5E0&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornjointplot/index_files/figure-html/unnamed-chunk-7-3.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>Several different approaches to plotting are available through the kind parameter. Setting kind=“kde” will draw both bivariate and univariate KDEs:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb11-2">sns.jointplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_depth_mm"</span>, hue<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"species"</span>, kind<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"kde"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005DA740A0&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornjointplot/index_files/figure-html/unnamed-chunk-8-5.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>Set <code>kind="reg"</code> to add a linear regression fit (using <code>regplot()</code>) and univariate KDE curves:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"></span>
+<span id="cb14-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb14-3">sns.jointplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_depth_mm"</span>, kind<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"reg"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005DA74220&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornjointplot/index_files/figure-html/unnamed-chunk-9-7.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"></span>
+<span id="cb17-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb17-3">sns.jointplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_length_mm"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"bill_depth_mm"</span>, kind<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"hex"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;seaborn.axisgrid.JointGrid object at 0x000000005E48A6D0&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornjointplot/index_files/figure-html/unnamed-chunk-10-9.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+</section>
+<section id="cited-materials" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-horst2022palmer" class="csl-entry">
+Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data</em>. <a href="https://doi.org/10.5281/zenodo.3960218">https://doi.org/10.5281/zenodo.3960218</a>.
+</div>
+</div></section></div> ]]></description>
+  <category>Analysis</category>
+  <category>Visualization</category>
+  <category>Python</category>
+  <guid>https://lugoga.github.io/semba-quarto/posts/seabornjointplot/index.html</guid>
+  <pubDate>Tue, 21 Feb 2023 21:00:00 GMT</pubDate>
+  <media:content url="https://lugoga.github.io/semba-quarto/posts/seabornjointplot/jointPlot.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>plotting in Python with Seaborn: Distribution plot</title>
+  <dc:creator>Masumbuko Semba</dc:creator>
+  <link>https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Wikipedia <span class="citation" data-cites="dataviz">(2023)</span> describe data visualization as an interdisciplinary field that deals with the graphic representation of data and information. It is a particularly efficient way of communicating when the data are processed to generate information that is shared.</p>
+<p>It is also the study of visual representations of abstract data to reinforce human cognition using common graphics, such as charts, plots, infographics, maps, and even animations. The abstract data include both numerical and non-numerical data, such as text and geographic information.</p>
+<p>Furthermore, it is related to infographics and scientific visualization to identify important patterns in the data that can be used for organizational decision making. Visualizing data graphically can reveal trends that otherwise may remain hidden from the naked eye.</p>
+<p>In the following is the series of post that focuse plotting with seaborn library in Python, we will learn the most commonly used plots using Seaborn library in Python <span class="citation" data-cites="waskom2021seaborn matplotlib">(Waskom 2021; Bisong and Bisong 2019)</span>. We will also touches on different types of plots using Maplotlib <span class="citation" data-cites="matplotlib">(Bisong and Bisong 2019)</span>, and Pandas <span class="citation" data-cites="pandas">(Betancourt et al. 2019)</span> libraries. In this post we will focus on the distplot.</p>
+</section>
+<section id="loading-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="loading-libraries">Loading libraries</h2>
+<p>Though most people are familiar with plotting using matplot, as it inherited most of the functions from MatLab. Python has an extremely nady library for data visualiztion called seaborn. The Seaborn library is based on the Matplotlib library. Therefore, you will also need to import the Matplotlib library.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;">as</span> plt</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;">import</span> seaborn <span class="im" style="color: #00769E;">as</span> sns</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;">import</span> pandas <span class="im" style="color: #00769E;">as</span> pd</span>
+<span id="cb1-4"><span class="im" style="color: #00769E;">import</span> numpy <span class="im" style="color: #00769E;">as</span> np</span>
+<span id="cb1-5"></span>
+<span id="cb1-6">sns.set_theme()</span></code></pre></div>
+</div>
+</section>
+<section id="dataset" class="level2">
+<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
+<p>We are going to use a penguin dataset from palmerpenguins package <span class="citation" data-cites="horst2022palmer">(Horst, Hill, and Gorman 2020)</span>. We first need to import the dataset from the package where is stored into the R session. let us load the packages that we are glint to use in this post.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1">pengr <span class="ot" style="color: #003B4F;">=</span> palmerpenguins<span class="sc" style="color: #5E5E5E;">::</span>penguins</span>
+<span id="cb2-2">pengr</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 x 8
+   species island    bill_length_mm bill_depth_mm flipper_~1 body_~2 sex    year
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;      &lt;int&gt;   &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7        181    3750 male   2007
+ 2 Adelie  Torgersen           39.5          17.4        186    3800 fema~  2007
+ 3 Adelie  Torgersen           40.3          18          195    3250 fema~  2007
+ 4 Adelie  Torgersen           NA            NA           NA      NA &lt;NA&gt;   2007
+ 5 Adelie  Torgersen           36.7          19.3        193    3450 fema~  2007
+ 6 Adelie  Torgersen           39.3          20.6        190    3650 male   2007
+ 7 Adelie  Torgersen           38.9          17.8        181    3625 fema~  2007
+ 8 Adelie  Torgersen           39.2          19.6        195    4675 male   2007
+ 9 Adelie  Torgersen           34.1          18.1        193    3475 &lt;NA&gt;   2007
+10 Adelie  Torgersen           42            20.2        190    4250 &lt;NA&gt;   2007
+# ... with 334 more rows, and abbreviated variable names 1: flipper_length_mm,
+#   2: body_mass_g</code></pre>
+</div>
+</div>
+<p>Once the tibble file is in the environment, we need to convert from tibble data frame into pandas dataframe. Make a copy of pandas dataframe from tibble with the <code>r.</code> function. please note that the conversion of tibble data frame to pandas data frame must be inside the Python chunk as chunk below;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1">pengp <span class="op" style="color: #5E5E5E;">=</span> r.pengr</span></code></pre></div>
+</div>
+<p>Let’s use <code>head</code> function to explore the first five rows on the converted penguin pandas data frame</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">pengp.head()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  species     island  bill_length_mm  ...  body_mass_g     sex  year
+0  Adelie  Torgersen            39.1  ...         3750    male  2007
+1  Adelie  Torgersen            39.5  ...         3800  female  2007
+2  Adelie  Torgersen            40.3  ...         3250  female  2007
+3  Adelie  Torgersen             NaN  ...  -2147483648     NaN  2007
+4  Adelie  Torgersen            36.7  ...         3450  female  2007
+
+[5 rows x 8 columns]</code></pre>
+</div>
+</div>
+<p>The pengp dataset comprise various measurements of three different penguin species — Adelie, Gentoo, and Chinstrap. The dataset contains eight variables – species, island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex, and year. You do not need to download this dataset as it comes with the palmerpenguin library in R. We will use this dataset to plot some of the seaborn plots. Lets begin plotting</p>
+<p>Alternatively, you can load the package as</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">df <span class="op" style="color: #5E5E5E;">=</span> sns.load_dataset(<span class="st" style="color: #20794D;">"penguins"</span>)</span>
+<span id="cb7-2"></span>
+<span id="cb7-3">df.head()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  species     island  bill_length_mm  ...  flipper_length_mm  body_mass_g     sex
+0  Adelie  Torgersen            39.1  ...              181.0       3750.0    Male
+1  Adelie  Torgersen            39.5  ...              186.0       3800.0  Female
+2  Adelie  Torgersen            40.3  ...              195.0       3250.0  Female
+3  Adelie  Torgersen             NaN  ...                NaN          NaN     NaN
+4  Adelie  Torgersen            36.7  ...              193.0       3450.0  Female
+
+[5 rows x 7 columns]</code></pre>
+</div>
+</div>
+<section id="univariable-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="univariable-distribution">Univariable distribution</h3>
+<p>The distplot, also commonly refers as the distribution plot, is widely used to plot a histogram of data for a specific variable in a dataset. To make this plot seaborn has a dedicated function called <code>displot</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"></span>
+<span id="cb9-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb9-3"></span>
+<span id="cb9-4">sns.displot(pengp.bill_length_mm)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="242"></p>
+</div>
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb10-2">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb10-3">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid" width="480"></p>
+</div>
+</div>
+<p>The new <code>displot</code> functions support the kernel density estimate line, by passing <code>kde=True</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"></span>
+<span id="cb11-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb11-3"></span>
+<span id="cb11-4">sns.displot(pengp.bill_length_mm, kde <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-7-5.png" class="img-fluid" width="242"></p>
+</div>
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb12-2">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb12-3">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-7-6.png" class="img-fluid" width="480"></p>
+</div>
+</div>
+<p>To change the distribution from counts to density, we simply parse an argument <code>stat="density"</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"></span>
+<span id="cb13-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb13-3"></span>
+<span id="cb13-4">sns.displot(pengp.bill_length_mm, kde <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>, stat <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"density"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-8-9.png" class="img-fluid" width="242"></p>
+</div>
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb14-2">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb14-3">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-8-10.png" class="img-fluid" width="480"></p>
+</div>
+</div>
+</section>
+<section id="kdeplot" class="level3">
+<h3 class="anchored" data-anchor-id="kdeplot">kdeplot</h3>
+<p>When you want to draw the density plot alone without overlay it to the histogram as presented using the displot function, seaboarn has a <code>kdeplot</code> function</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"></span>
+<span id="cb15-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb15-3"></span>
+<span id="cb15-4">sns.kdeplot(pengp.bill_length_mm)</span>
+<span id="cb15-5">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb15-6">plt.ylabel(<span class="st" style="color: #20794D;">"Density"</span>)</span>
+<span id="cb15-7">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-9-13.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>displot still can draw the kde plot, however, you need to parse an argument <code>kind="kde"</code> in displot:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"></span>
+<span id="cb16-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb16-3"></span>
+<span id="cb16-4">sns.displot(pengp.bill_length_mm, kind <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kde"</span>, rug <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-10-15.png" class="img-fluid" width="242"></p>
+</div>
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb17-2">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb17-3">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-10-16.png" class="img-fluid" width="480"></p>
+</div>
+</div>
+<p>If you parse <code>rug = True</code> function, wll add the rug in the plots</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"></span>
+<span id="cb18-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb18-3"></span>
+<span id="cb18-4">sns.displot(pengp.bill_length_mm, kind <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kde"</span>, rug <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-11-19.png" class="img-fluid" width="242"></p>
+</div>
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb19-2">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb19-3">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-11-20.png" class="img-fluid" width="480"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"></span>
+<span id="cb20-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb20-3"></span>
+<span id="cb20-4">aa <span class="op" style="color: #5E5E5E;">=</span> pengp[[<span class="st" style="color: #20794D;">"bill_length_mm"</span>, <span class="st" style="color: #20794D;">"bill_depth_mm"</span>]]</span>
+<span id="cb20-5"></span>
+<span id="cb20-6">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> aa)</span>
+<span id="cb20-7">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb20-8">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb20-9">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-12-23.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Plot conditional distributions with hue mapping of a second variable. Unlike the previous plot, for this kind you need to specify the x-variable and the hue in the dataset;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"></span>
+<span id="cb21-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb21-3"></span>
+<span id="cb21-4"></span>
+<span id="cb21-5">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> pengp, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>)</span>
+<span id="cb21-6">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb21-7">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb21-8">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-13-25.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><code>Stack</code> the conditional distributions by simply parsing argument <code>multiple = "stack"</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"></span>
+<span id="cb22-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb22-3"></span>
+<span id="cb22-4"></span>
+<span id="cb22-5">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> pengp, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>, multiple <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"stack"</span>)</span>
+<span id="cb22-6">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb22-7">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb22-8">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-14-27.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><code>multiple = "fill"</code> simply normalize the stacked distribution at each value in the grid</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"></span>
+<span id="cb23-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb23-3"></span>
+<span id="cb23-4"></span>
+<span id="cb23-5">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> pengp, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>, multiple <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"fill"</span>)</span>
+<span id="cb23-6">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb23-7">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb23-8">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-15-29.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Estimate the cumulative distribution function(s), normalizing each subset:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"></span>
+<span id="cb24-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb24-3"></span>
+<span id="cb24-4"></span>
+<span id="cb24-5">sns.kdeplot(data <span class="op" style="color: #5E5E5E;">=</span> pengp, x <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"bill_length_mm"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"species"</span>,  cumulative<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>, common_norm<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">False</span>, common_grid<span class="op" style="color: #5E5E5E;">=</span><span class="va" style="color: #111111;">True</span>)</span>
+<span id="cb24-6">plt.xlabel(<span class="st" style="color: #20794D;">"Bill length (mm)"</span>)</span>
+<span id="cb24-7">plt.ylabel(<span class="st" style="color: #20794D;">"Frequency"</span>)</span>
+<span id="cb24-8">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-16-31.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="bivariate-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="bivariate-distribution">Bivariate distribution</h2>
+<p>For bivariates, we are going to use <code>geyser</code> dataset. Old Faithful is a cone geyser in Yellowstone National Park in Wyoming, United States. It is a highly predictable geothermal feature and has erupted every 44 minutes to two hours since 2000. We do not need to download this dataset as it comes with the seaborn package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1">geyser <span class="op" style="color: #5E5E5E;">=</span> sns.load_dataset(<span class="st" style="color: #20794D;">"geyser"</span>)</span>
+<span id="cb25-2">geyser.head()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   duration  waiting   kind
+0     3.600       79   long
+1     1.800       54  short
+2     3.333       74   long
+3     2.283       62  short
+4     4.533       85   long</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"></span>
+<span id="cb27-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb27-3"></span>
+<span id="cb27-4">sns.kdeplot(data<span class="op" style="color: #5E5E5E;">=</span>geyser, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"waiting"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"duration"</span>)</span>
+<span id="cb27-5">plt.show()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Traceback (most recent call last):
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\backends\backend_qt5.py", line 475, in _draw_idle
+    self.draw()
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\backends\backend_agg.py", line 406, in draw
+    self.figure.draw(self.renderer)
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 74, in draw_wrapper
+    result = draw(artist, renderer, *args, **kwargs)
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 51, in draw_wrapper
+    return draw(artist, renderer, *args, **kwargs)
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\figure.py", line 2790, in draw
+    mimage._draw_list_compositing_images(
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\image.py", line 132, in _draw_list_compositing_images
+    a.draw(renderer)
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\artist.py", line 51, in draw_wrapper
+    return draw(artist, renderer, *args, **kwargs)
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\_api\deprecation.py", line 431, in wrapper
+    return func(*inner_args, **inner_kwargs)
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axes\_base.py", line 2881, in draw
+    self._update_title_position(renderer)
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axes\_base.py", line 2810, in _update_title_position
+    if (ax.xaxis.get_ticks_position() in ['top', 'unknown']
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axis.py", line 2234, in get_ticks_position
+    self._get_ticks_position()]
+  File "C:\PROGRA~3\ANACON~1\lib\site-packages\matplotlib\axis.py", line 1938, in _get_ticks_position
+    major = self.majorTicks[0]
+IndexError: list index out of range</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-18-33.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Map a third variable with a hue semantic to show conditional distributions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"></span>
+<span id="cb29-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb29-3"></span>
+<span id="cb29-4">sns.kdeplot(data<span class="op" style="color: #5E5E5E;">=</span>geyser, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"waiting"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"duration"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kind"</span>)</span>
+<span id="cb29-5">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-19-35.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Fill the contour by parsing <code>fill = True</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"></span>
+<span id="cb30-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb30-3"></span>
+<span id="cb30-4">sns.kdeplot(data<span class="op" style="color: #5E5E5E;">=</span>geyser, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"waiting"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"duration"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kind"</span>, fill <span class="op" style="color: #5E5E5E;">=</span> <span class="va" style="color: #111111;">True</span>)</span>
+<span id="cb30-5">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-20-37.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Show fewer contour levels, covering less of the distribution by parsing a <code>levels</code> and <code>thresh</code> functions in the kdeplot:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"></span>
+<span id="cb31-2">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb31-3"></span>
+<span id="cb31-4">sns.kdeplot(data<span class="op" style="color: #5E5E5E;">=</span>geyser, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"waiting"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"duration"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"kind"</span>, levels <span class="op" style="color: #5E5E5E;">=</span> <span class="dv" style="color: #AD0000;">5</span>, thresh <span class="op" style="color: #5E5E5E;">=</span> <span class="fl" style="color: #AD0000;">.2</span>)</span>
+<span id="cb31-5">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index_files/figure-html/unnamed-chunk-21-39.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="cited-materials" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-pandas" class="csl-entry">
+Betancourt, Randy, Sarah Chen, Randy Betancourt, and Sarah Chen. 2019. <span>“Pandas Library.”</span> <em>Python for SAS Users: A SAS-Oriented Introduction to Python</em>, 65–109.
+</div>
+<div id="ref-matplotlib" class="csl-entry">
+Bisong, Ekaba, and Ekaba Bisong. 2019. <span>“Matplotlib and Seaborn.”</span> <em>Building Machine Learning and Deep Learning Models on Google Cloud Platform: A Comprehensive Guide for Beginners</em>, 151–65.
+</div>
+<div id="ref-horst2022palmer" class="csl-entry">
+Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data</em>. <a href="https://doi.org/10.5281/zenodo.3960218">https://doi.org/10.5281/zenodo.3960218</a>.
+</div>
+<div id="ref-waskom2021seaborn" class="csl-entry">
+Waskom, Michael L. 2021. <span>“Seaborn: Statistical Data Visualization.”</span> <em>Journal of Open Source Software</em> 6 (60): 3021.
+</div>
+<div id="ref-dataviz" class="csl-entry">
+Wikipedia contributors. 2023. <span>“Data and Information Visualization — <span>Wikipedia</span><span>,</span> the Free Encyclopedia.”</span> <a href="https://en.wikipedia.org/w/index.php?title=Data_and_information_visualization&amp;oldid=1137075465">https://en.wikipedia.org/w/index.php?title=Data_and_information_visualization&amp;oldid=1137075465</a>.
+</div>
+</div></section></div> ]]></description>
+  <category>Analysis</category>
+  <category>Visualization</category>
+  <category>Python</category>
+  <guid>https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index.html</guid>
+  <pubDate>Mon, 20 Feb 2023 21:00:00 GMT</pubDate>
+  <media:content url="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/displot.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>Multi-lingual: R and Python for Data Science</title>
@@ -273,7 +665,7 @@ Wilke, Claus O. 2018. <em>Cowplot: Streamlined Plot Theme and Plot Annotations f
 </section>
 <section id="tibble-to-pandas-dataframe" class="level2">
 <h2 class="anchored" data-anchor-id="tibble-to-pandas-dataframe">Tibble to Pandas Dataframe</h2>
-<p>We are going to use a <code>penguin</code> dataset from <strong>palmerpenguins</strong> package <span class="citation" data-cites="horst2022palmer">(<strong>horst2022palmer?</strong>)</span>. We first need to import the dataset from the package where is stored into the R session. let us load the packages that we are glint to use in this post.</p>
+<p>We are going to use a <code>penguin</code> dataset from <strong>palmerpenguins</strong> package <span class="citation" data-cites="horst2022palmer">(Horst, Hill, and Gorman 2020)</span>. We first need to import the dataset from the package where is stored into the R session. let us load the packages that we are glint to use in this post.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">require</span>(tidyverse)</span>
 <span id="cb1-2"><span class="fu" style="color: #4758AB;">require</span>(reticulate)</span></code></pre></div>
@@ -587,6 +979,9 @@ Info
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited references</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-horst2022palmer" class="csl-entry">
+Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Palmerpenguins: Palmer Archipelago (Antarctica) Penguin Data</em>. <a href="https://doi.org/10.5281/zenodo.3960218">https://doi.org/10.5281/zenodo.3960218</a>.
+</div>
 <div id="ref-ggally" class="csl-entry">
 Schloerke, Barret, Jason Crowley, Di Cook, Francois Briatte, Moritz Marbach, Edwin Thoen, Amos Elberg, and Joseph Larmarange. 2020. <em>GGally: Extension to ’Ggplot2’</em>. <a href="https://CRAN.R-project.org/package=GGally">https://CRAN.R-project.org/package=GGally</a>.
 </div>
@@ -600,7 +995,247 @@ Wickham, Hadley, and Maintainer Hadley Wickham. 2017. <em>Tidyverse: Easily Inst
   <category>Analysis</category>
   <category>Visualization</category>
   <guid>https://lugoga.github.io/semba-quarto/posts/r_python/index.html</guid>
-  <pubDate>Fri, 17 Feb 2023 21:00:00 GMT</pubDate>
+  <pubDate>Sun, 19 Feb 2023 21:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Main and Inset maps with R</title>
+  <dc:creator>Masumbuko Semba</dc:creator>
+  <link>https://lugoga.github.io/semba-quarto/posts/inset_main_map/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<section id="introduction" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="introduction">Introduction</h3>
+<p>In this post, We learn how we can make publication quality inset maps in R using <code>ggplot2</code> package <span class="citation" data-cites="ggplot">(Wickham 2016)</span>. When publishing scientific research in journals or presenting research work at a conference, showing maps of data collection sites or experimental locations is one of the key visualization elements. Maps of study sites or sampling locations can help the audience and readers to fathom the data in a better way. Mapping sounds fancy, but it needs substantial training and skill set to make high-quality maps that are reader-friendly and visually aesthetic.</p>
+<p>Sometimes, the study sites are more dispersed and are easy to visualize in large geographic areas. However, in some cases, study sites are clustered, which makes it hard to show them on a broader scale. In that case, inset maps help us show the locations with reference to familiar geographical regions. An inset map is a smaller map featured on the same page as the main map. Traditionally, inset maps are shown at a larger scale (smaller area) than the main map. Often, an inset map is used as a locator map that shows the area of the main map in a broader, more familiar geographical frame of reference.</p>
+</section>
+<section id="spatial-vector-data-storage" class="level3">
+<h3 class="anchored" data-anchor-id="spatial-vector-data-storage">Spatial Vector Data Storage</h3>
+<p>If you have been using the vector data and doing spatial analysis, you know shapefile. Shapefile is the most commonly used vector data formats to store data and carry out any spatial analysis.</p>
+</section>
+<section id="characteristics-of-a-shapefile" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="characteristics-of-a-shapefile">Characteristics of a shapefile</h3>
+<p>Shapefiles are vector data storage models for storing feature classes composed of points, lines and polygons, but never a mixture. It stores information of the location, shape and attributes of geographical features. Each item in a shapefile has attributes that describe it composed of rows, called records and columns called fields and can also store multipart features, in which a single feature includes multiple objects which includes</p>
+<ul>
+<li><strong>.shp</strong> file stores coordinate data</li>
+<li><strong>.dbf</strong> file stores attribute data</li>
+<li><strong>.shx</strong> file stores a spatial index that speeds drawing and analysis</li>
+<li><strong>.prj</strong> file stores projection information</li>
+<li><strong>.avl</strong> file stores legend</li>
+<li><strong>.xml</strong> file contains metadata</li>
+</ul>
+</section>
+<section id="characteristics-of-a-shapefile-1" class="level3">
+<h3 class="anchored" data-anchor-id="characteristics-of-a-shapefile-1">Characteristics of a shapefile</h3>
+<ul>
+<li>Takes up more storage space on your system</li>
+<li>Shapefiles have a minimum size of 2GB</li>
+<li>Do not support names in fields longer than 10 characters</li>
+<li>A shapefile cannot have more than one geometry type in a file.</li>
+<li>Cannot store data and time in the same field</li>
+<li>Do not support raster files</li>
+<li>Do not store NULL values in a field; when a value is NULL, a shapefile will use 0 instead.</li>
+</ul>
+<p>But, shapefile has a lot of disadvantages when you wish to scale your work and build integrated &amp; automated workflows for large-scale deployments. Geopackage format offers a variety of features in this regard. And that’s why you need to use Geopackage files instead of shapefile. Let’s dive deeper into the details.</p>
+</section>
+<section id="geopackage" class="level3">
+<h3 class="anchored" data-anchor-id="geopackage">Geopackage</h3>
+<p>A Geopackage is platform-independent format for storing and transferring geospatial information. It is a SQLite based standard format designed for stand-alone databases that holds both raster data and multiple vector data layers in a single file and can be accessible by non-GIS software.</p>
+</section>
+<section id="characteristics-of-a-geopackage" class="level3">
+<h3 class="anchored" data-anchor-id="characteristics-of-a-geopackage">Characteristics of a Geopackage</h3>
+<ul>
+<li>Geopackages are open source, SQLite based database</li>
+<li>No limitation on the file size and can handle large number of features</li>
+<li>Can store both raster as well as vector data layers</li>
+<li>A single Geopackage file can have multiple vector layers with each layer having a different geometry type.</li>
+</ul>
+</section>
+<section id="why-choose-geopackages-and-not-shapefiles" class="level3">
+<h3 class="anchored" data-anchor-id="why-choose-geopackages-and-not-shapefiles">Why choose Geopackages and not Shapefiles?</h3>
+<ol type="1">
+<li><p>Shapefile is a multi-file format with minimum of 3 files and several other attached files with different extensions. Sharing a shapefile with someone would be complicated as all the other files attached will also have to be shared. Whereas, Geopackages includes all the information of the layer in a file and is easier to transfer or share.</p></li>
+<li><p>Compared to shapefiles, the column headers in a geopackage can be full names and right by providing the correct context for each column. A shapefile can only have 10 characters to define the column header.</p></li>
+<li><p>Geopackages run faster on algorithm outputs compared to shapefiles.</p></li>
+<li><p>In a geopackage, there is no limit on the file size and can handle large number of features in a smaller file size. A shapefile can handle maximum size of 2 GB and cannot export a vector layer with more features.</p></li>
+<li><p>A Geopackage stores both raster and vector files whereas, shapefiles can store only vector files.</p></li>
+<li><p>Geopackages are lightweight and compatible across environments specially in mobile devices. It is 1.1-1.3x lighter in file size compared to shapefiles.</p></li>
+</ol>
+</section>
+<section id="load-libraries" class="level3">
+<h3 class="anchored" data-anchor-id="load-libraries">Load libraries</h3>
+<p>Several packages in R are dealing with spatial data, but in this post we are going to use funtions from <strong>tidyverse</strong> <span class="citation" data-cites="tidyverse">(Wickham and Wickham 2017)</span> and <strong>sf</strong> <span class="citation" data-cites="sf">(Pebesma 2018)</span> packages. We can load these packages with a <code>library</code> function as as;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">library</span>(tidyverse)</span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;">library</span>(sf)</span></code></pre></div>
+</div>
+</section>
+<section id="load-file" class="level3">
+<h3 class="anchored" data-anchor-id="load-file">Load file</h3>
+<p>We first need to import spatial data into the session. For this case we are going to load the boundary layer of Africa. The file has boundary for 67 polygons representing feature in Africa. We can load the file into the session using <code>st_read</code> function from <strong>sf</strong> package <span class="citation" data-cites="sf">(Pebesma 2018)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">africa <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">st_read</span>(<span class="st" style="color: #20794D;">"../data/africa.gpkg"</span>, <span class="at" style="color: #657422;">quiet =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)</span></code></pre></div>
+</div>
+<p>Next I’ll extract the polygon for WIO region countries from from the <code>Africa</code> package using the <code>filter</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">wio <span class="ot" style="color: #003B4F;">=</span> africa  <span class="sc" style="color: #5E5E5E;">|&gt;</span>  </span>
+<span id="cb3-2">  <span class="fu" style="color: #4758AB;">filter</span>(</span>
+<span id="cb3-3">    country <span class="sc" style="color: #5E5E5E;">%in%</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"Tanzania"</span>, <span class="st" style="color: #20794D;">"Kenya"</span>, <span class="st" style="color: #20794D;">"Mozambique"</span>, <span class="st" style="color: #20794D;">"South Africa"</span>, </span>
+<span id="cb3-4">                   <span class="st" style="color: #20794D;">"Somalia"</span>, <span class="st" style="color: #20794D;">"Madagascar"</span>, <span class="st" style="color: #20794D;">"Seychelles"</span>, <span class="st" style="color: #20794D;">"Reunion"</span>, <span class="st" style="color: #20794D;">"Mauritius"</span>))</span>
+<span id="cb3-5"></span>
+<span id="cb3-6">wio.point.country <span class="ot" style="color: #003B4F;">=</span> wio <span class="sc" style="color: #5E5E5E;">%&gt;%</span> wior<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">polygon_tb</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">distinct</span>(country, <span class="at" style="color: #657422;">.keep_all =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)</span></code></pre></div>
+</div>
+<p>Then we load study points that were sampled off the coast of Madagascar.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">sampling.points <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">st_read</span>(<span class="st" style="color: #20794D;">"../data/madagascar_points.gpkg"</span>, <span class="at" style="color: #657422;">quiet =</span> <span class="cn" style="color: #8f5902;">TRUE</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb4-2">  <span class="fu" style="color: #4758AB;">filter</span>(state <span class="sc" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"Ocean"</span>)</span>
+<span id="cb4-3"></span>
+<span id="cb4-4">madagascar <span class="ot" style="color: #003B4F;">=</span> wio <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">filter</span>(country <span class="sc" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"Madagascar"</span>)</span></code></pre></div>
+</div>
+</section>
+<section id="focus-map" class="level2">
+<h2 class="anchored" data-anchor-id="focus-map">Focus Map</h2>
+<p>Now, I’ll plot a focused map of Madagascar. We need to define the geographical extent of the area. For that purpose, we first need to identify the extent of the study sites and we can do that using <code>extent</code> function from **sf package;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">madagascar <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">st_bbox</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     xmin      ymin      xmax      ymax 
+ 42.71862 -25.60895  50.48378 -11.94543 </code></pre>
+</div>
+</div>
+<p>The printed results indicates tha maxima and minima of longitude and latitude, which define the geographical extent of the area. Using the <code>min</code> and <code>max</code> values of coordinates from the previous map, we can draw a polygon over the study sites and see if this extent can best visualize the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">map.site <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">ggplot</span>() <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-2">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">layer_spatial</span>(<span class="at" style="color: #657422;">data =</span> madagascar, <span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"cyan4"</span>, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"black"</span>,<span class="at" style="color: #657422;">size =</span> .<span class="dv" style="color: #AD0000;">4</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-3">  <span class="fu" style="color: #4758AB;">geom_sf</span>(<span class="at" style="color: #657422;">data =</span> sampling.points, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"red"</span>, <span class="at" style="color: #657422;">size =</span> <span class="dv" style="color: #AD0000;">2</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-4">  ggsci<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">scale_color_lancet</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-5">  <span class="fu" style="color: #4758AB;">theme_bw</span>(<span class="at" style="color: #657422;">base_size =</span> <span class="dv" style="color: #AD0000;">12</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-6">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">axis.title =</span> <span class="fu" style="color: #4758AB;">element_blank</span>())<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-7">  <span class="fu" style="color: #4758AB;">coord_sf</span>(<span class="at" style="color: #657422;">xlim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">43</span>, <span class="dv" style="color: #AD0000;">51</span>), <span class="at" style="color: #657422;">ylim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">18</span>,<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">11</span>))</span>
+<span id="cb7-8"></span>
+<span id="cb7-9">map.site</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/inset_main_map/index_files/figure-html/focus-1.png" class="img-fluid figure-img" width="576"></p>
+<p></p><figcaption class="figure-caption">Sampling points in the coastal waters of Madagascar Island</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As you can see, the study sites are located on the northern part of Madagascar Island. However, to make a better sense of the study locations with reference to WIO region, we need to plot them on a focused scale.</p>
+</section>
+<section id="add-map-elements" class="level2">
+<h2 class="anchored" data-anchor-id="add-map-elements">Add Map elements</h2>
+<p>Professional maps also include some elements like <code>North Arrow</code> and <code>scale</code> etc. We’ll add these components to our map as well. Besides that, I’ll also fill the non-land area with <code>lightblue</code> color for reference and distinction respectively Figure&nbsp;1.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">map.site <span class="ot" style="color: #003B4F;">=</span> map.site <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb8-2">      <span class="fu" style="color: #4758AB;">guides</span>(<span class="at" style="color: #657422;">size =</span> <span class="st" style="color: #20794D;">"none"</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb8-3">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">annotation_north_arrow</span>(<span class="at" style="color: #657422;">location =</span> <span class="st" style="color: #20794D;">"tr"</span>, </span>
+<span id="cb8-4">                                    <span class="at" style="color: #657422;">height =</span> <span class="fu" style="color: #4758AB;">unit</span>(<span class="fl" style="color: #AD0000;">1.2</span>, <span class="st" style="color: #20794D;">"cm"</span>),  </span>
+<span id="cb8-5">                                    <span class="at" style="color: #657422;">width =</span> <span class="fu" style="color: #4758AB;">unit</span>(.<span class="dv" style="color: #AD0000;">75</span>, <span class="st" style="color: #20794D;">"cm"</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb8-6">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">annotation_scale</span>(<span class="at" style="color: #657422;">location =</span> <span class="st" style="color: #20794D;">"br"</span>)</span>
+<span id="cb8-7"></span>
+<span id="cb8-8">map.site</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-focus1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/inset_main_map/index_files/figure-html/fig-focus1-1.png" class="img-fluid figure-img" width="576"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Sampling points in the coastal waters of Madagascar Island</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="inset-map" class="level2">
+<h2 class="anchored" data-anchor-id="inset-map">Inset Map</h2>
+<p>Now, I’ll create a full-scale map of WIO region with a red polygon showing the extent of study sites and the focused map. The code below produce Figure&nbsp;2;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">inset.map <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">ggplot</span>() <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-2">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">layer_spatial</span>(<span class="at" style="color: #657422;">data =</span> africa, <span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"grey90"</span>, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"grey90"</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-3">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">layer_spatial</span>(<span class="at" style="color: #657422;">data =</span> wio, <span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"grey60"</span>, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"ivory"</span>,<span class="at" style="color: #657422;">size =</span> .<span class="dv" style="color: #AD0000;">4</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-4">  <span class="co" style="color: #5E5E5E;"># geom_sf_text(data = wio, aes(label = country))+</span></span>
+<span id="cb9-5">  ggrepel<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">geom_text_repel</span>(<span class="at" style="color: #657422;">data =</span> wio.point.country, </span>
+<span id="cb9-6">                           <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> lon, <span class="at" style="color: #657422;">y =</span> lat, <span class="at" style="color: #657422;">label =</span> country), <span class="at" style="color: #657422;">size =</span> <span class="dv" style="color: #AD0000;">3</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-7">  <span class="fu" style="color: #4758AB;">theme_bw</span>(<span class="at" style="color: #657422;">base_size =</span> <span class="dv" style="color: #AD0000;">12</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-8">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">axis.title =</span> <span class="fu" style="color: #4758AB;">element_blank</span>())<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-9">  <span class="fu" style="color: #4758AB;">geom_rect</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">xmin =</span> <span class="dv" style="color: #AD0000;">43</span>, <span class="at" style="color: #657422;">xmax =</span> <span class="dv" style="color: #AD0000;">51</span>, <span class="at" style="color: #657422;">ymin =</span> <span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">18</span>, <span class="at" style="color: #657422;">ymax =</span> <span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">11</span>), </span>
+<span id="cb9-10">            <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"red"</span>, <span class="at" style="color: #657422;">fill =</span> <span class="cn" style="color: #8f5902;">NA</span>, <span class="at" style="color: #657422;">size =</span> <span class="fl" style="color: #AD0000;">1.2</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-11">  <span class="fu" style="color: #4758AB;">coord_sf</span>(<span class="at" style="color: #657422;">xlim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">20</span>, <span class="dv" style="color: #AD0000;">60</span>), <span class="at" style="color: #657422;">ylim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">40</span>,<span class="dv" style="color: #AD0000;">15</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb9-12">  <span class="fu" style="color: #4758AB;">theme_test</span>() <span class="sc" style="color: #5E5E5E;">+</span> </span>
+<span id="cb9-13">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">axis.text =</span> <span class="fu" style="color: #4758AB;">element_blank</span>(),</span>
+<span id="cb9-14">        <span class="at" style="color: #657422;">axis.ticks =</span> <span class="fu" style="color: #4758AB;">element_blank</span>(),</span>
+<span id="cb9-15">        <span class="at" style="color: #657422;">axis.ticks.length =</span> <span class="fu" style="color: #4758AB;">unit</span>(<span class="dv" style="color: #AD0000;">0</span>, <span class="st" style="color: #20794D;">"pt"</span>),</span>
+<span id="cb9-16">        <span class="at" style="color: #657422;">axis.title=</span><span class="fu" style="color: #4758AB;">element_blank</span>(),</span>
+<span id="cb9-17">        <span class="at" style="color: #657422;">plot.margin =</span> <span class="fu" style="color: #4758AB;">margin</span>(<span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">0</span>, <span class="st" style="color: #20794D;">"cm"</span>),</span>
+<span id="cb9-18">        <span class="at" style="color: #657422;">panel.background =</span> <span class="fu" style="color: #4758AB;">element_rect</span>(<span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"lightblue"</span>))</span>
+<span id="cb9-19"></span>
+<span id="cb9-20">inset.map</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-inset" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/inset_main_map/index_files/figure-html/fig-inset-1.png" class="img-fluid figure-img" width="576"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: An inset map of the WIO region</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This version looks better compared to the previous one. However, we need to add some information to give it a reference.</p>
+</section>
+<section id="final-map" class="level2">
+<h2 class="anchored" data-anchor-id="final-map">Final Map</h2>
+<p>Now, to combine both maps where the map of WIO region is inset on the upper left corner we use the function from <strong>cowplot</strong> package. a <code>draw_plot</code> function allow to places a plot somewhere onto the drawing canvas that is established using <code>ggdraw</code> function also from <strong>cowplot</strong> package <span class="citation" data-cites="cowplot">(Wilke 2018)</span>. By default, coordinates run from 0 to 1, and the point (0, 0) is in the lower left corner of the canvas. The function also allows us to specify the size of the inset map using the <code>width</code> and <code>height</code> functions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">cowplot<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">ggdraw</span>(<span class="at" style="color: #657422;">plot =</span> map.site) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb10-2">  cowplot<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">draw_plot</span>(inset.map, <span class="at" style="color: #657422;">x =</span> .<span class="dv" style="color: #AD0000;">1</span>, <span class="at" style="color: #657422;">y =</span> .<span class="dv" style="color: #AD0000;">13</span>, <span class="at" style="color: #657422;">width =</span> .<span class="dv" style="color: #AD0000;">4</span>, <span class="at" style="color: #657422;">height =</span> .<span class="dv" style="color: #AD0000;">5</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-map2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/inset_main_map/index_files/figure-html/fig-map2-1.png" class="img-fluid figure-img" width="576"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: Map of the northwest side of Madagascar. An inset map indicate the location of the study area in the Western Indian Ocean region</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="summary" class="level3">
+<h3 class="anchored" data-anchor-id="summary">Summary</h3>
+<p>Therefore , a final map shown in Figure&nbsp;3 shows the locations of study sites with reference to the country and provinces and is more professional.</p>
+</section>
+</section>
+
+<section id="cited-materials" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section id="last-updated" class="level2 appendix"><h2 class="quarto-appendix-heading">Last updated</h2><div class="quarto-appendix-contents">
+
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "16 February 2023"</code></pre>
+</div>
+</div>
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-sf" class="csl-entry">
+Pebesma, Edzer. 2018. <span>“<span class="nocase">Simple Features for R: Standardized Support for Spatial Vector Data</span>.”</span> <em><span>The R Journal</span></em> 10 (1): 439–46. <a href="https://doi.org/10.32614/RJ-2018-009">https://doi.org/10.32614/RJ-2018-009</a>.
+</div>
+<div id="ref-ggplot" class="csl-entry">
+Wickham, Hadley. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
+</div>
+<div id="ref-tidyverse" class="csl-entry">
+Wickham, Hadley, and Maintainer Hadley Wickham. 2017. <em>Tidyverse: Easily Install and Load the ’Tidyverse’</em>. <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>.
+</div>
+<div id="ref-cowplot" class="csl-entry">
+Wilke, Claus O. 2018. <em>Cowplot: Streamlined Plot Theme and Plot Annotations for ’Ggplot2’</em>. <a href="https://CRAN.R-project.org/package=cowplot">https://CRAN.R-project.org/package=cowplot</a>.
+</div>
+</div></section></div> ]]></description>
+  <category>Analysis</category>
+  <category>Visualization</category>
+  <guid>https://lugoga.github.io/semba-quarto/posts/inset_main_map/index.html</guid>
+  <pubDate>Sat, 18 Feb 2023 21:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Inferential statistics in R:ttest</title>

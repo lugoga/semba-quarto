@@ -57,9 +57,9 @@ website:
     image: thumbnail_blog.png
     card-style: summary_large_image
     creator: "@semba753"
-comments:
-  giscus:
-    repo: lugoga/semba-quarto
+# comments:
+#   giscus:
+#     repo: lugoga/semba-quarto
   
 # filters:
 #   - code-filename

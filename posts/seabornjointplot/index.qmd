@@ -1,0 +1,124 @@
+---
+title: "plotting in Python with Seaborn: Joint plot"
+author: 
+  - name: Masumbuko Semba
+    url: https://semba.netlify.app
+    orcid: 0000-0002-5002-9747
+    affiliation: Nelson Mandela African Institution of Science and Technology
+    affiliation-url: https://semba.netlify.app/ 
+date: "2023-02-22"
+categories: [Analysis, Visualization, Python]
+image: "jointPlot.jpg"
+draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
+bibliography: ../blog.bib
+execute: 
+  warning: false
+fig-width: 7
+fig-height: 5
+code-line-numbers: true
+
+---
+
+## Introduction
+
+In [part I](www.ims.org.tz) of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going focus on jointplot. `jointplot` is used to plot the histogram distribution of two columns, one on the `x-axis` and the other on the `y-axis`. A scatter plot is by default drawn for the points in the two columns. Seaborn has nifty function called `jointplot()`, which is dedicated for this type of plot. 
+
+
+## Loading libraries
+
+Though most people are familiar with plotting using matplot, as it inherited most of the functions from MatLab. Python has an extremely nady library for data visualiztion called seaborn. The Seaborn library is based on the Matplotlib library. Therefore, you will also need to import the Matplotlib library.
+
+```{python}
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import numpy as np
+
+sns.set_theme()
+
+```
+
+## Dataset
+
+We are going to use a penguin dataset from palmerpenguins package [@horst2022palmer]. We do not need to download this dataset as it comes with the seaborn package. We only need to load it from the package into our session using `sns.load_dataset` function and specify the `penguins` as the name of the dataset and assign it as df;
+
+```{r}
+#| echo: false
+df = palmerpenguins::penguins
+
+```
+
+```{python}
+#| echo: false
+
+df = r.df
+```
+
+
+```{python}
+#| eval: false
+df = sns.load_dataset("penguins")
+```
+
+
+```{python}
+df.head()
+```
+
+A printed `df` dataset shows that is made up of various measurements of three different penguin species --- Adelie, Gentoo, and Chinstrap. The dataset contains seven variables -- species, island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex, and year.
+
+
+The joint plot is used to plot the histogram distribution of two columns, one on the x-axis and the other on the y-axis. A scatter plot is by default drawn for the points in the two columns. To plot a joint plot, you need to call the `jointplot()` function. The following script plots a joint plot for `bill_length_mm` and `bill_depth_mm` columns of the df dataset.
+
+
+```{python}
+fig = plt.figure()
+sns.jointplot(data=df, x="bill_length_mm", y="bill_depth_mm")
+plt.show()
+
+```
+
+Assigning a hue variable will add conditional colors to the scatter plot and draw separate density curves (using `kdeplot()`) on the marginal axes. In this case we specify `hue = "island"`
+
+
+```{python}
+fig = plt.figure()
+sns.jointplot(data=df, x="bill_length_mm", y="bill_depth_mm", hue = "island")
+plt.show()
+
+```
+
+Several different approaches to plotting are available through the kind parameter. Setting kind="kde" will draw both bivariate and univariate KDEs:
+
+```{python}
+fig = plt.figure()
+sns.jointplot(data=df, x="bill_length_mm", y="bill_depth_mm", hue="species", kind="kde")
+plt.show()
+
+```
+
+
+Set `kind="reg"` to add a linear regression fit (using `regplot()`) and univariate KDE curves:
+
+
+```{python}
+
+fig = plt.figure()
+sns.jointplot(data=df, x="bill_length_mm", y="bill_depth_mm", kind="reg")
+plt.show()
+
+```
+
+
+```{python}
+
+fig = plt.figure()
+sns.jointplot(data=df, x="bill_length_mm", y="bill_depth_mm", kind="hex")
+plt.show()
+
+
+```
+
+
+
+## Cited Materials

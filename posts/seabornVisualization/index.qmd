@@ -1,0 +1,275 @@
+---
+title: "plotting in Python with Seaborn: Distribution plot"
+author: 
+  - name: Masumbuko Semba
+    url: https://semba.netlify.app
+    orcid: 0000-0002-5002-9747
+    affiliation: Nelson Mandela African Institution of Science and Technology
+    affiliation-url: https://semba.netlify.app/ 
+date: "2023-02-21"
+categories: [Analysis, Visualization, Python]
+image: "displot.jpg"
+draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
+bibliography: ../blog.bib
+execute: 
+  warning: false
+fig-width: 7
+fig-height: 5
+code-line-numbers: true
+---
+
+## Introduction
+
+Wikipedia [-@dataviz] describe data visualization as an interdisciplinary field that deals with the graphic representation of data and information. It is a particularly efficient way of communicating when the data are processed to generate information that is shared. 
+
+It is also the study of visual representations of abstract data to reinforce human cognition using common graphics, such as charts, plots, infographics, maps, and even animations. The abstract data include both numerical and non-numerical data, such as text and geographic information. 
+
+Furthermore, it is related to infographics and scientific visualization to identify important patterns in the data that can be used for organizational decision making. Visualizing data graphically can reveal trends that otherwise may remain hidden from the naked eye.
+
+In the following is the series of post that focuse plotting with seaborn library in Python, we will learn the most commonly used plots using Seaborn library  in Python [@waskom2021seaborn; @matplotlib]. We will also touches on different types of plots using Maplotlib [@matplotlib], and Pandas [@pandas] libraries. In this post we will focus on the distplot. 
+
+## Loading libraries
+
+Though most people are familiar with plotting using matplot, as it inherited most of the functions from MatLab. Python has an extremely nady library for data visualiztion called seaborn. The Seaborn library is based on the Matplotlib library. Therefore, you will also need to import the Matplotlib library.
+
+```{python}
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import numpy as np
+
+sns.set_theme()
+
+```
+
+## Dataset
+
+We are going to use a penguin dataset from palmerpenguins package [@horst2022palmer]. We first need to import the dataset from the package where is stored into the R session. let us load the packages that we are glint to use in this post.
+
+```{r}
+pengr = palmerpenguins::penguins
+pengr
+```
+
+Once the tibble file is in the environment, we need to convert from tibble data frame into pandas dataframe. Make a copy of pandas dataframe from tibble with the `r.` function. please note that the conversion of tibble data frame to pandas data frame must be inside the Python chunk as chunk below;
+
+
+```{python}
+pengp = r.pengr
+
+```
+Let's use `head` function to explore the first five rows on the converted penguin pandas data frame
+```{python}
+pengp.head()
+```
+The pengp dataset comprise various measurements of three different penguin species --- Adelie, Gentoo, and Chinstrap. The dataset contains eight variables -- species, island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex, and year. You do not need to download this dataset as it comes with the palmerpenguin library in R. We will use this dataset to plot some of the seaborn plots. Lets begin plotting
+
+Alternatively, you can load the package as
+
+```{python}
+
+df = sns.load_dataset("penguins")
+df.head()
+```
+
+
+## Univariable distribution
+
+The distplot, also commonly refers as the distribution plot, is widely used to plot a histogram of data for a specific variable in a dataset. To make this plot seaborn has a dedicated function called `displot`
+
+```{python}
+
+fig = plt.figure()
+sns.displot(pengp.bill_length_mm)
+plt.xlabel("Bill length (mm)")
+plt.ylabel("Frequency")
+plt.show()
+
+```
+
+The new `displot` functions support the kernel density estimate line, by passing `kde=True`
+
+
+```{python}
+
+fig = plt.figure()
+sns.displot(pengp.bill_length_mm, kde = True)
+plt.xlabel("Bill length (mm)")
+plt.ylabel("Frequency")
+plt.show()
+
+```
+
+To change the distribution from counts to density, we simply parse an argument `stat="density"`
+
+
+```{python}
+
+fig = plt.figure()
+sns.displot(pengp.bill_length_mm, kde = True, stat = "density")
+plt.xlabel("Bill length (mm)")
+plt.ylabel("Frequency")
+plt.show()
+
+```
+
+## kdeplot
+When you want to draw the density plot alone without overlay it to the histogram as presented using the displot function, seaboarn has a `kdeplot` function
+
+
+```{python}
+
+fig = plt.figure()
+sns.kdeplot(pengp.bill_length_mm)
+plt.xlabel("Bill length (mm)")
+plt.ylabel("Density")
+plt.show()
+
+```
+
+displot still can draw the kde plot, however, you need to parse an argument `kind="kde"` in displot:
+
+```{python}
+
+fig = plt.figure()
+sns.displot(pengp.bill_length_mm, kind = "kde", rug = True)
+plt.xlabel("Bill length (mm)")
+plt.ylabel("Frequency")
+plt.show()
+
+```
+If you parse `rug = True` function, wll  add the rug in the plots
+
+```{python}
+
+fig = plt.figure()
+sns.displot(pengp.bill_length_mm, kind = "kde", rug = True)
+plt.xlabel("Bill length (mm)")
+plt.ylabel("Frequency")
+plt.show()
+
+```
+
+
+```{python}
+aa = pengp[["bill_length_mm", "bill_depth_mm"]]
+
+fig = plt.figure()
+sns.kdeplot(data = aa)
+plt.xlabel("Bill length (mm)")
+plt.ylabel("Frequency")
+plt.show()
+
+```
+
+Plot conditional distributions with hue mapping of a second variable. Unlike the previous plot, for this kind you need to specify the x-variable and the hue in the dataset;
+
+```{python}
+
+fig = plt.figure()
+sns.kdeplot(data = pengp, x = "bill_length_mm", hue = "species")
+plt.xlabel("Bill length (mm)")
+plt.ylabel("Frequency")
+plt.show()
+
+
+```
+
+`Stack` the conditional distributions by simply parsing argument `multiple = "stack"`
+
+```{python}
+
+fig = plt.figure()
+sns.kdeplot(data = pengp, x = "bill_length_mm", hue = "species", multiple = "stack")
+plt.xlabel("Bill length (mm)")
+plt.ylabel("Frequency")
+plt.show()
+
+
+```
+
+`multiple = "fill"` simply normalize the stacked distribution at each value in the grid
+
+
+```{python}
+
+fig = plt.figure()
+sns.kdeplot(data = pengp, x = "bill_length_mm", hue = "species", multiple = "fill")
+plt.xlabel("Bill length (mm)")
+plt.ylabel("Frequency")
+plt.show()
+
+
+```
+
+Estimate the cumulative distribution function(s), normalizing each subset:
+
+
+```{python}
+
+fig = plt.figure()
+
+sns.kdeplot(data = pengp, x = "bill_length_mm", hue = "species",  cumulative=True, common_norm=False, common_grid=True)
+plt.xlabel("Bill length (mm)")
+plt.ylabel("Frequency")
+plt.show()
+
+
+```
+
+## Bivariate distribution
+For bivariates, we are going to use `geyser` dataset. Old Faithful is a cone geyser in Yellowstone National Park in Wyoming, United States. It is a highly predictable geothermal feature and has erupted every 44 minutes to two hours since 2000. We do not need to download this dataset as it comes with the seaborn package.
+
+```{python}
+geyser = sns.load_dataset("geyser")
+geyser.head()
+```
+
+
+```{python}
+#| message: false
+#| comment: ""
+#| warning: false
+#| 
+
+fig = plt.figure()
+sns.kdeplot(data=geyser, x="waiting", y="duration")
+plt.show()
+
+
+```
+
+Map a third variable with a hue semantic to show conditional distributions:
+
+
+```{python}
+
+fig = plt.figure()
+sns.kdeplot(data=geyser, x="waiting", y="duration", hue = "kind")
+plt.show()
+
+```
+
+Fill the contour by parsing `fill = True`
+
+```{python}
+
+fig = plt.figure()
+sns.kdeplot(data=geyser, x="waiting", y="duration", hue = "kind", fill = True)
+plt.show()
+
+```
+
+Show fewer contour levels, covering less of the distribution by parsing a `levels` and `thresh` functions in the kdeplot:
+
+
+```{python}
+
+fig = plt.figure()
+sns.kdeplot(data=geyser, x="waiting", y="duration", hue = "kind", levels = 5, thresh = .2)
+plt.show()
+
+```
+
+
+## Cited Materials
