@@ -21,7 +21,7 @@ code-line-numbers: true
 
 ## Introduction
 
-In [Visualization with Seaborn](https://lugoga.github.io/semba-quarto/posts/seabornVisualization/) of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going focus on jointplot. `jointplot` is used to plot the histogram distribution of two columns, one on the `x-axis` and the other on the `y-axis`. A scatter plot is by default drawn for the points in the two columns. Seaborn has nifty function called `jointplot()`, which is dedicated for this type of plot. 
+In [visualization with Seaborn](https://lugoga.github.io/semba-quarto/posts/seabornVisualization/) of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going focus on jointplot. `jointplot` is used to plot the histogram distribution of two columns, one on the `x-axis` and the other on the `y-axis`. A scatter plot is by default drawn for the points in the two columns. Seaborn has nifty function called `jointplot()`, which is dedicated for this type of plot. 
 
 
 ## Loading libraries

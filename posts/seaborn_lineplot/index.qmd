@@ -1,0 +1,178 @@
+---
+title: "plotting in Python with Seaborn: Line plot"
+author: 
+  - name: Masumbuko Semba
+    url: https://semba.netlify.app
+    orcid: 0000-0002-5002-9747
+    affiliation: Nelson Mandela African Institution of Science and Technology
+    affiliation-url: https://semba.netlify.app/ 
+date: "2023-02-22"
+categories: [Analysis, Visualization, Python]
+image: "lineplot.jpg"
+draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
+bibliography: ../blog.bib
+execute: 
+  warning: false
+fig-width: 7
+fig-height: 5
+code-line-numbers: true
+
+---
+
+## Introduction
+
+In [visualization with Seaborn](https://lugoga.github.io/semba-quarto/posts/seabornVisualization/) of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going focus on jointplot. `jointplot` is used to plot the histogram distribution of two columns, one on the `x-axis` and the other on the `y-axis`. A scatter plot is by default drawn for the points in the two columns. Seaborn has nifty function called `jointplot()`, which is dedicated for this type of plot. 
+
+
+## Loading libraries
+
+Though most people are familiar with plotting using matplot, as it inherited most of the functions from MatLab. Python has an extremely nady library for data visualiztion called seaborn. The Seaborn library is based on the Matplotlib library. Therefore, you will also need to import the Matplotlib library.
+
+```{python}
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import numpy as np
+
+sns.set_theme()
+
+```
+
+## Dataset
+
+We are going to use a `flights` dataset, which has 10 years of monthly airline passenger data. We do not need to download this dataset as it comes with the seaborn package. We only need to load it from the package into our session using `sns.load_dataset` function and specify the `penguins` as the name of the dataset and assign it as df;
+
+```{r}
+#| echo: false
+#| eval: false
+df = palmerpenguins::penguins
+
+```
+
+```{python}
+#| echo: false
+#| eval: false
+
+df = r.df
+```
+
+
+```{python}
+#| eval: true
+df = sns.load_dataset('flights')
+```
+
+
+```{python}
+df
+```
+
+A printed `df` dataset shows that a flight dataset is made up of three variables --- year, month, and number of passenger between January 1949 and December 1960, which are arranged in long format. To draw a line plot using long-form data, we simply assign the `x` and `y` variables
+
+
+```{python}
+#| label: fig-ts
+#| fig-cap: Annual number of flight passenger
+#| 
+fig = plt.figure()
+sns.lineplot(data=df, x="year", y="passengers")
+plt.ylabel('Passengers')
+plt.show()
+
+```
+
+However, looking at @fig-ts1, we notice that the confidence level is aslo plotted thought we did not specify them. The reason is that each year has twelve records of monthly number of passengers, which when plotted are also estimated to show the variability of passenger on that year. So if we want to draw only the line, we may filter a specific year, for this case I only want to plot passengers for July during the same period. 
+
+First, we need to filter the dataset to July and assign a new dataset as `df_july`. The chunk below shows a line of code that filter passenger between 1949 to 1960 for July only.
+
+```{python}
+df_july = df[df.month == 'Jul']
+
+```
+
+Then plot.
+
+```{python}
+#| label: fig-ts1
+#| fig-cap: Number of flight passenger for July during the period
+#| 
+
+fig = plt.figure()
+sns.lineplot(data=df_july, x="year", y="passengers")
+plt.ylabel('Passengers')
+plt.show()
+
+```
+
+Because I still learning how to deal with time in python, I simply switch to R as quarto allows me to swap code for the two languages within the same environment. I switch to R code and then convert the panda data frame to tibble using the reticulate package [@reticulate]. The package allows us to convert pandas dataframe to tibble using a `py` function within R chunk;
+
+```{r}
+tb = reticulate::py$df
+```
+
+Then within R chunk, we can add a new column `date` contain date for each month
+
+```{r}
+tb = tb |>
+  dplyr::mutate(date = 
+seq(lubridate::my(011949), lubridate::my(121960), by = "month"))
+
+tb |> head()
+```
+
+The printed tibble has one added variable date. Since we have created this dataset, we can convert it back to python pandas dataframe by simply using `r.` funtion within the python chunk;
+
+```{python}
+pdf = r.tb
+pdf
+```
+
+Then we can now plot a line and use the new column `date` we just created instead of year.
+
+```{python}
+#| label: fig-ts3
+#| fig-cap: Monthly Number of flight passengers
+#| 
+
+fig = plt.figure()
+sns.lineplot(data=pdf, x="date", y="passengers")
+plt.ylabel('Passengers')
+plt.show()
+
+```
+
+@fig-ts3 and @fig-ts1 are almost similar but while @fig-ts3 used year as x-axis, @fig-ts3 used date in the x-axis. You can see that @fig-ts3 clearly shows the variability of passenger within the year, which was not possible with @fig-ts1.
+
+
+We can assign a grouping semantic (hue, size, or style) to plot separate lines
+
+```{python}
+#| label: fig-ts4
+#| fig-cap: Number of flight passenger by month during the period
+#| 
+
+fig = plt.figure()
+sns.lineplot(data=df, x="year", y="passengers", hue = "month")
+plt.ylabel("Passengers")
+plt.show()
+
+```
+
+Similarly, we can assign multiple semanti variables of the same variable that makes the plot more appealing ore easily to distinguish between the assigned parameters.
+
+
+
+```{python}
+#| label: fig-ts5
+#| fig-cap: Number of flight passenger by month during the period
+#| 
+
+fig = plt.figure()
+sns.lineplot(data=df, x="year", y="passengers", hue = "month", style = "month")
+plt.ylabel("Passengers")
+plt.show()
+
+```
+
+
+## Cited Materials

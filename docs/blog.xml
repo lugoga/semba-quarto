@@ -398,6 +398,204 @@ Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. <em>Pal
   <media:content url="https://lugoga.github.io/semba-quarto/posts/seabornjointplot/jointPlot.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
+  <title>plotting in Python with Seaborn: Line plot</title>
+  <dc:creator>Masumbuko Semba</dc:creator>
+  <link>https://lugoga.github.io/semba-quarto/posts/seaborn_lineplot/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>In <a href="https://lugoga.github.io/semba-quarto/posts/seabornVisualization/">visualization with Seaborn</a> of this series, we were introduced on the power visualization and dove into distributions plot. In this post we are going focus on jointplot. <code>jointplot</code> is used to plot the histogram distribution of two columns, one on the <code>x-axis</code> and the other on the <code>y-axis</code>. A scatter plot is by default drawn for the points in the two columns. Seaborn has nifty function called <code>jointplot()</code>, which is dedicated for this type of plot.</p>
+</section>
+<section id="loading-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="loading-libraries">Loading libraries</h2>
+<p>Though most people are familiar with plotting using matplot, as it inherited most of the functions from MatLab. Python has an extremely nady library for data visualiztion called seaborn. The Seaborn library is based on the Matplotlib library. Therefore, you will also need to import the Matplotlib library.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;">as</span> plt</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;">import</span> seaborn <span class="im" style="color: #00769E;">as</span> sns</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;">import</span> pandas <span class="im" style="color: #00769E;">as</span> pd</span>
+<span id="cb1-4"><span class="im" style="color: #00769E;">import</span> numpy <span class="im" style="color: #00769E;">as</span> np</span>
+<span id="cb1-5"></span>
+<span id="cb1-6">sns.set_theme()</span></code></pre></div>
+</div>
+</section>
+<section id="dataset" class="level2">
+<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
+<p>We are going to use a <code>flights</code> dataset, which has 10 years of monthly airline passenger data. We do not need to download this dataset as it comes with the seaborn package. We only need to load it from the package into our session using <code>sns.load_dataset</code> function and specify the <code>penguins</code> as the name of the dataset and assign it as df;</p>
+<div class="cell">
+
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1">df <span class="op" style="color: #5E5E5E;">=</span> sns.load_dataset(<span class="st" style="color: #20794D;">'flights'</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1">df</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     year month  passengers
+0    1949   Jan         112
+1    1949   Feb         118
+2    1949   Mar         132
+3    1949   Apr         129
+4    1949   May         121
+..    ...   ...         ...
+139  1960   Aug         606
+140  1960   Sep         508
+141  1960   Oct         461
+142  1960   Nov         390
+143  1960   Dec         432
+
+[144 rows x 3 columns]</code></pre>
+</div>
+</div>
+<p>A printed <code>df</code> dataset shows that a flight dataset is made up of three variables — year, month, and number of passenger between January 1949 and December 1960, which are arranged in long format. To draw a line plot using long-form data, we simply assign the <code>x</code> and <code>y</code> variables</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb5-2">sns.lineplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"year"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"passengers"</span>)</span>
+<span id="cb5-3">plt.ylabel(<span class="st" style="color: #20794D;">'Passengers'</span>)</span>
+<span id="cb5-4">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-ts" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seaborn_lineplot/index_files/figure-html/fig-ts-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Annual number of flight passenger</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>However, looking at Figure&nbsp;2, we notice that the confidence level is aslo plotted thought we did not specify them. The reason is that each year has twelve records of monthly number of passengers, which when plotted are also estimated to show the variability of passenger on that year. So if we want to draw only the line, we may filter a specific year, for this case I only want to plot passengers for July during the same period.</p>
+<p>First, we need to filter the dataset to July and assign a new dataset as <code>df_july</code>. The chunk below shows a line of code that filter passenger between 1949 to 1960 for July only.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1">df_july <span class="op" style="color: #5E5E5E;">=</span> df[df.month <span class="op" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">'Jul'</span>]</span></code></pre></div>
+</div>
+<p>Then plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb7-2">sns.lineplot(data<span class="op" style="color: #5E5E5E;">=</span>df_july, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"year"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"passengers"</span>)</span>
+<span id="cb7-3">plt.ylabel(<span class="st" style="color: #20794D;">'Passengers'</span>)</span>
+<span id="cb7-4">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-ts1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seaborn_lineplot/index_files/figure-html/fig-ts1-3.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Number of flight passenger for July during the period</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Because I still learning how to deal with time in python, I simply switch to R as quarto allows me to swap code for the two languages within the same environment. I switch to R code and then convert the panda data frame to tibble using the reticulate package <span class="citation" data-cites="reticulate">(Ushey, Allaire, and Tang 2020)</span>. The package allows us to convert pandas dataframe to tibble using a <code>py</code> function within R chunk;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1">tb <span class="ot" style="color: #003B4F;">=</span> reticulate<span class="sc" style="color: #5E5E5E;">::</span>py<span class="sc" style="color: #5E5E5E;">$</span>df</span></code></pre></div>
+</div>
+<p>Then within R chunk, we can add a new column <code>date</code> contain date for each month</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1">tb <span class="ot" style="color: #003B4F;">=</span> tb <span class="sc" style="color: #5E5E5E;">|&gt;</span></span>
+<span id="cb9-2">  dplyr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">date =</span> </span>
+<span id="cb9-3"><span class="fu" style="color: #4758AB;">seq</span>(lubridate<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">my</span>(<span class="dv" style="color: #AD0000;">011949</span>), lubridate<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">my</span>(<span class="dv" style="color: #AD0000;">121960</span>), <span class="at" style="color: #657422;">by =</span> <span class="st" style="color: #20794D;">"month"</span>))</span>
+<span id="cb9-4"></span>
+<span id="cb9-5">tb <span class="sc" style="color: #5E5E5E;">|&gt;</span> <span class="fu" style="color: #4758AB;">head</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  year month passengers       date
+1 1949   Jan        112 1949-01-01
+2 1949   Feb        118 1949-02-01
+3 1949   Mar        132 1949-03-01
+4 1949   Apr        129 1949-04-01
+5 1949   May        121 1949-05-01
+6 1949   Jun        135 1949-06-01</code></pre>
+</div>
+</div>
+<p>The printed tibble has one added variable date. Since we have created this dataset, we can convert it back to python pandas dataframe by simply using <code>r.</code> funtion within the python chunk;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1">pdf <span class="op" style="color: #5E5E5E;">=</span> r.tb</span>
+<span id="cb11-2">pdf</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       year month  passengers        date
+0    1949.0   Jan       112.0  1949-01-01
+1    1949.0   Feb       118.0  1949-02-01
+2    1949.0   Mar       132.0  1949-03-01
+3    1949.0   Apr       129.0  1949-04-01
+4    1949.0   May       121.0  1949-05-01
+..      ...   ...         ...         ...
+139  1960.0   Aug       606.0  1960-08-01
+140  1960.0   Sep       508.0  1960-09-01
+141  1960.0   Oct       461.0  1960-10-01
+142  1960.0   Nov       390.0  1960-11-01
+143  1960.0   Dec       432.0  1960-12-01
+
+[144 rows x 4 columns]</code></pre>
+</div>
+</div>
+<p>Then we can now plot a line and use the new column <code>date</code> we just created instead of year.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb13-2">sns.lineplot(data<span class="op" style="color: #5E5E5E;">=</span>pdf, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"date"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"passengers"</span>)</span>
+<span id="cb13-3">plt.ylabel(<span class="st" style="color: #20794D;">'Passengers'</span>)</span>
+<span id="cb13-4">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-ts3" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seaborn_lineplot/index_files/figure-html/fig-ts3-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: Monthly Number of flight passengers</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Figure&nbsp;3 and Figure&nbsp;2 are almost similar but while Figure&nbsp;3 used year as x-axis, Figure&nbsp;3 used date in the x-axis. You can see that Figure&nbsp;3 clearly shows the variability of passenger within the year, which was not possible with Figure&nbsp;2.</p>
+<p>We can assign a grouping semantic (hue, size, or style) to plot separate lines</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb14-2">sns.lineplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"year"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"passengers"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"month"</span>)</span>
+<span id="cb14-3">plt.ylabel(<span class="st" style="color: #20794D;">"Passengers"</span>)</span>
+<span id="cb14-4">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-ts4" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seaborn_lineplot/index_files/figure-html/fig-ts4-3.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: Number of flight passenger by month during the period</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Similarly, we can assign multiple semanti variables of the same variable that makes the plot more appealing ore easily to distinguish between the assigned parameters.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1">fig <span class="op" style="color: #5E5E5E;">=</span> plt.figure()</span>
+<span id="cb15-2">sns.lineplot(data<span class="op" style="color: #5E5E5E;">=</span>df, x<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"year"</span>, y<span class="op" style="color: #5E5E5E;">=</span><span class="st" style="color: #20794D;">"passengers"</span>, hue <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"month"</span>, style <span class="op" style="color: #5E5E5E;">=</span> <span class="st" style="color: #20794D;">"month"</span>)</span>
+<span id="cb15-3">plt.ylabel(<span class="st" style="color: #20794D;">"Passengers"</span>)</span>
+<span id="cb15-4">plt.show()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-ts5" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/seaborn_lineplot/index_files/figure-html/fig-ts5-5.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5: Number of flight passenger by month during the period</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="cited-materials" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-reticulate" class="csl-entry">
+Ushey, Kevin, JJ Allaire, and Yuan Tang. 2020. <em>Reticulate: Interface to ’Python’</em>. <a href="https://CRAN.R-project.org/package=reticulate">https://CRAN.R-project.org/package=reticulate</a>.
+</div>
+</div></section></div> ]]></description>
+  <category>Analysis</category>
+  <category>Visualization</category>
+  <category>Python</category>
+  <guid>https://lugoga.github.io/semba-quarto/posts/seaborn_lineplot/index.html</guid>
+  <pubDate>Tue, 21 Feb 2023 21:00:00 GMT</pubDate>
+  <media:content url="https://lugoga.github.io/semba-quarto/posts/seaborn_lineplot/lineplot.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
   <title>plotting in Python with Seaborn: Distribution plot</title>
   <dc:creator>Masumbuko Semba</dc:creator>
   <link>https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index.html</link>

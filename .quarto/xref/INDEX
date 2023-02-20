@@ -71,5 +71,8 @@
   },
   "posts/seaborn_boxplot/index.qmd": {
     "index.html": "b147a4d1"
+  },
+  "posts/seaborn_lineplot/index.qmd": {
+    "index.html": "2e47f901"
   }
 }

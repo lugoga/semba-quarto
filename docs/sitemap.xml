@@ -2,58 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://lugoga.github.io/semba-quarto/archive.html</loc>
-    <lastmod>2023-02-19T19:20:26.740Z</lastmod>
+    <lastmod>2023-02-20T03:45:46.413Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/blog.html</loc>
-    <lastmod>2023-02-19T19:20:27.767Z</lastmod>
+    <lastmod>2023-02-20T03:45:47.564Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/index.html</loc>
-    <lastmod>2023-02-19T19:19:23.999Z</lastmod>
+    <lastmod>2023-02-20T03:44:31.733Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/combining_plots/index.html</loc>
-    <lastmod>2023-02-19T19:14:09.296Z</lastmod>
+    <lastmod>2023-02-20T03:44:33.213Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/forecastingTimeseries/index.html</loc>
-    <lastmod>2023-02-19T19:14:10.348Z</lastmod>
+    <lastmod>2023-02-20T03:44:34.389Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/inset_main_map/index.html</loc>
-    <lastmod>2023-02-19T19:14:11.664Z</lastmod>
+    <lastmod>2023-02-20T03:44:35.619Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/newvisuals/index.html</loc>
-    <lastmod>2023-02-19T19:14:12.916Z</lastmod>
+    <lastmod>2023-02-20T03:44:36.871Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/r_python/index.html</loc>
-    <lastmod>2023-02-19T19:14:14.447Z</lastmod>
+    <lastmod>2023-02-20T03:44:38.306Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/seabornjointplot/index.html</loc>
-    <lastmod>2023-02-19T19:20:25.824Z</lastmod>
+    <lastmod>2023-02-20T03:44:39.187Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/seabornVisualization/index.html</loc>
-    <lastmod>2023-02-19T19:14:16.997Z</lastmod>
+    <lastmod>2023-02-20T03:44:40.727Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/seaborn_barplot/index.html</loc>
-    <lastmod>2023-02-19T19:16:55.289Z</lastmod>
+    <lastmod>2023-02-20T03:44:41.553Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/seaborn_boxplot/index.html</loc>
-    <lastmod>2023-02-19T19:19:14.897Z</lastmod>
+    <lastmod>2023-02-20T03:44:42.387Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lugoga.github.io/semba-quarto/posts/seaborn_lineplot/index.html</loc>
+    <lastmod>2023-02-20T03:45:55.061Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/spatialState/index.html</loc>
-    <lastmod>2023-02-19T19:14:19.815Z</lastmod>
+    <lastmod>2023-02-20T03:44:44.810Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/ttest/index.html</loc>
-    <lastmod>2023-02-19T19:14:21.007Z</lastmod>
+    <lastmod>2023-02-20T03:44:46.027Z</lastmod>
   </url>
 </urlset>
