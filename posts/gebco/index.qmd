@@ -1,0 +1,288 @@
+---
+title: "Getting GEBCO Bathymetry Data and glean the power of terra and tidyterra packages for raster and vector objects"
+author: 
+  - name: Masumbuko Semba
+    url: https://semba.netlify.app
+    orcid: 0000-0002-5002-9747
+    affiliation: Nelson Mandela African Institution of Science and Technology
+    affiliation-url: https://semba.netlify.app/ 
+date: "2023-03-01"
+categories: [Manipulation,Visualization, R]
+tags: 
+  - Bathymetry
+  - spatRaster
+  - terra
+  - tidyterra
+  - Masumbuko Semba
+image: "thumbnail.jpg"
+draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
+bibliography: ../blog.bib
+execute: 
+  warning: false
+fig-width: 7
+fig-height: 5
+code-line-numbers: true
+---
+
+## Introduction
+
+As an Oceanography, one key parameter that need to get right is the bathymetry. Bathymetry is the science of determining the topography of the seafloor. Bathymetry data is used to generate navigational charts, seafloor profile, biological oceanography, beach erosion, sea-level rise, etc. There pretty of bathymetry data and one of the them is the GEBCO Gridded Bathymetry Data. In this post we are going to learn how to access the bathymetry dataset from GEBCO website, import the dataset into R session and make plots to reveal the elevation and bathymetry of the Pemba Channel. In addtional, the post provide an glimpse of the new packages for handling raster dataset in R. The packages I am goint to introduce to you are *terra* and **tidyterra**, that have changed the way R handles raster and vector objet and improved both the processing of raster objects and visualization. 
+
+
+## Dataset
+The General bathymetric Chart of the Oceans (GEBCO) consists of an international group of experts in ocean mapping. This team provides the most authoritative publicly-available bathymetry of the world's oceans. In this post i will illustrate how to download data from their website and use for mapping. You can obtain the data for your region of interest or for the global oceans. You can download the data from [GEBCO](https://download.gebco.net/). For this case I have downloaded the data for East African Coast as netCDF file by specifying the geogrpahical extent and choose the file type as shown in @fig-gebco. 
+
+
+```{r gebco, out.width="100%"}
+#| label: fig-gebco
+#| fig-cap: The gateway screenshot for accessing bathymetric dataset for any region in the world
+#| out-width: "100%"
+#| echo: false
+#| 
+knitr::include_graphics("gebco.jpg")
+```
+
+
+To process the data and visualize in maps, we need several packages highlighted in the chunk below. You need to load the packages in your session first. If not in your machine, you need to install them first. 
+
+```{r}
+require(tidyverse)
+require(ncdf4)
+require(sf)
+require(metR)
+
+```
+
+Then read the file using `nc_open` function of the **ncdf4** package [@ncdf4] and print the file to see the metadata that describe the variables that are embedded in the file. 
+
+```{r}
+#| echo: false
+#| 
+nc = nc_open("d:/semba/shapefile/gebco/gebco_2021_n2.0_s-15.0_w35.0_e50.0.nc")
+
+```
+
+```{r}
+#| eval: false
+
+nc = nc_open("d:/gebco_tz.nc")
+```
+
+
+```{r}
+nc
+```
+
+Looking on the metadata, we notice that there are three variables we need to extract from the file, these are longitude, latitude and depth. We use a `ncvar_get` function from **ncdf4** [@ncdf4] package to extract these variables. Note the name parsed in the function as should written as they appear in the metadata. 
+
+```{r}
+lat = ncvar_get(nc, "lat")
+lon = ncvar_get(nc, "lon")
+bathy = ncvar_get(nc, "elevation")
+
+```
+
+Then we can check the type of the file using a `class` function
+
+```{r}
+class(bathy); class(lon); class(lat)
+```
+
+
+We notice these objects comes as array. we can check the size also
+```{r}
+dim(lon); dim(lat);dim(bathy)
+```
+
+We also notice that while lon and lat object are array, but they are vector and only bathy is the matrix. Therefore, we need to make a data frame so that we can make plots using ggplot package, which only work in the dataset that is organized as data.frame or tibble. That can be done using a `expand.grid` function. First we expand the lon and lat file followed with the bathy and combine them to make a tibble as the chunk below highlight. Because of the file size, only bathymetric values that fall within the pemba Channel were selected.  
+
+```{r}
+
+dataset = expand.grid(lon, lat) %>% 
+  bind_cols(expand.grid(bathy)) %>% 
+  as_tibble() %>% 
+  rename(lon = 1, lat = 2, depth = 3)%>% 
+  filter(lon >38.5 & lon < 40.5 & lat > -5.8 & lat < -4)
+
+
+
+```
+
+
+Separate the dataset into the land and ocean based on zero (0) value as reference point, where the above sea level topography values are assumed
+
+```{r}
+land = dataset %>% filter(depth >0 )
+ocean = dataset %>% filter(depth <= 0 )
+```
+
+Load the basemap shapefile
+
+```{r}
+#| echo: false
+#| 
+africa = st_read("d:/semba/shapefile/africa.shp", quiet = TRUE)
+```
+
+
+```{r}
+#| eval: false
+#| 
+africa = st_read("d:/africa.shp", quiet = TRUE)
+```
+
+Make a color of land and depth that we will use later for mapping the topography and bathymetry, respectively.
+
+```{r}
+#make palette
+ocean.pal <- c("#000000", "#000413", "#000728", "#002650", "#005E8C", "#0096C8", "#45BCBB", "#8AE2AE", "#BCF8B9", "#DBFBDC")
+land.pal <- c("#467832", "#887438", "#B19D48", "#DBC758", "#FAE769", "#FAEB7E", "#FCED93", "#FCF1A7", "#FCF6C1", "#FDFAE0")
+
+
+```
+
+We can plot the bathymetry  shown in @ fig-bathy with the code highlighted in the chunk below
+
+```{r}
+#| label: fig-bathy
+#| fig-cap: Bathymetry of the Pemba Channel, solid lines are contour lines
+
+
+ggplot()+
+  metR::geom_contour_fill(data = ocean, aes(x = lon, y = lat, z = depth), 
+                          bins = 120, global.breaks = FALSE) +
+  metR::geom_contour2(data = ocean, aes(x = lon, y = lat, z = depth, 
+                                        label = ..level..), breaks = c(-200,-600), skip = 0 )+
+  scale_fill_gradientn(colours = ocean.pal, name = "Depth (m)", 
+                       breaks = seq(-1800,0,300), label = seq(1800,0,-300))+
+  ggspatial::layer_spatial(data = africa)+
+  coord_sf(xlim = c(38.9,40), ylim = c(-5.6,-4.1))+
+  theme_bw(base_size = 12)+
+  theme(axis.title = element_blank())+
+  ggspatial::annotation_scale()
+
+```
+
+Similary, we can plot togopgraphy of the area shown in @fig-bathy2 using the code shown below
+
+```{r}
+#| label: fig-bathy2
+#| fig-cap: Elevation near the Pemba Channel, solid lines are contour lines
+
+ggplot()+
+  metR::geom_contour_fill(data = land, aes(x = lon, y = lat, z = depth), 
+                          bins = 120, show.legend = TRUE) +
+  metR::geom_contour2(data = land, aes(x = lon, y = lat, z = depth), 
+                      breaks = c(200), skip = 0 )+
+  scale_fill_gradientn(colours = land.pal, name = "Topography", 
+                       trans = scales::sqrt_trans())+
+  ggspatial::layer_spatial(data = africa, fill = NA)+
+  coord_sf(xlim = c(38.9,40), ylim = c(-5.6,-4.1))+
+  theme_bw(base_size = 12)+
+  theme(axis.title = element_blank())
+
+
+```
+
+## The modern approach
+
+In R ecosystem, the traditional handling of spatial data-- raster and vector has changed dramatically in recent years. The widely used **raster** [@raster] and **sp** [@sp] packages dominated spatial analysis in R for decades. This has changed recent with the introduction of new and more convinient packages. These packages include **terra**, which has functions for creating, reading, manipulating, and writing raster data [@terra]. The **terra** package provides, among other things, general raster data manipulation functions that can easily be used to develop more specific functions. The package also implements raster algebra and most functions for raster data manipulation.
+
+terra replaces the raster package. The interfaces of terra and raster are similar, but terra is simpler, faster and can do more. The sister package to **terra** is **tidyterra** [@tidyterra]. **tidyterra** is a package that add common methods from the **tidyverse** [@tidyverse] for SpatRaster and SpatVectors objects created with the **terra** package. It also adds specific `geom_spat*()` functions for plotting these kind of objects with **ggplot2** [@ggplot].
+
+Let's load the packages
+
+```{r}
+require(terra)
+require(tidyterra)
+```
+
+Then we use a function `rast` from **terra** package to read raster file from the working directory of the local machine. 
+
+```{r}
+#| eval: false
+#| 
+gebco = terra::rast("gebco.nc")
+```
+
+
+```{r}
+#| echo: false
+gebco = terra::rast("d:/semba/shapefile/gebco/gebco_2021_n2.0_s-15.0_w35.0_e50.0.nc")
+```
+
+
+Then we print the the bathymetry file that we just imported
+```{r}
+gebco
+
+
+```
+The printed output is the metadata of the spatRaster with information that can assist to clear understand the file. I am not going into detail into it but he `coord. ref.` field shows `lon/lat WGS 84`, which is Geographic Coordinates with Datum WGS 84. If you just want to know the CRS from a `SpatRaster`, you just call `crs()` You also notice that the `varname` is the elevation, but in fact this dataset contain the altitude (elevation) for land and depth (bathymetry) for ocean and the unit of the measurement are in meters. Since the dataset is the raste, it provide the grid resolution of 0.004166667 degree, which is equivalent to a spatial resolution of 500 meters grid. 
+
+The geographical extent of the file is quite big range from longitude 35 to 50 and latitude -15 to 2. Since we only focus for the Pemba Channel, we need to crop the spatRaster to  our area of interest. **terra** package has `crop` function for that but, thi function requires us to purse a file that has defined geographical extent. The extent can easily defined using `ext` function, also from **terra** package. The geographical extent of our area ranged from longitude 38 to 41 and latitude -6.2 to -3.
+
+```{r}
+pemba.ext = terra::ext(38,41,-6.2,-3.8)
+
+gebco.pemba = terra::crop(
+  x = gebco, 
+  y = pemba.ext
+  )
+
+gebco.pemba
+```
+The printed metadata indicated that the geographical extent meet what we defined above but it also provide the minimum and maximum values of the bathymetry and elevation values. **tidyterra** makes us use similar verbs of tidyverse to raster objects similar to tibble objects. For example, in the Pemba.gebco we can first filter and strip all elevation grid (elevation >0) and rename the elevation into depth with `rename` function and then use `as.data.frame` function from **terra** to convert spatRaster object to tibble. The chunk below summarise the above explanation;
+ 
+```{r}
+gebco.pemba.tb = gebco.pemba %>% 
+  tidyterra::filter(elevation <= 0) %>% 
+  tidyterra::rename(depth = elevation) %>% 
+  terra::as.data.frame(xy = TRUE)
+
+```
+
+
+In addition of making tidyverse verbs that suits for tibble for manipulation of raster objects, **tidyterra** brings function for plotting raster object with **ggplot2**. A `geom_spatraster` function has enabled ability of plotting both elevation and bathymetry with color gradient that distinguish these layers in a more appealing form. It also has `geom_spatraster_contour` function for plotting contour from raster in **ggplot**. Simple feature and shapefile are also plotted with `geom_spatvector` function. The chunk below contains lines that illustrates the above explanation and rendered to generate @fig-fig4. 
+
+```{r, fig.width=6}
+#| warning: false
+#| message: false
+#| label: fig-fig4
+#| fig-cap: Bathymetry and elevation of the Pemba Channel. Solid black line is an isobar contour of 200 meter
+#| 
+ggplot() +
+  geom_spatraster(data = gebco.pemba, show.legend = TRUE)+
+  geom_spatraster_contour(data = gebco.pemba, breaks = c(-200), 
+                          linewidth = 1.2, color = "black") +
+  geom_spatvector(data = africa, fill = NA, color = "black")+
+  geom_sf_text(data = africa, aes(label = str_to_upper(CNTRY_NAME)), 
+               size = 2.3, check_overlap = TRUE)+
+  coord_sf(xlim = c(38.9,40), ylim = c(-5.6,-4.1))+
+  theme_bw() +
+  theme(legend.position = "right", axis.title = element_blank())+
+  ggspatial::annotation_north_arrow(location = "tr", 
+                                    height = unit(1.5, "cm"),
+                                    width = unit(1, "cm"),
+                                    pad_x = unit(0.25, "cm"),
+                                    pad_y = unit(0.25, "cm"),
+                                    rotation = NULL)+
+  ggspatial::annotation_scale(location = "bl")+
+  scale_fill_hypso_tint_c(
+    palette = "gmt_globe",
+    labels = scales::label_number(big.mark = ","),
+    limits = c(-2000,2000),
+    breaks = seq(-3000,3000,500),
+    guide = guide_colorbar(
+      title = "Bathymetry and Elevation",
+      title.hjust = .5,
+      direction = "vertical",
+      title.position = "right",
+      title.theme = element_text(angle = 90),
+      barheight = 10,
+      barwidth = .60)
+    )
+
+```
+
+## Cited Materials

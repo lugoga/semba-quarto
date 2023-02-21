@@ -10,7 +10,369 @@
 <atom:link href="https://lugoga.github.io/semba-quarto/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Coding for all for better today and tommorow</description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Thu, 23 Feb 2023 21:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 28 Feb 2023 21:00:00 GMT</lastBuildDate>
+<item>
+  <title>Getting GEBCO Bathymetry Data and glean the power of terra and tidyterra packages for raster and vector objects</title>
+  <dc:creator>Masumbuko Semba</dc:creator>
+  <link>https://lugoga.github.io/semba-quarto/posts/gebco/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>As an Oceanography, one key parameter that need to get right is the bathymetry. Bathymetry is the science of determining the topography of the seafloor. Bathymetry data is used to generate navigational charts, seafloor profile, biological oceanography, beach erosion, sea-level rise, etc. There pretty of bathymetry data and one of the them is the GEBCO Gridded Bathymetry Data. In this post we are going to learn how to access the bathymetry dataset from GEBCO website, import the dataset into R session and make plots to reveal the elevation and bathymetry of the Pemba Channel. In addtional, the post provide an glimpse of the new packages for handling raster dataset in R. The packages I am goint to introduce to you are <em>terra</em> and <strong>tidyterra</strong>, that have changed the way R handles raster and vector objet and improved both the processing of raster objects and visualization.</p>
+</section>
+<section id="dataset" class="level2">
+<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
+<p>The General bathymetric Chart of the Oceans (GEBCO) consists of an international group of experts in ocean mapping. This team provides the most authoritative publicly-available bathymetry of the world’s oceans. In this post i will illustrate how to download data from their website and use for mapping. You can obtain the data for your region of interest or for the global oceans. You can download the data from <a href="https://download.gebco.net/">GEBCO</a>. For this case I have downloaded the data for East African Coast as netCDF file by specifying the geogrpahical extent and choose the file type as shown in Figure&nbsp;1.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-gebco" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/gebco/gebco.jpg" class="img-fluid figure-img" style="width:100.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: The gateway screenshot for accessing bathymetric dataset for any region in the world</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To process the data and visualize in maps, we need several packages highlighted in the chunk below. You need to load the packages in your session first. If not in your machine, you need to install them first.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">require</span>(tidyverse)</span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;">require</span>(ncdf4)</span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;">require</span>(sf)</span>
+<span id="cb1-4"><span class="fu" style="color: #4758AB;">require</span>(metR)</span></code></pre></div>
+</div>
+<p>Then read the file using <code>nc_open</code> function of the <strong>ncdf4</strong> package <span class="citation" data-cites="ncdf4">(Pierce 2017)</span> and print the file to see the metadata that describe the variables that are embedded in the file.</p>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1">nc <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">nc_open</span>(<span class="st" style="color: #20794D;">"d:/gebco_tz.nc"</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1">nc</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>File d:/semba/shapefile/gebco/gebco_2021_n2.0_s-15.0_w35.0_e50.0.nc (NC_FORMAT_CLASSIC):
+
+     1 variables (excluding dimension variables):
+        short elevation[lon,lat]   
+            standard_name: height_above_mean_sea_level
+            long_name: Elevation relative to sea level
+            units: m
+            grid_mapping: crs
+            sdn_parameter_urn: SDN:P01::ALATZZ01
+            sdn_parameter_name: Sea floor height (above mean sea level) {bathymetric height}
+            sdn_uom_urn: SDN:P06::ULAA
+            sdn_uom_name: Metres
+
+     2 dimensions:
+        lat  Size:4080 
+            standard_name: latitude
+            long_name: latitude
+            units: degrees_north
+            axis: Y
+            sdn_parameter_urn: SDN:P01::ALATZZ01
+            sdn_parameter_name: Latitude north
+            sdn_uom_urn: SDN:P06::DEGN
+            sdn_uom_name: Degrees north
+        lon  Size:3600 
+            standard_name: longitude
+            long_name: longitude
+            units: degrees_east
+            axis: X
+            sdn_parameter_urn: SDN:P01::ALONZZ01
+            sdn_parameter_name: Longitude east
+            sdn_uom_urn: SDN:P06::DEGE
+            sdn_uom_name: Degrees east
+
+    36 global attributes:
+        title: The GEBCO_2021 Grid - a continuous terrain model for oceans and land at 15 arc-second intervals
+        summary: The GEBCO_2021 Grid is a continuous, global terrain model for ocean and land with a spatial resolution of 15 arc seconds.The grid uses as a 'base-map' Version 2.2 of the SRTM15+ data set (Tozer et al, 2019). This data set is a fusion of land topography with measured and estimated seafloor topography. It is augmented with gridded bathymetric data sets developed as part of the Nippon Foundation-GEBCO Seabed 2030 Project.
+        keywords: BATHYMETRY/SEAFLOOR TOPOGRAPHY, DIGITAL ELEVATION/DIGITAL TERRAIN MODELS
+        Conventions: CF-1.6, ACDD-1.3
+        id: DOI: 10.5285/c6612cbe-50b3-0cff-e053-6c86abc09f8f
+        naming_authority: https://dx.doi.org
+        history: Information on the development of the data set and the source data sets included in the grid can be found in the data set documentation available from https://www.gebco.net
+        source: The GEBCO_2021 Grid is the latest global bathymetric product released by the General Bathymetric Chart of the Oceans (GEBCO) and has been developed through the Nippon Foundation-GEBCO Seabed 2030 Project. This is a collaborative project between the Nippon Foundation of Japan and GEBCO. The Seabed 2030 Project aims to bring together all available bathymetric data to produce the definitive map of the world ocean floor and make it available to all.
+        comment: The data in the GEBCO_2021 Grid should not be used for navigation or any purpose relating to safety at sea.
+        license: The GEBCO Grid is placed in the public domain and may be used free of charge. Use of the GEBCO Grid indicates that the user accepts the conditions of use and disclaimer information: https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2019/grid_terms_of_use.html
+        date_created: 2021-07-01
+        creator_name: GEBCO through the Nippon Foundation-GEBCO Seabed 2030 Project
+        creator_email: gdacc@seabed2030.org
+        creator_url: https://www.gebco.net
+        institution: On behalf of the General Bathymetric Chart of the Oceans (GEBCO), the data are held at the British Oceanographic Data Centre (BODC).
+        project: Nippon Foundation - GEBCO Seabed2030 Project
+        creator_type: International organisation
+        geospatial_bounds: -180
+         geospatial_bounds: -90
+         geospatial_bounds: 180
+         geospatial_bounds: 90
+        geospatial_bounds_crs: WGS84
+        geospatial_bounds_vertical_crs: EPSG:5831
+        geospatial_lat_min: -90
+        geospatial_lat_max: 90
+        geospatial_lat_units: degrees_north
+        geospatial_lat_resolution: 0.00416666666666667
+        geospatial_lon_min: -180
+        geospatial_lon_max: 180
+        geospatial_lon_units: degrees_east
+        geospatial_lon_resolution: 0.00416666666666667
+        geospatial_vertical_min: -10977
+        geospatial_vertical_max: 8685
+        geospatial_vertical_units: meters
+        geospatial_vertical_resolution: 1
+        geospatial_vertical_positive: up
+        identifier_product_doi: DOI: 10.5285/c6612cbe-50b3-0cff-e053-6c86abc09f8f
+        references: DOI: 10.5285/c6612cbe-50b3-0cff-e053-6c86abc09f8f
+        node_offset: 1</code></pre>
+</div>
+</div>
+<p>Looking on the metadata, we notice that there are three variables we need to extract from the file, these are longitude, latitude and depth. We use a <code>ncvar_get</code> function from <strong>ncdf4</strong> <span class="citation" data-cites="ncdf4">(Pierce 2017)</span> package to extract these variables. Note the name parsed in the function as should written as they appear in the metadata.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1">lat <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">ncvar_get</span>(nc, <span class="st" style="color: #20794D;">"lat"</span>)</span>
+<span id="cb5-2">lon <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">ncvar_get</span>(nc, <span class="st" style="color: #20794D;">"lon"</span>)</span>
+<span id="cb5-3">bathy <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">ncvar_get</span>(nc, <span class="st" style="color: #20794D;">"elevation"</span>)</span></code></pre></div>
+</div>
+<p>Then we can check the type of the file using a <code>class</code> function</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;">class</span>(bathy); <span class="fu" style="color: #4758AB;">class</span>(lon); <span class="fu" style="color: #4758AB;">class</span>(lat)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "matrix" "array" </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "array"</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "array"</code></pre>
+</div>
+</div>
+<p>We notice these objects comes as array. we can check the size also</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;">dim</span>(lon); <span class="fu" style="color: #4758AB;">dim</span>(lat);<span class="fu" style="color: #4758AB;">dim</span>(bathy)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3600</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4080</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3600 4080</code></pre>
+</div>
+</div>
+<p>We also notice that while lon and lat object are array, but they are vector and only bathy is the matrix. Therefore, we need to make a data frame so that we can make plots using ggplot package, which only work in the dataset that is organized as data.frame or tibble. That can be done using a <code>expand.grid</code> function. First we expand the lon and lat file followed with the bathy and combine them to make a tibble as the chunk below highlight. Because of the file size, only bathymetric values that fall within the pemba Channel were selected.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1">dataset <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">expand.grid</span>(lon, lat) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb14-2">  <span class="fu" style="color: #4758AB;">bind_cols</span>(<span class="fu" style="color: #4758AB;">expand.grid</span>(bathy)) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb14-3">  <span class="fu" style="color: #4758AB;">as_tibble</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb14-4">  <span class="fu" style="color: #4758AB;">rename</span>(<span class="at" style="color: #657422;">lon =</span> <span class="dv" style="color: #AD0000;">1</span>, <span class="at" style="color: #657422;">lat =</span> <span class="dv" style="color: #AD0000;">2</span>, <span class="at" style="color: #657422;">depth =</span> <span class="dv" style="color: #AD0000;">3</span>)<span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb14-5">  <span class="fu" style="color: #4758AB;">filter</span>(lon <span class="sc" style="color: #5E5E5E;">&gt;</span><span class="fl" style="color: #AD0000;">38.5</span> <span class="sc" style="color: #5E5E5E;">&amp;</span> lon <span class="sc" style="color: #5E5E5E;">&lt;</span> <span class="fl" style="color: #AD0000;">40.5</span> <span class="sc" style="color: #5E5E5E;">&amp;</span> lat <span class="sc" style="color: #5E5E5E;">&gt;</span> <span class="sc" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">5.8</span> <span class="sc" style="color: #5E5E5E;">&amp;</span> lat <span class="sc" style="color: #5E5E5E;">&lt;</span> <span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">4</span>)</span></code></pre></div>
+</div>
+<p>Separate the dataset into the land and ocean based on zero (0) value as reference point, where the above sea level topography values are assumed</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1">land <span class="ot" style="color: #003B4F;">=</span> dataset <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">filter</span>(depth <span class="sc" style="color: #5E5E5E;">&gt;</span><span class="dv" style="color: #AD0000;">0</span> )</span>
+<span id="cb15-2">ocean <span class="ot" style="color: #003B4F;">=</span> dataset <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">filter</span>(depth <span class="sc" style="color: #5E5E5E;">&lt;=</span> <span class="dv" style="color: #AD0000;">0</span> )</span></code></pre></div>
+</div>
+<p>Load the basemap shapefile</p>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1">africa <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">st_read</span>(<span class="st" style="color: #20794D;">"d:/africa.shp"</span>, <span class="at" style="color: #657422;">quiet =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)</span></code></pre></div>
+</div>
+<p>Make a color of land and depth that we will use later for mapping the topography and bathymetry, respectively.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><span class="co" style="color: #5E5E5E;">#make palette</span></span>
+<span id="cb17-2">ocean.pal <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"#000000"</span>, <span class="st" style="color: #20794D;">"#000413"</span>, <span class="st" style="color: #20794D;">"#000728"</span>, <span class="st" style="color: #20794D;">"#002650"</span>, <span class="st" style="color: #20794D;">"#005E8C"</span>, <span class="st" style="color: #20794D;">"#0096C8"</span>, <span class="st" style="color: #20794D;">"#45BCBB"</span>, <span class="st" style="color: #20794D;">"#8AE2AE"</span>, <span class="st" style="color: #20794D;">"#BCF8B9"</span>, <span class="st" style="color: #20794D;">"#DBFBDC"</span>)</span>
+<span id="cb17-3">land.pal <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"#467832"</span>, <span class="st" style="color: #20794D;">"#887438"</span>, <span class="st" style="color: #20794D;">"#B19D48"</span>, <span class="st" style="color: #20794D;">"#DBC758"</span>, <span class="st" style="color: #20794D;">"#FAE769"</span>, <span class="st" style="color: #20794D;">"#FAEB7E"</span>, <span class="st" style="color: #20794D;">"#FCED93"</span>, <span class="st" style="color: #20794D;">"#FCF1A7"</span>, <span class="st" style="color: #20794D;">"#FCF6C1"</span>, <span class="st" style="color: #20794D;">"#FDFAE0"</span>)</span></code></pre></div>
+</div>
+<p>We can plot the bathymetry shown in @ fig-bathy with the code highlighted in the chunk below</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><span class="fu" style="color: #4758AB;">ggplot</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb18-2">  metR<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">geom_contour_fill</span>(<span class="at" style="color: #657422;">data =</span> ocean, <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> lon, <span class="at" style="color: #657422;">y =</span> lat, <span class="at" style="color: #657422;">z =</span> depth), </span>
+<span id="cb18-3">                          <span class="at" style="color: #657422;">bins =</span> <span class="dv" style="color: #AD0000;">120</span>, <span class="at" style="color: #657422;">global.breaks =</span> <span class="cn" style="color: #8f5902;">FALSE</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb18-4">  metR<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">geom_contour2</span>(<span class="at" style="color: #657422;">data =</span> ocean, <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> lon, <span class="at" style="color: #657422;">y =</span> lat, <span class="at" style="color: #657422;">z =</span> depth, </span>
+<span id="cb18-5">                                        <span class="at" style="color: #657422;">label =</span> ..level..), <span class="at" style="color: #657422;">breaks =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">200</span>,<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">600</span>), <span class="at" style="color: #657422;">skip =</span> <span class="dv" style="color: #AD0000;">0</span> )<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb18-6">  <span class="fu" style="color: #4758AB;">scale_fill_gradientn</span>(<span class="at" style="color: #657422;">colours =</span> ocean.pal, <span class="at" style="color: #657422;">name =</span> <span class="st" style="color: #20794D;">"Depth (m)"</span>, </span>
+<span id="cb18-7">                       <span class="at" style="color: #657422;">breaks =</span> <span class="fu" style="color: #4758AB;">seq</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1800</span>,<span class="dv" style="color: #AD0000;">0</span>,<span class="dv" style="color: #AD0000;">300</span>), <span class="at" style="color: #657422;">label =</span> <span class="fu" style="color: #4758AB;">seq</span>(<span class="dv" style="color: #AD0000;">1800</span>,<span class="dv" style="color: #AD0000;">0</span>,<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">300</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb18-8">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">layer_spatial</span>(<span class="at" style="color: #657422;">data =</span> africa)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb18-9">  <span class="fu" style="color: #4758AB;">coord_sf</span>(<span class="at" style="color: #657422;">xlim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="fl" style="color: #AD0000;">38.9</span>,<span class="dv" style="color: #AD0000;">40</span>), <span class="at" style="color: #657422;">ylim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">5.6</span>,<span class="sc" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">4.1</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb18-10">  <span class="fu" style="color: #4758AB;">theme_bw</span>(<span class="at" style="color: #657422;">base_size =</span> <span class="dv" style="color: #AD0000;">12</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb18-11">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">axis.title =</span> <span class="fu" style="color: #4758AB;">element_blank</span>())<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb18-12">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">annotation_scale</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-bathy" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/gebco/index_files/figure-html/fig-bathy-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Bathymetry of the Pemba Channel, solid lines are contour lines</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Similary, we can plot togopgraphy of the area shown in Figure&nbsp;3 using the code shown below</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="fu" style="color: #4758AB;">ggplot</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb19-2">  metR<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">geom_contour_fill</span>(<span class="at" style="color: #657422;">data =</span> land, <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> lon, <span class="at" style="color: #657422;">y =</span> lat, <span class="at" style="color: #657422;">z =</span> depth), </span>
+<span id="cb19-3">                          <span class="at" style="color: #657422;">bins =</span> <span class="dv" style="color: #AD0000;">120</span>, <span class="at" style="color: #657422;">show.legend =</span> <span class="cn" style="color: #8f5902;">TRUE</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb19-4">  metR<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">geom_contour2</span>(<span class="at" style="color: #657422;">data =</span> land, <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> lon, <span class="at" style="color: #657422;">y =</span> lat, <span class="at" style="color: #657422;">z =</span> depth), </span>
+<span id="cb19-5">                      <span class="at" style="color: #657422;">breaks =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">200</span>), <span class="at" style="color: #657422;">skip =</span> <span class="dv" style="color: #AD0000;">0</span> )<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb19-6">  <span class="fu" style="color: #4758AB;">scale_fill_gradientn</span>(<span class="at" style="color: #657422;">colours =</span> land.pal, <span class="at" style="color: #657422;">name =</span> <span class="st" style="color: #20794D;">"Topography"</span>, </span>
+<span id="cb19-7">                       <span class="at" style="color: #657422;">trans =</span> scales<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">sqrt_trans</span>())<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb19-8">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">layer_spatial</span>(<span class="at" style="color: #657422;">data =</span> africa, <span class="at" style="color: #657422;">fill =</span> <span class="cn" style="color: #8f5902;">NA</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb19-9">  <span class="fu" style="color: #4758AB;">coord_sf</span>(<span class="at" style="color: #657422;">xlim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="fl" style="color: #AD0000;">38.9</span>,<span class="dv" style="color: #AD0000;">40</span>), <span class="at" style="color: #657422;">ylim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">5.6</span>,<span class="sc" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">4.1</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb19-10">  <span class="fu" style="color: #4758AB;">theme_bw</span>(<span class="at" style="color: #657422;">base_size =</span> <span class="dv" style="color: #AD0000;">12</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb19-11">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">axis.title =</span> <span class="fu" style="color: #4758AB;">element_blank</span>())</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-bathy2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/gebco/index_files/figure-html/fig-bathy2-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: Elevation near the Pemba Channel, solid lines are contour lines</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="the-modern-approach" class="level2">
+<h2 class="anchored" data-anchor-id="the-modern-approach">The modern approach</h2>
+<p>In R ecosystem, the traditional handling of spatial data– raster and vector has changed dramatically in recent years. The widely used <strong>raster</strong> <span class="citation" data-cites="raster">(Hijmans 2017)</span> and <strong>sp</strong> <span class="citation" data-cites="sp">(Bivand, Pebesma, and Gomez-Rubio 2013)</span> packages dominated spatial analysis in R for decades. This has changed recent with the introduction of new and more convinient packages. These packages include <strong>terra</strong>, which has functions for creating, reading, manipulating, and writing raster data <span class="citation" data-cites="terra">(Hijmans 2022)</span>. The <strong>terra</strong> package provides, among other things, general raster data manipulation functions that can easily be used to develop more specific functions. The package also implements raster algebra and most functions for raster data manipulation.</p>
+<p>terra replaces the raster package. The interfaces of terra and raster are similar, but terra is simpler, faster and can do more. The sister package to <strong>terra</strong> is <strong>tidyterra</strong> <span class="citation" data-cites="tidyterra">(Hernangómez 2023)</span>. <strong>tidyterra</strong> is a package that add common methods from the <strong>tidyverse</strong> <span class="citation" data-cites="tidyverse">(Wickham and Wickham 2017)</span> for SpatRaster and SpatVectors objects created with the <strong>terra</strong> package. It also adds specific <code>geom_spat*()</code> functions for plotting these kind of objects with <strong>ggplot2</strong> <span class="citation" data-cites="ggplot">(Wickham 2016)</span>.</p>
+<p>Let’s load the packages</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><span class="fu" style="color: #4758AB;">require</span>(terra)</span>
+<span id="cb20-2"><span class="fu" style="color: #4758AB;">require</span>(tidyterra)</span></code></pre></div>
+</div>
+<p>Then we use a function <code>rast</code> from <strong>terra</strong> package to read raster file from the working directory of the local machine.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1">gebco <span class="ot" style="color: #003B4F;">=</span> terra<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">rast</span>(<span class="st" style="color: #20794D;">"gebco.nc"</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+
+</div>
+<p>Then we print the the bathymetry file that we just imported</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1">gebco</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 4080, 3600, 1  (nrow, ncol, nlyr)
+resolution  : 0.004166667, 0.004166667  (x, y)
+extent      : 35, 50, -15, 2  (xmin, xmax, ymin, ymax)
+coord. ref. : lon/lat WGS 84 
+source      : gebco_2021_n2.0_s-15.0_w35.0_e50.0.nc 
+varname     : elevation (Elevation relative to sea level) 
+name        : elevation 
+unit        :         m </code></pre>
+</div>
+</div>
+<p>The printed output is the metadata of the spatRaster with information that can assist to clear understand the file. I am not going into detail into it but he <code>coord. ref.</code> field shows <code>lon/lat WGS 84</code>, which is Geographic Coordinates with Datum WGS 84. If you just want to know the CRS from a <code>SpatRaster</code>, you just call <code>crs()</code> You also notice that the <code>varname</code> is the elevation, but in fact this dataset contain the altitude (elevation) for land and depth (bathymetry) for ocean and the unit of the measurement are in meters. Since the dataset is the raste, it provide the grid resolution of 0.004166667 degree, which is equivalent to a spatial resolution of 500 meters grid.</p>
+<p>The geographical extent of the file is quite big range from longitude 35 to 50 and latitude -15 to 2. Since we only focus for the Pemba Channel, we need to crop the spatRaster to our area of interest. <strong>terra</strong> package has <code>crop</code> function for that but, thi function requires us to purse a file that has defined geographical extent. The extent can easily defined using <code>ext</code> function, also from <strong>terra</strong> package. The geographical extent of our area ranged from longitude 38 to 41 and latitude -6.2 to -3.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1">pemba.ext <span class="ot" style="color: #003B4F;">=</span> terra<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">ext</span>(<span class="dv" style="color: #AD0000;">38</span>,<span class="dv" style="color: #AD0000;">41</span>,<span class="sc" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">6.2</span>,<span class="sc" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">3.8</span>)</span>
+<span id="cb24-2"></span>
+<span id="cb24-3">gebco.pemba <span class="ot" style="color: #003B4F;">=</span> terra<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">crop</span>(</span>
+<span id="cb24-4">  <span class="at" style="color: #657422;">x =</span> gebco, </span>
+<span id="cb24-5">  <span class="at" style="color: #657422;">y =</span> pemba.ext</span>
+<span id="cb24-6">  )</span>
+<span id="cb24-7"></span>
+<span id="cb24-8">gebco.pemba</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 576, 720, 1  (nrow, ncol, nlyr)
+resolution  : 0.004166667, 0.004166667  (x, y)
+extent      : 38, 41, -6.2, -3.8  (xmin, xmax, ymin, ymax)
+coord. ref. : lon/lat WGS 84 
+source(s)   : memory
+name        : elevation 
+min value   :     -2610 
+max value   :      2247 </code></pre>
+</div>
+</div>
+<p>The printed metadata indicated that the geographical extent meet what we defined above but it also provide the minimum and maximum values of the bathymetry and elevation values. <strong>tidyterra</strong> makes us use similar verbs of tidyverse to raster objects similar to tibble objects. For example, in the Pemba.gebco we can first filter and strip all elevation grid (elevation &gt;0) and rename the elevation into depth with <code>rename</code> function and then use <code>as.data.frame</code> function from <strong>terra</strong> to convert spatRaster object to tibble. The chunk below summarise the above explanation;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1">gebco.pemba.tb <span class="ot" style="color: #003B4F;">=</span> gebco.pemba <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb26-2">  tidyterra<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">filter</span>(elevation <span class="sc" style="color: #5E5E5E;">&lt;=</span> <span class="dv" style="color: #AD0000;">0</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb26-3">  tidyterra<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">rename</span>(<span class="at" style="color: #657422;">depth =</span> elevation) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb26-4">  terra<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">as.data.frame</span>(<span class="at" style="color: #657422;">xy =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)</span></code></pre></div>
+</div>
+<p>In addition of making tidyverse verbs that suits for tibble for manipulation of raster objects, <strong>tidyterra</strong> brings function for plotting raster object with <strong>ggplot2</strong>. A <code>geom_spatraster</code> function has enabled ability of plotting both elevation and bathymetry with color gradient that distinguish these layers in a more appealing form. It also has <code>geom_spatraster_contour</code> function for plotting contour from raster in <strong>ggplot</strong>. Simple feature and shapefile are also plotted with <code>geom_spatvector</code> function. The chunk below contains lines that illustrates the above explanation and rendered to generate Figure&nbsp;4.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><span class="fu" style="color: #4758AB;">ggplot</span>() <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb27-2">  <span class="fu" style="color: #4758AB;">geom_spatraster</span>(<span class="at" style="color: #657422;">data =</span> gebco.pemba, <span class="at" style="color: #657422;">show.legend =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb27-3">  <span class="fu" style="color: #4758AB;">geom_spatraster_contour</span>(<span class="at" style="color: #657422;">data =</span> gebco.pemba, <span class="at" style="color: #657422;">breaks =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">200</span>), </span>
+<span id="cb27-4">                          <span class="at" style="color: #657422;">linewidth =</span> <span class="fl" style="color: #AD0000;">1.2</span>, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"black"</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb27-5">  <span class="fu" style="color: #4758AB;">geom_spatvector</span>(<span class="at" style="color: #657422;">data =</span> africa, <span class="at" style="color: #657422;">fill =</span> <span class="cn" style="color: #8f5902;">NA</span>, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"black"</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb27-6">  <span class="fu" style="color: #4758AB;">geom_sf_text</span>(<span class="at" style="color: #657422;">data =</span> africa, <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">label =</span> <span class="fu" style="color: #4758AB;">str_to_upper</span>(CNTRY_NAME)), </span>
+<span id="cb27-7">               <span class="at" style="color: #657422;">size =</span> <span class="fl" style="color: #AD0000;">2.3</span>, <span class="at" style="color: #657422;">check_overlap =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb27-8">  <span class="fu" style="color: #4758AB;">coord_sf</span>(<span class="at" style="color: #657422;">xlim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="fl" style="color: #AD0000;">38.9</span>,<span class="dv" style="color: #AD0000;">40</span>), <span class="at" style="color: #657422;">ylim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">5.6</span>,<span class="sc" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">4.1</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb27-9">  <span class="fu" style="color: #4758AB;">theme_bw</span>() <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb27-10">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">legend.position =</span> <span class="st" style="color: #20794D;">"right"</span>, <span class="at" style="color: #657422;">axis.title =</span> <span class="fu" style="color: #4758AB;">element_blank</span>())<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb27-11">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">annotation_north_arrow</span>(<span class="at" style="color: #657422;">location =</span> <span class="st" style="color: #20794D;">"tr"</span>, </span>
+<span id="cb27-12">                                    <span class="at" style="color: #657422;">height =</span> <span class="fu" style="color: #4758AB;">unit</span>(<span class="fl" style="color: #AD0000;">1.5</span>, <span class="st" style="color: #20794D;">"cm"</span>),</span>
+<span id="cb27-13">                                    <span class="at" style="color: #657422;">width =</span> <span class="fu" style="color: #4758AB;">unit</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="st" style="color: #20794D;">"cm"</span>),</span>
+<span id="cb27-14">                                    <span class="at" style="color: #657422;">pad_x =</span> <span class="fu" style="color: #4758AB;">unit</span>(<span class="fl" style="color: #AD0000;">0.25</span>, <span class="st" style="color: #20794D;">"cm"</span>),</span>
+<span id="cb27-15">                                    <span class="at" style="color: #657422;">pad_y =</span> <span class="fu" style="color: #4758AB;">unit</span>(<span class="fl" style="color: #AD0000;">0.25</span>, <span class="st" style="color: #20794D;">"cm"</span>),</span>
+<span id="cb27-16">                                    <span class="at" style="color: #657422;">rotation =</span> <span class="cn" style="color: #8f5902;">NULL</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb27-17">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">annotation_scale</span>(<span class="at" style="color: #657422;">location =</span> <span class="st" style="color: #20794D;">"bl"</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb27-18">  <span class="fu" style="color: #4758AB;">scale_fill_hypso_tint_c</span>(</span>
+<span id="cb27-19">    <span class="at" style="color: #657422;">palette =</span> <span class="st" style="color: #20794D;">"gmt_globe"</span>,</span>
+<span id="cb27-20">    <span class="at" style="color: #657422;">labels =</span> scales<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">label_number</span>(<span class="at" style="color: #657422;">big.mark =</span> <span class="st" style="color: #20794D;">","</span>),</span>
+<span id="cb27-21">    <span class="at" style="color: #657422;">limits =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">2000</span>,<span class="dv" style="color: #AD0000;">2000</span>),</span>
+<span id="cb27-22">    <span class="at" style="color: #657422;">breaks =</span> <span class="fu" style="color: #4758AB;">seq</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">3000</span>,<span class="dv" style="color: #AD0000;">3000</span>,<span class="dv" style="color: #AD0000;">500</span>),</span>
+<span id="cb27-23">    <span class="at" style="color: #657422;">guide =</span> <span class="fu" style="color: #4758AB;">guide_colorbar</span>(</span>
+<span id="cb27-24">      <span class="at" style="color: #657422;">title =</span> <span class="st" style="color: #20794D;">"Bathymetry and Elevation"</span>,</span>
+<span id="cb27-25">      <span class="at" style="color: #657422;">title.hjust =</span> .<span class="dv" style="color: #AD0000;">5</span>,</span>
+<span id="cb27-26">      <span class="at" style="color: #657422;">direction =</span> <span class="st" style="color: #20794D;">"vertical"</span>,</span>
+<span id="cb27-27">      <span class="at" style="color: #657422;">title.position =</span> <span class="st" style="color: #20794D;">"right"</span>,</span>
+<span id="cb27-28">      <span class="at" style="color: #657422;">title.theme =</span> <span class="fu" style="color: #4758AB;">element_text</span>(<span class="at" style="color: #657422;">angle =</span> <span class="dv" style="color: #AD0000;">90</span>),</span>
+<span id="cb27-29">      <span class="at" style="color: #657422;">barheight =</span> <span class="dv" style="color: #AD0000;">10</span>,</span>
+<span id="cb27-30">      <span class="at" style="color: #657422;">barwidth =</span> .<span class="dv" style="color: #AD0000;">60</span>)</span>
+<span id="cb27-31">    )</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-fig4" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/gebco/index_files/figure-html/fig-fig4-1.png" class="img-fluid figure-img" width="576"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: Bathymetry and elevation of the Pemba Channel. Solid black line is an isobar contour of 200 meter</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="cited-materials" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-sp" class="csl-entry">
+Bivand, Roger S., Edzer Pebesma, and Virgilio Gomez-Rubio. 2013. <em>Applied Spatial Data Analysis with <span>R</span>, Second Edition</em>. Springer, NY. <a href="https://asdar-book.org/">https://asdar-book.org/</a>.
+</div>
+<div id="ref-tidyterra" class="csl-entry">
+Hernangómez, Diego. 2023. <em><span class="nocase">tidyterra</span>: Tidyverse Methods and Ggplot2 Helpers for Terra Objects</em> (version 0.3.1). <a href="https://doi.org/10.5281/zenodo.6572471">https://doi.org/10.5281/zenodo.6572471</a>.
+</div>
+<div id="ref-raster" class="csl-entry">
+Hijmans, Robert J. 2017. <em>Raster: Geographic Data Analysis and Modeling</em>. <a href="https://CRAN.R-project.org/package=raster">https://CRAN.R-project.org/package=raster</a>.
+</div>
+<div id="ref-terra" class="csl-entry">
+———. 2022. <em>Terra: Spatial Data Analysis</em>. <a href="https://CRAN.R-project.org/package=terra">https://CRAN.R-project.org/package=terra</a>.
+</div>
+<div id="ref-ncdf4" class="csl-entry">
+Pierce, David. 2017. <em>Ncdf4: Interface to Unidata netCDF (Version 4 or Earlier) Format Data Files</em>. <a href="https://CRAN.R-project.org/package=ncdf4">https://CRAN.R-project.org/package=ncdf4</a>.
+</div>
+<div id="ref-ggplot" class="csl-entry">
+Wickham, Hadley. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
+</div>
+<div id="ref-tidyverse" class="csl-entry">
+Wickham, Hadley, and Maintainer Hadley Wickham. 2017. <em>Tidyverse: Easily Install and Load the ’Tidyverse’</em>. <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>.
+</div>
+</div></section></div> ]]></description>
+  <category>Manipulation</category>
+  <category>Visualization</category>
+  <category>R</category>
+  <guid>https://lugoga.github.io/semba-quarto/posts/gebco/index.html</guid>
+  <pubDate>Tue, 28 Feb 2023 21:00:00 GMT</pubDate>
+  <media:content url="https://lugoga.github.io/semba-quarto/posts/gebco/thumbnail.jpg" medium="image" type="image/jpeg"/>
+</item>
 <item>
   <title>plotting in Python with Seaborn: box plot</title>
   <dc:creator>Masumbuko Semba</dc:creator>
