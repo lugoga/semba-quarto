@@ -1,0 +1,138 @@
+---
+title: "Manipulating Simple features: point to polyline"
+author: 
+  - name: Masumbuko Semba
+    url: https://semba.netlify.app
+    orcid: 0000-0002-5002-9747
+    affiliation: Nelson Mandela African Institution of Science and Technology
+    affiliation-url: https://semba.netlify.app/ 
+date: "2022-12-01"
+categories: [Manipulation,Visualization, R]
+tags: 
+  - Argo
+  - Indian Ocean
+  - Pemba Channel
+  - Masumbuko Semba
+# image: "boxplot.jpg"
+draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
+bibliography: ../blog.bib
+execute: 
+  warning: false
+fig-width: 7
+fig-height: 5
+code-line-numbers: true
+
+---
+
+
+In this post we are going to learn one of the key skills that one dealing with spatial data need to know. That's is how to read a file that contain geographical information (longitude and latitude) and associated attribute information for each location. In its native tabular form, the geographical information are of no use at all until are converted and presented as spatial information. While industrial leading software like ArcMAP and QGIS provide the tools necessary for that conversion, but these software requires us to click the function every time we want to use them to do the process.
+
+Unlike ArcMAP and QGIS, R software has tools that allows automate processing and conversion of geographical information into spatial data in an intuitive approach, which offers a possible way to reproduce the same. Before we proceed with our task, we need to load some of the packages whose function are needed for this post. We simply load these packages using `require` function of **R** [@r-base]. The chunk below load these packages;
+
+```{r}
+require(sf)
+require(tidyverse)
+require(tmap)
+
+tmap_mode(mode = "view")
+
+```
+
+
+
+## Dataset
+We are going to use Argo float dataset. The step involved to prepare this dataset are explained in [Getting and Processing Satellite Data Made Easier in R](https://lugoga.github.io/semba-quarto/posts/satelliteData/)
+Let's load this dataset. We import this dataset using `read_csv` function from **readr** package [@readr]
+
+```{r}
+argo.surface.tb = read_csv("../data/argo_profile_cast_location.csv") %>% 
+  janitor::clean_names()
+
+argo.surface.tb
+```
+
+
+The dataset has 217 rows and eight variables with date and time stamp the argo surfaced and pushed profile data into the satellite after roving the water column after ten days. The geographical location (longitude and latitude) of the float when was at the surface with the associated temperature and salinity at the surface represent with zero depth. 
+
+## Simple feature
+
+The main task of this post is to convert this dataset that contain 217 geographical information into simple feature. @wiki-sf describe simple feature as *set of standards that specify a common storage and access model of geographic feature made of mostly two-dimensional geometries used by geographic information systems*. In general, simple feature is a model of a non-topological way to store geospatial data in a database. The three common types of simple feature are point, lines and polygon, each represent a particular type of geographical feature on earth. Further, simple features refers a formal standard that describes how objects in the real world can be represented in computers, with emphasis on the *spatial geometry *of these objects.
+
+@sf developed a simple feature packages (sf) that is dedicated to deal with simple feature objects in R. The packages has hundred of functions that make dealing with spatial information in R environment much easier than before. Its not the focus of this post to describe the package, but if you wish to dive on this topic you can simply consult book such as [geocompuation in R](https://geocompr.robinlovelace.net/spatial-class.html) [@lovelace2019geocomputation]. 
+
+For this post we begin by looking on how we can convert tabular data with geographical information into simple feature. That is achieved using `st_as_sf` function of **sf** package [@sf] and parse the argument `coords = c("longitude", "latitude")` that bind the geographical coordinate and argument the datum `crs = 4326` to define the datuma and the geographical coordinate system, which is WGS 1984 (epsg = 4326). The chunk below has code of the above description;
+
+```{r}
+argo.surface.sf = argo.surface.tb %>% 
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
+
+argo.surface.sf
+
+```
+
+A printed object is the metadata of the file with key information that tells us that is a simple feature with 217 simple features (recores) and six variables (column) and the type of the object are points. The metadata also display the bounding extent covered with these points and the datum of WGS84. We can check whether the conversion is successful by simply map the simple feature object we created into an interactive map shown in @fig-fig1.
+               
+```{r}
+#| label: fig-fig1
+#| fig-cap: Map with bubble size representing temperature variation and the color is the salinity gradients.
+#| 
+argo.surface.sf %>% 
+  tm_shape() +
+  tm_bubbles(
+    size = "temperature", 
+    col = "salinity", 
+    scale = c(0.3,.8),
+    border.col = "black", 
+    border.alpha = .5, 
+    style="fixed", 
+    breaks=c(-Inf, seq(34.8, 35.6, by=.2), Inf),
+    palette="-RdYlBu", contrast=1, 
+    title.size="Temperature", 
+    title.col="Salinity (%)", 
+    id="Date",
+    popup.vars=c("Temperature: "="temperature", "Salinity: "="salinity"),
+    popup.format=list(temperature=list(digits=2))
+    ) 
+```
+
+
+## Trajectory
+
+Looking on @fig-fig1 we notice that the points are following a certain. This path is commonly known as *trajectory* -- a path that an Argo float follows through in the Indian Ocean over its lifespan. Therefore, we ought to convert the point simple feature into trajectory. Fortunate, a combination of function from dplyr package [@dplyr] and sf [@sf] has made it possible. Though we can create a trajectory for the entire lifespan it recorded profiles in the area, but for exploration purpose, I first created a year variable and extract `year` variable from `date` variable and then use the `year` variable to group the information by year and then create trajectories that are grouped by year. 
+
+```{r}
+#| label: fig-fig2
+#| fig-cap: Incorrect trajectories of the Argo float separated by year
+#| 
+argo_traj = argo.surface.sf %>% 
+  dplyr::mutate(year = lubridate::year(date) %>% as.factor()) %>% 
+  dplyr::group_by(year) %>% 
+  dplyr::summarise() %>% 
+  sf::st_cast(to = "LINESTRING")
+
+tm_shape(shp = argo_traj)+
+  tm_lines(col = "year", lwd = 3, stretch.palette = TRUE)
+
+
+```
+
+We notice that @fig-fig2 trajectories are un ordered and very confusing. In fact the trajectories in @fig-fig2 do not reflect the pathway of the Argo float. The problem like this arise especially when you forget to parse an argument `do_uninon = FALSE` in the `summarise` function. But if we simply parse that argument, as the chunk below highlight, we correct the observed error and create a trajectory that reflect the pathwary of the Argo float shown in @fig-fig3
+
+```{r}
+#| label: fig-fig3
+#| fig-cap: Correct trajectories of Argo floats separated by year
+#| 
+argo_traj = argo.surface.sf %>% 
+  mutate(year = lubridate::year(date) %>% as.factor()) %>% 
+  arrange(date) %>% 
+  group_by(year) %>% 
+  summarise(do_union = FALSE) %>% 
+  st_cast(to = "LINESTRING")
+
+tm_shape(shp = argo_traj)+
+  tm_lines(col = "year", lwd = 3, stretch.palette = TRUE)
+```
+
+
+
+## Cited Materials

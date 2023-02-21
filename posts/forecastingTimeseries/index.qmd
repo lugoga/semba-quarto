@@ -2,7 +2,7 @@
 title: "Forecasting Rising Temperature with prophet package in R"
 author: "Masumbuko Semba"
 date: "2022-08-13"
-categories: [code, analysis, spatial]
+categories: [code, Analysis, Spatial]
 bibliography: ../ref.bib
 image: forecast.png
 execute: 

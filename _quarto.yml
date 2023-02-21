@@ -48,7 +48,7 @@ website:
               href: https://www.r-bloggers.com/
         - text: Archive
           href: archive.qmd
-  google-analytics: "14521548"
+  google-analytics: "UA-127756435-1"
   # cookie-consent: 
   #     type: express
   #     style: headline
