@@ -2,7 +2,9 @@
   {
     "listing": "/archive.html",
     "items": [
+      "/posts/tidymodels_classificationTrain/index.html",
       "/posts/tidymodels_regression/index.html",
+      "/posts/tidymodels_classification/index.html",
       "/posts/gebco/index.html",
       "/posts/seaborn_boxplot/index.html",
       "/posts/seaborn_barplot/index.html",
@@ -23,7 +25,9 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/tidymodels_classificationTrain/index.html",
       "/posts/tidymodels_regression/index.html",
+      "/posts/tidymodels_classification/index.html",
       "/posts/gebco/index.html",
       "/posts/seaborn_boxplot/index.html",
       "/posts/seaborn_barplot/index.html",

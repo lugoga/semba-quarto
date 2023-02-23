@@ -1,5 +1,5 @@
 ---
-title: " Linear and Bayesian Regression Models with tidymodels package"
+title: "Machine learning with tidymodels: Linear and Bayesian Regression Models"
 author: 
   - name: Masumbuko Semba
     url: https://semba.netlify.app
@@ -16,7 +16,7 @@ tags:
 # image: "thumbnail.jpg"
 draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
 bibliography: ../blog.bib
-csl:  ../apa.csl
+csl:  ../elsevier.csl
 execute: 
   warning: false
 fig-width: 7
@@ -46,11 +46,19 @@ model.packages = c("tidymodels", "tidyverse")
 install.packages(model.packages)
 ```
 
-Once installed, you can load the packages in your session. We often we use several packages to accomplish a task. Even in this post, though seems only two packages are loaded, these are ecosystems which  comes with dozens of packages bundled with them. 
+similar to the **tidyverse**, **tidymodels** consists of several linked packages that use a similar philosophy and syntax. Here is a brief explanation of the component packages.
 
+1. **parsnips**: used to define models using a common syntax; makes it easier to experiment with different algorithms
+1. **workflows**: provides tools to create workflows, or the desired machine learning pipeline, including pre-processing, training, and post-processing
+1. **yardstick**: a one-stop-shop to implement a variety of assessment metrics for regression and classification problems
+1. **tune**: for hyperparameter tuning
+1. **dials**: for managing parameters and tuning grids
+1. **rsample**: tools for data splitting, partitioning, and resampling
+1. **recipes**: tools for pre-processing and data engineering
+
+Once installed, you can load the packages in your session. I begin by reading in the required packages. Here, tidymodels is used to load the component packages discussed above along with some other packages (e.g., ggplot2, purr, and dplyr).
 
 ```{r}
-require(tidyverse)
 require(tidymodels)
 ```
 

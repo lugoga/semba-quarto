@@ -9,7 +9,7 @@
 <meta name="author" content="Masumbuko Semba">
 <meta name="dcterms.date" content="2023-04-11">
 
-<title>ng’ara - Linear and Bayesian Regression Models with tidymodels package</title>
+<title>ng’ara - Machine learning with tidymodels: Linear and Bayesian Regression Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -160,7 +160,7 @@ ga('send', {
 
 
 <link rel="stylesheet" href="../../styles.css">
-<meta name="twitter:title" content="ng’ara - Linear and Bayesian Regression Models with tidymodels package">
+<meta name="twitter:title" content="ng’ara - Machine learning with tidymodels: Linear and Bayesian Regression Models">
 <meta name="twitter:description" content="We live in age of increasing data and as a data scientist, our role primarily involves exploring and analyzing data.">
 <meta name="twitter:image" content="https://lugoga.github.io/semba-quarto/posts\tidymodels_regression\thumbnail_blog.png">
 <meta name="twitter:creator" content="@semba753">
@@ -317,7 +317,7 @@ ga('send', {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Linear and Bayesian Regression Models with tidymodels package</h1>
+<h1 class="title">Machine learning with tidymodels: Linear and Bayesian Regression Models</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Manipulation</div>
     <div class="quarto-category">Visualization</div>
@@ -365,17 +365,26 @@ ga('send', {
 <p>After decades of open-source development, R provides extensive functionality that’s backed by a massive set of powerful statistical modeling, machine learning, visualization and data wrangling packages. Some of these package that has revolutionized R are <strong>tidyverse</strong> and <strong>tidymodel</strong> package. <strong>tidyverse</strong> is a collection of R packages that make data science faster, easier, and more fun and <strong>tidymodels</strong> is a collection of R packages for modeling and statistical analysis.</p>
 <p>As a data scientist, you need to distinguish between <em>regression predictive models</em> and <em>classification predictive models</em>. Clear understanding of these models helps to choose the best one for a specific use case. In a nutshell, <em>regression predictive models</em>and <em>classification predictive models</em> fall under supervised machine learning. The main difference between these two models is the output: while in regression produce an output as numerical (or continuous), the output of classification is categorical (or discrete).</p>
 <p>A big part of machine learning is <em>classification</em> — we want to know what class or group an observation belongs to. Therefore, the ability to precisely classify observations to their groups is valuable for various business applications like predicting the future based on historical data. For example, when provided with a dataset about environmental variables, and you are asked to predict productivity, that is a regression task because productivity measured in term of chlorophyll concentration will be a continuous output.</p>
-<p>In this post we will focus on regression. We will learn the steps of modelling using <strong>tidymodels</strong> <span class="citation" data-cites="tidymodels">(<a href="#ref-tidymodels" role="doc-biblioref">Kuhn &amp; Wickham, 2020b</a>)</span>. We first explore the data and check if it fit for modelling, we then split the dataset into a training and testing sets. Next, we will create a recipe object and define our model. Lastly, we will train a specified model and evaluate its performance. I will use the same dataset for three different model’s algorithms. Example of the common regression algorithms include <code>random forest</code>, <code>linear regression</code>, <code>support vector regression (SVR)</code> and <code>bayes</code>. Some algorithms, such as <code>logistic regression</code>, have the name <code>regression</code> in their functions but they are not regression algorithms.</p>
-<p>To follow use code in this article, you will need <strong>tidymodels</strong> <span class="citation" data-cites="tidymodels">(<a href="#ref-tidymodels" role="doc-biblioref">Kuhn &amp; Wickham, 2020b</a>)</span> and <strong>tidyverse</strong> packages <span class="citation" data-cites="tidyverse">(<a href="#ref-tidyverse" role="doc-biblioref">Wickham &amp; Wickham, 2017</a>)</span> installed in your machine. You can install them from CRAN. The chunk below highlight lines of code to install the packages if they are yet in your PC.</p>
+<p>In this post we will focus on regression. We will learn the steps of modelling using <strong>tidymodels</strong> <span class="citation" data-cites="tidymodels">(<a href="#ref-tidymodels" role="doc-biblioref">Kuhn and Wickham, 2020a</a>)</span>. We first explore the data and check if it fit for modelling, we then split the dataset into a training and testing sets. Next, we will create a recipe object and define our model. Lastly, we will train a specified model and evaluate its performance. I will use the same dataset for three different model’s algorithms. Example of the common regression algorithms include <code>random forest</code>, <code>linear regression</code>, <code>support vector regression (SVR)</code> and <code>bayes</code>. Some algorithms, such as <code>logistic regression</code>, have the name <code>regression</code> in their functions but they are not regression algorithms.</p>
+<p>To follow use code in this article, you will need <strong>tidymodels</strong> <span class="citation" data-cites="tidymodels">(<a href="#ref-tidymodels" role="doc-biblioref">Kuhn and Wickham, 2020a</a>)</span> and <strong>tidyverse</strong> packages <span class="citation" data-cites="tidyverse">(<a href="#ref-tidyverse" role="doc-biblioref">Wickham and Wickham, 2017</a>)</span> installed in your machine. You can install them from CRAN. The chunk below highlight lines of code to install the packages if they are yet in your PC.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>model.packages <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"tidymodels"</span>, <span class="st">"tidyverse"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="fu">install.packages</span>(model.packages)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Once installed, you can load the packages in your session. We often we use several packages to accomplish a task. Even in this post, though seems only two packages are loaded, these are ecosystems which comes with dozens of packages bundled with them.</p>
+<p>similar to the <strong>tidyverse</strong>, <strong>tidymodels</strong> consists of several linked packages that use a similar philosophy and syntax. Here is a brief explanation of the component packages.</p>
+<ol type="1">
+<li><strong>parsnips</strong>: used to define models using a common syntax; makes it easier to experiment with different algorithms</li>
+<li><strong>workflows</strong>: provides tools to create workflows, or the desired machine learning pipeline, including pre-processing, training, and post-processing</li>
+<li><strong>yardstick</strong>: a one-stop-shop to implement a variety of assessment metrics for regression and classification problems</li>
+<li><strong>tune</strong>: for hyperparameter tuning</li>
+<li><strong>dials</strong>: for managing parameters and tuning grids</li>
+<li><strong>rsample</strong>: tools for data splitting, partitioning, and resampling</li>
+<li><strong>recipes</strong>: tools for pre-processing and data engineering</li>
+</ol>
+<p>Once installed, you can load the packages in your session. I begin by reading in the required packages. Here, tidymodels is used to load the component packages discussed above along with some other packages (e.g., ggplot2, purr, and dplyr).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">require</span>(tidyverse)</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">require</span>(tidymodels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">require</span>(tidymodels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="the-dataset" class="level1">
@@ -386,7 +395,7 @@ ga('send', {
 <li>Physical variables — temperature</li>
 <li>Biological variables— chlorophyll-<em>a</em></li>
 </ul>
-<p>Because the variables are organized in sheets of Excel spreadsheet, i used a <code>read_excel</code> function from <strong>readxl</strong> package <span class="citation" data-cites="readxl">(<a href="#ref-readxl" role="doc-biblioref">Wickham &amp; Bryan, 2018</a>)</span> to read the file from the sheet. And because there are several sheet, the processed was iterated with a <code>for</code> loop. Data from each sheet was allocated in the list file. The chunk below highlight the code used to read files in sheets.</p>
+<p>Because the variables are organized in sheets of Excel spreadsheet, i used a <code>read_excel</code> function from <strong>readxl</strong> package <span class="citation" data-cites="readxl">(<a href="#ref-readxl" role="doc-biblioref">Wickham and Bryan, 2018</a>)</span> to read the file from the sheet. And because there are several sheet, the processed was iterated with a <code>for</code> loop. Data from each sheet was allocated in the list file. The chunk below highlight the code used to read files in sheets.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>variables <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"salinity"</span>, <span class="st">"temperature"</span>, <span class="st">"do"</span>, <span class="st">"ph"</span>, <span class="st">"chl"</span>, <span class="st">"ammonia"</span>, <span class="st">"phosphate"</span>, <span class="st">"nitrate"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
@@ -495,7 +504,7 @@ $ nitrate     &lt;dbl&gt; 0.04, 0.07, 3.26, 3.34, 0.03, 0.47, 1.45, 0.84, 0.06, 
 <section id="resample" class="level1">
 <h1>Resample</h1>
 <p>In machine learning, one risk is the machine learns too well our sample data and is then less accurate during a real-world testing. This phenomenon is called <em>overtraining</em> or <em>overfitting</em>. We overcome this problem by splitting the dataset into a training and testing sets. The training set is used to train the model while the test set is reserved to later estimate how well the model might work on new or wild data. The splitting is based on ratios and the widely used ratios include 80/20, 75/25, or 7/30, with the training data receiving a bigger proportion of the dataset and the test set get the remaining small portion.</p>
-<p>For our sample that has only 52 observations, it make sense to use 70/30 split ratio. we use the fraction <code>set.seed(4595)</code> from base R to fix the random number generator from <strong>rsample</strong> package <span class="citation" data-cites="rsample">(<a href="#ref-rsample" role="doc-biblioref">Kuhn, Chow, &amp; Wickham, 2020</a>)</span>. This prevent generating new data in each execution. the function <code>initial_split</code> from the <strong>rsample</strong> package is designed to split the dataset into a training and testing sets. We purse the data to be split and the proportion that serve as a cutpoint of the two sets.</p>
+<p>For our sample that has only 52 observations, it make sense to use 70/30 split ratio. we use the fraction <code>set.seed(4595)</code> from base R to fix the random number generator from <strong>rsample</strong> package <span class="citation" data-cites="rsample">(<a href="#ref-rsample" role="doc-biblioref">Kuhn et al., 2020</a>)</span>. This prevent generating new data in each execution. the function <code>initial_split</code> from the <strong>rsample</strong> package is designed to split the dataset into a training and testing sets. We purse the data to be split and the proportion that serve as a cutpoint of the two sets.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">set.seed</span>(<span class="dv">4595</span>)</span>
 <span id="cb10-2"><a href="#cb10-2"></a></span>
@@ -518,7 +527,7 @@ $ nitrate     &lt;dbl&gt; 0.04, 0.07, 3.26, 3.34, 0.03, 0.47, 1.45, 0.84, 0.06, 
 <span id="cb12-6"><a href="#cb12-6"></a>crtr.test <span class="ot">=</span> crtr.split <span class="sc">%&gt;%</span> </span>
 <span id="cb12-7"><a href="#cb12-7"></a>  <span class="fu">testing</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We can have a glimpse of the train dataset using a <code>glimpse</code> function from <strong>dplyr</strong> package <span class="citation" data-cites="dplyr">(<a href="#ref-dplyr" role="doc-biblioref">Wickham, François, Henry, &amp; Müller, 2019</a>)</span>.</p>
+<p>We can have a glimpse of the train dataset using a <code>glimpse</code> function from <strong>dplyr</strong> package <span class="citation" data-cites="dplyr">(<a href="#ref-dplyr" role="doc-biblioref">Wickham et al., 2019</a>)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>crtr.train <span class="sc">%&gt;%</span> <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -537,7 +546,7 @@ $ nitrate     &lt;dbl&gt; 0.64, 0.06, 0.03, 0.04, 0.03, 0.05, 0.05, 0.04, 0.48, 
 </section>
 <section id="recipe" class="level1">
 <h1>recipe</h1>
-<p>The <strong>recipes</strong> package <span class="citation" data-cites="recipes">(<a href="#ref-recipes" role="doc-biblioref">Kuhn &amp; Wickham, 2020a</a>)</span> define a recipe object that we will use for modeling and to conduct preprocessing of variables. The four main functions are <code>recipe()</code>, <code>prep()</code>, <code>juice()</code> and <code>bake()</code>. <code>recipe()</code> defines the operations on the data and the associated roles. Once the preprocessing steps are defined, any parameters are estimated using <code>prep()</code>.</p>
+<p>The <strong>recipes</strong> package <span class="citation" data-cites="recipes">(<a href="#ref-recipes" role="doc-biblioref">Kuhn and Wickham, 2020b</a>)</span> define a recipe object that we will use for modeling and to conduct preprocessing of variables. The four main functions are <code>recipe()</code>, <code>prep()</code>, <code>juice()</code> and <code>bake()</code>. <code>recipe()</code> defines the operations on the data and the associated roles. Once the preprocessing steps are defined, any parameters are estimated using <code>prep()</code>.</p>
 <p>Recipes can be created manually by sequentially adding roles to variables in a data set. First, we will create a recipe object from the train set data and then specify the processing steps and transform the data with <code>step_*</code>. once the recipe is ready we prep it. For example, to create a simple recipe containing only an outcome and predictors and have the predictors normalized and missing values in predictors imputed:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>crtr.recipe <span class="ot">=</span> crtr.train <span class="sc">%&gt;%</span></span>
@@ -582,7 +591,7 @@ K-nearest neighbor imputation for temperature, do, ph, ammonia, phosphate, nitra
 <p>We begin by fitting a random forest model.</p>
 <section id="make-random-forest-model" class="level3">
 <h3 class="anchored" data-anchor-id="make-random-forest-model">Make random forest model</h3>
-<p>We specify the model using the <strong>parsnip</strong> package <span class="citation" data-cites="parsnip">(<a href="#ref-parsnip" role="doc-biblioref">Kuhn &amp; Vaughan, 2020a</a>)</span>. This package provides a tidy, unified interface to models for a range of models without getting bogged down in the syntactical minutiae of the underlying packages. The <strong>parsnip</strong> package help us to specify ;</p>
+<p>We specify the model using the <strong>parsnip</strong> package <span class="citation" data-cites="parsnip">(<a href="#ref-parsnip" role="doc-biblioref">Kuhn and Vaughan, 2020a</a>)</span>. This package provides a tidy, unified interface to models for a range of models without getting bogged down in the syntactical minutiae of the underlying packages. The <strong>parsnip</strong> package help us to specify ;</p>
 <ul>
 <li>the <code>type</code> of model e.g <strong>random forest</strong>,</li>
 <li>the <code>mode</code> of the model whether is <code>regression</code> or <code>classification</code></li>
@@ -642,7 +651,7 @@ Computational engine: ranger </code></pre>
 </section>
 <section id="evaluate-the-rf-model" class="level3">
 <h3 class="anchored" data-anchor-id="evaluate-the-rf-model">Evaluate the rf model</h3>
-<p>So far, we have built a model and preprocessed data with a recipe. We predicted new data as a way to bundle a parsnip model and recipe together. The next step is to assess or evaluate the accuracy of the model. We use a <code>metrics</code> function from <strong>yardstick</strong> package <span class="citation" data-cites="yardstick">(<a href="#ref-yardstick" role="doc-biblioref">Kuhn &amp; Vaughan, 2020b</a>)</span>to assess the accuracy of the model by comparing the predicted versus the original outcome variable. Note that we use the predicted dataset we just computed using <code>predict</code> function.</p>
+<p>So far, we have built a model and preprocessed data with a recipe. We predicted new data as a way to bundle a parsnip model and recipe together. The next step is to assess or evaluate the accuracy of the model. We use a <code>metrics</code> function from <strong>yardstick</strong> package <span class="citation" data-cites="yardstick">(<a href="#ref-yardstick" role="doc-biblioref">Kuhn and Vaughan, 2020b</a>)</span>to assess the accuracy of the model by comparing the predicted versus the original outcome variable. Note that we use the predicted dataset we just computed using <code>predict</code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>rf.predict <span class="sc">%&gt;%</span></span>
 <span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">metrics</span>(<span class="at">truth =</span> chl, <span class="at">estimate =</span> .pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -661,7 +670,7 @@ Computational engine: ranger </code></pre>
 <h2 class="anchored" data-anchor-id="linear-regression-approach">Linear regression approach</h2>
 <section id="make-linear-model" class="level3">
 <h3 class="anchored" data-anchor-id="make-linear-model">Make linear model</h3>
-<p>The good of <strong>tidymodels</strong> is that when we change the model, we do not need to start over again from the beginning but rather change the engine. For instance, we replace the <code>ranger</code> engine with <code>lm</code> to specify the linear model using the <strong>parsnip</strong> package <span class="citation" data-cites="parsnip">(<a href="#ref-parsnip" role="doc-biblioref">Kuhn &amp; Vaughan, 2020a</a>)</span> .</p>
+<p>The good of <strong>tidymodels</strong> is that when we change the model, we do not need to start over again from the beginning but rather change the engine. For instance, we replace the <code>ranger</code> engine with <code>lm</code> to specify the linear model using the <strong>parsnip</strong> package <span class="citation" data-cites="parsnip">(<a href="#ref-parsnip" role="doc-biblioref">Kuhn and Vaughan, 2020a</a>)</span> .</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>lm.model <span class="ot">=</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">set_engine</span>(<span class="at">engine =</span> <span class="st">"lm"</span>) <span class="sc">%&gt;%</span></span>
@@ -914,36 +923,36 @@ sigma 0.7    0.2
 </section>
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="doc-bibliography">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
 <div id="ref-rsample" class="csl-entry" role="doc-biblioentry">
-Kuhn, M., Chow, F., &amp; Wickham, H. (2020). <em>Rsample: General resampling infrastructure</em>. Retrieved from <a href="https://CRAN.R-project.org/package=rsample">https://CRAN.R-project.org/package=rsample</a>
+Kuhn, M., Chow, F., Wickham, H., 2020. <a href="https://CRAN.R-project.org/package=rsample">Rsample: General resampling infrastructure</a>.
 </div>
 <div id="ref-parsnip" class="csl-entry" role="doc-biblioentry">
-Kuhn, M., &amp; Vaughan, D. (2020a). <em>Parsnip: A common API to modeling and analysis functions</em>. Retrieved from <a href="https://CRAN.R-project.org/package=parsnip">https://CRAN.R-project.org/package=parsnip</a>
+Kuhn, M., Vaughan, D., 2020a. <a href="https://CRAN.R-project.org/package=parsnip">Parsnip: A common API to modeling and analysis functions</a>.
 </div>
 <div id="ref-yardstick" class="csl-entry" role="doc-biblioentry">
-Kuhn, M., &amp; Vaughan, D. (2020b). <em>Yardstick: Tidy characterizations of model performance</em>. Retrieved from <a href="https://CRAN.R-project.org/package=yardstick">https://CRAN.R-project.org/package=yardstick</a>
-</div>
-<div id="ref-recipes" class="csl-entry" role="doc-biblioentry">
-Kuhn, M., &amp; Wickham, H. (2020a). <em>Recipes: Preprocessing tools to create design matrices</em>. Retrieved from <a href="https://CRAN.R-project.org/package=recipes">https://CRAN.R-project.org/package=recipes</a>
+Kuhn, M., Vaughan, D., 2020b. <a href="https://CRAN.R-project.org/package=yardstick">Yardstick: Tidy characterizations of model performance</a>.
 </div>
 <div id="ref-tidymodels" class="csl-entry" role="doc-biblioentry">
-Kuhn, M., &amp; Wickham, H. (2020b). <em>Tidymodels: Easily install and load the ’tidymodels’ packages</em>. Retrieved from <a href="https://CRAN.R-project.org/package=tidymodels">https://CRAN.R-project.org/package=tidymodels</a>
+Kuhn, M., Wickham, H., 2020a. <a href="https://CRAN.R-project.org/package=tidymodels">Tidymodels: Easily install and load the ’tidymodels’ packages</a>.
+</div>
+<div id="ref-recipes" class="csl-entry" role="doc-biblioentry">
+Kuhn, M., Wickham, H., 2020b. <a href="https://CRAN.R-project.org/package=recipes">Recipes: Preprocessing tools to create design matrices</a>.
 </div>
 <div id="ref-r" class="csl-entry" role="doc-biblioentry">
-R Core Team. (2018). <em>R: A language and environment for statistical computing</em>. Vienna, Austria: R Foundation for Statistical Computing. Retrieved from <a href="https://www.R-project.org/">https://www.R-project.org/</a>
+R Core Team, 2018. <a href="https://www.R-project.org/">R: A language and environment for statistical computing</a>. R Foundation for Statistical Computing, Vienna, Austria.
 </div>
 <div id="ref-ggally" class="csl-entry" role="doc-biblioentry">
-Schloerke, B., Crowley, J., Cook, D., Briatte, F., Marbach, M., Thoen, E., … Larmarange, J. (2020). <em>GGally: Extension to ’ggplot2’</em>. Retrieved from <a href="https://CRAN.R-project.org/package=GGally">https://CRAN.R-project.org/package=GGally</a>
+Schloerke, B., Crowley, J., Cook, D., Briatte, F., Marbach, M., Thoen, E., Elberg, A., Larmarange, J., 2020. <a href="https://CRAN.R-project.org/package=GGally">GGally: Extension to ’ggplot2’</a>.
 </div>
 <div id="ref-readxl" class="csl-entry" role="doc-biblioentry">
-Wickham, H., &amp; Bryan, J. (2018). <em>Readxl: Read excel files</em>. Retrieved from <a href="https://CRAN.R-project.org/package=readxl">https://CRAN.R-project.org/package=readxl</a>
+Wickham, H., Bryan, J., 2018. <a href="https://CRAN.R-project.org/package=readxl">Readxl: Read excel files</a>.
 </div>
 <div id="ref-dplyr" class="csl-entry" role="doc-biblioentry">
-Wickham, H., François, R., Henry, L., &amp; Müller, K. (2019). <em>Dplyr: A grammar of data manipulation</em>. Retrieved from <a href="https://CRAN.R-project.org/package=dplyr">https://CRAN.R-project.org/package=dplyr</a>
+Wickham, H., François, R., Henry, L., Müller, K., 2019. <a href="https://CRAN.R-project.org/package=dplyr">Dplyr: A grammar of data manipulation</a>.
 </div>
 <div id="ref-tidyverse" class="csl-entry" role="doc-biblioentry">
-Wickham, H., &amp; Wickham, M. H. (2017). <em>Tidyverse: Easily install and load the ’tidyverse’</em>. Retrieved from <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>
+Wickham, H., Wickham, M.H., 2017. <a href="https://CRAN.R-project.org/package=tidyverse">Tidyverse: Easily install and load the ’tidyverse’</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -10,9 +10,385 @@
 <atom:link href="https://lugoga.github.io/semba-quarto/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Coding for all for better today and tommorow</description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Mon, 10 Apr 2023 21:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 12 Apr 2023 21:00:00 GMT</lastBuildDate>
 <item>
-  <title>Linear and Bayesian Regression Models with tidymodels package</title>
+  <title>Machine learning with tidymodels: Binary Classification Model</title>
+  <dc:creator>Masumbuko Semba</dc:creator>
+  <link>https://lugoga.github.io/semba-quarto/posts/tidymodels_classificationTrain/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<section id="a-gentle-introduction" class="level1">
+<h1>A gentle introduction</h1>
+<p>In this post, we’ll learn how to create Machine learning models using R. Machine learning is the foundation for predictive modeling and artificial intelligence. We’ll learn the core principles of machine learning and how to use common tools and frameworks to train, evaluate, and use machine learning models.</p>
+<p>Modules that will be covered in this learning path include:</p>
+<ul>
+<li>Explore and analyze data with R</li>
+<li>Train and evaluate regression models</li>
+<li>Train and evaluate classification models</li>
+<li>Train and evaluate clustering models (under development)</li>
+<li>Train and evaluate deep learning models (under development)</li>
+</ul>
+<p>We need some packages to accomplish the step in this post. We can have them installed as:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">install.packages</span>(<span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">'tidyverse'</span>, <span class="st" style="color: #20794D;">'tidymodels'</span>, <span class="st" style="color: #20794D;">'ranger'</span>, <span class="st" style="color: #20794D;">'vip'</span>, <span class="st" style="color: #20794D;">'palmerpenguins'</span>, <span class="st" style="color: #20794D;">'skimr'</span>, <span class="st" style="color: #20794D;">'paletteer'</span>, <span class="st" style="color: #20794D;">'nnet'</span>, <span class="st" style="color: #20794D;">'here'</span>))</span></code></pre></div>
+</div>
+<p>Then we load the packages in the session</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">require</span>(tidyverse)</span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;">require</span>(tidymodels)</span>
+<span id="cb2-3"><span class="fu" style="color: #4758AB;">require</span>(magrittr)</span>
+<span id="cb2-4"><span class="fu" style="color: #4758AB;">require</span>(patchwork)</span></code></pre></div>
+</div>
+<section id="binary-classification" class="level2">
+<h2 class="anchored" data-anchor-id="binary-classification">Binary classification</h2>
+<p>Let’s start by looking at an example of <em>binary</em> classification, where the model must predict a label that belongs to one of two classes. In this exercise, we’ll train a binary classifier to predict whether or not a patient should be tested for diabetes based on some medical data.</p>
+<section id="explore-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="explore-the-data">Explore the data</h3>
+<p>The first step in any machine learning project is to explore the data that you will use to train a model. And before we can explore the data, we must first import the dataset in our R environment. So, let’s begin by importing a CSV file of patent data into a tibble direct from the internet with <code>read_csv</code> function of <strong>readr</strong> package <span class="citation" data-cites="readr">(Wickham, Hester, &amp; Francois, 2017)</span>, part of the tidyverse ecosystem <span class="citation" data-cites="tidyverse">(Wickham &amp; Wickham, 2017)</span>;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1">diabetes <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">read_csv</span>(<span class="at" style="color: #657422;">file =</span> <span class="st" style="color: #20794D;">"https://raw.githubusercontent.com/MicrosoftDocs/ml-basics/master/data/diabetes.csv"</span>)</span></code></pre></div>
+</div>
+<p>We then print the dataset to explore the variables and records contained in the dataset;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1">diabetes</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 15,000 x 10
+   PatientID Pregn~1 Plasm~2 Diast~3 Trice~4 Serum~5   BMI Diabe~6   Age Diabe~7
+       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+ 1   1354778       0     171      80      34      23  43.5  1.21      21       0
+ 2   1147438       8      92      93      47      36  21.2  0.158     23       0
+ 3   1640031       7     115      47      52      35  41.5  0.0790    23       0
+ 4   1883350       9     103      78      25     304  29.6  1.28      43       1
+ 5   1424119       1      85      59      27      35  42.6  0.550     22       0
+ 6   1619297       0      82      92       9     253  19.7  0.103     26       0
+ 7   1660149       0     133      47      19     227  21.9  0.174     21       0
+ 8   1458769       0      67      87      43      36  18.3  0.236     26       0
+ 9   1201647       8      80      95      33      24  26.6  0.444     53       1
+10   1403912       1      72      31      40      42  36.9  0.104     26       0
+# ... with 14,990 more rows, and abbreviated variable names 1: Pregnancies,
+#   2: PlasmaGlucose, 3: DiastolicBloodPressure, 4: TricepsThickness,
+#   5: SerumInsulin, 6: DiabetesPedigree, 7: Diabetic</code></pre>
+</div>
+</div>
+<p>Though the printed output tell us that there are fifteen thousand records and ten variable, but sometimes you may wish to explore the internal structure of the dataset. The <code>glimpse</code> function from <strong>dplyr</strong> package can do that by listing the available variables and their types;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1">diabetes <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb6-2">  <span class="fu" style="color: #4758AB;">glimpse</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 15,000
+Columns: 10
+$ PatientID              &lt;dbl&gt; 1354778, 1147438, 1640031, 1883350, 1424119, 16~
+$ Pregnancies            &lt;dbl&gt; 0, 8, 7, 9, 1, 0, 0, 0, 8, 1, 1, 3, 5, 7, 0, 3,~
+$ PlasmaGlucose          &lt;dbl&gt; 171, 92, 115, 103, 85, 82, 133, 67, 80, 72, 88,~
+$ DiastolicBloodPressure &lt;dbl&gt; 80, 93, 47, 78, 59, 92, 47, 87, 95, 31, 86, 96,~
+$ TricepsThickness       &lt;dbl&gt; 34, 47, 52, 25, 27, 9, 19, 43, 33, 40, 11, 31, ~
+$ SerumInsulin           &lt;dbl&gt; 23, 36, 35, 304, 35, 253, 227, 36, 24, 42, 58, ~
+$ BMI                    &lt;dbl&gt; 43.50973, 21.24058, 41.51152, 29.58219, 42.6045~
+$ DiabetesPedigree       &lt;dbl&gt; 1.21319135, 0.15836498, 0.07901857, 1.28286985,~
+$ Age                    &lt;dbl&gt; 21, 23, 23, 43, 22, 26, 21, 26, 53, 26, 22, 23,~
+$ Diabetic               &lt;dbl&gt; 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1,~</code></pre>
+</div>
+</div>
+<p>This data consists of diagnostic information about some patients who have been tested for diabetes. Note that the final column in the dataset (Diabetic) contains the value 0 for patients who tested negative for diabetes, and 1 for patients who tested positive. This is the label that we will train our model to predict; most of the other columns (Pregnancies, PlasmaGlucose, DiastolicBloodPressure, BMI and so on) are the features we will use to predict the Diabetic label.</p>
+<p>Let’s reformat the data to make it easier for a model to use effectively. For now, let’s drop the PatientID column, encode the Diabetic column as a categorical variable, and clean the variable names:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1">diabetes.tidy <span class="ot" style="color: #003B4F;">=</span> diabetes <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb8-2">  janitor<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">clean_names</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb8-3">  <span class="fu" style="color: #4758AB;">select</span>(<span class="sc" style="color: #5E5E5E;">-</span>patient_id) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb8-4">  <span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">diabetic =</span> <span class="fu" style="color: #4758AB;">factor</span>(diabetic, <span class="at" style="color: #657422;">levels =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">1</span>,<span class="dv" style="color: #AD0000;">0</span>)))</span>
+<span id="cb8-5"></span>
+<span id="cb8-6">diabetes.tidy</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 15,000 x 9
+   pregnancies plasma_gluc~1 diast~2 trice~3 serum~4   bmi diabe~5   age diabe~6
+         &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;  
+ 1           0           171      80      34      23  43.5  1.21      21 0      
+ 2           8            92      93      47      36  21.2  0.158     23 0      
+ 3           7           115      47      52      35  41.5  0.0790    23 0      
+ 4           9           103      78      25     304  29.6  1.28      43 1      
+ 5           1            85      59      27      35  42.6  0.550     22 0      
+ 6           0            82      92       9     253  19.7  0.103     26 0      
+ 7           0           133      47      19     227  21.9  0.174     21 0      
+ 8           0            67      87      43      36  18.3  0.236     26 0      
+ 9           8            80      95      33      24  26.6  0.444     53 1      
+10           1            72      31      40      42  36.9  0.104     26 0      
+# ... with 14,990 more rows, and abbreviated variable names 1: plasma_glucose,
+#   2: diastolic_blood_pressure, 3: triceps_thickness, 4: serum_insulin,
+#   5: diabetes_pedigree, 6: diabetic</code></pre>
+</div>
+</div>
+<p>The primary goal of this exploration is to try to understand the relationships between of the variables in the dataset. In general to assess any apparent correlation between the features and the label we want to predict. The best approach is to use mental picture through data visualization. Now let’s compare the feature distributions for each label value. We’ll begin by formatting the data to a long format to make it somewhat easier to make multiple facets.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1">diabetes.tidy.long <span class="ot" style="color: #003B4F;">=</span> diabetes.tidy <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb10-2">  <span class="fu" style="color: #4758AB;">pivot_longer</span>(</span>
+<span id="cb10-3">    <span class="at" style="color: #657422;">cols =</span> <span class="sc" style="color: #5E5E5E;">!</span>diabetic, </span>
+<span id="cb10-4">    <span class="at" style="color: #657422;">names_to =</span> <span class="st" style="color: #20794D;">"features"</span>, </span>
+<span id="cb10-5">    <span class="at" style="color: #657422;">values_to =</span> <span class="st" style="color: #20794D;">"values"</span></span>
+<span id="cb10-6">               )</span></code></pre></div>
+</div>
+<p>Once we have pivoted the data to long format, we can make some plots for visual exploration</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;">theme_set</span>(<span class="fu" style="color: #4758AB;">theme_light</span>())</span>
+<span id="cb11-2"></span>
+<span id="cb11-3">diabetes.tidy.long <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb11-4">  <span class="fu" style="color: #4758AB;">ggplot</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> diabetic, <span class="at" style="color: #657422;">y =</span> values, <span class="at" style="color: #657422;">fill =</span> features)) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb11-5">  <span class="fu" style="color: #4758AB;">geom_boxplot</span>() <span class="sc" style="color: #5E5E5E;">+</span> </span>
+<span id="cb11-6">  <span class="fu" style="color: #4758AB;">facet_wrap</span>(<span class="sc" style="color: #5E5E5E;">~</span> features, <span class="at" style="color: #657422;">scales =</span> <span class="st" style="color: #20794D;">"free"</span>, <span class="at" style="color: #657422;">ncol =</span> <span class="dv" style="color: #AD0000;">4</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb11-7">  <span class="fu" style="color: #4758AB;">scale_color_viridis_d</span>(<span class="at" style="color: #657422;">option =</span> <span class="st" style="color: #20794D;">"plasma"</span>, <span class="at" style="color: #657422;">end =</span> .<span class="dv" style="color: #AD0000;">7</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb11-8">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">legend.position =</span> <span class="st" style="color: #20794D;">"none"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/tidymodels_classificationTrain/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Amazing! For some of the features, there’s a noticeable difference in the distribution for each label value. In particular, Pregnancies and Age show markedly different distributions for diabetic patients than for non-diabetic patients. These features may help predict whether or not a patient is diabetic.</p>
+</section>
+<section id="split-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="split-the-data">Split the data</h3>
+<p>Our dataset includes known values for the label, so we can use this to train a classifier so that it finds a statistical relationship between the features and the label value; but how will we know if our model is any good? How do we know it will predict correctly when we use it with new data that it wasn’t trained with?</p>
+<p>It is best practice to hold out part of the data for testing in order to get a better estimate of how models will perform on new data by comparing the predicted labels with the already known labels in the test set. Well, we can take advantage of the fact we have a large dataset with known label values, use only some of it to train the model, and hold back some to test the trained model - enabling us to compare the predicted labels with the already known labels in the test set.</p>
+<p>In R, the <strong>tidymodels</strong> framework provides a collection of packages for modeling and machine learning using tidyverse principles <span class="citation" data-cites="tidymodels">(Kuhn &amp; Wickham, 2020)</span>. For instance, <strong>rsample</strong>, a package in tidymodels, provides infrastructure for efficient data splitting and resampling <span class="citation" data-cites="rsample">(Kuhn, Chow, &amp; Wickham, 2020)</span>:</p>
+<ul>
+<li><code>initial_split()</code>: specifies how data will be split into a training and testing set</li>
+<li><code>training()</code> and <code>testing()</code> functions extract the data in each split</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><span class="co" style="color: #5E5E5E;"># Split data into 70% for training and 30% for testing</span></span>
+<span id="cb12-2"><span class="fu" style="color: #4758AB;">set.seed</span>(<span class="dv" style="color: #AD0000;">2056</span>)</span>
+<span id="cb12-3">diabetes_split <span class="ot" style="color: #003B4F;">&lt;-</span> diabetes.tidy <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb12-4">  <span class="fu" style="color: #4758AB;">initial_split</span>(<span class="at" style="color: #657422;">prop =</span> <span class="fl" style="color: #AD0000;">0.70</span>)</span>
+<span id="cb12-5"></span>
+<span id="cb12-6"></span>
+<span id="cb12-7"><span class="co" style="color: #5E5E5E;"># Extract the data in each split</span></span>
+<span id="cb12-8">diabetes_train <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">training</span>(diabetes_split)</span>
+<span id="cb12-9">diabetes_test <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">testing</span>(diabetes_split)</span>
+<span id="cb12-10"></span>
+<span id="cb12-11"></span>
+<span id="cb12-12"><span class="co" style="color: #5E5E5E;"># Print the number of cases in each split</span></span>
+<span id="cb12-13"><span class="fu" style="color: #4758AB;">cat</span>(<span class="st" style="color: #20794D;">"Training cases: "</span>, <span class="fu" style="color: #4758AB;">nrow</span>(diabetes_train), <span class="st" style="color: #20794D;">"</span><span class="sc" style="color: #5E5E5E;">\n</span><span class="st" style="color: #20794D;">"</span>,</span>
+<span id="cb12-14">    <span class="st" style="color: #20794D;">"Test cases: "</span>, <span class="fu" style="color: #4758AB;">nrow</span>(diabetes_test), <span class="at" style="color: #657422;">sep =</span> <span class="st" style="color: #20794D;">""</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Training cases: 10500
+Test cases: 4500</code></pre>
+</div>
+</div>
+</section>
+<section id="train-and-evaluate-a-binary-classification-model" class="level3">
+<h3 class="anchored" data-anchor-id="train-and-evaluate-a-binary-classification-model">Train and Evaluate a Binary Classification Model</h3>
+<p>Once we have separated the dataset into train and test set, now we’re ready to train our model by fitting the training features to the training labels (diabetic). There are various algorithms we can use to train the model. In this example, we’ll use <em>Logistic Regression</em>, which is a well-established algorithm for classification. Logistic regression is a binary classification algorithm, meaning it predicts two categories.</p>
+<p>There are quite a number of ways to fit a logistic regression model in tidymodels. For now, let’s fit a logistic regression model via the default <code>stats::glm()</code> engine.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><span class="co" style="color: #5E5E5E;"># Make a model specifcation</span></span>
+<span id="cb14-2">logreg_spec <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">logistic_reg</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb14-3">  <span class="fu" style="color: #4758AB;">set_engine</span>(<span class="st" style="color: #20794D;">"glm"</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb14-4">  <span class="fu" style="color: #4758AB;">set_mode</span>(<span class="st" style="color: #20794D;">"classification"</span>)</span>
+<span id="cb14-5"></span>
+<span id="cb14-6"></span>
+<span id="cb14-7"><span class="co" style="color: #5E5E5E;"># Print the model specification</span></span>
+<span id="cb14-8">logreg_spec</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Logistic Regression Model Specification (classification)
+
+Computational engine: glm </code></pre>
+</div>
+</div>
+<p>After a model has been specified, the model can be estimated or trained using the fit() function, typically using a symbolic description of the model (a formula) and some data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><span class="co" style="color: #5E5E5E;"># Train a logistic regression model</span></span>
+<span id="cb16-2">logreg_fit <span class="ot" style="color: #003B4F;">&lt;-</span> logreg_spec <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb16-3">  <span class="fu" style="color: #4758AB;">fit</span>(diabetic <span class="sc" style="color: #5E5E5E;">~</span> ., <span class="at" style="color: #657422;">data =</span> diabetes_train)</span>
+<span id="cb16-4"></span>
+<span id="cb16-5"></span>
+<span id="cb16-6"><span class="co" style="color: #5E5E5E;"># Print the model object</span></span>
+<span id="cb16-7">logreg_fit</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>parsnip model object
+
+
+Call:  stats::glm(formula = diabetic ~ ., family = stats::binomial, 
+    data = data)
+
+Coefficients:
+             (Intercept)               pregnancies            plasma_glucose  
+                8.624243                 -0.266296                 -0.009615  
+diastolic_blood_pressure         triceps_thickness             serum_insulin  
+               -0.012297                 -0.022807                 -0.003932  
+                     bmi         diabetes_pedigree                       age  
+               -0.049028                 -0.923262                 -0.056876  
+
+Degrees of Freedom: 10499 Total (i.e. Null);  10491 Residual
+Null Deviance:      13290 
+Residual Deviance: 9221     AIC: 9239</code></pre>
+</div>
+</div>
+<p>The model print out shows the coefficients learned during training.</p>
+<p>Now we’ve trained the model using the training data, we can use the test data we held back to evaluate how well it predicts using <code>parsnip::predict()</code>. Let’s start by using the model to predict labels for our test set, and compare the predicted labels to the known labels:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><span class="co" style="color: #5E5E5E;"># Make predictions then bind them to the test set</span></span>
+<span id="cb18-2">results <span class="ot" style="color: #003B4F;">&lt;-</span> diabetes_test <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb18-3">  <span class="fu" style="color: #4758AB;">select</span>(diabetic) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb18-4">  <span class="fu" style="color: #4758AB;">bind_cols</span>(</span>
+<span id="cb18-5">    logreg_fit <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">predict</span>(<span class="at" style="color: #657422;">new_data =</span> diabetes_test)</span>
+<span id="cb18-6">    )</span>
+<span id="cb18-7"></span>
+<span id="cb18-8"><span class="co" style="color: #5E5E5E;"># Compare predictions</span></span>
+<span id="cb18-9">results <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb18-10">  <span class="fu" style="color: #4758AB;">slice_head</span>(<span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">10</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 x 2
+   diabetic .pred_class
+   &lt;fct&gt;    &lt;fct&gt;      
+ 1 0        0          
+ 2 0        0          
+ 3 0        0          
+ 4 0        0          
+ 5 1        1          
+ 6 0        0          
+ 7 0        0          
+ 8 1        0          
+ 9 0        0          
+10 0        0          </code></pre>
+</div>
+</div>
+<p>Comparing each prediction with its corresponding “ground truth” actual value isn’t a very efficient way to determine how well the model is predicting. Fortunately, Tidymodels has a few more tricks up its sleeve: <strong>yardstick</strong> - a package used to measure the effectiveness of models using performance metrics <span class="citation" data-cites="yardstick">(Kuhn &amp; Vaughan, 2020)</span>.</p>
+<p>The most obvious thing you might want to do is to check the accuracy of the predictions - in simple terms, what proportion of the labels did the model predict correctly? <code>yardstick::accuracy()</code> does just that!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><span class="co" style="color: #5E5E5E;"># Calculate accuracy: proportion of data predicted correctly</span></span>
+<span id="cb20-2"><span class="fu" style="color: #4758AB;">accuracy</span>(</span>
+<span id="cb20-3">  <span class="at" style="color: #657422;">data =</span> results, </span>
+<span id="cb20-4">  <span class="at" style="color: #657422;">truth =</span> diabetic, </span>
+<span id="cb20-5">  <span class="at" style="color: #657422;">estimate =</span> .pred_class</span>
+<span id="cb20-6">  )</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 x 3
+  .metric  .estimator .estimate
+  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+1 accuracy binary         0.789</code></pre>
+</div>
+</div>
+<p>The accuracy is returned as a decimal value - a value of 1.0 would mean that the model got 100% of the predictions right; while an accuracy of 0.0 is, well, pretty useless! Accuracy seems like a sensible metric to evaluate (and to a certain extent it is), but you need to be careful about drawing too many conclusions from the accuracy of a classifier. Remember that it’s simply a measure of how many cases were predicted correctly. Suppose only 3% of the population is diabetic. You could create a classifier that always just predicts 0, and it would be 97% accurate - but not terribly helpful in identifying patients with diabetes!</p>
+<p>Fortunately, there are some other metrics that reveal a little more about how our classification model is performing.One performance metric associated with classification problems is the confusion matrix. A confusion matrix describes how well a classification model performs by tabulating how many examples in each class were correctly classified by a model. In our case, it will show you how many cases were classified as negative (0) and how many as positive (1); the confusion matrix also shows you how many were classified into the wrong categories. The <code>conf_mat()</code> function from yardstick calculates this cross-tabulation of observed and predicted classes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><span class="co" style="color: #5E5E5E;"># Confusion matrix for prediction results</span></span>
+<span id="cb22-2"><span class="fu" style="color: #4758AB;">conf_mat</span>(<span class="at" style="color: #657422;">data =</span> results, <span class="at" style="color: #657422;">truth =</span> diabetic, <span class="at" style="color: #657422;">estimate =</span> .pred_class)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Truth
+Prediction    1    0
+         1  897  293
+         0  657 2653</code></pre>
+</div>
+</div>
+<p><strong>tidymodels</strong> provides yet another succinct way of evaluating all these metrics. Using yardstick::metric_set(), you can combine multiple metrics together into a new function that calculates all of them at once.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><span class="co" style="color: #5E5E5E;"># Combine metrics and evaluate them all at once</span></span>
+<span id="cb24-2">eval_metrics <span class="ot" style="color: #003B4F;">&lt;-</span> </span>
+<span id="cb24-3">  <span class="fu" style="color: #4758AB;">metric_set</span>(ppv, recall, accuracy, f_meas)</span>
+<span id="cb24-4"></span>
+<span id="cb24-5"></span>
+<span id="cb24-6"><span class="fu" style="color: #4758AB;">eval_metrics</span>(</span>
+<span id="cb24-7">  <span class="at" style="color: #657422;">data =</span> results, </span>
+<span id="cb24-8">  <span class="at" style="color: #657422;">truth =</span> diabetic, </span>
+<span id="cb24-9">  <span class="at" style="color: #657422;">estimate =</span> .pred_class</span>
+<span id="cb24-10">  )</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 x 3
+  .metric  .estimator .estimate
+  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+1 ppv      binary         0.754
+2 recall   binary         0.577
+3 accuracy binary         0.789
+4 f_meas   binary         0.654</code></pre>
+</div>
+</div>
+<p>Until now, we’ve considered the predictions from the model as being either 1 or 0 class labels. Actually, things are a little more complex than that. Statistical machine learning algorithms, like logistic regression, are based on probability; so what actually gets predicted by a binary classifier is the probability that the label is true (P(y) ) and the probability that the label is false (1−P(y) ). A threshold value of 0.5 is used to decide whether the predicted label is a 1 (P(y)&gt;0.5 ) or a 0 (P(y)&lt;=0.5 ). Let’s see the probability pairs for each case:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><span class="co" style="color: #5E5E5E;"># Predict class probabilities and bind them to results</span></span>
+<span id="cb26-2">results <span class="ot" style="color: #003B4F;">&lt;-</span> results <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb26-3">  <span class="fu" style="color: #4758AB;">bind_cols</span>(logreg_fit <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb26-4">              <span class="fu" style="color: #4758AB;">predict</span>(<span class="at" style="color: #657422;">new_data =</span> diabetes_test, <span class="at" style="color: #657422;">type =</span> <span class="st" style="color: #20794D;">"prob"</span>))</span>
+<span id="cb26-5"></span>
+<span id="cb26-6">  </span>
+<span id="cb26-7"></span>
+<span id="cb26-8"></span>
+<span id="cb26-9"><span class="co" style="color: #5E5E5E;"># Print out the results</span></span>
+<span id="cb26-10">results <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb26-11">  <span class="fu" style="color: #4758AB;">slice_head</span>(<span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">10</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 x 4
+   diabetic .pred_class .pred_1 .pred_0
+   &lt;fct&gt;    &lt;fct&gt;         &lt;dbl&gt;   &lt;dbl&gt;
+ 1 0        0            0.417    0.583
+ 2 0        0            0.0985   0.902
+ 3 0        0            0.0469   0.953
+ 4 0        0            0.0561   0.944
+ 5 1        1            0.581    0.419
+ 6 0        0            0.331    0.669
+ 7 0        0            0.288    0.712
+ 8 1        0            0.270    0.730
+ 9 0        0            0.275    0.725
+10 0        0            0.131    0.869</code></pre>
+</div>
+</div>
+<p>The decision to score a prediction as a 1 or a 0 depends on the threshold to which the predicted probabilities are compared. If we were to change the threshold, it would affect the predictions; and therefore change the metrics in the confusion matrix. A common way to evaluate a classifier is to examine the true positive rate (which is another name for recall) and the false positive rate (1 - specificity) for a range of possible thresholds. These rates are then plotted against all possible thresholds to form a chart known as a received operator characteristic (ROC) chart, like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><span class="co" style="color: #5E5E5E;"># Make a roc_chart</span></span>
+<span id="cb28-2">results <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb28-3">  <span class="fu" style="color: #4758AB;">roc_curve</span>(<span class="at" style="color: #657422;">truth =</span> diabetic, .pred_1) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb28-4">  <span class="fu" style="color: #4758AB;">autoplot</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/tidymodels_classificationTrain/index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The ROC chart shows the curve of the true and false positive rates for different threshold values between 0 and 1. A perfect classifier would have a curve that goes straight up the left side and straight across the top. The diagonal line across the chart represents the probability of predicting correctly with a 50/50 random prediction; so you obviously want the curve to be higher than that (or your model is no better than simply guessing!).</p>
+<p>The area under the curve (AUC) is a value between 0 and 1 that quantifies the overall performance of the model. One way of interpreting AUC is as the probability that the model ranks a random positive example more highly than a random negative example. The closer to 1 this value is, the better the model. Once again, Tidymodels includes a function to calculate this metric: yardstick::roc_auc()</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><span class="co" style="color: #5E5E5E;"># Compute the AUC</span></span>
+<span id="cb29-2">results <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb29-3">  <span class="fu" style="color: #4758AB;">roc_auc</span>(diabetic, .pred_1)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 x 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 roc_auc binary         0.860</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="cited-materials" class="level2">
+
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2">
+<div id="ref-rsample" class="csl-entry">
+Kuhn, M., Chow, F., &amp; Wickham, H. (2020). <em>Rsample: General resampling infrastructure</em>. Retrieved from <a href="https://CRAN.R-project.org/package=rsample">https://CRAN.R-project.org/package=rsample</a>
+</div>
+<div id="ref-yardstick" class="csl-entry">
+Kuhn, M., &amp; Vaughan, D. (2020). <em>Yardstick: Tidy characterizations of model performance</em>. Retrieved from <a href="https://CRAN.R-project.org/package=yardstick">https://CRAN.R-project.org/package=yardstick</a>
+</div>
+<div id="ref-tidymodels" class="csl-entry">
+Kuhn, M., &amp; Wickham, H. (2020). <em>Tidymodels: Easily install and load the ’tidymodels’ packages</em>. Retrieved from <a href="https://CRAN.R-project.org/package=tidymodels">https://CRAN.R-project.org/package=tidymodels</a>
+</div>
+<div id="ref-readr" class="csl-entry">
+Wickham, H., Hester, J., &amp; Francois, R. (2017). <em>Readr: Read rectangular text data</em>. Retrieved from <a href="https://CRAN.R-project.org/package=readr">https://CRAN.R-project.org/package=readr</a>
+</div>
+<div id="ref-tidyverse" class="csl-entry">
+Wickham, H., &amp; Wickham, M. H. (2017). <em>Tidyverse: Easily install and load the ’tidyverse’</em>. Retrieved from <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>
+</div>
+</div></section></div> ]]></description>
+  <category>Manipulation</category>
+  <category>Visualization</category>
+  <category>R</category>
+  <category>Modelling</category>
+  <guid>https://lugoga.github.io/semba-quarto/posts/tidymodels_classificationTrain/index.html</guid>
+  <pubDate>Wed, 12 Apr 2023 21:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Machine learning with tidymodels: Linear and Bayesian Regression Models</title>
   <dc:creator>Masumbuko Semba</dc:creator>
   <link>https://lugoga.github.io/semba-quarto/posts/tidymodels_regression/index.html</link>
   <description><![CDATA[ 
@@ -25,17 +401,26 @@
 <p>After decades of open-source development, R provides extensive functionality that’s backed by a massive set of powerful statistical modeling, machine learning, visualization and data wrangling packages. Some of these package that has revolutionized R are <strong>tidyverse</strong> and <strong>tidymodel</strong> package. <strong>tidyverse</strong> is a collection of R packages that make data science faster, easier, and more fun and <strong>tidymodels</strong> is a collection of R packages for modeling and statistical analysis.</p>
 <p>As a data scientist, you need to distinguish between <em>regression predictive models</em> and <em>classification predictive models</em>. Clear understanding of these models helps to choose the best one for a specific use case. In a nutshell, <em>regression predictive models</em>and <em>classification predictive models</em> fall under supervised machine learning. The main difference between these two models is the output: while in regression produce an output as numerical (or continuous), the output of classification is categorical (or discrete).</p>
 <p>A big part of machine learning is <em>classification</em> — we want to know what class or group an observation belongs to. Therefore, the ability to precisely classify observations to their groups is valuable for various business applications like predicting the future based on historical data. For example, when provided with a dataset about environmental variables, and you are asked to predict productivity, that is a regression task because productivity measured in term of chlorophyll concentration will be a continuous output.</p>
-<p>In this post we will focus on regression. We will learn the steps of modelling using <strong>tidymodels</strong> <span class="citation" data-cites="tidymodels">(Kuhn &amp; Wickham, 2020b)</span>. We first explore the data and check if it fit for modelling, we then split the dataset into a training and testing sets. Next, we will create a recipe object and define our model. Lastly, we will train a specified model and evaluate its performance. I will use the same dataset for three different model’s algorithms. Example of the common regression algorithms include <code>random forest</code>, <code>linear regression</code>, <code>support vector regression (SVR)</code> and <code>bayes</code>. Some algorithms, such as <code>logistic regression</code>, have the name <code>regression</code> in their functions but they are not regression algorithms.</p>
-<p>To follow use code in this article, you will need <strong>tidymodels</strong> <span class="citation" data-cites="tidymodels">(Kuhn &amp; Wickham, 2020b)</span> and <strong>tidyverse</strong> packages <span class="citation" data-cites="tidyverse">(Wickham &amp; Wickham, 2017)</span> installed in your machine. You can install them from CRAN. The chunk below highlight lines of code to install the packages if they are yet in your PC.</p>
+<p>In this post we will focus on regression. We will learn the steps of modelling using <strong>tidymodels</strong> <span class="citation" data-cites="tidymodels">(Kuhn and Wickham, 2020a)</span>. We first explore the data and check if it fit for modelling, we then split the dataset into a training and testing sets. Next, we will create a recipe object and define our model. Lastly, we will train a specified model and evaluate its performance. I will use the same dataset for three different model’s algorithms. Example of the common regression algorithms include <code>random forest</code>, <code>linear regression</code>, <code>support vector regression (SVR)</code> and <code>bayes</code>. Some algorithms, such as <code>logistic regression</code>, have the name <code>regression</code> in their functions but they are not regression algorithms.</p>
+<p>To follow use code in this article, you will need <strong>tidymodels</strong> <span class="citation" data-cites="tidymodels">(Kuhn and Wickham, 2020a)</span> and <strong>tidyverse</strong> packages <span class="citation" data-cites="tidyverse">(Wickham and Wickham, 2017)</span> installed in your machine. You can install them from CRAN. The chunk below highlight lines of code to install the packages if they are yet in your PC.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1">model.packages <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"tidymodels"</span>, <span class="st" style="color: #20794D;">"tidyverse"</span>)</span>
 <span id="cb1-2"></span>
 <span id="cb1-3"><span class="fu" style="color: #4758AB;">install.packages</span>(model.packages)</span></code></pre></div>
 </div>
-<p>Once installed, you can load the packages in your session. We often we use several packages to accomplish a task. Even in this post, though seems only two packages are loaded, these are ecosystems which comes with dozens of packages bundled with them.</p>
+<p>similar to the <strong>tidyverse</strong>, <strong>tidymodels</strong> consists of several linked packages that use a similar philosophy and syntax. Here is a brief explanation of the component packages.</p>
+<ol type="1">
+<li><strong>parsnips</strong>: used to define models using a common syntax; makes it easier to experiment with different algorithms</li>
+<li><strong>workflows</strong>: provides tools to create workflows, or the desired machine learning pipeline, including pre-processing, training, and post-processing</li>
+<li><strong>yardstick</strong>: a one-stop-shop to implement a variety of assessment metrics for regression and classification problems</li>
+<li><strong>tune</strong>: for hyperparameter tuning</li>
+<li><strong>dials</strong>: for managing parameters and tuning grids</li>
+<li><strong>rsample</strong>: tools for data splitting, partitioning, and resampling</li>
+<li><strong>recipes</strong>: tools for pre-processing and data engineering</li>
+</ol>
+<p>Once installed, you can load the packages in your session. I begin by reading in the required packages. Here, tidymodels is used to load the component packages discussed above along with some other packages (e.g., ggplot2, purr, and dplyr).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">require</span>(tidyverse)</span>
-<span id="cb2-2"><span class="fu" style="color: #4758AB;">require</span>(tidymodels)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">require</span>(tidymodels)</span></code></pre></div>
 </div>
 </section>
 <section id="the-dataset" class="level1">
@@ -46,7 +431,7 @@
 <li>Physical variables — temperature</li>
 <li>Biological variables— chlorophyll-<em>a</em></li>
 </ul>
-<p>Because the variables are organized in sheets of Excel spreadsheet, i used a <code>read_excel</code> function from <strong>readxl</strong> package <span class="citation" data-cites="readxl">(Wickham &amp; Bryan, 2018)</span> to read the file from the sheet. And because there are several sheet, the processed was iterated with a <code>for</code> loop. Data from each sheet was allocated in the list file. The chunk below highlight the code used to read files in sheets.</p>
+<p>Because the variables are organized in sheets of Excel spreadsheet, i used a <code>read_excel</code> function from <strong>readxl</strong> package <span class="citation" data-cites="readxl">(Wickham and Bryan, 2018)</span> to read the file from the sheet. And because there are several sheet, the processed was iterated with a <code>for</code> loop. Data from each sheet was allocated in the list file. The chunk below highlight the code used to read files in sheets.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1">variables <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"salinity"</span>, <span class="st" style="color: #20794D;">"temperature"</span>, <span class="st" style="color: #20794D;">"do"</span>, <span class="st" style="color: #20794D;">"ph"</span>, <span class="st" style="color: #20794D;">"chl"</span>, <span class="st" style="color: #20794D;">"ammonia"</span>, <span class="st" style="color: #20794D;">"phosphate"</span>, <span class="st" style="color: #20794D;">"nitrate"</span>)</span>
 <span id="cb3-2"></span>
@@ -157,7 +542,7 @@ $ nitrate     &lt;dbl&gt; 0.04, 0.07, 3.26, 3.34, 0.03, 0.47, 1.45, 0.84, 0.06, 
 <section id="resample" class="level1">
 <h1>Resample</h1>
 <p>In machine learning, one risk is the machine learns too well our sample data and is then less accurate during a real-world testing. This phenomenon is called <em>overtraining</em> or <em>overfitting</em>. We overcome this problem by splitting the dataset into a training and testing sets. The training set is used to train the model while the test set is reserved to later estimate how well the model might work on new or wild data. The splitting is based on ratios and the widely used ratios include 80/20, 75/25, or 7/30, with the training data receiving a bigger proportion of the dataset and the test set get the remaining small portion.</p>
-<p>For our sample that has only 52 observations, it make sense to use 70/30 split ratio. we use the fraction <code>set.seed(4595)</code> from base R to fix the random number generator from <strong>rsample</strong> package <span class="citation" data-cites="rsample">(Kuhn, Chow, &amp; Wickham, 2020)</span>. This prevent generating new data in each execution. the function <code>initial_split</code> from the <strong>rsample</strong> package is designed to split the dataset into a training and testing sets. We purse the data to be split and the proportion that serve as a cutpoint of the two sets.</p>
+<p>For our sample that has only 52 observations, it make sense to use 70/30 split ratio. we use the fraction <code>set.seed(4595)</code> from base R to fix the random number generator from <strong>rsample</strong> package <span class="citation" data-cites="rsample">(Kuhn et al., 2020)</span>. This prevent generating new data in each execution. the function <code>initial_split</code> from the <strong>rsample</strong> package is designed to split the dataset into a training and testing sets. We purse the data to be split and the proportion that serve as a cutpoint of the two sets.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;">set.seed</span>(<span class="dv" style="color: #AD0000;">4595</span>)</span>
 <span id="cb10-2"></span>
@@ -182,7 +567,7 @@ font-style: italic;">## pull test set</span></span>
 <span id="cb12-6">crtr.test <span class="ot" style="color: #003B4F;">=</span> crtr.split <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
 <span id="cb12-7">  <span class="fu" style="color: #4758AB;">testing</span>()</span></code></pre></div>
 </div>
-<p>We can have a glimpse of the train dataset using a <code>glimpse</code> function from <strong>dplyr</strong> package <span class="citation" data-cites="dplyr">(Wickham, François, Henry, &amp; Müller, 2019)</span>.</p>
+<p>We can have a glimpse of the train dataset using a <code>glimpse</code> function from <strong>dplyr</strong> package <span class="citation" data-cites="dplyr">(Wickham et al., 2019)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1">crtr.train <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">glimpse</span>()</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -201,7 +586,7 @@ $ nitrate     &lt;dbl&gt; 0.64, 0.06, 0.03, 0.04, 0.03, 0.05, 0.05, 0.04, 0.48, 
 </section>
 <section id="recipe" class="level1">
 <h1>recipe</h1>
-<p>The <strong>recipes</strong> package <span class="citation" data-cites="recipes">(Kuhn &amp; Wickham, 2020a)</span> define a recipe object that we will use for modeling and to conduct preprocessing of variables. The four main functions are <code>recipe()</code>, <code>prep()</code>, <code>juice()</code> and <code>bake()</code>. <code>recipe()</code> defines the operations on the data and the associated roles. Once the preprocessing steps are defined, any parameters are estimated using <code>prep()</code>.</p>
+<p>The <strong>recipes</strong> package <span class="citation" data-cites="recipes">(Kuhn and Wickham, 2020b)</span> define a recipe object that we will use for modeling and to conduct preprocessing of variables. The four main functions are <code>recipe()</code>, <code>prep()</code>, <code>juice()</code> and <code>bake()</code>. <code>recipe()</code> defines the operations on the data and the associated roles. Once the preprocessing steps are defined, any parameters are estimated using <code>prep()</code>.</p>
 <p>Recipes can be created manually by sequentially adding roles to variables in a data set. First, we will create a recipe object from the train set data and then specify the processing steps and transform the data with <code>step_*</code>. once the recipe is ready we prep it. For example, to create a simple recipe containing only an outcome and predictors and have the predictors normalized and missing values in predictors imputed:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1">crtr.recipe <span class="ot" style="color: #003B4F;">=</span> crtr.train <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
@@ -246,7 +631,7 @@ K-nearest neighbor imputation for temperature, do, ph, ammonia, phosphate, nitra
 <p>We begin by fitting a random forest model.</p>
 <section id="make-random-forest-model" class="level3">
 <h3 class="anchored" data-anchor-id="make-random-forest-model">Make random forest model</h3>
-<p>We specify the model using the <strong>parsnip</strong> package <span class="citation" data-cites="parsnip">(Kuhn &amp; Vaughan, 2020a)</span>. This package provides a tidy, unified interface to models for a range of models without getting bogged down in the syntactical minutiae of the underlying packages. The <strong>parsnip</strong> package help us to specify ;</p>
+<p>We specify the model using the <strong>parsnip</strong> package <span class="citation" data-cites="parsnip">(Kuhn and Vaughan, 2020a)</span>. This package provides a tidy, unified interface to models for a range of models without getting bogged down in the syntactical minutiae of the underlying packages. The <strong>parsnip</strong> package help us to specify ;</p>
 <ul>
 <li>the <code>type</code> of model e.g <strong>random forest</strong>,</li>
 <li>the <code>mode</code> of the model whether is <code>regression</code> or <code>classification</code></li>
@@ -306,7 +691,7 @@ Computational engine: ranger </code></pre>
 </section>
 <section id="evaluate-the-rf-model" class="level3">
 <h3 class="anchored" data-anchor-id="evaluate-the-rf-model">Evaluate the rf model</h3>
-<p>So far, we have built a model and preprocessed data with a recipe. We predicted new data as a way to bundle a parsnip model and recipe together. The next step is to assess or evaluate the accuracy of the model. We use a <code>metrics</code> function from <strong>yardstick</strong> package <span class="citation" data-cites="yardstick">(Kuhn &amp; Vaughan, 2020b)</span>to assess the accuracy of the model by comparing the predicted versus the original outcome variable. Note that we use the predicted dataset we just computed using <code>predict</code> function.</p>
+<p>So far, we have built a model and preprocessed data with a recipe. We predicted new data as a way to bundle a parsnip model and recipe together. The next step is to assess or evaluate the accuracy of the model. We use a <code>metrics</code> function from <strong>yardstick</strong> package <span class="citation" data-cites="yardstick">(Kuhn and Vaughan, 2020b)</span>to assess the accuracy of the model by comparing the predicted versus the original outcome variable. Note that we use the predicted dataset we just computed using <code>predict</code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1">rf.predict <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
 <span id="cb23-2">  <span class="fu" style="color: #4758AB;">metrics</span>(<span class="at" style="color: #657422;">truth =</span> chl, <span class="at" style="color: #657422;">estimate =</span> .pred)</span></code></pre></div>
@@ -325,7 +710,7 @@ Computational engine: ranger </code></pre>
 <h2 class="anchored" data-anchor-id="linear-regression-approach">Linear regression approach</h2>
 <section id="make-linear-model" class="level3">
 <h3 class="anchored" data-anchor-id="make-linear-model">Make linear model</h3>
-<p>The good of <strong>tidymodels</strong> is that when we change the model, we do not need to start over again from the beginning but rather change the engine. For instance, we replace the <code>ranger</code> engine with <code>lm</code> to specify the linear model using the <strong>parsnip</strong> package <span class="citation" data-cites="parsnip">(Kuhn &amp; Vaughan, 2020a)</span> .</p>
+<p>The good of <strong>tidymodels</strong> is that when we change the model, we do not need to start over again from the beginning but rather change the engine. For instance, we replace the <code>ranger</code> engine with <code>lm</code> to specify the linear model using the <strong>parsnip</strong> package <span class="citation" data-cites="parsnip">(Kuhn and Vaughan, 2020a)</span> .</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1">lm.model <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">linear_reg</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
 <span id="cb25-2">  <span class="fu" style="color: #4758AB;">set_engine</span>(<span class="at" style="color: #657422;">engine =</span> <span class="st" style="color: #20794D;">"lm"</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
@@ -580,33 +965,366 @@ sigma 0.7    0.2
 </section>
 </section>
 
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-rsample" class="csl-entry">
+Kuhn, M., Chow, F., Wickham, H., 2020. <a href="https://CRAN.R-project.org/package=rsample">Rsample: General resampling infrastructure</a>.
+</div>
+<div id="ref-parsnip" class="csl-entry">
+Kuhn, M., Vaughan, D., 2020a. <a href="https://CRAN.R-project.org/package=parsnip">Parsnip: A common API to modeling and analysis functions</a>.
+</div>
+<div id="ref-yardstick" class="csl-entry">
+Kuhn, M., Vaughan, D., 2020b. <a href="https://CRAN.R-project.org/package=yardstick">Yardstick: Tidy characterizations of model performance</a>.
+</div>
+<div id="ref-tidymodels" class="csl-entry">
+Kuhn, M., Wickham, H., 2020a. <a href="https://CRAN.R-project.org/package=tidymodels">Tidymodels: Easily install and load the ’tidymodels’ packages</a>.
+</div>
+<div id="ref-recipes" class="csl-entry">
+Kuhn, M., Wickham, H., 2020b. <a href="https://CRAN.R-project.org/package=recipes">Recipes: Preprocessing tools to create design matrices</a>.
+</div>
+<div id="ref-r" class="csl-entry">
+R Core Team, 2018. <a href="https://www.R-project.org/">R: A language and environment for statistical computing</a>. R Foundation for Statistical Computing, Vienna, Austria.
+</div>
+<div id="ref-ggally" class="csl-entry">
+Schloerke, B., Crowley, J., Cook, D., Briatte, F., Marbach, M., Thoen, E., Elberg, A., Larmarange, J., 2020. <a href="https://CRAN.R-project.org/package=GGally">GGally: Extension to ’ggplot2’</a>.
+</div>
+<div id="ref-readxl" class="csl-entry">
+Wickham, H., Bryan, J., 2018. <a href="https://CRAN.R-project.org/package=readxl">Readxl: Read excel files</a>.
+</div>
+<div id="ref-dplyr" class="csl-entry">
+Wickham, H., François, R., Henry, L., Müller, K., 2019. <a href="https://CRAN.R-project.org/package=dplyr">Dplyr: A grammar of data manipulation</a>.
+</div>
+<div id="ref-tidyverse" class="csl-entry">
+Wickham, H., Wickham, M.H., 2017. <a href="https://CRAN.R-project.org/package=tidyverse">Tidyverse: Easily install and load the ’tidyverse’</a>.
+</div>
+</div></section></div> ]]></description>
+  <category>Manipulation</category>
+  <category>Visualization</category>
+  <category>R</category>
+  <category>Modelling</category>
+  <guid>https://lugoga.github.io/semba-quarto/posts/tidymodels_regression/index.html</guid>
+  <pubDate>Mon, 10 Apr 2023 21:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Machine learning with tidymodels: Classification Models</title>
+  <dc:creator>Masumbuko Semba</dc:creator>
+  <link>https://lugoga.github.io/semba-quarto/posts/tidymodels_classification/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<section id="a-gentle-introduction-to-classification" class="level1">
+<h1>A gentle introduction to classification</h1>
+<p><em>Classification</em> is a form of machine learning in which you train a model to predict which category an item belongs to. Categorical data has distinct ‘classes’, rather than numeric values. For example, a health clinic might use diagnostic data such as a patient’s height, weight, blood pressure, blood-glucose level to predict whether or not the patient is diabetic.</p>
+<p>Classification is an example of a supervised machine learning technique, which means it relies on data that includes known feature values (for example, diagnostic measurements for patients) as well as known label values (for example, a classification of non-diabetic or diabetic). A classification algorithm is used to fit a subset of the data to a function that can calculate the probability for each class label from the feature values. The remaining data is used to evaluate the model by comparing the predictions it generates from the features to the known class labels.</p>
+<p>The best way to learn about classification is to try it for yourself, so that’s what you’ll do in this exercise.</p>
+<p>We’ll require some packages to knock-off this module. You can have them installed as:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">install.packages</span>(<span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">'tidyverse'</span>, <span class="st" style="color: #20794D;">'tidymodels'</span>, <span class="st" style="color: #20794D;">'ranger'</span>, <span class="st" style="color: #20794D;">'tidyverse'</span>, <span class="st" style="color: #20794D;">'forecats'</span>, <span class="st" style="color: #20794D;">'skimr'</span>, <span class="st" style="color: #20794D;">'paletteer'</span>, <span class="st" style="color: #20794D;">'nnet'</span>, <span class="st" style="color: #20794D;">'here'</span>))</span></code></pre></div>
+</div>
+<p>Once you have installed the package, you can load the required packages</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">library</span>(tidymodels)</span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;">library</span>(tidyverse)</span>
+<span id="cb2-3"><span class="fu" style="color: #4758AB;">library</span>(forcats)</span></code></pre></div>
+</div>
+<section id="dataset" class="level2">
+<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
+<p>Once the packages are loaded then we are going to import the dataset into the session. In this post we will explore a multi-class classification problem using the Covertype Data Set, which I obtained from the UCI Machine Learning Repository. This data set provides a total of 581,012 instances. The goal is to differentiate seven forest community types using several environmental variables including elevation, topographic aspect, topographic slope, horizontal distance to streams, vertical distance to streams, horizontal distance to roadways, hillshade values at 9AM, hillshade values at noon, hillshade values at 3PM, horizontal distance to fire points, and a wilderness area designation, a binary and nominal variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1">cover.type <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">read_csv</span>(<span class="st" style="color: #20794D;">"../data/ml/covtype.csv"</span>)</span>
+<span id="cb3-2">cover.type <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb3-3">  <span class="fu" style="color: #4758AB;">glimpse</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 581,012
+Columns: 55
+$ Elevation                          &lt;dbl&gt; 2596, 2590, 2804, 2785, 2595, 2579,~
+$ Aspect                             &lt;dbl&gt; 51, 56, 139, 155, 45, 132, 45, 49, ~
+$ Slope                              &lt;dbl&gt; 3, 2, 9, 18, 2, 6, 7, 4, 9, 10, 4, ~
+$ Horizontal_Distance_To_Hydrology   &lt;dbl&gt; 258, 212, 268, 242, 153, 300, 270, ~
+$ Vertical_Distance_To_Hydrology     &lt;dbl&gt; 0, -6, 65, 118, -1, -15, 5, 7, 56, ~
+$ Horizontal_Distance_To_Roadways    &lt;dbl&gt; 510, 390, 3180, 3090, 391, 67, 633,~
+$ Hillshade_9am                      &lt;dbl&gt; 221, 220, 234, 238, 220, 230, 222, ~
+$ Hillshade_Noon                     &lt;dbl&gt; 232, 235, 238, 238, 234, 237, 225, ~
+$ Hillshade_3pm                      &lt;dbl&gt; 148, 151, 135, 122, 150, 140, 138, ~
+$ Horizontal_Distance_To_Fire_Points &lt;dbl&gt; 6279, 6225, 6121, 6211, 6172, 6031,~
+$ Wilderness_Area1                   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,~
+$ Wilderness_Area2                   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Wilderness_Area3                   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Wilderness_Area4                   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type1                         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type2                         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type3                         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type4                         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type5                         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type6                         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type7                         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type8                         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type9                         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type10                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type11                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type12                        &lt;dbl&gt; 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type13                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type14                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type15                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type16                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type17                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type18                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,~
+$ Soil_Type19                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type20                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type21                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type22                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type23                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type24                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type25                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type26                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type27                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type28                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type29                        &lt;dbl&gt; 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0,~
+$ Soil_Type30                        &lt;dbl&gt; 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,~
+$ Soil_Type31                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type32                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type33                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type34                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type35                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type36                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type37                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type38                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type39                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Soil_Type40                        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ Cover_Type                         &lt;dbl&gt; 5, 5, 2, 2, 5, 2, 5, 5, 5, 5, 5, 2,~</code></pre>
+</div>
+</div>
+<p>The seven community types are:</p>
+<ul>
+<li>1 = Spruce/Fir</li>
+<li>2 = Lodgepole Pine</li>
+<li>3 = Ponderosa Pine</li>
+<li>4 = Cottonwood/Willow</li>
+<li>5 = Aspen</li>
+<li>6 = Douglas Fir</li>
+<li>7 = Krummholz</li>
+</ul>
+<p>We need to recode the cover type with the corresponding names as follows;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1">cover.type <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb5-2">  <span class="fu" style="color: #4758AB;">distinct</span>(Cover_Type)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 x 1
+  Cover_Type
+       &lt;dbl&gt;
+1          5
+2          2
+3          1
+4          7
+5          3
+6          6
+7          4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1">cover.type <span class="ot" style="color: #003B4F;">=</span> cover.type <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb7-2">  <span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">cover =</span> <span class="fu" style="color: #4758AB;">case_when</span>(Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">1</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Spruce"</span>,</span>
+<span id="cb7-3">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">2</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Lodgepole"</span>,</span>
+<span id="cb7-4">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">3</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Ponderosa"</span>,</span>
+<span id="cb7-5">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">4</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Cottonwood"</span>,</span>
+<span id="cb7-6">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">5</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Aspen"</span>,</span>
+<span id="cb7-7">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">6</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Douglas"</span>,</span>
+<span id="cb7-8">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">7</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Krummholz"</span>)</span>
+<span id="cb7-9">         )</span></code></pre></div>
+</div>
+<p>I then use dplyr <code>count</code> function to to compute the number of records from each community type</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1">cover.type <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb8-2">  <span class="fu" style="color: #4758AB;">group_by</span>(cover) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb8-3">  <span class="fu" style="color: #4758AB;">summarise</span>(<span class="at" style="color: #657422;">n =</span> <span class="fu" style="color: #4758AB;">n</span>()) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb8-4">  <span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">area_ha =</span> (n<span class="sc" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">900</span>)<span class="sc" style="color: #5E5E5E;">/</span><span class="dv" style="color: #AD0000;">4063</span>, </span>
+<span id="cb8-5">         <span class="at" style="color: #657422;">pct =</span> n<span class="sc" style="color: #5E5E5E;">/</span><span class="fu" style="color: #4758AB;">sum</span>(n) <span class="sc" style="color: #5E5E5E;">*</span> <span class="dv" style="color: #AD0000;">100</span>, </span>
+<span id="cb8-6">         <span class="fu" style="color: #4758AB;">across</span>(is.numeric, round, <span class="dv" style="color: #AD0000;">2</span>)) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb8-7">  <span class="fu" style="color: #4758AB;">arrange</span>(<span class="sc" style="color: #5E5E5E;">-</span>n)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 x 4
+  cover           n area_ha   pct
+  &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+1 Lodgepole  283301  62754. 48.8 
+2 Spruce     211840  46925. 36.5 
+3 Ponderosa   35754   7920.  6.15
+4 Krummholz   20510   4543.  3.53
+5 Douglas     17367   3847.  2.99
+6 Aspen        9493   2103.  1.63
+7 Cottonwood   2747    608.  0.47</code></pre>
+</div>
+</div>
+<p>The printed output suggests significant data imbalance. In order to speed up the tuning and training process, I then select out 500 samples from each class using a stratified random sample. For potentially improved results, I should use all available samples. However, this would take a lot longer to execute.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;">set.seed</span>(<span class="dv" style="color: #AD0000;">123</span>)</span>
+<span id="cb10-2"></span>
+<span id="cb10-3">cover.type.sample <span class="ot" style="color: #003B4F;">=</span> cover.type <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb10-4">  <span class="fu" style="color: #4758AB;">group_by</span>(cover) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb10-5">  <span class="fu" style="color: #4758AB;">sample_n</span>(<span class="at" style="color: #657422;">size =</span> <span class="dv" style="color: #AD0000;">500</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb10-6">  <span class="fu" style="color: #4758AB;">ungroup</span>()</span>
+<span id="cb10-7"></span>
+<span id="cb10-8">cover.type.sample <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb10-9">  <span class="fu" style="color: #4758AB;">group_by</span>(cover) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb10-10">  <span class="fu" style="color: #4758AB;">summarise</span>(<span class="at" style="color: #657422;">n =</span> <span class="fu" style="color: #4758AB;">n</span>())</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 x 2
+  cover          n
+  &lt;chr&gt;      &lt;int&gt;
+1 Aspen        500
+2 Cottonwood   500
+3 Douglas      500
+4 Krummholz    500
+5 Lodgepole    500
+6 Ponderosa    500
+7 Spruce       500</code></pre>
+</div>
+</div>
+<p>Next, I use the parsnips package <span class="citation" data-cites="parsnip">(Kuhn &amp; Vaughan, 2020)</span> to define a random forest implementation using the <code>ranger</code> engine in <em>classification</em> mode. Note the use of <code>tune()</code> to indicate that I plan to tune the <em>mtry</em> parameter. Since the data have not already been split into <em>training</em> and <em>testing</em> sets, I use the <code>initial_split()</code> function from <strong>rsample</strong> to define training and testing partitions followed by the <code>training()</code> and <code>testing()</code> functions to create new datasets for each split <span class="citation" data-cites="rsample">(Kuhn, Chow, &amp; Wickham, 2020)</span>.</p>
+</section>
+<section id="define-model" class="level2">
+<h2 class="anchored" data-anchor-id="define-model">Define Model</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1">rf_model <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">rand_forest</span>(<span class="at" style="color: #657422;">mtry=</span><span class="fu" style="color: #4758AB;">tune</span>(), <span class="at" style="color: #657422;">trees=</span><span class="dv" style="color: #AD0000;">500</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb12-2">  <span class="fu" style="color: #4758AB;">set_engine</span>(<span class="st" style="color: #20794D;">"ranger"</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb12-3">  <span class="fu" style="color: #4758AB;">set_mode</span>(<span class="st" style="color: #20794D;">"classification"</span>)</span></code></pre></div>
+</div>
+</section>
+<section id="set-split" class="level2">
+<h2 class="anchored" data-anchor-id="set-split">Set split</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;">set.seed</span>(<span class="dv" style="color: #AD0000;">42</span>)</span>
+<span id="cb13-2"></span>
+<span id="cb13-3">cover_split <span class="ot" style="color: #003B4F;">=</span> cover.type.sample <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb13-4">  <span class="fu" style="color: #4758AB;">initial_split</span>(<span class="at" style="color: #657422;">prop=</span>.<span class="dv" style="color: #AD0000;">75</span>, <span class="at" style="color: #657422;">strata=</span>cover)</span>
+<span id="cb13-5"></span>
+<span id="cb13-6">cover_train <span class="ot" style="color: #003B4F;">=</span> cover_split <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">training</span>()</span>
+<span id="cb13-7">cover_test <span class="ot" style="color: #003B4F;">=</span> cover_split <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">testing</span>()</span></code></pre></div>
+</div>
+<p>I would like to normalize all continuous predictor variables and create a dummy variable from the single nominal predictor variable (“wilderness”). I define these transformations within a recipe using functions available in recipes package <span class="citation" data-cites="recipes">(Kuhn &amp; Wickham, 2020a)</span>. This also requires defining the formula and the input data. Here, I am referencing only the training set, as the test set should not be introduced to the model at this point, as this could result in a later bias assessment of model performance. The <code>all_numeric()</code>, <code>all_nominal()</code>, and <code>all_outcomes()</code> functions are used to select columns on which to apply the desired transformations.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1">cover_recipe <span class="ot" style="color: #003B4F;">=</span> cover_train <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb14-2">  <span class="fu" style="color: #4758AB;">recipe</span>(cover<span class="sc" style="color: #5E5E5E;">~</span>.) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb14-3">  <span class="fu" style="color: #4758AB;">step_normalize</span>(<span class="fu" style="color: #4758AB;">all_numeric</span>()) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb14-4">  <span class="fu" style="color: #4758AB;">step_dummy</span>(<span class="fu" style="color: #4758AB;">all_nominal</span>(), <span class="sc" style="color: #5E5E5E;">-</span><span class="fu" style="color: #4758AB;">all_outcomes</span>())</span></code></pre></div>
+</div>
+<p>The model and pre-processing recipe are then combined into a workflow.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1">cover_wf <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">workflow</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb15-2">  <span class="fu" style="color: #4758AB;">add_model</span>(rf_model) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb15-3">  <span class="fu" style="color: #4758AB;">add_recipe</span>(cover_recipe)</span></code></pre></div>
+</div>
+<p>I then use <strong>yardstick</strong> <span class="citation" data-cites="yerdstick">(<strong>yerdstick?</strong>)</span> and the <code>metric_set()</code> function to define the desired assessment metrics, in this case only overall accuracy. To prepare for hyperparameter tuning using five-fold cross validation, I define folds using the <code>vfold_cv()</code> function from <strong>rsample</strong>. Similar to the training and testing split above, the folds are stratified by the community type to maintain class balance within each fold. Lastly, I then define values of <em>mtry</em> to test using the dials package. It would be better to test more values and maybe optimize additional parameters. However, I am trying to decrease the time required to execute the example.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><span class="co" style="color: #5E5E5E;">#Define metrics</span></span>
+<span id="cb16-2">my_mets <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">metric_set</span>(accuracy)</span>
+<span id="cb16-3"></span>
+<span id="cb16-4"><span class="co" style="color: #5E5E5E;">#Define folds</span></span>
+<span id="cb16-5"><span class="fu" style="color: #4758AB;">set.seed</span>(<span class="dv" style="color: #AD0000;">42</span>)</span>
+<span id="cb16-6">cover_folds <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">vfold_cv</span>(cover_train, <span class="at" style="color: #657422;">v=</span><span class="dv" style="color: #AD0000;">5</span>, <span class="at" style="color: #657422;">strata=</span>cover)</span>
+<span id="cb16-7"></span>
+<span id="cb16-8"><span class="co" style="color: #5E5E5E;">#Define tuning grid</span></span>
+<span id="cb16-9">rf_grid <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">grid_regular</span>(<span class="fu" style="color: #4758AB;">mtry</span>(<span class="at" style="color: #657422;">range =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">12</span>)),</span>
+<span id="cb16-10">                        <span class="at" style="color: #657422;">levels =</span> <span class="dv" style="color: #AD0000;">6</span>)</span></code></pre></div>
+</div>
+<p>Now that the model, pre-processing steps, workflow, metrics, data partitions, and mtry values to try have been defined, I tune the model using <code>tune_grid()</code> from the tune package. Note that this may take several minutes. Specifically, I make sure to use the defined workflow so that the pre-processing steps defined using the recipe are used. Once completed, I collect the resulting metrics for each mtry value for each fold using collect_metrics() from tune. The summarize parameter is set to FALSE because I want to obtain all results for each fold, as opposed to aggregated results. I then calculate the minimum, maximum, and median overall accuracies for each fold using dplyr and plot the results using ggplot2.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1">rf_tuning <span class="ot" style="color: #003B4F;">=</span> cover_wf <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb17-2">  <span class="fu" style="color: #4758AB;">tune_grid</span>(<span class="at" style="color: #657422;">resamples=</span>cover_folds, <span class="at" style="color: #657422;">grid =</span> rf_grid, <span class="at" style="color: #657422;">metrics=</span>my_mets)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1">tune_result <span class="ot" style="color: #003B4F;">=</span> rf_tuning <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb18-2">  <span class="fu" style="color: #4758AB;">collect_metrics</span>(<span class="at" style="color: #657422;">summarize=</span><span class="cn" style="color: #8f5902;">FALSE</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb18-3">  <span class="fu" style="color: #4758AB;">filter</span>(.metric <span class="sc" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">'accuracy'</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span>  </span>
+<span id="cb18-4">  <span class="fu" style="color: #4758AB;">group_by</span>(mtry) <span class="sc" style="color: #5E5E5E;">%&gt;%</span>  </span>
+<span id="cb18-5">  <span class="fu" style="color: #4758AB;">summarize</span>(<span class="at" style="color: #657422;">min_acc =</span> <span class="fu" style="color: #4758AB;">min</span>(.estimate),             </span>
+<span id="cb18-6">            <span class="at" style="color: #657422;">median_acc =</span> <span class="fu" style="color: #4758AB;">mean</span>(.estimate),             </span>
+<span id="cb18-7">            <span class="at" style="color: #657422;">max_acc =</span> <span class="fu" style="color: #4758AB;">max</span>(.estimate))</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="fu" style="color: #4758AB;">ggplot</span>(tune_result, <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">y=</span>median_acc, <span class="at" style="color: #657422;">x=</span>mtry))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb19-2">  <span class="fu" style="color: #4758AB;">geom_point</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb19-3">  <span class="fu" style="color: #4758AB;">geom_errorbar</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">ymin=</span>min_acc, <span class="at" style="color: #657422;">ymax=</span>max_acc), <span class="at" style="color: #657422;">width =</span> .<span class="dv" style="color: #AD0000;">4</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb19-4">  <span class="fu" style="color: #4758AB;">theme_bw</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb19-5">  <span class="fu" style="color: #4758AB;">labs</span>(<span class="at" style="color: #657422;">x=</span><span class="st" style="color: #20794D;">"mtry Parameter"</span>, <span class="at" style="color: #657422;">y =</span> <span class="st" style="color: #20794D;">"Accuracy"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/tidymodels_classification/index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The best mtry parameter is defined using the <code>select_best()</code> function from tune. The workflow is then finalized and the model is trained using <code>last_fit()</code> from tune. The <code>collect_predictions()</code> function from tune is used to obtain the class prediction for each sample in the withheld test set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1">best_rf_model <span class="ot" style="color: #003B4F;">=</span> rf_tuning <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb20-2">  <span class="fu" style="color: #4758AB;">select_best</span>(<span class="at" style="color: #657422;">metric=</span><span class="st" style="color: #20794D;">"accuracy"</span>)</span>
+<span id="cb20-3"></span>
+<span id="cb20-4">final_cover_wf <span class="ot" style="color: #003B4F;">=</span> cover_wf <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb20-5">  <span class="fu" style="color: #4758AB;">finalize_workflow</span>(best_rf_model)</span>
+<span id="cb20-6"></span>
+<span id="cb20-7">final_cover_fit <span class="ot" style="color: #003B4F;">=</span> final_cover_wf <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb20-8">  <span class="fu" style="color: #4758AB;">last_fit</span>(<span class="at" style="color: #657422;">split=</span>cover_split, <span class="at" style="color: #657422;">metrics=</span>my_mets) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb20-9">  <span class="fu" style="color: #4758AB;">collect_predictions</span>()</span></code></pre></div>
+</div>
+<p>Lastly, I use the <code>conf_mat()</code> function from the yardstick package to obtain a multi-class error matrix from the reference and predicted classes for each sample in the withheld testing set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1">final_cover_fit <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb21-2">  <span class="fu" style="color: #4758AB;">conf_mat</span>(<span class="at" style="color: #657422;">truth=</span>cover, <span class="at" style="color: #657422;">estimate=</span>.pred_class)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Truth
+Prediction   Aspen Cottonwood Douglas Krummholz Lodgepole Ponderosa Spruce
+  Aspen        125          0       0         0         0         0      0
+  Cottonwood     0        125       0         0         0         0      0
+  Douglas        0          0     125         0         0         0      0
+  Krummholz      0          0       0       125         0         0      0
+  Lodgepole      0          0       0         0       124         0      0
+  Ponderosa      0          0       0         0         1       125      0
+  Spruce         0          0       0         0         0         0    125</code></pre>
+</div>
+</div>
+<p>Passing the matrix to <code>summary()</code> will provide a set of assessment metrics calculated from the error matrix.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1">final_cover_fit <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb23-2">  <span class="fu" style="color: #4758AB;">conf_mat</span>(<span class="at" style="color: #657422;">truth=</span>cover, <span class="at" style="color: #657422;">estimate=</span>.pred_class) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb23-3">  <span class="fu" style="color: #4758AB;">summary</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 x 3
+   .metric              .estimator .estimate
+   &lt;chr&gt;                &lt;chr&gt;          &lt;dbl&gt;
+ 1 accuracy             multiclass     0.999
+ 2 kap                  multiclass     0.999
+ 3 sens                 macro          0.999
+ 4 spec                 macro          1.00 
+ 5 ppv                  macro          0.999
+ 6 npv                  macro          1.00 
+ 7 mcc                  multiclass     0.999
+ 8 j_index              macro          0.999
+ 9 bal_accuracy         macro          0.999
+10 detection_prevalence macro          0.143
+11 precision            macro          0.999
+12 recall               macro          0.999
+13 f_meas               macro          0.999</code></pre>
+</div>
+</div>
+</section>
+<section id="concluding-remarks" class="level2">
+<h2 class="anchored" data-anchor-id="concluding-remarks">Concluding Remarks</h2>
+<p>Similar to the tidyverse <span class="citation" data-cites="tidyverse">(Wickham &amp; Wickham, 2017)</span>, tidymodels <span class="citation" data-cites="tidymodels">(Kuhn &amp; Wickham, 2020b)</span> is a very powerful framework for creating machine learning workflows and experimental environments using a common philosophy and syntax. Although this introduction was brief and there are many more components that could be discussed, this can serve as a starting point for continued learning and experimentation. Check out the <a href="https://www.tidymodels.org/start/tuning/">tidymodels website</a> for additional examples and tutorials.</p>
+</section>
+<section id="cited-materials" class="level2">
+
+
+
+
+</section>
+</section>
+
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2">
 <div id="ref-rsample" class="csl-entry">
 Kuhn, M., Chow, F., &amp; Wickham, H. (2020). <em>Rsample: General resampling infrastructure</em>. Retrieved from <a href="https://CRAN.R-project.org/package=rsample">https://CRAN.R-project.org/package=rsample</a>
 </div>
 <div id="ref-parsnip" class="csl-entry">
-Kuhn, M., &amp; Vaughan, D. (2020a). <em>Parsnip: A common API to modeling and analysis functions</em>. Retrieved from <a href="https://CRAN.R-project.org/package=parsnip">https://CRAN.R-project.org/package=parsnip</a>
-</div>
-<div id="ref-yardstick" class="csl-entry">
-Kuhn, M., &amp; Vaughan, D. (2020b). <em>Yardstick: Tidy characterizations of model performance</em>. Retrieved from <a href="https://CRAN.R-project.org/package=yardstick">https://CRAN.R-project.org/package=yardstick</a>
+Kuhn, M., &amp; Vaughan, D. (2020). <em>Parsnip: A common API to modeling and analysis functions</em>. Retrieved from <a href="https://CRAN.R-project.org/package=parsnip">https://CRAN.R-project.org/package=parsnip</a>
 </div>
 <div id="ref-recipes" class="csl-entry">
 Kuhn, M., &amp; Wickham, H. (2020a). <em>Recipes: Preprocessing tools to create design matrices</em>. Retrieved from <a href="https://CRAN.R-project.org/package=recipes">https://CRAN.R-project.org/package=recipes</a>
 </div>
 <div id="ref-tidymodels" class="csl-entry">
 Kuhn, M., &amp; Wickham, H. (2020b). <em>Tidymodels: Easily install and load the ’tidymodels’ packages</em>. Retrieved from <a href="https://CRAN.R-project.org/package=tidymodels">https://CRAN.R-project.org/package=tidymodels</a>
-</div>
-<div id="ref-r" class="csl-entry">
-R Core Team. (2018). <em>R: A language and environment for statistical computing</em>. Vienna, Austria: R Foundation for Statistical Computing. Retrieved from <a href="https://www.R-project.org/">https://www.R-project.org/</a>
-</div>
-<div id="ref-ggally" class="csl-entry">
-Schloerke, B., Crowley, J., Cook, D., Briatte, F., Marbach, M., Thoen, E., … Larmarange, J. (2020). <em>GGally: Extension to ’ggplot2’</em>. Retrieved from <a href="https://CRAN.R-project.org/package=GGally">https://CRAN.R-project.org/package=GGally</a>
-</div>
-<div id="ref-readxl" class="csl-entry">
-Wickham, H., &amp; Bryan, J. (2018). <em>Readxl: Read excel files</em>. Retrieved from <a href="https://CRAN.R-project.org/package=readxl">https://CRAN.R-project.org/package=readxl</a>
-</div>
-<div id="ref-dplyr" class="csl-entry">
-Wickham, H., François, R., Henry, L., &amp; Müller, K. (2019). <em>Dplyr: A grammar of data manipulation</em>. Retrieved from <a href="https://CRAN.R-project.org/package=dplyr">https://CRAN.R-project.org/package=dplyr</a>
 </div>
 <div id="ref-tidyverse" class="csl-entry">
 Wickham, H., &amp; Wickham, M. H. (2017). <em>Tidyverse: Easily install and load the ’tidyverse’</em>. Retrieved from <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>
@@ -616,8 +1334,8 @@ Wickham, H., &amp; Wickham, M. H. (2017). <em>Tidyverse: Easily install and load
   <category>Visualization</category>
   <category>R</category>
   <category>Modelling</category>
-  <guid>https://lugoga.github.io/semba-quarto/posts/tidymodels_regression/index.html</guid>
-  <pubDate>Mon, 10 Apr 2023 21:00:00 GMT</pubDate>
+  <guid>https://lugoga.github.io/semba-quarto/posts/tidymodels_classification/index.html</guid>
+  <pubDate>Sun, 02 Apr 2023 21:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Getting GEBCO Bathymetry Data and glean the power of terra and tidyterra packages for raster and vector objects</title>

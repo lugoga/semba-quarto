@@ -1,0 +1,241 @@
+---
+title: "Machine learning with tidymodels: Classification Models"
+author: 
+  - name: Masumbuko Semba
+    url: https://semba.netlify.app
+    orcid: 0000-0002-5002-9747
+    affiliation: Nelson Mandela African Institution of Science and Technology
+    affiliation-url: https://semba.netlify.app/ 
+date: "2023-04-03"
+categories: [Manipulation,Visualization, R, Modelling]
+tags: 
+  - tidymodels
+  - classification
+  - modelling
+  - Masumbuko Semba
+# image: "thumbnail.jpg"
+draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
+bibliography: ../blog.bib
+csl:  ../apa.csl
+execute: 
+  warning: false
+fig-width: 7
+fig-height: 5
+code-line-numbers: true
+---
+
+# A gentle introduction to classification
+*Classification* is a form of machine learning in which you train a model to predict which category an item belongs to. Categorical data has distinct ‘classes’, rather than numeric values. For example, a health clinic might use diagnostic data such as a patient’s height, weight, blood pressure, blood-glucose level to predict whether or not the patient is diabetic.
+
+Classification is an example of a supervised machine learning technique, which means it relies on data that includes known feature values (for example, diagnostic measurements for patients) as well as known label values (for example, a classification of non-diabetic or diabetic). A classification algorithm is used to fit a subset of the data to a function that can calculate the probability for each class label from the feature values. The remaining data is used to evaluate the model by comparing the predictions it generates from the features to the known class labels.
+
+The best way to learn about classification is to try it for yourself, so that’s what you’ll do in this exercise.
+
+We’ll require some packages to knock-off this module. You can have them installed as: 
+
+```{r}
+#| eval: false
+install.packages(c('tidyverse', 'tidymodels', 'ranger', 'tidyverse', 'forecats', 'skimr', 'paletteer', 'nnet', 'here'))
+```
+
+
+Once you have installed the package, you can load the required packages 
+
+```{r}
+library(tidymodels)
+library(tidyverse)
+library(forcats)
+```
+
+
+## Dataset
+
+Once the packages are loaded then we are going to import the dataset into the session. In this post we will explore a multi-class classification problem using the Covertype Data Set, which I obtained from the UCI Machine Learning Repository. This data set provides a total of 581,012 instances. The goal is to differentiate seven forest community types using several environmental variables including elevation, topographic aspect, topographic slope, horizontal distance to streams, vertical distance to streams, horizontal distance to roadways, hillshade values at 9AM, hillshade values at noon, hillshade values at 3PM, horizontal distance to fire points, and a wilderness area designation, a binary and nominal variable. 
+
+```{r}
+
+cover.type = read_csv("../data/ml/covtype.csv")
+cover.type %>% 
+  glimpse()
+```
+The seven community types are:
+
++ 1 = Spruce/Fir
++ 2 = Lodgepole Pine
++ 3 = Ponderosa Pine
++ 4 = Cottonwood/Willow
++ 5 = Aspen
++ 6 = Douglas Fir
++ 7 = Krummholz
+
+We need to recode the cover type with the corresponding names as follows;
+
+```{r}
+cover.type %>% 
+  distinct(Cover_Type)
+  
+cover.type = cover.type %>% 
+  mutate(cover = case_when(Cover_Type == 1 ~ "Spruce",
+                               Cover_Type == 2 ~ "Lodgepole",
+                               Cover_Type == 3 ~ "Ponderosa",
+                               Cover_Type == 4 ~ "Cottonwood",
+                               Cover_Type == 5 ~ "Aspen",
+                               Cover_Type == 6 ~ "Douglas",
+                               Cover_Type == 7 ~ "Krummholz")
+         )
+
+
+```
+
+
+I then use dplyr `count` function to to compute the number of records from each community type
+```{r}
+cover.type %>% 
+  group_by(cover) %>% 
+  summarise(n = n()) %>% 
+  mutate(area_ha = (n*900)/4063, 
+         pct = n/sum(n) * 100, 
+         across(is.numeric, round, 2)) %>% 
+  arrange(-n)
+```
+
+
+The printed output suggests significant data imbalance. In order to speed up the tuning and training process, I then select out 500 samples from each class using a stratified random sample. For potentially improved results, I should use all available samples. However, this would take a lot longer to execute. 
+
+```{r}
+
+set.seed(123)
+
+cover.type.sample = cover.type %>% 
+  group_by(cover) %>% 
+  sample_n(size = 500) %>% 
+  ungroup()
+
+cover.type.sample %>% 
+  group_by(cover) %>% 
+  summarise(n = n())
+
+```
+
+Next, I use the parsnips package [@parsnip] to define a random forest implementation using the `ranger` engine in *classification* mode. Note the use of `tune()` to indicate that I plan to tune the *mtry* parameter. Since the data have not already been split into *training* and *testing* sets, I use the `initial_split()` function from **rsample** to define training and testing partitions followed by the `training()` and `testing()` functions to create new datasets for each split [@rsample].
+
+## Define Model
+```{r}
+rf_model = rand_forest(mtry=tune(), trees=500) %>%
+  set_engine("ranger") %>%
+  set_mode("classification")
+```
+
+## Set split
+
+```{r}
+set.seed(42)
+
+cover_split = cover.type.sample %>% 
+  initial_split(prop=.75, strata=cover)
+
+cover_train = cover_split %>% training()
+cover_test = cover_split %>% testing()
+```
+
+
+I would like to normalize all continuous predictor variables and create a dummy variable from the single nominal predictor variable (“wilderness”). I define these transformations within a recipe using functions available in recipes package [@recipes]. This also requires defining the formula and the input data. Here, I am referencing only the training set, as the test set should not be introduced to the model at this point, as this could result in a later bias assessment of model performance. The `all_numeric()`, `all_nominal()`, and `all_outcomes()` functions are used to select columns on which to apply the desired transformations.
+
+
+```{r}
+cover_recipe = cover_train %>% 
+  recipe(cover~.) %>%
+  step_normalize(all_numeric()) %>%
+  step_dummy(all_nominal(), -all_outcomes())
+```
+
+The model and pre-processing recipe are then combined into a workflow.
+
+```{r}
+cover_wf = workflow() %>%
+  add_model(rf_model) %>% 
+  add_recipe(cover_recipe)
+
+```
+
+
+I then use **yardstick** [@yerdstick] and the `metric_set()` function to define the desired assessment metrics, in this case only overall accuracy. To prepare for hyperparameter tuning using five-fold cross validation, I define folds using the `vfold_cv()` function from **rsample**. Similar to the training and testing split above, the folds are stratified by the community type to maintain class balance within each fold. Lastly, I then define values of *mtry* to test using the dials package. It would be better to test more values and maybe optimize additional parameters. However, I am trying to decrease the time required to execute the example.
+
+
+```{r}
+#Define metrics
+my_mets = metric_set(accuracy)
+
+#Define folds
+set.seed(42)
+cover_folds = vfold_cv(cover_train, v=5, strata=cover)
+
+#Define tuning grid
+rf_grid = grid_regular(mtry(range = c(1, 12)),
+                        levels = 6)
+```
+
+Now that the model, pre-processing steps, workflow, metrics, data partitions, and mtry values to try have been defined, I tune the model using `tune_grid()` from the tune package. Note that this may take several minutes. Specifically, I make sure to use the defined workflow so that the pre-processing steps defined using the recipe are used. Once completed, I collect the resulting metrics for each mtry value for each fold using collect_metrics() from tune. The summarize parameter is set to FALSE because I want to obtain all results for each fold, as opposed to aggregated results. I then calculate the minimum, maximum, and median overall accuracies for each fold using dplyr and plot the results using ggplot2.
+
+
+
+```{r}
+rf_tuning = cover_wf %>% 
+  tune_grid(resamples=cover_folds, grid = rf_grid, metrics=my_mets)
+```
+
+
+```{r}
+tune_result = rf_tuning %>% 
+  collect_metrics(summarize=FALSE) %>%
+  filter(.metric == 'accuracy') %>%  
+  group_by(mtry) %>%  
+  summarize(min_acc = min(.estimate),             
+            median_acc = mean(.estimate),             
+            max_acc = max(.estimate))
+```
+
+
+```{r}
+ggplot(tune_result, aes(y=median_acc, x=mtry))+
+  geom_point()+
+  geom_errorbar(aes(ymin=min_acc, ymax=max_acc), width = .4)+
+  theme_bw()+
+  labs(x="mtry Parameter", y = "Accuracy")
+
+```
+
+The best mtry parameter is defined using the `select_best()` function from tune. The workflow is then finalized and the model is trained using `last_fit()` from tune. The `collect_predictions()` function from tune is used to obtain the class prediction for each sample in the withheld test set.
+
+```{r}
+best_rf_model = rf_tuning %>% 
+  select_best(metric="accuracy")
+
+final_cover_wf = cover_wf %>% 
+  finalize_workflow(best_rf_model)
+
+final_cover_fit = final_cover_wf %>% 
+  last_fit(split=cover_split, metrics=my_mets) %>% 
+  collect_predictions()
+```
+
+Lastly, I use the `conf_mat()` function from the yardstick package to obtain a multi-class error matrix from the reference and predicted classes for each sample in the withheld testing set. 
+
+```{r}
+final_cover_fit %>% 
+  conf_mat(truth=cover, estimate=.pred_class)
+```
+
+Passing the matrix to `summary()` will provide a set of assessment metrics calculated from the error matrix.
+
+```{r}
+final_cover_fit %>% 
+  conf_mat(truth=cover, estimate=.pred_class) %>% 
+  summary()
+```
+
+## Concluding Remarks
+Similar to the tidyverse [@tidyverse], tidymodels [@tidymodels] is a very powerful framework for creating machine learning workflows and experimental environments using a common philosophy and syntax. Although this introduction was brief and there are many more components that could be discussed, this can serve as a starting point for continued learning and experimentation. Check out the [tidymodels website](https://www.tidymodels.org/start/tuning/) for additional examples and tutorials. 
+
+
+## Cited Materials
