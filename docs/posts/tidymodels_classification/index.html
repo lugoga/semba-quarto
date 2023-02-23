@@ -354,9 +354,14 @@ ga('send', {
 <h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
 <p>Once the packages are loaded then we are going to import the dataset into the session. In this post we will explore a multi-class classification problem using the Covertype Data Set, which I obtained from the UCI Machine Learning Repository. This data set provides a total of 581,012 instances. The goal is to differentiate seven forest community types using several environmental variables including elevation, topographic aspect, topographic slope, horizontal distance to streams, vertical distance to streams, horizontal distance to roadways, hillshade values at 9AM, hillshade values at noon, hillshade values at 3PM, horizontal distance to fire points, and a wilderness area designation, a binary and nominal variable.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>cover.type <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"../data/ml/covtype.csv"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2"></a>cover.type <span class="sc">%&gt;%</span> </span>
-<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>cover.type <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"../data/ml/covtype.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>cover.type <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 581,012
 Columns: 55
@@ -429,8 +434,8 @@ $ Cover_Type                         &lt;dbl&gt; 5, 5, 2, 2, 5, 2, 5, 5, 5, 5, 5
 </ul>
 <p>We need to recode the cover type with the corresponding names as follows;</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>cover.type <span class="sc">%&gt;%</span> </span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">distinct</span>(Cover_Type)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>cover.type <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">distinct</span>(Cover_Type)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7 x 1
   Cover_Type
@@ -443,25 +448,25 @@ $ Cover_Type                         &lt;dbl&gt; 5, 5, 2, 2, 5, 2, 5, 5, 5, 5, 5
 6          6
 7          4</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>cover.type <span class="ot">=</span> cover.type <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">mutate</span>(<span class="at">cover =</span> <span class="fu">case_when</span>(Cover_Type <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"Spruce"</span>,</span>
-<span id="cb7-3"><a href="#cb7-3"></a>                               Cover_Type <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">"Lodgepole"</span>,</span>
-<span id="cb7-4"><a href="#cb7-4"></a>                               Cover_Type <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">"Ponderosa"</span>,</span>
-<span id="cb7-5"><a href="#cb7-5"></a>                               Cover_Type <span class="sc">==</span> <span class="dv">4</span> <span class="sc">~</span> <span class="st">"Cottonwood"</span>,</span>
-<span id="cb7-6"><a href="#cb7-6"></a>                               Cover_Type <span class="sc">==</span> <span class="dv">5</span> <span class="sc">~</span> <span class="st">"Aspen"</span>,</span>
-<span id="cb7-7"><a href="#cb7-7"></a>                               Cover_Type <span class="sc">==</span> <span class="dv">6</span> <span class="sc">~</span> <span class="st">"Douglas"</span>,</span>
-<span id="cb7-8"><a href="#cb7-8"></a>                               Cover_Type <span class="sc">==</span> <span class="dv">7</span> <span class="sc">~</span> <span class="st">"Krummholz"</span>)</span>
-<span id="cb7-9"><a href="#cb7-9"></a>         )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>cover.type <span class="ot">=</span> cover.type <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">mutate</span>(<span class="at">cover =</span> <span class="fu">case_when</span>(Cover_Type <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"Spruce"</span>,</span>
+<span id="cb8-3"><a href="#cb8-3"></a>                               Cover_Type <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">"Lodgepole"</span>,</span>
+<span id="cb8-4"><a href="#cb8-4"></a>                               Cover_Type <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">"Ponderosa"</span>,</span>
+<span id="cb8-5"><a href="#cb8-5"></a>                               Cover_Type <span class="sc">==</span> <span class="dv">4</span> <span class="sc">~</span> <span class="st">"Cottonwood"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6"></a>                               Cover_Type <span class="sc">==</span> <span class="dv">5</span> <span class="sc">~</span> <span class="st">"Aspen"</span>,</span>
+<span id="cb8-7"><a href="#cb8-7"></a>                               Cover_Type <span class="sc">==</span> <span class="dv">6</span> <span class="sc">~</span> <span class="st">"Douglas"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8"></a>                               Cover_Type <span class="sc">==</span> <span class="dv">7</span> <span class="sc">~</span> <span class="st">"Krummholz"</span>)</span>
+<span id="cb8-9"><a href="#cb8-9"></a>         )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>I then use dplyr <code>count</code> function to to compute the number of records from each community type</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>cover.type <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">group_by</span>(cover) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-4"><a href="#cb8-4"></a>  <span class="fu">mutate</span>(<span class="at">area_ha =</span> (n<span class="sc">*</span><span class="dv">900</span>)<span class="sc">/</span><span class="dv">4063</span>, </span>
-<span id="cb8-5"><a href="#cb8-5"></a>         <span class="at">pct =</span> n<span class="sc">/</span><span class="fu">sum</span>(n) <span class="sc">*</span> <span class="dv">100</span>, </span>
-<span id="cb8-6"><a href="#cb8-6"></a>         <span class="fu">across</span>(is.numeric, round, <span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-7"><a href="#cb8-7"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>cover.type <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">group_by</span>(cover) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="fu">mutate</span>(<span class="at">area_ha =</span> (n<span class="sc">*</span><span class="dv">900</span>)<span class="sc">/</span><span class="dv">4063</span>, </span>
+<span id="cb9-5"><a href="#cb9-5"></a>         <span class="at">pct =</span> n<span class="sc">/</span><span class="fu">sum</span>(n) <span class="sc">*</span> <span class="dv">100</span>, </span>
+<span id="cb9-6"><a href="#cb9-6"></a>         <span class="fu">across</span>(is.numeric, round, <span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-7"><a href="#cb9-7"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7 x 4
   cover           n area_ha   pct
@@ -477,16 +482,16 @@ $ Cover_Type                         &lt;dbl&gt; 5, 5, 2, 2, 5, 2, 5, 5, 5, 5, 5
 </div>
 <p>The printed output suggests significant data imbalance. In order to speed up the tuning and training process, I then select out 500 samples from each class using a stratified random sample. For potentially improved results, I should use all available samples. However, this would take a lot longer to execute.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb10-2"><a href="#cb10-2"></a></span>
-<span id="cb10-3"><a href="#cb10-3"></a>cover.type.sample <span class="ot">=</span> cover.type <span class="sc">%&gt;%</span> </span>
-<span id="cb10-4"><a href="#cb10-4"></a>  <span class="fu">group_by</span>(cover) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-5"><a href="#cb10-5"></a>  <span class="fu">sample_n</span>(<span class="at">size =</span> <span class="dv">500</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-6"><a href="#cb10-6"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb10-7"><a href="#cb10-7"></a></span>
-<span id="cb10-8"><a href="#cb10-8"></a>cover.type.sample <span class="sc">%&gt;%</span> </span>
-<span id="cb10-9"><a href="#cb10-9"></a>  <span class="fu">group_by</span>(cover) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-10"><a href="#cb10-10"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb11-2"><a href="#cb11-2"></a></span>
+<span id="cb11-3"><a href="#cb11-3"></a>cover.type.sample <span class="ot">=</span> cover.type <span class="sc">%&gt;%</span> </span>
+<span id="cb11-4"><a href="#cb11-4"></a>  <span class="fu">group_by</span>(cover) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-5"><a href="#cb11-5"></a>  <span class="fu">sample_n</span>(<span class="at">size =</span> <span class="dv">500</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-6"><a href="#cb11-6"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb11-7"><a href="#cb11-7"></a></span>
+<span id="cb11-8"><a href="#cb11-8"></a>cover.type.sample <span class="sc">%&gt;%</span> </span>
+<span id="cb11-9"><a href="#cb11-9"></a>  <span class="fu">group_by</span>(cover) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-10"><a href="#cb11-10"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7 x 2
   cover          n
@@ -505,88 +510,88 @@ $ Cover_Type                         &lt;dbl&gt; 5, 5, 2, 2, 5, 2, 5, 5, 5, 5, 5
 <section id="define-model" class="level2">
 <h2 class="anchored" data-anchor-id="define-model">Define Model</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>rf_model <span class="ot">=</span> <span class="fu">rand_forest</span>(<span class="at">mtry=</span><span class="fu">tune</span>(), <span class="at">trees=</span><span class="dv">500</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">set_engine</span>(<span class="st">"ranger"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>rf_model <span class="ot">=</span> <span class="fu">rand_forest</span>(<span class="at">mtry=</span><span class="fu">tune</span>(), <span class="at">trees=</span><span class="dv">500</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">set_engine</span>(<span class="st">"ranger"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="set-split" class="level2">
 <h2 class="anchored" data-anchor-id="set-split">Set split</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb13-2"><a href="#cb13-2"></a></span>
-<span id="cb13-3"><a href="#cb13-3"></a>cover_split <span class="ot">=</span> cover.type.sample <span class="sc">%&gt;%</span> </span>
-<span id="cb13-4"><a href="#cb13-4"></a>  <span class="fu">initial_split</span>(<span class="at">prop=</span>.<span class="dv">75</span>, <span class="at">strata=</span>cover)</span>
-<span id="cb13-5"><a href="#cb13-5"></a></span>
-<span id="cb13-6"><a href="#cb13-6"></a>cover_train <span class="ot">=</span> cover_split <span class="sc">%&gt;%</span> <span class="fu">training</span>()</span>
-<span id="cb13-7"><a href="#cb13-7"></a>cover_test <span class="ot">=</span> cover_split <span class="sc">%&gt;%</span> <span class="fu">testing</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb14-2"><a href="#cb14-2"></a></span>
+<span id="cb14-3"><a href="#cb14-3"></a>cover_split <span class="ot">=</span> cover.type.sample <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">initial_split</span>(<span class="at">prop=</span>.<span class="dv">75</span>, <span class="at">strata=</span>cover)</span>
+<span id="cb14-5"><a href="#cb14-5"></a></span>
+<span id="cb14-6"><a href="#cb14-6"></a>cover_train <span class="ot">=</span> cover_split <span class="sc">%&gt;%</span> <span class="fu">training</span>()</span>
+<span id="cb14-7"><a href="#cb14-7"></a>cover_test <span class="ot">=</span> cover_split <span class="sc">%&gt;%</span> <span class="fu">testing</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>I would like to normalize all continuous predictor variables and create a dummy variable from the single nominal predictor variable (“wilderness”). I define these transformations within a recipe using functions available in recipes package <span class="citation" data-cites="recipes">(<a href="#ref-recipes" role="doc-biblioref">Kuhn &amp; Wickham, 2020a</a>)</span>. This also requires defining the formula and the input data. Here, I am referencing only the training set, as the test set should not be introduced to the model at this point, as this could result in a later bias assessment of model performance. The <code>all_numeric()</code>, <code>all_nominal()</code>, and <code>all_outcomes()</code> functions are used to select columns on which to apply the desired transformations.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>cover_recipe <span class="ot">=</span> cover_train <span class="sc">%&gt;%</span> </span>
-<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">recipe</span>(cover<span class="sc">~</span>.) <span class="sc">%&gt;%</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>cover_recipe <span class="ot">=</span> cover_train <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">recipe</span>(cover<span class="sc">~</span>.) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal</span>(), <span class="sc">-</span><span class="fu">all_outcomes</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The model and pre-processing recipe are then combined into a workflow.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>cover_wf <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">add_model</span>(rf_model) <span class="sc">%&gt;%</span> </span>
-<span id="cb15-3"><a href="#cb15-3"></a>  <span class="fu">add_recipe</span>(cover_recipe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>cover_wf <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">add_model</span>(rf_model) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">add_recipe</span>(cover_recipe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>I then use <strong>yardstick</strong> <span class="citation" data-cites="yerdstick">(<a href="#ref-yerdstick" role="doc-biblioref"><strong>yerdstick?</strong></a>)</span> and the <code>metric_set()</code> function to define the desired assessment metrics, in this case only overall accuracy. To prepare for hyperparameter tuning using five-fold cross validation, I define folds using the <code>vfold_cv()</code> function from <strong>rsample</strong>. Similar to the training and testing split above, the folds are stratified by the community type to maintain class balance within each fold. Lastly, I then define values of <em>mtry</em> to test using the dials package. It would be better to test more values and maybe optimize additional parameters. However, I am trying to decrease the time required to execute the example.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co">#Define metrics</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a>my_mets <span class="ot">=</span> <span class="fu">metric_set</span>(accuracy)</span>
-<span id="cb16-3"><a href="#cb16-3"></a></span>
-<span id="cb16-4"><a href="#cb16-4"></a><span class="co">#Define folds</span></span>
-<span id="cb16-5"><a href="#cb16-5"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb16-6"><a href="#cb16-6"></a>cover_folds <span class="ot">=</span> <span class="fu">vfold_cv</span>(cover_train, <span class="at">v=</span><span class="dv">5</span>, <span class="at">strata=</span>cover)</span>
-<span id="cb16-7"><a href="#cb16-7"></a></span>
-<span id="cb16-8"><a href="#cb16-8"></a><span class="co">#Define tuning grid</span></span>
-<span id="cb16-9"><a href="#cb16-9"></a>rf_grid <span class="ot">=</span> <span class="fu">grid_regular</span>(<span class="fu">mtry</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">12</span>)),</span>
-<span id="cb16-10"><a href="#cb16-10"></a>                        <span class="at">levels =</span> <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co">#Define metrics</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>my_mets <span class="ot">=</span> <span class="fu">metric_set</span>(accuracy)</span>
+<span id="cb17-3"><a href="#cb17-3"></a></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="co">#Define folds</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb17-6"><a href="#cb17-6"></a>cover_folds <span class="ot">=</span> <span class="fu">vfold_cv</span>(cover_train, <span class="at">v=</span><span class="dv">5</span>, <span class="at">strata=</span>cover)</span>
+<span id="cb17-7"><a href="#cb17-7"></a></span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="co">#Define tuning grid</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a>rf_grid <span class="ot">=</span> <span class="fu">grid_regular</span>(<span class="fu">mtry</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">12</span>)),</span>
+<span id="cb17-10"><a href="#cb17-10"></a>                        <span class="at">levels =</span> <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now that the model, pre-processing steps, workflow, metrics, data partitions, and mtry values to try have been defined, I tune the model using <code>tune_grid()</code> from the tune package. Note that this may take several minutes. Specifically, I make sure to use the defined workflow so that the pre-processing steps defined using the recipe are used. Once completed, I collect the resulting metrics for each mtry value for each fold using collect_metrics() from tune. The summarize parameter is set to FALSE because I want to obtain all results for each fold, as opposed to aggregated results. I then calculate the minimum, maximum, and median overall accuracies for each fold using dplyr and plot the results using ggplot2.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>rf_tuning <span class="ot">=</span> cover_wf <span class="sc">%&gt;%</span> </span>
-<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">tune_grid</span>(<span class="at">resamples=</span>cover_folds, <span class="at">grid =</span> rf_grid, <span class="at">metrics=</span>my_mets)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>rf_tuning <span class="ot">=</span> cover_wf <span class="sc">%&gt;%</span> </span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">tune_grid</span>(<span class="at">resamples=</span>cover_folds, <span class="at">grid =</span> rf_grid, <span class="at">metrics=</span>my_mets)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>tune_result <span class="ot">=</span> rf_tuning <span class="sc">%&gt;%</span> </span>
-<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">collect_metrics</span>(<span class="at">summarize=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">filter</span>(.metric <span class="sc">==</span> <span class="st">'accuracy'</span>) <span class="sc">%&gt;%</span>  </span>
-<span id="cb18-4"><a href="#cb18-4"></a>  <span class="fu">group_by</span>(mtry) <span class="sc">%&gt;%</span>  </span>
-<span id="cb18-5"><a href="#cb18-5"></a>  <span class="fu">summarize</span>(<span class="at">min_acc =</span> <span class="fu">min</span>(.estimate),             </span>
-<span id="cb18-6"><a href="#cb18-6"></a>            <span class="at">median_acc =</span> <span class="fu">mean</span>(.estimate),             </span>
-<span id="cb18-7"><a href="#cb18-7"></a>            <span class="at">max_acc =</span> <span class="fu">max</span>(.estimate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>tune_result <span class="ot">=</span> rf_tuning <span class="sc">%&gt;%</span> </span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">collect_metrics</span>(<span class="at">summarize=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">filter</span>(.metric <span class="sc">==</span> <span class="st">'accuracy'</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb19-4"><a href="#cb19-4"></a>  <span class="fu">group_by</span>(mtry) <span class="sc">%&gt;%</span>  </span>
+<span id="cb19-5"><a href="#cb19-5"></a>  <span class="fu">summarize</span>(<span class="at">min_acc =</span> <span class="fu">min</span>(.estimate),             </span>
+<span id="cb19-6"><a href="#cb19-6"></a>            <span class="at">median_acc =</span> <span class="fu">mean</span>(.estimate),             </span>
+<span id="cb19-7"><a href="#cb19-7"></a>            <span class="at">max_acc =</span> <span class="fu">max</span>(.estimate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">ggplot</span>(tune_result, <span class="fu">aes</span>(<span class="at">y=</span>median_acc, <span class="at">x=</span>mtry))<span class="sc">+</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>min_acc, <span class="at">ymax=</span>max_acc), <span class="at">width =</span> .<span class="dv">4</span>)<span class="sc">+</span></span>
-<span id="cb19-4"><a href="#cb19-4"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
-<span id="cb19-5"><a href="#cb19-5"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"mtry Parameter"</span>, <span class="at">y =</span> <span class="st">"Accuracy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">ggplot</span>(tune_result, <span class="fu">aes</span>(<span class="at">y=</span>median_acc, <span class="at">x=</span>mtry))<span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>min_acc, <span class="at">ymax=</span>max_acc), <span class="at">width =</span> .<span class="dv">4</span>)<span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"mtry Parameter"</span>, <span class="at">y =</span> <span class="st">"Accuracy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>The best mtry parameter is defined using the <code>select_best()</code> function from tune. The workflow is then finalized and the model is trained using <code>last_fit()</code> from tune. The <code>collect_predictions()</code> function from tune is used to obtain the class prediction for each sample in the withheld test set.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>best_rf_model <span class="ot">=</span> rf_tuning <span class="sc">%&gt;%</span> </span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">select_best</span>(<span class="at">metric=</span><span class="st">"accuracy"</span>)</span>
-<span id="cb20-3"><a href="#cb20-3"></a></span>
-<span id="cb20-4"><a href="#cb20-4"></a>final_cover_wf <span class="ot">=</span> cover_wf <span class="sc">%&gt;%</span> </span>
-<span id="cb20-5"><a href="#cb20-5"></a>  <span class="fu">finalize_workflow</span>(best_rf_model)</span>
-<span id="cb20-6"><a href="#cb20-6"></a></span>
-<span id="cb20-7"><a href="#cb20-7"></a>final_cover_fit <span class="ot">=</span> final_cover_wf <span class="sc">%&gt;%</span> </span>
-<span id="cb20-8"><a href="#cb20-8"></a>  <span class="fu">last_fit</span>(<span class="at">split=</span>cover_split, <span class="at">metrics=</span>my_mets) <span class="sc">%&gt;%</span> </span>
-<span id="cb20-9"><a href="#cb20-9"></a>  <span class="fu">collect_predictions</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>best_rf_model <span class="ot">=</span> rf_tuning <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">select_best</span>(<span class="at">metric=</span><span class="st">"accuracy"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3"></a></span>
+<span id="cb21-4"><a href="#cb21-4"></a>final_cover_wf <span class="ot">=</span> cover_wf <span class="sc">%&gt;%</span> </span>
+<span id="cb21-5"><a href="#cb21-5"></a>  <span class="fu">finalize_workflow</span>(best_rf_model)</span>
+<span id="cb21-6"><a href="#cb21-6"></a></span>
+<span id="cb21-7"><a href="#cb21-7"></a>final_cover_fit <span class="ot">=</span> final_cover_wf <span class="sc">%&gt;%</span> </span>
+<span id="cb21-8"><a href="#cb21-8"></a>  <span class="fu">last_fit</span>(<span class="at">split=</span>cover_split, <span class="at">metrics=</span>my_mets) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-9"><a href="#cb21-9"></a>  <span class="fu">collect_predictions</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Lastly, I use the <code>conf_mat()</code> function from the yardstick package to obtain a multi-class error matrix from the reference and predicted classes for each sample in the withheld testing set.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>final_cover_fit <span class="sc">%&gt;%</span> </span>
-<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">conf_mat</span>(<span class="at">truth=</span>cover, <span class="at">estimate=</span>.pred_class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>final_cover_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">conf_mat</span>(<span class="at">truth=</span>cover, <span class="at">estimate=</span>.pred_class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            Truth
 Prediction   Aspen Cottonwood Douglas Krummholz Lodgepole Ponderosa Spruce
@@ -601,9 +606,9 @@ Prediction   Aspen Cottonwood Douglas Krummholz Lodgepole Ponderosa Spruce
 </div>
 <p>Passing the matrix to <code>summary()</code> will provide a set of assessment metrics calculated from the error matrix.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>final_cover_fit <span class="sc">%&gt;%</span> </span>
-<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">conf_mat</span>(<span class="at">truth=</span>cover, <span class="at">estimate=</span>.pred_class) <span class="sc">%&gt;%</span> </span>
-<span id="cb23-3"><a href="#cb23-3"></a>  <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>final_cover_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">conf_mat</span>(<span class="at">truth=</span>cover, <span class="at">estimate=</span>.pred_class) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 13 x 3
    .metric              .estimator .estimate

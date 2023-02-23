@@ -53,8 +53,20 @@ library(forcats)
 Once the packages are loaded then we are going to import the dataset into the session. In this post we will explore a multi-class classification problem using the Covertype Data Set, which I obtained from the UCI Machine Learning Repository. This data set provides a total of 581,012 instances. The goal is to differentiate seven forest community types using several environmental variables including elevation, topographic aspect, topographic slope, horizontal distance to streams, vertical distance to streams, horizontal distance to roadways, hillshade values at 9AM, hillshade values at noon, hillshade values at 3PM, horizontal distance to fire points, and a wilderness area designation, a binary and nominal variable. 
 
 ```{r}
-
+#| eval: false
+#| 
 cover.type = read_csv("../data/ml/covtype.csv")
+```
+
+
+
+```{r}
+#| echo: false
+#| 
+cover.type = read_csv("d:/semba/2023/blogs/covtype.csv")
+```
+
+```{r}
 cover.type %>% 
   glimpse()
 ```

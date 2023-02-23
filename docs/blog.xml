@@ -1031,9 +1031,14 @@ Wickham, H., Wickham, M.H., 2017. <a href="https://CRAN.R-project.org/package=ti
 <h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
 <p>Once the packages are loaded then we are going to import the dataset into the session. In this post we will explore a multi-class classification problem using the Covertype Data Set, which I obtained from the UCI Machine Learning Repository. This data set provides a total of 581,012 instances. The goal is to differentiate seven forest community types using several environmental variables including elevation, topographic aspect, topographic slope, horizontal distance to streams, vertical distance to streams, horizontal distance to roadways, hillshade values at 9AM, hillshade values at noon, hillshade values at 3PM, horizontal distance to fire points, and a wilderness area designation, a binary and nominal variable.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1">cover.type <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">read_csv</span>(<span class="st" style="color: #20794D;">"../data/ml/covtype.csv"</span>)</span>
-<span id="cb3-2">cover.type <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb3-3">  <span class="fu" style="color: #4758AB;">glimpse</span>()</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1">cover.type <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">read_csv</span>(<span class="st" style="color: #20794D;">"../data/ml/covtype.csv"</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1">cover.type <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb4-2">  <span class="fu" style="color: #4758AB;">glimpse</span>()</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 581,012
 Columns: 55
@@ -1106,8 +1111,8 @@ $ Cover_Type                         &lt;dbl&gt; 5, 5, 2, 2, 5, 2, 5, 5, 5, 5, 5
 </ul>
 <p>We need to recode the cover type with the corresponding names as follows;</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1">cover.type <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb5-2">  <span class="fu" style="color: #4758AB;">distinct</span>(Cover_Type)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1">cover.type <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb6-2">  <span class="fu" style="color: #4758AB;">distinct</span>(Cover_Type)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7 x 1
   Cover_Type
@@ -1120,25 +1125,25 @@ $ Cover_Type                         &lt;dbl&gt; 5, 5, 2, 2, 5, 2, 5, 5, 5, 5, 5
 6          6
 7          4</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1">cover.type <span class="ot" style="color: #003B4F;">=</span> cover.type <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb7-2">  <span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">cover =</span> <span class="fu" style="color: #4758AB;">case_when</span>(Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">1</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Spruce"</span>,</span>
-<span id="cb7-3">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">2</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Lodgepole"</span>,</span>
-<span id="cb7-4">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">3</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Ponderosa"</span>,</span>
-<span id="cb7-5">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">4</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Cottonwood"</span>,</span>
-<span id="cb7-6">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">5</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Aspen"</span>,</span>
-<span id="cb7-7">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">6</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Douglas"</span>,</span>
-<span id="cb7-8">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">7</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Krummholz"</span>)</span>
-<span id="cb7-9">         )</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1">cover.type <span class="ot" style="color: #003B4F;">=</span> cover.type <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb8-2">  <span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">cover =</span> <span class="fu" style="color: #4758AB;">case_when</span>(Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">1</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Spruce"</span>,</span>
+<span id="cb8-3">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">2</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Lodgepole"</span>,</span>
+<span id="cb8-4">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">3</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Ponderosa"</span>,</span>
+<span id="cb8-5">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">4</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Cottonwood"</span>,</span>
+<span id="cb8-6">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">5</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Aspen"</span>,</span>
+<span id="cb8-7">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">6</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Douglas"</span>,</span>
+<span id="cb8-8">                               Cover_Type <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">7</span> <span class="sc" style="color: #5E5E5E;">~</span> <span class="st" style="color: #20794D;">"Krummholz"</span>)</span>
+<span id="cb8-9">         )</span></code></pre></div>
 </div>
 <p>I then use dplyr <code>count</code> function to to compute the number of records from each community type</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1">cover.type <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb8-2">  <span class="fu" style="color: #4758AB;">group_by</span>(cover) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb8-3">  <span class="fu" style="color: #4758AB;">summarise</span>(<span class="at" style="color: #657422;">n =</span> <span class="fu" style="color: #4758AB;">n</span>()) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb8-4">  <span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">area_ha =</span> (n<span class="sc" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">900</span>)<span class="sc" style="color: #5E5E5E;">/</span><span class="dv" style="color: #AD0000;">4063</span>, </span>
-<span id="cb8-5">         <span class="at" style="color: #657422;">pct =</span> n<span class="sc" style="color: #5E5E5E;">/</span><span class="fu" style="color: #4758AB;">sum</span>(n) <span class="sc" style="color: #5E5E5E;">*</span> <span class="dv" style="color: #AD0000;">100</span>, </span>
-<span id="cb8-6">         <span class="fu" style="color: #4758AB;">across</span>(is.numeric, round, <span class="dv" style="color: #AD0000;">2</span>)) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb8-7">  <span class="fu" style="color: #4758AB;">arrange</span>(<span class="sc" style="color: #5E5E5E;">-</span>n)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1">cover.type <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb9-2">  <span class="fu" style="color: #4758AB;">group_by</span>(cover) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb9-3">  <span class="fu" style="color: #4758AB;">summarise</span>(<span class="at" style="color: #657422;">n =</span> <span class="fu" style="color: #4758AB;">n</span>()) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb9-4">  <span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">area_ha =</span> (n<span class="sc" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">900</span>)<span class="sc" style="color: #5E5E5E;">/</span><span class="dv" style="color: #AD0000;">4063</span>, </span>
+<span id="cb9-5">         <span class="at" style="color: #657422;">pct =</span> n<span class="sc" style="color: #5E5E5E;">/</span><span class="fu" style="color: #4758AB;">sum</span>(n) <span class="sc" style="color: #5E5E5E;">*</span> <span class="dv" style="color: #AD0000;">100</span>, </span>
+<span id="cb9-6">         <span class="fu" style="color: #4758AB;">across</span>(is.numeric, round, <span class="dv" style="color: #AD0000;">2</span>)) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb9-7">  <span class="fu" style="color: #4758AB;">arrange</span>(<span class="sc" style="color: #5E5E5E;">-</span>n)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7 x 4
   cover           n area_ha   pct
@@ -1154,16 +1159,16 @@ $ Cover_Type                         &lt;dbl&gt; 5, 5, 2, 2, 5, 2, 5, 5, 5, 5, 5
 </div>
 <p>The printed output suggests significant data imbalance. In order to speed up the tuning and training process, I then select out 500 samples from each class using a stratified random sample. For potentially improved results, I should use all available samples. However, this would take a lot longer to execute.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;">set.seed</span>(<span class="dv" style="color: #AD0000;">123</span>)</span>
-<span id="cb10-2"></span>
-<span id="cb10-3">cover.type.sample <span class="ot" style="color: #003B4F;">=</span> cover.type <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb10-4">  <span class="fu" style="color: #4758AB;">group_by</span>(cover) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb10-5">  <span class="fu" style="color: #4758AB;">sample_n</span>(<span class="at" style="color: #657422;">size =</span> <span class="dv" style="color: #AD0000;">500</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb10-6">  <span class="fu" style="color: #4758AB;">ungroup</span>()</span>
-<span id="cb10-7"></span>
-<span id="cb10-8">cover.type.sample <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb10-9">  <span class="fu" style="color: #4758AB;">group_by</span>(cover) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb10-10">  <span class="fu" style="color: #4758AB;">summarise</span>(<span class="at" style="color: #657422;">n =</span> <span class="fu" style="color: #4758AB;">n</span>())</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;">set.seed</span>(<span class="dv" style="color: #AD0000;">123</span>)</span>
+<span id="cb11-2"></span>
+<span id="cb11-3">cover.type.sample <span class="ot" style="color: #003B4F;">=</span> cover.type <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb11-4">  <span class="fu" style="color: #4758AB;">group_by</span>(cover) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb11-5">  <span class="fu" style="color: #4758AB;">sample_n</span>(<span class="at" style="color: #657422;">size =</span> <span class="dv" style="color: #AD0000;">500</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb11-6">  <span class="fu" style="color: #4758AB;">ungroup</span>()</span>
+<span id="cb11-7"></span>
+<span id="cb11-8">cover.type.sample <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb11-9">  <span class="fu" style="color: #4758AB;">group_by</span>(cover) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb11-10">  <span class="fu" style="color: #4758AB;">summarise</span>(<span class="at" style="color: #657422;">n =</span> <span class="fu" style="color: #4758AB;">n</span>())</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7 x 2
   cover          n
@@ -1182,88 +1187,88 @@ $ Cover_Type                         &lt;dbl&gt; 5, 5, 2, 2, 5, 2, 5, 5, 5, 5, 5
 <section id="define-model" class="level2">
 <h2 class="anchored" data-anchor-id="define-model">Define Model</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1">rf_model <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">rand_forest</span>(<span class="at" style="color: #657422;">mtry=</span><span class="fu" style="color: #4758AB;">tune</span>(), <span class="at" style="color: #657422;">trees=</span><span class="dv" style="color: #AD0000;">500</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb12-2">  <span class="fu" style="color: #4758AB;">set_engine</span>(<span class="st" style="color: #20794D;">"ranger"</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb12-3">  <span class="fu" style="color: #4758AB;">set_mode</span>(<span class="st" style="color: #20794D;">"classification"</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1">rf_model <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">rand_forest</span>(<span class="at" style="color: #657422;">mtry=</span><span class="fu" style="color: #4758AB;">tune</span>(), <span class="at" style="color: #657422;">trees=</span><span class="dv" style="color: #AD0000;">500</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb13-2">  <span class="fu" style="color: #4758AB;">set_engine</span>(<span class="st" style="color: #20794D;">"ranger"</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb13-3">  <span class="fu" style="color: #4758AB;">set_mode</span>(<span class="st" style="color: #20794D;">"classification"</span>)</span></code></pre></div>
 </div>
 </section>
 <section id="set-split" class="level2">
 <h2 class="anchored" data-anchor-id="set-split">Set split</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;">set.seed</span>(<span class="dv" style="color: #AD0000;">42</span>)</span>
-<span id="cb13-2"></span>
-<span id="cb13-3">cover_split <span class="ot" style="color: #003B4F;">=</span> cover.type.sample <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb13-4">  <span class="fu" style="color: #4758AB;">initial_split</span>(<span class="at" style="color: #657422;">prop=</span>.<span class="dv" style="color: #AD0000;">75</span>, <span class="at" style="color: #657422;">strata=</span>cover)</span>
-<span id="cb13-5"></span>
-<span id="cb13-6">cover_train <span class="ot" style="color: #003B4F;">=</span> cover_split <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">training</span>()</span>
-<span id="cb13-7">cover_test <span class="ot" style="color: #003B4F;">=</span> cover_split <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">testing</span>()</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><span class="fu" style="color: #4758AB;">set.seed</span>(<span class="dv" style="color: #AD0000;">42</span>)</span>
+<span id="cb14-2"></span>
+<span id="cb14-3">cover_split <span class="ot" style="color: #003B4F;">=</span> cover.type.sample <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb14-4">  <span class="fu" style="color: #4758AB;">initial_split</span>(<span class="at" style="color: #657422;">prop=</span>.<span class="dv" style="color: #AD0000;">75</span>, <span class="at" style="color: #657422;">strata=</span>cover)</span>
+<span id="cb14-5"></span>
+<span id="cb14-6">cover_train <span class="ot" style="color: #003B4F;">=</span> cover_split <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">training</span>()</span>
+<span id="cb14-7">cover_test <span class="ot" style="color: #003B4F;">=</span> cover_split <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">testing</span>()</span></code></pre></div>
 </div>
 <p>I would like to normalize all continuous predictor variables and create a dummy variable from the single nominal predictor variable (“wilderness”). I define these transformations within a recipe using functions available in recipes package <span class="citation" data-cites="recipes">(Kuhn &amp; Wickham, 2020a)</span>. This also requires defining the formula and the input data. Here, I am referencing only the training set, as the test set should not be introduced to the model at this point, as this could result in a later bias assessment of model performance. The <code>all_numeric()</code>, <code>all_nominal()</code>, and <code>all_outcomes()</code> functions are used to select columns on which to apply the desired transformations.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1">cover_recipe <span class="ot" style="color: #003B4F;">=</span> cover_train <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb14-2">  <span class="fu" style="color: #4758AB;">recipe</span>(cover<span class="sc" style="color: #5E5E5E;">~</span>.) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb14-3">  <span class="fu" style="color: #4758AB;">step_normalize</span>(<span class="fu" style="color: #4758AB;">all_numeric</span>()) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb14-4">  <span class="fu" style="color: #4758AB;">step_dummy</span>(<span class="fu" style="color: #4758AB;">all_nominal</span>(), <span class="sc" style="color: #5E5E5E;">-</span><span class="fu" style="color: #4758AB;">all_outcomes</span>())</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1">cover_recipe <span class="ot" style="color: #003B4F;">=</span> cover_train <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb15-2">  <span class="fu" style="color: #4758AB;">recipe</span>(cover<span class="sc" style="color: #5E5E5E;">~</span>.) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb15-3">  <span class="fu" style="color: #4758AB;">step_normalize</span>(<span class="fu" style="color: #4758AB;">all_numeric</span>()) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb15-4">  <span class="fu" style="color: #4758AB;">step_dummy</span>(<span class="fu" style="color: #4758AB;">all_nominal</span>(), <span class="sc" style="color: #5E5E5E;">-</span><span class="fu" style="color: #4758AB;">all_outcomes</span>())</span></code></pre></div>
 </div>
 <p>The model and pre-processing recipe are then combined into a workflow.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1">cover_wf <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">workflow</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb15-2">  <span class="fu" style="color: #4758AB;">add_model</span>(rf_model) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb15-3">  <span class="fu" style="color: #4758AB;">add_recipe</span>(cover_recipe)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1">cover_wf <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">workflow</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb16-2">  <span class="fu" style="color: #4758AB;">add_model</span>(rf_model) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb16-3">  <span class="fu" style="color: #4758AB;">add_recipe</span>(cover_recipe)</span></code></pre></div>
 </div>
 <p>I then use <strong>yardstick</strong> <span class="citation" data-cites="yerdstick">(<strong>yerdstick?</strong>)</span> and the <code>metric_set()</code> function to define the desired assessment metrics, in this case only overall accuracy. To prepare for hyperparameter tuning using five-fold cross validation, I define folds using the <code>vfold_cv()</code> function from <strong>rsample</strong>. Similar to the training and testing split above, the folds are stratified by the community type to maintain class balance within each fold. Lastly, I then define values of <em>mtry</em> to test using the dials package. It would be better to test more values and maybe optimize additional parameters. However, I am trying to decrease the time required to execute the example.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><span class="co" style="color: #5E5E5E;">#Define metrics</span></span>
-<span id="cb16-2">my_mets <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">metric_set</span>(accuracy)</span>
-<span id="cb16-3"></span>
-<span id="cb16-4"><span class="co" style="color: #5E5E5E;">#Define folds</span></span>
-<span id="cb16-5"><span class="fu" style="color: #4758AB;">set.seed</span>(<span class="dv" style="color: #AD0000;">42</span>)</span>
-<span id="cb16-6">cover_folds <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">vfold_cv</span>(cover_train, <span class="at" style="color: #657422;">v=</span><span class="dv" style="color: #AD0000;">5</span>, <span class="at" style="color: #657422;">strata=</span>cover)</span>
-<span id="cb16-7"></span>
-<span id="cb16-8"><span class="co" style="color: #5E5E5E;">#Define tuning grid</span></span>
-<span id="cb16-9">rf_grid <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">grid_regular</span>(<span class="fu" style="color: #4758AB;">mtry</span>(<span class="at" style="color: #657422;">range =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">12</span>)),</span>
-<span id="cb16-10">                        <span class="at" style="color: #657422;">levels =</span> <span class="dv" style="color: #AD0000;">6</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><span class="co" style="color: #5E5E5E;">#Define metrics</span></span>
+<span id="cb17-2">my_mets <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">metric_set</span>(accuracy)</span>
+<span id="cb17-3"></span>
+<span id="cb17-4"><span class="co" style="color: #5E5E5E;">#Define folds</span></span>
+<span id="cb17-5"><span class="fu" style="color: #4758AB;">set.seed</span>(<span class="dv" style="color: #AD0000;">42</span>)</span>
+<span id="cb17-6">cover_folds <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">vfold_cv</span>(cover_train, <span class="at" style="color: #657422;">v=</span><span class="dv" style="color: #AD0000;">5</span>, <span class="at" style="color: #657422;">strata=</span>cover)</span>
+<span id="cb17-7"></span>
+<span id="cb17-8"><span class="co" style="color: #5E5E5E;">#Define tuning grid</span></span>
+<span id="cb17-9">rf_grid <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">grid_regular</span>(<span class="fu" style="color: #4758AB;">mtry</span>(<span class="at" style="color: #657422;">range =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">12</span>)),</span>
+<span id="cb17-10">                        <span class="at" style="color: #657422;">levels =</span> <span class="dv" style="color: #AD0000;">6</span>)</span></code></pre></div>
 </div>
 <p>Now that the model, pre-processing steps, workflow, metrics, data partitions, and mtry values to try have been defined, I tune the model using <code>tune_grid()</code> from the tune package. Note that this may take several minutes. Specifically, I make sure to use the defined workflow so that the pre-processing steps defined using the recipe are used. Once completed, I collect the resulting metrics for each mtry value for each fold using collect_metrics() from tune. The summarize parameter is set to FALSE because I want to obtain all results for each fold, as opposed to aggregated results. I then calculate the minimum, maximum, and median overall accuracies for each fold using dplyr and plot the results using ggplot2.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1">rf_tuning <span class="ot" style="color: #003B4F;">=</span> cover_wf <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb17-2">  <span class="fu" style="color: #4758AB;">tune_grid</span>(<span class="at" style="color: #657422;">resamples=</span>cover_folds, <span class="at" style="color: #657422;">grid =</span> rf_grid, <span class="at" style="color: #657422;">metrics=</span>my_mets)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1">rf_tuning <span class="ot" style="color: #003B4F;">=</span> cover_wf <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb18-2">  <span class="fu" style="color: #4758AB;">tune_grid</span>(<span class="at" style="color: #657422;">resamples=</span>cover_folds, <span class="at" style="color: #657422;">grid =</span> rf_grid, <span class="at" style="color: #657422;">metrics=</span>my_mets)</span></code></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1">tune_result <span class="ot" style="color: #003B4F;">=</span> rf_tuning <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb18-2">  <span class="fu" style="color: #4758AB;">collect_metrics</span>(<span class="at" style="color: #657422;">summarize=</span><span class="cn" style="color: #8f5902;">FALSE</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb18-3">  <span class="fu" style="color: #4758AB;">filter</span>(.metric <span class="sc" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">'accuracy'</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span>  </span>
-<span id="cb18-4">  <span class="fu" style="color: #4758AB;">group_by</span>(mtry) <span class="sc" style="color: #5E5E5E;">%&gt;%</span>  </span>
-<span id="cb18-5">  <span class="fu" style="color: #4758AB;">summarize</span>(<span class="at" style="color: #657422;">min_acc =</span> <span class="fu" style="color: #4758AB;">min</span>(.estimate),             </span>
-<span id="cb18-6">            <span class="at" style="color: #657422;">median_acc =</span> <span class="fu" style="color: #4758AB;">mean</span>(.estimate),             </span>
-<span id="cb18-7">            <span class="at" style="color: #657422;">max_acc =</span> <span class="fu" style="color: #4758AB;">max</span>(.estimate))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1">tune_result <span class="ot" style="color: #003B4F;">=</span> rf_tuning <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb19-2">  <span class="fu" style="color: #4758AB;">collect_metrics</span>(<span class="at" style="color: #657422;">summarize=</span><span class="cn" style="color: #8f5902;">FALSE</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb19-3">  <span class="fu" style="color: #4758AB;">filter</span>(.metric <span class="sc" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">'accuracy'</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span>  </span>
+<span id="cb19-4">  <span class="fu" style="color: #4758AB;">group_by</span>(mtry) <span class="sc" style="color: #5E5E5E;">%&gt;%</span>  </span>
+<span id="cb19-5">  <span class="fu" style="color: #4758AB;">summarize</span>(<span class="at" style="color: #657422;">min_acc =</span> <span class="fu" style="color: #4758AB;">min</span>(.estimate),             </span>
+<span id="cb19-6">            <span class="at" style="color: #657422;">median_acc =</span> <span class="fu" style="color: #4758AB;">mean</span>(.estimate),             </span>
+<span id="cb19-7">            <span class="at" style="color: #657422;">max_acc =</span> <span class="fu" style="color: #4758AB;">max</span>(.estimate))</span></code></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="fu" style="color: #4758AB;">ggplot</span>(tune_result, <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">y=</span>median_acc, <span class="at" style="color: #657422;">x=</span>mtry))<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb19-2">  <span class="fu" style="color: #4758AB;">geom_point</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb19-3">  <span class="fu" style="color: #4758AB;">geom_errorbar</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">ymin=</span>min_acc, <span class="at" style="color: #657422;">ymax=</span>max_acc), <span class="at" style="color: #657422;">width =</span> .<span class="dv" style="color: #AD0000;">4</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb19-4">  <span class="fu" style="color: #4758AB;">theme_bw</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb19-5">  <span class="fu" style="color: #4758AB;">labs</span>(<span class="at" style="color: #657422;">x=</span><span class="st" style="color: #20794D;">"mtry Parameter"</span>, <span class="at" style="color: #657422;">y =</span> <span class="st" style="color: #20794D;">"Accuracy"</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><span class="fu" style="color: #4758AB;">ggplot</span>(tune_result, <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">y=</span>median_acc, <span class="at" style="color: #657422;">x=</span>mtry))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb20-2">  <span class="fu" style="color: #4758AB;">geom_point</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb20-3">  <span class="fu" style="color: #4758AB;">geom_errorbar</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">ymin=</span>min_acc, <span class="at" style="color: #657422;">ymax=</span>max_acc), <span class="at" style="color: #657422;">width =</span> .<span class="dv" style="color: #AD0000;">4</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb20-4">  <span class="fu" style="color: #4758AB;">theme_bw</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb20-5">  <span class="fu" style="color: #4758AB;">labs</span>(<span class="at" style="color: #657422;">x=</span><span class="st" style="color: #20794D;">"mtry Parameter"</span>, <span class="at" style="color: #657422;">y =</span> <span class="st" style="color: #20794D;">"Accuracy"</span>)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://lugoga.github.io/semba-quarto/posts/tidymodels_classification/index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+<p><img src="https://lugoga.github.io/semba-quarto/posts/tidymodels_classification/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>The best mtry parameter is defined using the <code>select_best()</code> function from tune. The workflow is then finalized and the model is trained using <code>last_fit()</code> from tune. The <code>collect_predictions()</code> function from tune is used to obtain the class prediction for each sample in the withheld test set.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1">best_rf_model <span class="ot" style="color: #003B4F;">=</span> rf_tuning <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb20-2">  <span class="fu" style="color: #4758AB;">select_best</span>(<span class="at" style="color: #657422;">metric=</span><span class="st" style="color: #20794D;">"accuracy"</span>)</span>
-<span id="cb20-3"></span>
-<span id="cb20-4">final_cover_wf <span class="ot" style="color: #003B4F;">=</span> cover_wf <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb20-5">  <span class="fu" style="color: #4758AB;">finalize_workflow</span>(best_rf_model)</span>
-<span id="cb20-6"></span>
-<span id="cb20-7">final_cover_fit <span class="ot" style="color: #003B4F;">=</span> final_cover_wf <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb20-8">  <span class="fu" style="color: #4758AB;">last_fit</span>(<span class="at" style="color: #657422;">split=</span>cover_split, <span class="at" style="color: #657422;">metrics=</span>my_mets) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb20-9">  <span class="fu" style="color: #4758AB;">collect_predictions</span>()</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1">best_rf_model <span class="ot" style="color: #003B4F;">=</span> rf_tuning <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb21-2">  <span class="fu" style="color: #4758AB;">select_best</span>(<span class="at" style="color: #657422;">metric=</span><span class="st" style="color: #20794D;">"accuracy"</span>)</span>
+<span id="cb21-3"></span>
+<span id="cb21-4">final_cover_wf <span class="ot" style="color: #003B4F;">=</span> cover_wf <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb21-5">  <span class="fu" style="color: #4758AB;">finalize_workflow</span>(best_rf_model)</span>
+<span id="cb21-6"></span>
+<span id="cb21-7">final_cover_fit <span class="ot" style="color: #003B4F;">=</span> final_cover_wf <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb21-8">  <span class="fu" style="color: #4758AB;">last_fit</span>(<span class="at" style="color: #657422;">split=</span>cover_split, <span class="at" style="color: #657422;">metrics=</span>my_mets) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb21-9">  <span class="fu" style="color: #4758AB;">collect_predictions</span>()</span></code></pre></div>
 </div>
 <p>Lastly, I use the <code>conf_mat()</code> function from the yardstick package to obtain a multi-class error matrix from the reference and predicted classes for each sample in the withheld testing set.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1">final_cover_fit <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb21-2">  <span class="fu" style="color: #4758AB;">conf_mat</span>(<span class="at" style="color: #657422;">truth=</span>cover, <span class="at" style="color: #657422;">estimate=</span>.pred_class)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1">final_cover_fit <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb22-2">  <span class="fu" style="color: #4758AB;">conf_mat</span>(<span class="at" style="color: #657422;">truth=</span>cover, <span class="at" style="color: #657422;">estimate=</span>.pred_class)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            Truth
 Prediction   Aspen Cottonwood Douglas Krummholz Lodgepole Ponderosa Spruce
@@ -1278,9 +1283,9 @@ Prediction   Aspen Cottonwood Douglas Krummholz Lodgepole Ponderosa Spruce
 </div>
 <p>Passing the matrix to <code>summary()</code> will provide a set of assessment metrics calculated from the error matrix.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1">final_cover_fit <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb23-2">  <span class="fu" style="color: #4758AB;">conf_mat</span>(<span class="at" style="color: #657422;">truth=</span>cover, <span class="at" style="color: #657422;">estimate=</span>.pred_class) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb23-3">  <span class="fu" style="color: #4758AB;">summary</span>()</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1">final_cover_fit <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb24-2">  <span class="fu" style="color: #4758AB;">conf_mat</span>(<span class="at" style="color: #657422;">truth=</span>cover, <span class="at" style="color: #657422;">estimate=</span>.pred_class) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb24-3">  <span class="fu" style="color: #4758AB;">summary</span>()</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 13 x 3
    .metric              .estimator .estimate
