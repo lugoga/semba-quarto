@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://lugoga.github.io/semba-quarto/archive.html</loc>
-    <lastmod>2023-02-21T15:45:39.149Z</lastmod>
+    <lastmod>2023-02-23T04:09:56.110Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/blog.html</loc>
-    <lastmod>2023-02-21T15:45:40.338Z</lastmod>
+    <lastmod>2023-02-23T04:10:53.662Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/index.html</loc>
@@ -71,5 +71,9 @@
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/ttest/index.html</loc>
     <lastmod>2023-02-21T15:35:01.720Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lugoga.github.io/semba-quarto/posts/tidymodels_regression/index.html</loc>
+    <lastmod>2023-02-23T04:10:02.225Z</lastmod>
   </url>
 </urlset>

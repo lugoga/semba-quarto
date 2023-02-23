@@ -83,5 +83,8 @@
   },
   "posts/gebco/index.qmd": {
     "index.html": "61d3bf94"
+  },
+  "posts/tidymodels_regression/index.qmd": {
+    "index.html": "0d72fe27"
   }
 }

@@ -10,7 +10,615 @@
 <atom:link href="https://lugoga.github.io/semba-quarto/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Coding for all for better today and tommorow</description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Tue, 28 Feb 2023 21:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 10 Apr 2023 21:00:00 GMT</lastBuildDate>
+<item>
+  <title>Linear and Bayesian Regression Models with tidymodels package</title>
+  <dc:creator>Masumbuko Semba</dc:creator>
+  <link>https://lugoga.github.io/semba-quarto/posts/tidymodels_regression/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>We live in age of increasing data and as a data scientist, our role primarily involves exploring and analyzing data. However, with the amount of data data exploration and analysis become a thing for automation and use of intelligent tools to help us glean key information from data. The results of an analysis might form the basis of a report or a machine learning model, but it all begins with data. The two popular tools commonly used are R and Python. R is one of the most popular programming languages for data scientists. R is an elegant environment that’s designed to support data science, and you can use it for many purposes.</p>
+<p>After decades of open-source development, R provides extensive functionality that’s backed by a massive set of powerful statistical modeling, machine learning, visualization and data wrangling packages. Some of these package that has revolutionized R are <strong>tidyverse</strong> and <strong>tidymodel</strong> package. <strong>tidyverse</strong> is a collection of R packages that make data science faster, easier, and more fun and <strong>tidymodels</strong> is a collection of R packages for modeling and statistical analysis.</p>
+<p>As a data scientist, you need to distinguish between <em>regression predictive models</em> and <em>classification predictive models</em>. Clear understanding of these models helps to choose the best one for a specific use case. In a nutshell, <em>regression predictive models</em>and <em>classification predictive models</em> fall under supervised machine learning. The main difference between these two models is the output: while in regression produce an output as numerical (or continuous), the output of classification is categorical (or discrete).</p>
+<p>A big part of machine learning is <em>classification</em> — we want to know what class or group an observation belongs to. Therefore, the ability to precisely classify observations to their groups is valuable for various business applications like predicting the future based on historical data. For example, when provided with a dataset about environmental variables, and you are asked to predict productivity, that is a regression task because productivity measured in term of chlorophyll concentration will be a continuous output.</p>
+<p>In this post we will focus on regression. We will learn the steps of modelling using <strong>tidymodels</strong> <span class="citation" data-cites="tidymodels">(Kuhn &amp; Wickham, 2020b)</span>. We first explore the data and check if it fit for modelling, we then split the dataset into a training and testing sets. Next, we will create a recipe object and define our model. Lastly, we will train a specified model and evaluate its performance. I will use the same dataset for three different model’s algorithms. Example of the common regression algorithms include <code>random forest</code>, <code>linear regression</code>, <code>support vector regression (SVR)</code> and <code>bayes</code>. Some algorithms, such as <code>logistic regression</code>, have the name <code>regression</code> in their functions but they are not regression algorithms.</p>
+<p>To follow use code in this article, you will need <strong>tidymodels</strong> <span class="citation" data-cites="tidymodels">(Kuhn &amp; Wickham, 2020b)</span> and <strong>tidyverse</strong> packages <span class="citation" data-cites="tidyverse">(Wickham &amp; Wickham, 2017)</span> installed in your machine. You can install them from CRAN. The chunk below highlight lines of code to install the packages if they are yet in your PC.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1">model.packages <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"tidymodels"</span>, <span class="st" style="color: #20794D;">"tidyverse"</span>)</span>
+<span id="cb1-2"></span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;">install.packages</span>(model.packages)</span></code></pre></div>
+</div>
+<p>Once installed, you can load the packages in your session. We often we use several packages to accomplish a task. Even in this post, though seems only two packages are loaded, these are ecosystems which comes with dozens of packages bundled with them.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">require</span>(tidyverse)</span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;">require</span>(tidymodels)</span></code></pre></div>
+</div>
+</section>
+<section id="the-dataset" class="level1">
+<h1>The dataset</h1>
+<p>We use the data collected with the Institute of Marine Sciences of the University of Dar es Salaam to illustrate the concept. The data was collected through the Coral Reef Targeted Research and Capacity Building for Management (CRTR) project between 2008 and 2009. The dataset contains;</p>
+<ul>
+<li>Chemical variables —nitrate, phosphate, salinity, pH, dissolved oxygen and ammonia</li>
+<li>Physical variables — temperature</li>
+<li>Biological variables— chlorophyll-<em>a</em></li>
+</ul>
+<p>Because the variables are organized in sheets of Excel spreadsheet, i used a <code>read_excel</code> function from <strong>readxl</strong> package <span class="citation" data-cites="readxl">(Wickham &amp; Bryan, 2018)</span> to read the file from the sheet. And because there are several sheet, the processed was iterated with a <code>for</code> loop. Data from each sheet was allocated in the list file. The chunk below highlight the code used to read files in sheets.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1">variables <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"salinity"</span>, <span class="st" style="color: #20794D;">"temperature"</span>, <span class="st" style="color: #20794D;">"do"</span>, <span class="st" style="color: #20794D;">"ph"</span>, <span class="st" style="color: #20794D;">"chl"</span>, <span class="st" style="color: #20794D;">"ammonia"</span>, <span class="st" style="color: #20794D;">"phosphate"</span>, <span class="st" style="color: #20794D;">"nitrate"</span>)</span>
+<span id="cb3-2"></span>
+<span id="cb3-3">crtr.list <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">list</span>()</span>
+<span id="cb3-4"></span>
+<span id="cb3-5"><span class="cf" style="color: #003B4F;">for</span> (i <span class="cf" style="color: #003B4F;">in</span> <span class="dv" style="color: #AD0000;">1</span><span class="sc" style="color: #5E5E5E;">:</span><span class="fu" style="color: #4758AB;">length</span>(variables)){</span>
+<span id="cb3-6">  </span>
+<span id="cb3-7">  crtr.list[[i]] <span class="ot" style="color: #003B4F;">=</span> readxl<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">read_excel</span>(<span class="st" style="color: #20794D;">"../data/crtr.xlsx"</span>, <span class="at" style="color: #657422;">sheet =</span> i) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb3-8">    <span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">variable =</span> variables[i]) </span>
+<span id="cb3-9"></span>
+<span id="cb3-10">}</span></code></pre></div>
+</div>
+<p>The data was untidy and unsuitable for visualization and modelling in R. Therefore, the first thing I had to deal with the data was to tidy the variables in the dataset to a right format that <strong>tidymodels</strong> and <strong>tidyverse</strong> recognizes. First the dataset was unlisted with <code>bind_rows</code> function and the data was pivoted to long format and then back to wide format with only the variable of interested selected.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## organize in long form</span></span>
+<span id="cb4-2">crtr.long <span class="ot" style="color: #003B4F;">=</span> crtr.list <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb4-3">  <span class="fu" style="color: #4758AB;">bind_rows</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb4-4">  <span class="fu" style="color: #4758AB;">pivot_longer</span>(<span class="at" style="color: #657422;">cols =</span><span class="dv" style="color: #AD0000;">2</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">5</span>, <span class="at" style="color: #657422;">names_to =</span> <span class="st" style="color: #20794D;">"sites"</span>, <span class="at" style="color: #657422;">values_to =</span> <span class="st" style="color: #20794D;">"data"</span> ) </span>
+<span id="cb4-5"></span>
+<span id="cb4-6"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## organize in the wide form</span></span>
+<span id="cb4-7">crtr.wide <span class="ot" style="color: #003B4F;">=</span> crtr.long <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb4-8">  <span class="fu" style="color: #4758AB;">pivot_wider</span>(<span class="at" style="color: #657422;">names_from =</span> variable, <span class="at" style="color: #657422;">values_from =</span> data) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb4-9">  <span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">month =</span> lubridate<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">month</span>(Date, <span class="at" style="color: #657422;">label =</span> <span class="cn" style="color: #8f5902;">TRUE</span>, </span>
+<span id="cb4-10">                                  <span class="at" style="color: #657422;">abb =</span> <span class="cn" style="color: #8f5902;">TRUE</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">as.character</span>()) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb4-11">  <span class="fu" style="color: #4758AB;">mutate_if</span>(is.character, as.factor) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb4-12">  <span class="fu" style="color: #4758AB;">mutate_if</span>(is.numeric, round, <span class="at" style="color: #657422;">digits =</span> <span class="dv" style="color: #AD0000;">2</span>)  <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb4-13">  <span class="fu" style="color: #4758AB;">select</span>(<span class="at" style="color: #657422;">date =</span> Date, month,sites, chl, <span class="fu" style="color: #4758AB;">everything</span>())</span></code></pre></div>
+</div>
+<p>Let’s us glimpse the dataset</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1">crtr.wide <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb5-2">  <span class="fu" style="color: #4758AB;">glimpse</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 52
+Columns: 11
+$ date        &lt;dttm&gt; 2008-03-01, 2008-03-01, 2008-03-01, 2008-03-01, 2008-04-0~
+$ month       &lt;fct&gt; Mar, Mar, Mar, Mar, Apr, Apr, Apr, Apr, May, May, May, May~
+$ sites       &lt;fct&gt; Pongwe, Mnemba, Chumbe, Bawe, Pongwe, Mnemba, Chumbe, Bawe~
+$ chl         &lt;dbl&gt; 0.09, 0.26, 0.56, 0.43, 0.47, 1.01, 0.63, 1.39, 0.37, 0.33~
+$ salinity    &lt;dbl&gt; 35.0, 34.0, 32.0, 32.0, 35.0, 35.0, 34.0, 34.0, 36.0, 36.0~
+$ temperature &lt;dbl&gt; 28.8, 28.4, 28.0, 28.0, 28.2, 27.7, 28.1, 26.7, 27.0, 27.2~
+$ do          &lt;dbl&gt; 6.11, 5.95, 6.16, NA, 6.35, 6.14, 7.01, 6.31, 6.15, 6.10, ~
+$ ph          &lt;dbl&gt; 7.86, 7.88, 7.73, NA, 7.87, 7.88, 7.86, 7.91, 7.68, 7.80, ~
+$ ammonia     &lt;dbl&gt; 0.55, 0.80, 0.74, 0.94, 0.56, 0.72, 0.53, 0.97, 0.56, 0.65~
+$ phosphate   &lt;dbl&gt; 0.28, 0.28, 1.31, 1.91, 0.28, 0.32, 1.16, 0.84, 0.28, 0.43~
+$ nitrate     &lt;dbl&gt; 0.04, 0.07, 3.26, 3.34, 0.03, 0.47, 1.45, 0.84, 0.06, 0.48~</code></pre>
+</div>
+</div>
+<p>As a first step in modeling, it’s always a good idea to explore the variables in the dataset. Figure&nbsp;1 is a pairplot that compare each pair of variables as scatterplots in the lower diagonal, densities on the diagonal and correlations written in the upper diagonal <span class="citation" data-cites="ggally">(Schloerke et al., 2020)</span>. Figure&nbsp;2 show the correlation between chlorophyll-<em>a</em> (outcome) with other six predictor variables using a linear and quadratic equations is unfit for these dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1">crtr.wide <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb7-2">  <span class="fu" style="color: #4758AB;">select</span>(<span class="sc" style="color: #5E5E5E;">-</span>salinity)<span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb7-3">  <span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">season =</span> lubridate<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">month</span>(date) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">as.integer</span>(),</span>
+<span id="cb7-4">         <span class="at" style="color: #657422;">season =</span> <span class="fu" style="color: #4758AB;">replace</span>(season,season <span class="sc" style="color: #5E5E5E;">%in%</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">1</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">4</span>,<span class="dv" style="color: #AD0000;">11</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">12</span>), <span class="st" style="color: #20794D;">"NE"</span>),</span>
+<span id="cb7-5">         <span class="at" style="color: #657422;">season =</span> <span class="fu" style="color: #4758AB;">replace</span>(season,season <span class="sc" style="color: #5E5E5E;">%in%</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">5</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">10</span>), <span class="st" style="color: #20794D;">"SE"</span>))<span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb7-6">  GGally<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">ggscatmat</span>(<span class="at" style="color: #657422;">columns =</span> <span class="dv" style="color: #AD0000;">4</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">10</span>,<span class="at" style="color: #657422;">color=</span><span class="st" style="color: #20794D;">"season"</span>, <span class="at" style="color: #657422;">alpha=</span><span class="dv" style="color: #AD0000;">1</span>, <span class="at" style="color: #657422;">corMethod =</span> <span class="st" style="color: #20794D;">"spearman"</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-7">  ggsci<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">scale_color_jco</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-8">  ggpubr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">theme_pubclean</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-9">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">strip.background =</span> <span class="fu" style="color: #4758AB;">element_blank</span>(), </span>
+<span id="cb7-10">        <span class="at" style="color: #657422;">legend.position =</span> <span class="st" style="color: #20794D;">"right"</span>,</span>
+<span id="cb7-11">        <span class="at" style="color: #657422;">legend.key =</span> <span class="fu" style="color: #4758AB;">element_blank</span>())</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-fig0" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/tidymodels_regression/index_files/figure-html/fig-fig0-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Pair plot of numerical variables</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1">wesa <span class="ot" style="color: #003B4F;">=</span> wesanderson<span class="sc" style="color: #5E5E5E;">::</span>wes_palettes <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">names</span>()</span>
+<span id="cb8-2"></span>
+<span id="cb8-3">crtr.wide <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb8-4">  <span class="fu" style="color: #4758AB;">select</span>(<span class="sc" style="color: #5E5E5E;">-</span>salinity)<span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb8-5">  <span class="fu" style="color: #4758AB;">filter</span>(nitrate <span class="sc" style="color: #5E5E5E;">&lt;</span> <span class="dv" style="color: #AD0000;">1</span> <span class="sc" style="color: #5E5E5E;">&amp;</span> phosphate <span class="sc" style="color: #5E5E5E;">&lt;</span> <span class="fl" style="color: #AD0000;">1.2</span> <span class="sc" style="color: #5E5E5E;">&amp;</span> chl <span class="sc" style="color: #5E5E5E;">&lt;</span> <span class="dv" style="color: #AD0000;">1</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb8-6">  <span class="fu" style="color: #4758AB;">pivot_longer</span>(<span class="at" style="color: #657422;">cols =</span> <span class="dv" style="color: #AD0000;">5</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">10</span>, <span class="at" style="color: #657422;">names_to =</span> <span class="st" style="color: #20794D;">"predictor"</span>, <span class="at" style="color: #657422;">values_to =</span> <span class="st" style="color: #20794D;">"data"</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb8-7">  <span class="co" style="color: #5E5E5E;"># filter(sites == "Bawe")%&gt;%</span></span>
+<span id="cb8-8">  <span class="fu" style="color: #4758AB;">ggplot</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> data, <span class="at" style="color: #657422;">y =</span> chl))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb8-9">  <span class="fu" style="color: #4758AB;">scale_y_continuous</span>(<span class="at" style="color: #657422;">trans =</span> scales<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">sqrt_trans</span>(), <span class="at" style="color: #657422;">labels =</span> <span class="cf" style="color: #003B4F;">function</span>(x) <span class="fu" style="color: #4758AB;">round</span>(x,<span class="dv" style="color: #AD0000;">2</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb8-10">  <span class="co" style="color: #5E5E5E;"># scale_x_continuous(trans = scales::sqrt_trans(), labels = function(x) round(x,2))+</span></span>
+<span id="cb8-11">  <span class="fu" style="color: #4758AB;">geom_jitter</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb8-12">  <span class="fu" style="color: #4758AB;">geom_smooth</span>(<span class="at" style="color: #657422;">se =</span> <span class="cn" style="color: #8f5902;">FALSE</span>, <span class="at" style="color: #657422;">method =</span> <span class="st" style="color: #20794D;">"lm"</span>, <span class="at" style="color: #657422;">formula =</span> <span class="st" style="color: #20794D;">"y ~ poly(x,2)"</span>, <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"Quadratic"</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb8-13">  <span class="fu" style="color: #4758AB;">geom_smooth</span>(<span class="at" style="color: #657422;">se =</span> <span class="cn" style="color: #8f5902;">FALSE</span>, <span class="at" style="color: #657422;">method =</span> <span class="st" style="color: #20794D;">"lm"</span>, <span class="at" style="color: #657422;">formula =</span> <span class="st" style="color: #20794D;">"y ~ x"</span>, <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"Linear"</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb8-14">   ggsci<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">scale_color_jco</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb8-15">  <span class="fu" style="color: #4758AB;">facet_wrap</span>(<span class="sc" style="color: #5E5E5E;">~</span>predictor, <span class="at" style="color: #657422;">scales =</span> <span class="st" style="color: #20794D;">"free_x"</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb8-16">  ggpubr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">theme_pubclean</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb8-17">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">strip.background.x =</span> <span class="fu" style="color: #4758AB;">element_blank</span>(), <span class="at" style="color: #657422;">legend.key =</span> <span class="fu" style="color: #4758AB;">element_blank</span>(), </span>
+<span id="cb8-18">        <span class="at" style="color: #657422;">legend.position =</span> <span class="st" style="color: #20794D;">"right"</span>, <span class="at" style="color: #657422;">panel.background =</span> <span class="fu" style="color: #4758AB;">element_rect</span>(<span class="at" style="color: #657422;">colour =</span> <span class="st" style="color: #20794D;">"black"</span>))</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-fig1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/tidymodels_regression/index_files/figure-html/fig-fig1-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Linear and quadratic correlation of environmental variables and chlorophyll-a</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1">crtr.clean <span class="ot" style="color: #003B4F;">=</span> crtr.wide <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb9-2">  <span class="fu" style="color: #4758AB;">select</span>(<span class="sc" style="color: #5E5E5E;">-</span>salinity)<span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb9-3">  <span class="fu" style="color: #4758AB;">filter</span>(nitrate <span class="sc" style="color: #5E5E5E;">&lt;</span> <span class="dv" style="color: #AD0000;">1</span> <span class="sc" style="color: #5E5E5E;">&amp;</span> phosphate <span class="sc" style="color: #5E5E5E;">&lt;</span> <span class="fl" style="color: #AD0000;">1.2</span> <span class="sc" style="color: #5E5E5E;">&amp;</span> chl <span class="sc" style="color: #5E5E5E;">&lt;</span> <span class="dv" style="color: #AD0000;">1</span>)  <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb9-4">  <span class="fu" style="color: #4758AB;">select</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="fu" style="color: #4758AB;">c</span>(date<span class="sc" style="color: #5E5E5E;">:</span>sites))</span></code></pre></div>
+</div>
+</section>
+<section id="resample" class="level1">
+<h1>Resample</h1>
+<p>In machine learning, one risk is the machine learns too well our sample data and is then less accurate during a real-world testing. This phenomenon is called <em>overtraining</em> or <em>overfitting</em>. We overcome this problem by splitting the dataset into a training and testing sets. The training set is used to train the model while the test set is reserved to later estimate how well the model might work on new or wild data. The splitting is based on ratios and the widely used ratios include 80/20, 75/25, or 7/30, with the training data receiving a bigger proportion of the dataset and the test set get the remaining small portion.</p>
+<p>For our sample that has only 52 observations, it make sense to use 70/30 split ratio. we use the fraction <code>set.seed(4595)</code> from base R to fix the random number generator from <strong>rsample</strong> package <span class="citation" data-cites="rsample">(Kuhn, Chow, &amp; Wickham, 2020)</span>. This prevent generating new data in each execution. the function <code>initial_split</code> from the <strong>rsample</strong> package is designed to split the dataset into a training and testing sets. We purse the data to be split and the proportion that serve as a cutpoint of the two sets.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;">set.seed</span>(<span class="dv" style="color: #AD0000;">4595</span>)</span>
+<span id="cb10-2"></span>
+<span id="cb10-3">crtr.split <span class="ot" style="color: #003B4F;">=</span> crtr.clean <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb10-4">  rsample<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">initial_split</span>(<span class="at" style="color: #657422;">prop =</span> <span class="fl" style="color: #AD0000;">0.7</span>)</span>
+<span id="cb10-5"></span>
+<span id="cb10-6">crtr.split</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;Analysis/Assess/Total&gt;
+&lt;28/13/41&gt;</code></pre>
+</div>
+</div>
+<p>Given the 41 total observations, we reserve 12 observations as a test set and kept 70% of the dataset (29 observation) as train set. From the <code>crtr.split</code> object, we pull both the train set with the <code>training</code> function and the test set with a <code>testing</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## pull train set</span></span>
+<span id="cb12-2">crtr.train <span class="ot" style="color: #003B4F;">=</span> crtr.split <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb12-3">  <span class="fu" style="color: #4758AB;">training</span>()</span>
+<span id="cb12-4"></span>
+<span id="cb12-5"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## pull test set</span></span>
+<span id="cb12-6">crtr.test <span class="ot" style="color: #003B4F;">=</span> crtr.split <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb12-7">  <span class="fu" style="color: #4758AB;">testing</span>()</span></code></pre></div>
+</div>
+<p>We can have a glimpse of the train dataset using a <code>glimpse</code> function from <strong>dplyr</strong> package <span class="citation" data-cites="dplyr">(Wickham, François, Henry, &amp; Müller, 2019)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1">crtr.train <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">glimpse</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 28
+Columns: 7
+$ chl         &lt;dbl&gt; 0.44, 0.37, 0.25, 0.23, 0.47, 0.68, 0.45, 0.28, 0.33, 0.63~
+$ temperature &lt;dbl&gt; 27.3, 27.0, 29.8, 28.9, 28.2, 28.2, 25.8, 27.2, 27.2, 29.2~
+$ do          &lt;dbl&gt; 6.19, 6.15, 5.32, 5.56, 6.35, 5.36, 5.76, 5.46, 6.10, 5.12~
+$ ph          &lt;dbl&gt; 7.85, 7.68, 8.30, 7.98, 7.87, 8.04, 8.02, 8.05, 7.80, 7.97~
+$ ammonia     &lt;dbl&gt; 0.88, 0.56, 0.61, 1.32, 0.56, 0.14, 0.56, 0.52, 0.65, 0.66~
+$ phosphate   &lt;dbl&gt; 0.92, 0.28, 0.51, 0.30, 0.28, 0.26, 0.17, 0.14, 0.43, 0.54~
+$ nitrate     &lt;dbl&gt; 0.64, 0.06, 0.03, 0.04, 0.03, 0.05, 0.05, 0.04, 0.48, 0.20~</code></pre>
+</div>
+</div>
+<p>The printed output shows that we have seven variables and all are numeric</p>
+</section>
+<section id="recipe" class="level1">
+<h1>recipe</h1>
+<p>The <strong>recipes</strong> package <span class="citation" data-cites="recipes">(Kuhn &amp; Wickham, 2020a)</span> define a recipe object that we will use for modeling and to conduct preprocessing of variables. The four main functions are <code>recipe()</code>, <code>prep()</code>, <code>juice()</code> and <code>bake()</code>. <code>recipe()</code> defines the operations on the data and the associated roles. Once the preprocessing steps are defined, any parameters are estimated using <code>prep()</code>.</p>
+<p>Recipes can be created manually by sequentially adding roles to variables in a data set. First, we will create a recipe object from the train set data and then specify the processing steps and transform the data with <code>step_*</code>. once the recipe is ready we prep it. For example, to create a simple recipe containing only an outcome and predictors and have the predictors normalized and missing values in predictors imputed:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1">crtr.recipe <span class="ot" style="color: #003B4F;">=</span> crtr.train <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb15-2">  <span class="fu" style="color: #4758AB;">recipe</span>(chl <span class="sc" style="color: #5E5E5E;">~</span> .) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb15-3">  <span class="fu" style="color: #4758AB;">step_normalize</span>(<span class="fu" style="color: #4758AB;">all_numeric</span>()) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb15-4">  <span class="fu" style="color: #4758AB;">step_corr</span>(<span class="fu" style="color: #4758AB;">all_numeric</span>())<span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb15-5">  <span class="fu" style="color: #4758AB;">step_impute_knn</span>(<span class="fu" style="color: #4758AB;">all_numeric</span>()) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb15-6">  <span class="fu" style="color: #4758AB;">prep</span>()</span>
+<span id="cb15-7"></span>
+<span id="cb15-8">crtr.recipe</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Recipe
+
+Inputs:
+
+      role #variables
+   outcome          1
+ predictor          6
+
+Training data contained 28 data points and no missing data.
+
+Operations:
+
+Centering and scaling for temperature, do, ph, ammonia, phosphate, nitrat... [trained]
+Correlation filter on &lt;none&gt; [trained]
+K-nearest neighbor imputation for temperature, do, ph, ammonia, phosphate, nitra... [trained]</code></pre>
+</div>
+</div>
+<p>Once the data are ready for transformation, the <code>juices()</code> extract transformed training set while the <code>bake()</code> function create a new testing set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1">crtr.training <span class="ot" style="color: #003B4F;">=</span> crtr.recipe <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb17-2">  <span class="fu" style="color: #4758AB;">juice</span>()</span>
+<span id="cb17-3"></span>
+<span id="cb17-4">crtr.testing <span class="ot" style="color: #003B4F;">=</span> crtr.recipe <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb17-5">  <span class="fu" style="color: #4758AB;">bake</span>(crtr.test)</span></code></pre></div>
+</div>
+</section>
+<section id="build-models" class="level1">
+<h1>Build Models</h1>
+<section id="random-forest" class="level2">
+<h2 class="anchored" data-anchor-id="random-forest">Random Forest</h2>
+<p>We begin by fitting a random forest model.</p>
+<section id="make-random-forest-model" class="level3">
+<h3 class="anchored" data-anchor-id="make-random-forest-model">Make random forest model</h3>
+<p>We specify the model using the <strong>parsnip</strong> package <span class="citation" data-cites="parsnip">(Kuhn &amp; Vaughan, 2020a)</span>. This package provides a tidy, unified interface to models for a range of models without getting bogged down in the syntactical minutiae of the underlying packages. The <strong>parsnip</strong> package help us to specify ;</p>
+<ul>
+<li>the <code>type</code> of model e.g <strong>random forest</strong>,</li>
+<li>the <code>mode</code> of the model whether is <code>regression</code> or <code>classification</code></li>
+<li>the computational <code>engine</code> is the name of the R package.</li>
+</ul>
+<p>Based on the information above, we can use <strong>parsnip</strong> package to build our model as;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1">rf.model <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">rand_forest</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb18-2">  <span class="fu" style="color: #4758AB;">set_engine</span>(<span class="at" style="color: #657422;">engine =</span> <span class="st" style="color: #20794D;">"ranger"</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb18-3">  <span class="fu" style="color: #4758AB;">set_mode</span>(<span class="at" style="color: #657422;">mode =</span> <span class="st" style="color: #20794D;">"regression"</span>)</span>
+<span id="cb18-4"></span>
+<span id="cb18-5">rf.model</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Random Forest Model Specification (regression)
+
+Computational engine: ranger </code></pre>
+</div>
+</div>
+</section>
+<section id="train-random-forest-model" class="level3">
+<h3 class="anchored" data-anchor-id="train-random-forest-model">Train random forest model</h3>
+<p>Once we have specified the model type, engine and mode, the model can be trained with the <code>fit</code> function. We simply parse into the fit the specified model and the transformed training set extracted from the prepped recipe.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1">rf.fit <span class="ot" style="color: #003B4F;">=</span> rf.model <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb20-2">  <span class="fu" style="color: #4758AB;">fit</span>(chl <span class="sc" style="color: #5E5E5E;">~</span> ., <span class="at" style="color: #657422;">data =</span> crtr.training)</span></code></pre></div>
+</div>
+</section>
+<section id="predict-with-random-forest" class="level3">
+<h3 class="anchored" data-anchor-id="predict-with-random-forest">predict with random forest</h3>
+<p>To get our predicted results, we use the <code>predict()</code> function to find the estimated chlorophyll-<em>a</em>. First, let’s generate the estimated chlorophyll-<em>a</em> values by simply parse the random forest model <code>rf.model</code> we specified and the transformed testing set we created from a prepped recipe. We also stitch the predicted values to the transformed train set with <code>bind_cols</code> function;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1">rf.predict <span class="ot" style="color: #003B4F;">=</span> rf.fit <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb21-2">  <span class="fu" style="color: #4758AB;">predict</span>(crtr.testing) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb21-3">  <span class="fu" style="color: #4758AB;">bind_cols</span>(crtr.testing) </span>
+<span id="cb21-4"></span>
+<span id="cb21-5">rf.predict</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 x 8
+     .pred temperature      do     ph ammonia phosphate nitrate     chl
+     &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1 -0.143        0.407  0.624  -0.756  1.05     -0.485   -0.364 -0.685 
+ 2 -0.0964      -0.897  0.603  -1.56   0.401    -0.242   -0.419 -0.0561
+ 3 -0.0919      -0.897  0.516  -1.20   0.530     0.0808   1.32   0.206 
+ 4  0.366       -1.10   1.69   -1.64   0.562     1.86     3.49  -0.894 
+ 5 -0.0544      -0.966  1.30   -0.976 -0.0507   -0.565   -0.364 -0.161 
+ 6 -0.0748      -1.58  -0.0480 -1.12   0.498     0.0808   1.26  -1.31  
+ 7  0.0753      -1.58   1.17   -0.462  2.05     -0.525    0.721  0.573 
+ 8  0.160        0.887  0.538   0.493 -0.244     0.121   -0.473 -0.528 
+ 9  0.189        0.887  0.429   0.420 -0.890    -0.202    0.341 -0.528 
+10 -0.0890       0.132 -0.850   0.567 -1.54     -0.767   -0.419 -0.632 
+11 -0.386        0.613 -0.200   0.567  0.272    -0.767   -0.364 -0.423 
+12 -0.0471       1.09  -0.503   0.714  1.66     -0.162   -0.419 -0.528 
+13  0.800        1.16   0.386   1.67   0.0138    2.10    -0.419  2.09  </code></pre>
+</div>
+</div>
+<p>When making predictions, the tidymodels convention is to always produce a tibble of results with standardized column names. This makes it easy to combine the original data and the predictions in a usable format:</p>
+</section>
+<section id="evaluate-the-rf-model" class="level3">
+<h3 class="anchored" data-anchor-id="evaluate-the-rf-model">Evaluate the rf model</h3>
+<p>So far, we have built a model and preprocessed data with a recipe. We predicted new data as a way to bundle a parsnip model and recipe together. The next step is to assess or evaluate the accuracy of the model. We use a <code>metrics</code> function from <strong>yardstick</strong> package <span class="citation" data-cites="yardstick">(Kuhn &amp; Vaughan, 2020b)</span>to assess the accuracy of the model by comparing the predicted versus the original outcome variable. Note that we use the predicted dataset we just computed using <code>predict</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1">rf.predict <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb23-2">  <span class="fu" style="color: #4758AB;">metrics</span>(<span class="at" style="color: #657422;">truth =</span> chl, <span class="at" style="color: #657422;">estimate =</span> .pred)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 x 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 rmse    standard       0.731
+2 rsq     standard       0.363
+3 mae     standard       0.595</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="linear-regression-approach" class="level2">
+<h2 class="anchored" data-anchor-id="linear-regression-approach">Linear regression approach</h2>
+<section id="make-linear-model" class="level3">
+<h3 class="anchored" data-anchor-id="make-linear-model">Make linear model</h3>
+<p>The good of <strong>tidymodels</strong> is that when we change the model, we do not need to start over again from the beginning but rather change the engine. For instance, we replace the <code>ranger</code> engine with <code>lm</code> to specify the linear model using the <strong>parsnip</strong> package <span class="citation" data-cites="parsnip">(Kuhn &amp; Vaughan, 2020a)</span> .</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1">lm.model <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">linear_reg</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb25-2">  <span class="fu" style="color: #4758AB;">set_engine</span>(<span class="at" style="color: #657422;">engine =</span> <span class="st" style="color: #20794D;">"lm"</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb25-3">  <span class="fu" style="color: #4758AB;">set_mode</span>(<span class="at" style="color: #657422;">mode =</span> <span class="st" style="color: #20794D;">"regression"</span>)</span></code></pre></div>
+</div>
+</section>
+<section id="train-linear-model" class="level3">
+<h3 class="anchored" data-anchor-id="train-linear-model">Train Linear model</h3>
+<p>Once we have specified the model type, engine and mode, the model can be trained with the <code>fit</code> function;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1">lm.fit <span class="ot" style="color: #003B4F;">=</span> lm.model <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb26-2">  <span class="fu" style="color: #4758AB;">fit</span>(chl <span class="sc" style="color: #5E5E5E;">~</span> ., <span class="at" style="color: #657422;">data =</span> crtr.training)</span></code></pre></div>
+</div>
+</section>
+<section id="predict-with-linear-model" class="level3">
+<h3 class="anchored" data-anchor-id="predict-with-linear-model">Predict with linear model</h3>
+<p>Once the model is fitted, This fitted object lm_fit has the lm model output built-in, which you can access with lm_fit$fit, but there are some benefits to using the fitted parsnip model object when it comes to predicting. To predict the values we use <code>predict</code> function and parse the model and standardized testing values we computed from the recipe <span class="citation" data-cites="r">(R Core Team, 2018)</span>. Note that here we use the transformed test set and not the original from the split object. In this case we use the model to predict the value and stitch the testing values using the <code>bind_cols</code> function;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1">lm.predict <span class="ot" style="color: #003B4F;">=</span> lm.fit <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb27-2">  <span class="fu" style="color: #4758AB;">predict</span>(crtr.testing) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb27-3">  <span class="fu" style="color: #4758AB;">bind_cols</span>(crtr.testing) </span>
+<span id="cb27-4"></span>
+<span id="cb27-5">lm.predict</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 x 8
+     .pred temperature      do     ph ammonia phosphate nitrate     chl
+     &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1 -0.347        0.407  0.624  -0.756  1.05     -0.485   -0.364 -0.685 
+ 2 -0.239       -0.897  0.603  -1.56   0.401    -0.242   -0.419 -0.0561
+ 3 -0.260       -0.897  0.516  -1.20   0.530     0.0808   1.32   0.206 
+ 4  0.0430      -1.10   1.69   -1.64   0.562     1.86     3.49  -0.894 
+ 5 -0.238       -0.966  1.30   -0.976 -0.0507   -0.565   -0.364 -0.161 
+ 6 -0.243       -1.58  -0.0480 -1.12   0.498     0.0808   1.26  -1.31  
+ 7 -0.614       -1.58   1.17   -0.462  2.05     -0.525    0.721  0.573 
+ 8  0.142        0.887  0.538   0.493 -0.244     0.121   -0.473 -0.528 
+ 9  0.0942       0.887  0.429   0.420 -0.890    -0.202    0.341 -0.528 
+10  0.115        0.132 -0.850   0.567 -1.54     -0.767   -0.419 -0.632 
+11 -0.191        0.613 -0.200   0.567  0.272    -0.767   -0.364 -0.423 
+12 -0.215        1.09  -0.503   0.714  1.66     -0.162   -0.419 -0.528 
+13  0.760        1.16   0.386   1.67   0.0138    2.10    -0.419  2.09  </code></pre>
+</div>
+</div>
+</section>
+<section id="evaluate-linear-model" class="level3">
+<h3 class="anchored" data-anchor-id="evaluate-linear-model">Evaluate linear model</h3>
+<p>Once we have our <code>lm.predict</code> dataset that contains the predicted and test values, we can now use the <code>metrics</code> fiction to evaluate the accuracy of the model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1">lm.predict<span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb29-2">  <span class="fu" style="color: #4758AB;">metrics</span>(<span class="at" style="color: #657422;">truth =</span> chl, <span class="at" style="color: #657422;">estimate =</span> .pred)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 x 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 rmse    standard       0.740
+2 rsq     standard       0.194
+3 mae     standard       0.629</code></pre>
+</div>
+</div>
+</section>
+<section id="estimate-stats" class="level3">
+<h3 class="anchored" data-anchor-id="estimate-stats">Estimate stats</h3>
+<p>Sometimes you may wish to plot predicted values with different predictors. To do that you need to create a new tidied data from the the model with <code>tidy</code> function and parse <code>interval = TRUE</code> argument as shown in the code below. This create a tibble shown below and the same data is plotted in figure @ref(fig:fig3).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1">lm.fit.stats <span class="ot" style="color: #003B4F;">=</span> lm.fit <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb31-2">  <span class="fu" style="color: #4758AB;">tidy</span>(<span class="at" style="color: #657422;">interval =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)</span>
+<span id="cb31-3"></span>
+<span id="cb31-4">lm.fit.stats</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 x 5
+  term         estimate std.error statistic p.value
+  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1 (Intercept) -3.41e-17     0.200 -1.71e-16   1    
+2 temperature  1.29e- 2     0.253  5.09e- 2   0.960
+3 do          -2.09e- 2     0.261 -8.00e- 2   0.937
+4 ph           6.88e- 2     0.289  2.38e- 1   0.814
+5 ammonia     -1.63e- 1     0.235 -6.96e- 1   0.494
+6 phosphate    2.91e- 1     0.277  1.05e+ 0   0.306
+7 nitrate     -6.99e- 2     0.316 -2.21e- 1   0.827</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1">lm.fit.stats <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb33-2">  <span class="fu" style="color: #4758AB;">slice</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb33-3">  <span class="fu" style="color: #4758AB;">ggplot</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> term, <span class="at" style="color: #657422;">y =</span> estimate)) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb33-4">  <span class="fu" style="color: #4758AB;">geom_point</span>(<span class="at" style="color: #657422;">size =</span> <span class="dv" style="color: #AD0000;">4</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb33-5">  <span class="fu" style="color: #4758AB;">geom_errorbar</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">ymin =</span> estimate<span class="sc" style="color: #5E5E5E;">-</span>std.error, <span class="at" style="color: #657422;">ymax =</span> estimate<span class="sc" style="color: #5E5E5E;">+</span>std.error), <span class="at" style="color: #657422;">width =</span> .<span class="dv" style="color: #AD0000;">2</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb33-6">  <span class="fu" style="color: #4758AB;">scale_y_continuous</span>(<span class="at" style="color: #657422;">breaks =</span> <span class="fu" style="color: #4758AB;">seq</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">1.5</span>,<span class="fl" style="color: #AD0000;">1.5</span>,<span class="fl" style="color: #AD0000;">0.5</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb33-7">  ggpubr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">theme_pubclean</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb33-8">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">axis.text =</span> <span class="fu" style="color: #4758AB;">element_text</span>(<span class="at" style="color: #657422;">size =</span> <span class="dv" style="color: #AD0000;">10</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb33-9">  <span class="fu" style="color: #4758AB;">labs</span>(<span class="at" style="color: #657422;">x =</span> <span class="st" style="color: #20794D;">""</span>, <span class="at" style="color: #657422;">y =</span> <span class="st" style="color: #20794D;">"Estimated chl"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div id="fig-fig3" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/tidymodels_regression/index_files/figure-html/fig-fig3-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: Estimated value of chlorophyll concentration at different predictors</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="bayesian-approach" class="level2">
+<h2 class="anchored" data-anchor-id="bayesian-approach">Bayesian approach</h2>
+<section id="make-bayes-model" class="level3">
+<h3 class="anchored" data-anchor-id="make-bayes-model">Make Bayes Model</h3>
+<p>For Bayesian, we also change the engine and specified are called <code>prior</code> and <code>prior_intercept</code>. It turns out that <code>linear_reg()</code> has a <code>stan</code> engine. Since these prior distribution arguments are specific to the Stan software, they are passed as arguments to <code>parsnip::set_engine()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1">prior.dist <span class="ot" style="color: #003B4F;">=</span> rstanarm<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">student_t</span>(<span class="at" style="color: #657422;">df =</span> <span class="dv" style="color: #AD0000;">1</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><span class="fu" style="color: #4758AB;">set.seed</span>(<span class="dv" style="color: #AD0000;">401</span>)</span>
+<span id="cb35-2"></span>
+<span id="cb35-3"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## make the parsnip model</span></span>
+<span id="cb35-4">bayes.model <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">linear_reg</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb35-5">  <span class="fu" style="color: #4758AB;">set_engine</span>(<span class="at" style="color: #657422;">engine =</span> <span class="st" style="color: #20794D;">"stan"</span>, </span>
+<span id="cb35-6">             <span class="at" style="color: #657422;">prior_intercept =</span> prior.dist, </span>
+<span id="cb35-7">             <span class="at" style="color: #657422;">prior =</span> prior.dist) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb35-8">  <span class="fu" style="color: #4758AB;">set_mode</span>(<span class="at" style="color: #657422;">mode =</span> <span class="st" style="color: #20794D;">"regression"</span>)</span></code></pre></div>
+</div>
+<p>This kind of Bayesian analysis (like many models) involves randomly generated numbers in its fitting procedure. We can use <code>set.seed()</code> to ensure that the same (pseudo-)random numbers are generated each time we run this code. The number 123 isn’t special or related to our data; it is just a “seed” used to choose random numbers.</p>
+</section>
+<section id="train-bayes-model" class="level3">
+<h3 class="anchored" data-anchor-id="train-bayes-model">Train Bayes model</h3>
+<p>Once we have defined the Bayesian model, we train it using a transformed testing set;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## train the bayes model</span></span>
+<span id="cb36-2">bayes.fit <span class="ot" style="color: #003B4F;">=</span> bayes.model<span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb36-3">  <span class="fu" style="color: #4758AB;">fit</span>(chl <span class="sc" style="color: #5E5E5E;">~</span> ., <span class="at" style="color: #657422;">data =</span> crtr.testing)</span>
+<span id="cb36-4"></span>
+<span id="cb36-5">bayes.fit</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>parsnip model object
+
+stan_glm
+ family:       gaussian [identity]
+ formula:      chl ~ .
+ observations: 13
+ predictors:   7
+------
+            Median MAD_SD
+(Intercept) -0.2    0.2  
+temperature -0.5    0.3  
+do           0.4    0.4  
+ph           0.6    0.4  
+ammonia      0.1    0.2  
+phosphate    0.6    0.3  
+nitrate     -0.5    0.3  
+
+Auxiliary parameter(s):
+      Median MAD_SD
+sigma 0.7    0.2   
+
+------
+* For help interpreting the printed output see ?print.stanreg
+* For info on the priors used see ?prior_summary.stanreg</code></pre>
+</div>
+</div>
+</section>
+<section id="predict-bayes-fit" class="level3">
+<h3 class="anchored" data-anchor-id="predict-bayes-fit">Predict Bayes fit</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1">bayes.predict <span class="ot" style="color: #003B4F;">=</span> bayes.fit <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb38-2">  <span class="fu" style="color: #4758AB;">predict</span>(crtr.testing) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb38-3">  <span class="fu" style="color: #4758AB;">bind_cols</span>(crtr.testing)</span>
+<span id="cb38-4"></span>
+<span id="cb38-5">bayes.predict</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 x 8
+     .pred temperature      do     ph ammonia phosphate nitrate     chl
+     &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1 -0.607        0.407  0.624  -0.756  1.05     -0.485   -0.364 -0.685 
+ 2 -0.302       -0.897  0.603  -1.56   0.401    -0.242   -0.419 -0.0561
+ 3 -0.827       -0.897  0.516  -1.20   0.530     0.0808   1.32   0.206 
+ 4 -0.617       -1.10   1.69   -1.64   0.562     1.86     3.49  -0.894 
+ 5  0.0850      -0.966  1.30   -0.976 -0.0507   -0.565   -0.364 -0.161 
+ 6 -0.611       -1.58  -0.0480 -1.12   0.498     0.0808   1.26  -1.31  
+ 7  0.379       -1.58   1.17   -0.462  2.05     -0.525    0.721  0.573 
+ 8  0.0950       0.887  0.538   0.493 -0.244     0.121   -0.473 -0.528 
+ 9 -0.686        0.887  0.429   0.420 -0.890    -0.202    0.341 -0.528 
+10 -0.705        0.132 -0.850   0.567 -1.54     -0.767   -0.419 -0.632 
+11 -0.516        0.613 -0.200   0.567  0.272    -0.767   -0.364 -0.423 
+12 -0.256        1.09  -0.503   0.714  1.66     -0.162   -0.419 -0.528 
+13  1.74         1.16   0.386   1.67   0.0138    2.10    -0.419  2.09  </code></pre>
+</div>
+</div>
+</section>
+<section id="evaluate-bayes-model" class="level3">
+<h3 class="anchored" data-anchor-id="evaluate-bayes-model">Evaluate Bayes model</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1">bayes.predict <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb40-2">  <span class="fu" style="color: #4758AB;">metrics</span>(<span class="at" style="color: #657422;">truth =</span> chl, <span class="at" style="color: #657422;">estimate =</span> .pred)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 x 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 rmse    standard       0.432
+2 rsq     standard       0.717
+3 mae     standard       0.334</code></pre>
+</div>
+</div>
+</section>
+<section id="bayes.fit.stats" class="level3">
+<h3 class="anchored" data-anchor-id="bayes.fit.stats">Bayes.fit.stats</h3>
+<p>To update the parameter table, the <code>tidy()</code> method is once again used:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1">bayes.stats <span class="ot" style="color: #003B4F;">=</span> bayes.fit <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb42-2">  broom.mixed<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">tidy</span>(<span class="at" style="color: #657422;">intervals =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)</span>
+<span id="cb42-3"></span>
+<span id="cb42-4">bayes.stats</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 x 3
+  term        estimate std.error
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+1 (Intercept)   -0.220     0.230
+2 temperature   -0.541     0.338
+3 do             0.394     0.370
+4 ph             0.597     0.379
+5 ammonia        0.120     0.222
+6 phosphate      0.586     0.310
+7 nitrate       -0.527     0.270</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1">bayes.stats <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb44-2">  <span class="fu" style="color: #4758AB;">slice</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb44-3">  <span class="fu" style="color: #4758AB;">ggplot</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> term, <span class="at" style="color: #657422;">y =</span> estimate)) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb44-4">  <span class="fu" style="color: #4758AB;">geom_point</span>(<span class="at" style="color: #657422;">size =</span> <span class="dv" style="color: #AD0000;">4</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb44-5">  <span class="fu" style="color: #4758AB;">geom_errorbar</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">ymin =</span> estimate <span class="sc" style="color: #5E5E5E;">-</span> std.error, <span class="at" style="color: #657422;">ymax =</span> estimate <span class="sc" style="color: #5E5E5E;">+</span> std.error), <span class="at" style="color: #657422;">width =</span> .<span class="dv" style="color: #AD0000;">2</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb44-6">  <span class="fu" style="color: #4758AB;">scale_y_continuous</span>(<span class="at" style="color: #657422;">breaks =</span> <span class="fu" style="color: #4758AB;">seq</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">1.5</span>,<span class="fl" style="color: #AD0000;">1.5</span>,<span class="fl" style="color: #AD0000;">0.5</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb44-7">  ggpubr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">theme_pubclean</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb44-8">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">axis.text =</span> <span class="fu" style="color: #4758AB;">element_text</span>(<span class="at" style="color: #657422;">size =</span> <span class="dv" style="color: #AD0000;">10</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb44-9">  <span class="fu" style="color: #4758AB;">labs</span>(<span class="at" style="color: #657422;">x =</span> <span class="st" style="color: #20794D;">""</span>, <span class="at" style="color: #657422;">y =</span> <span class="st" style="color: #20794D;">"Estimated chl"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/tidymodels_regression/index_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="links" class="level2">
+<h2 class="anchored" data-anchor-id="links">Links</h2>
+<ul>
+<li><a href="http://www.wvview.org/os_sa/20_tidymodels.html">Machine Learning with tidymodels</a></li>
+</ul>
+</section>
+<section id="cited-materials" class="level2">
+
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2">
+<div id="ref-rsample" class="csl-entry">
+Kuhn, M., Chow, F., &amp; Wickham, H. (2020). <em>Rsample: General resampling infrastructure</em>. Retrieved from <a href="https://CRAN.R-project.org/package=rsample">https://CRAN.R-project.org/package=rsample</a>
+</div>
+<div id="ref-parsnip" class="csl-entry">
+Kuhn, M., &amp; Vaughan, D. (2020a). <em>Parsnip: A common API to modeling and analysis functions</em>. Retrieved from <a href="https://CRAN.R-project.org/package=parsnip">https://CRAN.R-project.org/package=parsnip</a>
+</div>
+<div id="ref-yardstick" class="csl-entry">
+Kuhn, M., &amp; Vaughan, D. (2020b). <em>Yardstick: Tidy characterizations of model performance</em>. Retrieved from <a href="https://CRAN.R-project.org/package=yardstick">https://CRAN.R-project.org/package=yardstick</a>
+</div>
+<div id="ref-recipes" class="csl-entry">
+Kuhn, M., &amp; Wickham, H. (2020a). <em>Recipes: Preprocessing tools to create design matrices</em>. Retrieved from <a href="https://CRAN.R-project.org/package=recipes">https://CRAN.R-project.org/package=recipes</a>
+</div>
+<div id="ref-tidymodels" class="csl-entry">
+Kuhn, M., &amp; Wickham, H. (2020b). <em>Tidymodels: Easily install and load the ’tidymodels’ packages</em>. Retrieved from <a href="https://CRAN.R-project.org/package=tidymodels">https://CRAN.R-project.org/package=tidymodels</a>
+</div>
+<div id="ref-r" class="csl-entry">
+R Core Team. (2018). <em>R: A language and environment for statistical computing</em>. Vienna, Austria: R Foundation for Statistical Computing. Retrieved from <a href="https://www.R-project.org/">https://www.R-project.org/</a>
+</div>
+<div id="ref-ggally" class="csl-entry">
+Schloerke, B., Crowley, J., Cook, D., Briatte, F., Marbach, M., Thoen, E., … Larmarange, J. (2020). <em>GGally: Extension to ’ggplot2’</em>. Retrieved from <a href="https://CRAN.R-project.org/package=GGally">https://CRAN.R-project.org/package=GGally</a>
+</div>
+<div id="ref-readxl" class="csl-entry">
+Wickham, H., &amp; Bryan, J. (2018). <em>Readxl: Read excel files</em>. Retrieved from <a href="https://CRAN.R-project.org/package=readxl">https://CRAN.R-project.org/package=readxl</a>
+</div>
+<div id="ref-dplyr" class="csl-entry">
+Wickham, H., François, R., Henry, L., &amp; Müller, K. (2019). <em>Dplyr: A grammar of data manipulation</em>. Retrieved from <a href="https://CRAN.R-project.org/package=dplyr">https://CRAN.R-project.org/package=dplyr</a>
+</div>
+<div id="ref-tidyverse" class="csl-entry">
+Wickham, H., &amp; Wickham, M. H. (2017). <em>Tidyverse: Easily install and load the ’tidyverse’</em>. Retrieved from <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>
+</div>
+</div></section></div> ]]></description>
+  <category>Manipulation</category>
+  <category>Visualization</category>
+  <category>R</category>
+  <category>Modelling</category>
+  <guid>https://lugoga.github.io/semba-quarto/posts/tidymodels_regression/index.html</guid>
+  <pubDate>Mon, 10 Apr 2023 21:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Getting GEBCO Bathymetry Data and glean the power of terra and tidyterra packages for raster and vector objects</title>
   <dc:creator>Masumbuko Semba</dc:creator>
