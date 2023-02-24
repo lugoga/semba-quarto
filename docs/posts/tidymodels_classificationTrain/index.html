@@ -158,6 +158,7 @@ ga('send', {
 });
 </script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../styles.css">
 <meta name="twitter:title" content="ng’ara - Machine learning with tidymodels: Binary Classification Model">
@@ -283,8 +284,13 @@ ga('send', {
   <ul class="collapse">
   <li><a href="#explore-the-data" id="toc-explore-the-data" class="nav-link" data-scroll-target="#explore-the-data">Explore the data</a></li>
   <li><a href="#split-the-data" id="toc-split-the-data" class="nav-link" data-scroll-target="#split-the-data">Split the data</a></li>
-  <li><a href="#train-and-evaluate-a-binary-classification-model" id="toc-train-and-evaluate-a-binary-classification-model" class="nav-link" data-scroll-target="#train-and-evaluate-a-binary-classification-model">Train and Evaluate a Binary Classification Model</a></li>
   </ul></li>
+  <li><a href="#train-and-evaluate-a-binary-classification-model" id="toc-train-and-evaluate-a-binary-classification-model" class="nav-link" data-scroll-target="#train-and-evaluate-a-binary-classification-model">Train and Evaluate a Binary Classification Model</a>
+  <ul class="collapse">
+  <li><a href="#logistic-regression-algorithm" id="toc-logistic-regression-algorithm" class="nav-link" data-scroll-target="#logistic-regression-algorithm">Logistic regression Algorithm</a></li>
+  <li><a href="#random-forest-algorithm" id="toc-random-forest-algorithm" class="nav-link" data-scroll-target="#random-forest-algorithm">Random Forest Algorithm</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   <li><a href="#cited-materials" id="toc-cited-materials" class="nav-link" data-scroll-target="#cited-materials">Cited Materials</a></li>
   </ul></li>
   </ul>
@@ -339,16 +345,7 @@ ga('send', {
 
 <section id="a-gentle-introduction" class="level1">
 <h1>A gentle introduction</h1>
-<p>In this post, we’ll learn how to create Machine learning models using R. Machine learning is the foundation for predictive modeling and artificial intelligence. We’ll learn the core principles of machine learning and how to use common tools and frameworks to train, evaluate, and use machine learning models.</p>
-<p>Modules that will be covered in this learning path include:</p>
-<ul>
-<li>Explore and analyze data with R</li>
-<li>Train and evaluate regression models</li>
-<li>Train and evaluate classification models</li>
-<li>Train and evaluate clustering models (under development)</li>
-<li>Train and evaluate deep learning models (under development)</li>
-</ul>
-<p>We need some packages to accomplish the step in this post. We can have them installed as:</p>
+<p>In this post, we’ll learn how to create Machine learning models using R. Machine learning is the foundation for predictive modeling and artificial intelligence. We’ll learn the core principles of machine learning and how to use common tools and frameworks to train, evaluate, and use machine learning models. in this post we are going to manipulate and visualize diabetes dataset and train and evaluate binary regression models. But before we proceed, we need some packages to accomplish the step in this post. We can have them installed as:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">'tidyverse'</span>, <span class="st">'tidymodels'</span>, <span class="st">'ranger'</span>, <span class="st">'vip'</span>, <span class="st">'palmerpenguins'</span>, <span class="st">'skimr'</span>, <span class="st">'paletteer'</span>, <span class="st">'nnet'</span>, <span class="st">'here'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -364,7 +361,7 @@ ga('send', {
 <p>Let’s start by looking at an example of <em>binary</em> classification, where the model must predict a label that belongs to one of two classes. In this exercise, we’ll train a binary classifier to predict whether or not a patient should be tested for diabetes based on some medical data.</p>
 <section id="explore-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="explore-the-data">Explore the data</h3>
-<p>The first step in any machine learning project is to explore the data that you will use to train a model. And before we can explore the data, we must first import the dataset in our R environment. So, let’s begin by importing a CSV file of patent data into a tibble direct from the internet with <code>read_csv</code> function of <strong>readr</strong> package <span class="citation" data-cites="readr">(<a href="#ref-readr" role="doc-biblioref">Wickham, Hester, &amp; Francois, 2017</a>)</span>, part of the tidyverse ecosystem <span class="citation" data-cites="tidyverse">(<a href="#ref-tidyverse" role="doc-biblioref">Wickham &amp; Wickham, 2017</a>)</span>;</p>
+<p>Let’s first import a file of patients data direct from the internet with <code>read_csv</code> function of <strong>readr</strong> package <span class="citation" data-cites="readr">(<a href="#ref-readr" role="doc-biblioref">Wickham, Hester, &amp; Francois, 2017</a>)</span>, part of the tidyverse ecosystem <span class="citation" data-cites="tidyverse">(<a href="#ref-tidyverse" role="doc-biblioref">Wickham &amp; Wickham, 2017</a>)</span>;</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>diabetes <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"https://raw.githubusercontent.com/MicrosoftDocs/ml-basics/master/data/diabetes.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -409,35 +406,36 @@ $ Age                    &lt;dbl&gt; 21, 23, 23, 43, 22, 26, 21, 26, 53, 26, 22,
 $ Diabetic               &lt;dbl&gt; 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1,~</code></pre>
 </div>
 </div>
-<p>This data consists of diagnostic information about some patients who have been tested for diabetes. Note that the final column in the dataset (Diabetic) contains the value 0 for patients who tested negative for diabetes, and 1 for patients who tested positive. This is the label that we will train our model to predict; most of the other columns (Pregnancies, PlasmaGlucose, DiastolicBloodPressure, BMI and so on) are the features we will use to predict the Diabetic label.</p>
-<p>Let’s reformat the data to make it easier for a model to use effectively. For now, let’s drop the PatientID column, encode the Diabetic column as a categorical variable, and clean the variable names:</p>
+<p>This data consists of 15,000 patients with 10 variables that were used to diagnose diabetes. In this post we tread a <code>Diabetic</code> as <em>outome</em> and the remaining variables as <em>predictor</em>. A predictor variable is used to predict the occurrence and/or level of another variable, called the outcome variable. Let’s tidy and reorganize in format that easy for model to understand. The variable names do not follow the recommended standard therefore we clean them using <code>clean_names</code> function from janitor package <span class="citation" data-cites="janitor">(<a href="#ref-janitor" role="doc-biblioref">Firke, 2020</a>)</span>. We also notice that some of the variable like PatientId adds no effect in the model and was dropped from the dataset.</p>
+<p>Further, since we are going to use classification algorithm in this we need to convert our our predictor variable–diabetic–from numerical to factor. This is the outcome (label) and other variable like Pregnancies, PlasmaGlucose, DiastolicBloodPressure, BMI and so on are the predictor (features) we will use to predict the Diabetic label.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>diabetes.tidy <span class="ot">=</span> diabetes <span class="sc">%&gt;%</span> </span>
 <span id="cb8-2"><a href="#cb8-2"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
 <span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">select</span>(<span class="sc">-</span>patient_id) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-4"><a href="#cb8-4"></a>  <span class="fu">mutate</span>(<span class="at">diabetic =</span> <span class="fu">factor</span>(diabetic, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>)))</span>
-<span id="cb8-5"><a href="#cb8-5"></a></span>
-<span id="cb8-6"><a href="#cb8-6"></a>diabetes.tidy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-4"><a href="#cb8-4"></a>  <span class="fu">mutate</span>(<span class="at">diabetic =</span> <span class="fu">if_else</span>(diabetic <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"Diabetic"</span>, <span class="st">"Non diabetic"</span>),</span>
+<span id="cb8-5"><a href="#cb8-5"></a>         <span class="at">diabetic =</span> <span class="fu">as.factor</span>(diabetic))</span>
+<span id="cb8-6"><a href="#cb8-6"></a></span>
+<span id="cb8-7"><a href="#cb8-7"></a>diabetes.tidy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 15,000 x 9
    pregnancies plasma_gluc~1 diast~2 trice~3 serum~4   bmi diabe~5   age diabe~6
          &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;  
- 1           0           171      80      34      23  43.5  1.21      21 0      
- 2           8            92      93      47      36  21.2  0.158     23 0      
- 3           7           115      47      52      35  41.5  0.0790    23 0      
- 4           9           103      78      25     304  29.6  1.28      43 1      
- 5           1            85      59      27      35  42.6  0.550     22 0      
- 6           0            82      92       9     253  19.7  0.103     26 0      
- 7           0           133      47      19     227  21.9  0.174     21 0      
- 8           0            67      87      43      36  18.3  0.236     26 0      
- 9           8            80      95      33      24  26.6  0.444     53 1      
-10           1            72      31      40      42  36.9  0.104     26 0      
+ 1           0           171      80      34      23  43.5  1.21      21 Non di~
+ 2           8            92      93      47      36  21.2  0.158     23 Non di~
+ 3           7           115      47      52      35  41.5  0.0790    23 Non di~
+ 4           9           103      78      25     304  29.6  1.28      43 Diabet~
+ 5           1            85      59      27      35  42.6  0.550     22 Non di~
+ 6           0            82      92       9     253  19.7  0.103     26 Non di~
+ 7           0           133      47      19     227  21.9  0.174     21 Non di~
+ 8           0            67      87      43      36  18.3  0.236     26 Non di~
+ 9           8            80      95      33      24  26.6  0.444     53 Diabet~
+10           1            72      31      40      42  36.9  0.104     26 Non di~
 # ... with 14,990 more rows, and abbreviated variable names 1: plasma_glucose,
 #   2: diastolic_blood_pressure, 3: triceps_thickness, 4: serum_insulin,
 #   5: diabetes_pedigree, 6: diabetic</code></pre>
 </div>
 </div>
-<p>The primary goal of this exploration is to try to understand the relationships between of the variables in the dataset. In general to assess any apparent correlation between the features and the label we want to predict. The best approach is to use mental picture through data visualization. Now let’s compare the feature distributions for each label value. We’ll begin by formatting the data to a long format to make it somewhat easier to make multiple facets.</p>
+<p>Our primary goal of data exploration is to try to understand the existing relationship patterns between variables in the dataset. Therefore, we should assess any apparent correlation using picture through data visualization. To make it easy to plot multiple plot at once, the format of our dataset at this stage is wide, and that prevent us doing that. In order to plot all variable in single plot, we must first convert the dataset from wide format to long format, and we can do that using <code>pivot_longer</code> function from <strong>dplyr</strong> package <span class="citation" data-cites="dplyr">(<a href="#ref-dplyr" role="doc-biblioref">Wickham, François, Henry, &amp; Müller, 2019</a>)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>diabetes.tidy.long <span class="ot">=</span> diabetes.tidy <span class="sc">%&gt;%</span> </span>
 <span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">pivot_longer</span>(</span>
@@ -446,7 +444,7 @@ $ Diabetic               &lt;dbl&gt; 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
 <span id="cb10-5"><a href="#cb10-5"></a>    <span class="at">values_to =</span> <span class="st">"values"</span></span>
 <span id="cb10-6"><a href="#cb10-6"></a>               )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Once we have pivoted the data to long format, we can make some plots for visual exploration</p>
+<p>Once we have pivoted the data to long format, we can create plot in a single plot using multiple facet;</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_light</span>())</span>
 <span id="cb11-2"><a href="#cb11-2"></a></span>
@@ -455,12 +453,20 @@ $ Diabetic               &lt;dbl&gt; 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0
 <span id="cb11-5"><a href="#cb11-5"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
 <span id="cb11-6"><a href="#cb11-6"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> features, <span class="at">scales =</span> <span class="st">"free"</span>, <span class="at">ncol =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
 <span id="cb11-7"><a href="#cb11-7"></a>  <span class="fu">scale_color_viridis_d</span>(<span class="at">option =</span> <span class="st">"plasma"</span>, <span class="at">end =</span> .<span class="dv">7</span>) <span class="sc">+</span></span>
-<span id="cb11-8"><a href="#cb11-8"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-8"><a href="#cb11-8"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name =</span> <span class="st">"Values"</span>, <span class="at">trans =</span> scales<span class="sc">::</span><span class="fu">sqrt_trans</span>())<span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>, <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb11-10"><a href="#cb11-10"></a>        <span class="at">strip.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"grey60"</span>), </span>
+<span id="cb11-11"><a href="#cb11-11"></a>        <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"white"</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+<div id="fig-fig1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-fig1-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Boxplot of the predictor variables between diabetic and non-diabetic patients</figcaption><p></p>
+</figure>
 </div>
 </div>
-<p>Amazing! For some of the features, there’s a noticeable difference in the distribution for each label value. In particular, Pregnancies and Age show markedly different distributions for diabetic patients than for non-diabetic patients. These features may help predict whether or not a patient is diabetic.</p>
+</div>
+<p>The values of the predictor vary between diabetic and non-diabetic individuals. In particular, with exception of diabetes_pedigree and triceps_thickness, other predictors show that diabetic individual with relatively high values than non-diabetic (<a href="#fig-fig1">Figure&nbsp;1</a>). These features may help predict whether or not a patient is diabetic.</p>
 </section>
 <section id="split-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="split-the-data">Split the data</h3>
@@ -492,12 +498,15 @@ Test cases: 4500</code></pre>
 </div>
 </div>
 </section>
-<section id="train-and-evaluate-a-binary-classification-model" class="level3">
-<h3 class="anchored" data-anchor-id="train-and-evaluate-a-binary-classification-model">Train and Evaluate a Binary Classification Model</h3>
-<p>Once we have separated the dataset into train and test set, now we’re ready to train our model by fitting the training features to the training labels (diabetic). There are various algorithms we can use to train the model. In this example, we’ll use <em>Logistic Regression</em>, which is a well-established algorithm for classification. Logistic regression is a binary classification algorithm, meaning it predicts two categories.</p>
-<p>There are quite a number of ways to fit a logistic regression model in tidymodels. For now, let’s fit a logistic regression model via the default <code>stats::glm()</code> engine.</p>
+</section>
+<section id="train-and-evaluate-a-binary-classification-model" class="level2">
+<h2 class="anchored" data-anchor-id="train-and-evaluate-a-binary-classification-model">Train and Evaluate a Binary Classification Model</h2>
+<p>Once we have separated the dataset into train and test set, now we’re ready to train our model by fitting the training features to the training labels (diabetic). There are various algorithms we can use to train the model.</p>
+<section id="logistic-regression-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="logistic-regression-algorithm">Logistic regression Algorithm</h3>
+<p>In this section, we’ll use <em>Logistic Regression</em>, which is a well-established algorithm for classification. Logistic regression is a binary classification algorithm, meaning it predicts two categories. There are quite a number of ways to fit a logistic regression model in tidymodels. For now, let’s fit a logistic regression model via the default <code>stats::glm()</code> engine.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Make a model specifcation</span></span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Make a model specification</span></span>
 <span id="cb14-2"><a href="#cb14-2"></a>logreg_spec <span class="ot">&lt;-</span> <span class="fu">logistic_reg</span>() <span class="sc">%&gt;%</span> </span>
 <span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
@@ -540,8 +549,7 @@ Null Deviance:      13290
 Residual Deviance: 9221     AIC: 9239</code></pre>
 </div>
 </div>
-<p>The model print out shows the coefficients learned during training.</p>
-<p>Now we’ve trained the model using the training data, we can use the test data we held back to evaluate how well it predicts using <code>parsnip::predict()</code>. Let’s start by using the model to predict labels for our test set, and compare the predicted labels to the known labels:</p>
+<p>The model print out shows the coefficients learned during training. Now we’ve trained the model using the training data, we can use the test data we held back to evaluate how well it predicts using <code>parsnip::predict()</code>. Let’s start by using the model to predict labels for our test set, and compare the predicted labels to the known labels:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Make predictions then bind them to the test set</span></span>
 <span id="cb18-2"><a href="#cb18-2"></a>results <span class="ot">&lt;-</span> diabetes_test <span class="sc">%&gt;%</span> </span>
@@ -555,22 +563,21 @@ Residual Deviance: 9221     AIC: 9239</code></pre>
 <span id="cb18-10"><a href="#cb18-10"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 x 2
-   diabetic .pred_class
-   &lt;fct&gt;    &lt;fct&gt;      
- 1 0        0          
- 2 0        0          
- 3 0        0          
- 4 0        0          
- 5 1        1          
- 6 0        0          
- 7 0        0          
- 8 1        0          
- 9 0        0          
-10 0        0          </code></pre>
+   diabetic     .pred_class 
+   &lt;fct&gt;        &lt;fct&gt;       
+ 1 Non diabetic Non diabetic
+ 2 Non diabetic Non diabetic
+ 3 Non diabetic Non diabetic
+ 4 Non diabetic Non diabetic
+ 5 Diabetic     Diabetic    
+ 6 Non diabetic Non diabetic
+ 7 Non diabetic Non diabetic
+ 8 Diabetic     Non diabetic
+ 9 Non diabetic Non diabetic
+10 Non diabetic Non diabetic</code></pre>
 </div>
 </div>
-<p>Comparing each prediction with its corresponding “ground truth” actual value isn’t a very efficient way to determine how well the model is predicting. Fortunately, Tidymodels has a few more tricks up its sleeve: <strong>yardstick</strong> - a package used to measure the effectiveness of models using performance metrics <span class="citation" data-cites="yardstick">(<a href="#ref-yardstick" role="doc-biblioref">Kuhn &amp; Vaughan, 2020</a>)</span>.</p>
-<p>The most obvious thing you might want to do is to check the accuracy of the predictions - in simple terms, what proportion of the labels did the model predict correctly? <code>yardstick::accuracy()</code> does just that!</p>
+<p>Comparing each prediction with its corresponding “ground truth” actual value isn’t a very efficient way to determine how well the model is predicting. Fortunately, <strong>tidymodels</strong> has a few more tricks up its sleeve: <strong>yardstick</strong> - a package used to measure the effectiveness of models using performance metrics <span class="citation" data-cites="yardstick">(<a href="#ref-yardstick" role="doc-biblioref">Kuhn &amp; Vaughan, 2020</a>)</span>. The most obvious thing you might want to do is to check the accuracy of the predictions - in simple terms, what proportion of the labels did the model predict correctly? <code>yardstick::accuracy()</code> does just that!</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># Calculate accuracy: proportion of data predicted correctly</span></span>
 <span id="cb20-2"><a href="#cb20-2"></a><span class="fu">accuracy</span>(</span>
@@ -589,26 +596,44 @@ Residual Deviance: 9221     AIC: 9239</code></pre>
 <p>Fortunately, there are some other metrics that reveal a little more about how our classification model is performing.One performance metric associated with classification problems is the confusion matrix. A confusion matrix describes how well a classification model performs by tabulating how many examples in each class were correctly classified by a model. In our case, it will show you how many cases were classified as negative (0) and how many as positive (1); the confusion matrix also shows you how many were classified into the wrong categories. The <code>conf_mat()</code> function from yardstick calculates this cross-tabulation of observed and predicted classes.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># Confusion matrix for prediction results</span></span>
-<span id="cb22-2"><a href="#cb22-2"></a><span class="fu">conf_mat</span>(<span class="at">data =</span> results, <span class="at">truth =</span> diabetic, <span class="at">estimate =</span> .pred_class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-2"><a href="#cb22-2"></a>results <span class="sc">%&gt;%</span> </span>
+<span id="cb22-3"><a href="#cb22-3"></a>  <span class="fu">conf_mat</span>(<span class="at">truth =</span> diabetic, <span class="at">estimate =</span> .pred_class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>          Truth
-Prediction    1    0
-         1  897  293
-         0  657 2653</code></pre>
+<pre><code>              Truth
+Prediction     Diabetic Non diabetic
+  Diabetic          897          293
+  Non diabetic      657         2653</code></pre>
 </div>
 </div>
-<p><strong>tidymodels</strong> provides yet another succinct way of evaluating all these metrics. Using yardstick::metric_set(), you can combine multiple metrics together into a new function that calculates all of them at once.</p>
+<p>The descriptive statistic of confusion matrix presented above can be presented visually as shown in <a href="#fig-confmat">Figure&nbsp;2</a></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># Combine metrics and evaluate them all at once</span></span>
-<span id="cb24-2"><a href="#cb24-2"></a>eval_metrics <span class="ot">&lt;-</span> </span>
-<span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">metric_set</span>(ppv, recall, accuracy, f_meas)</span>
-<span id="cb24-4"><a href="#cb24-4"></a></span>
-<span id="cb24-5"><a href="#cb24-5"></a></span>
-<span id="cb24-6"><a href="#cb24-6"></a><span class="fu">eval_metrics</span>(</span>
-<span id="cb24-7"><a href="#cb24-7"></a>  <span class="at">data =</span> results, </span>
-<span id="cb24-8"><a href="#cb24-8"></a>  <span class="at">truth =</span> diabetic, </span>
-<span id="cb24-9"><a href="#cb24-9"></a>  <span class="at">estimate =</span> .pred_class</span>
-<span id="cb24-10"><a href="#cb24-10"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># Visualize conf mat</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="fu">update_geom_defaults</span>(<span class="at">geom =</span> <span class="st">"rect"</span>, <span class="at">new =</span> <span class="fu">list</span>(<span class="at">fill =</span> <span class="st">"midnightblue"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>))</span>
+<span id="cb24-3"><a href="#cb24-3"></a></span>
+<span id="cb24-4"><a href="#cb24-4"></a>results <span class="sc">%&gt;%</span> </span>
+<span id="cb24-5"><a href="#cb24-5"></a>  <span class="fu">conf_mat</span>(diabetic, .pred_class) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-6"><a href="#cb24-6"></a>  <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-confmat" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-confmat-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Visualize confusion matrix plot</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>tidymodels</strong> provides yet another succinct way of evaluating all these metrics. Using <code>yardstick::metric_set()</code>, you can combine multiple metrics together into a new function that calculates all of them at once.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># Combine metrics and evaluate them all at once</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a>eval_metrics <span class="ot">&lt;-</span> </span>
+<span id="cb25-3"><a href="#cb25-3"></a>  <span class="fu">metric_set</span>(ppv, recall, accuracy, f_meas)</span>
+<span id="cb25-4"><a href="#cb25-4"></a></span>
+<span id="cb25-5"><a href="#cb25-5"></a></span>
+<span id="cb25-6"><a href="#cb25-6"></a><span class="fu">eval_metrics</span>(</span>
+<span id="cb25-7"><a href="#cb25-7"></a>  <span class="at">data =</span> results, </span>
+<span id="cb25-8"><a href="#cb25-8"></a>  <span class="at">truth =</span> diabetic, </span>
+<span id="cb25-9"><a href="#cb25-9"></a>  <span class="at">estimate =</span> .pred_class</span>
+<span id="cb25-10"><a href="#cb25-10"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 x 3
   .metric  .estimator .estimate
@@ -619,51 +644,69 @@ Prediction    1    0
 4 f_meas   binary         0.654</code></pre>
 </div>
 </div>
-<p>Until now, we’ve considered the predictions from the model as being either 1 or 0 class labels. Actually, things are a little more complex than that. Statistical machine learning algorithms, like logistic regression, are based on probability; so what actually gets predicted by a binary classifier is the probability that the label is true (P(y) ) and the probability that the label is false (1−P(y) ). A threshold value of 0.5 is used to decide whether the predicted label is a 1 (P(y)&gt;0.5 ) or a 0 (P(y)&lt;=0.5 ). Let’s see the probability pairs for each case:</p>
+<p>Until now, we’ve considered the predictions from the model as being either 1 or 0 class labels. Actually, things are a little more complex than that. Statistical machine learning algorithms, like logistic regression, are based on probability; so what actually gets predicted by a binary classifier is the probability that the label is true <span class="math inline">\(P(y)\)</span> ) and the probability that the label is false <span class="math inline">\(1−P(y)\)</span>. A threshold value of 0.5 is used to decide whether the predicted label is a 1 <span class="math inline">\(P(y)&gt;0.5\)</span> or a 0 <span class="math inline">\(P(y)&lt;=0.5\)</span>. Let’s see the probability pairs for each case:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># Predict class probabilities and bind them to results</span></span>
-<span id="cb26-2"><a href="#cb26-2"></a>results <span class="ot">&lt;-</span> results <span class="sc">%&gt;%</span> </span>
-<span id="cb26-3"><a href="#cb26-3"></a>  <span class="fu">bind_cols</span>(logreg_fit <span class="sc">%&gt;%</span> </span>
-<span id="cb26-4"><a href="#cb26-4"></a>              <span class="fu">predict</span>(<span class="at">new_data =</span> diabetes_test, <span class="at">type =</span> <span class="st">"prob"</span>))</span>
-<span id="cb26-5"><a href="#cb26-5"></a></span>
-<span id="cb26-6"><a href="#cb26-6"></a>  </span>
-<span id="cb26-7"><a href="#cb26-7"></a></span>
-<span id="cb26-8"><a href="#cb26-8"></a></span>
-<span id="cb26-9"><a href="#cb26-9"></a><span class="co"># Print out the results</span></span>
-<span id="cb26-10"><a href="#cb26-10"></a>results <span class="sc">%&gt;%</span> </span>
-<span id="cb26-11"><a href="#cb26-11"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># Predict class probabilities and bind them to results</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a>results <span class="ot">&lt;-</span> results <span class="sc">%&gt;%</span> </span>
+<span id="cb27-3"><a href="#cb27-3"></a>  <span class="fu">bind_cols</span>(logreg_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb27-4"><a href="#cb27-4"></a>              <span class="fu">predict</span>(<span class="at">new_data =</span> diabetes_test, <span class="at">type =</span> <span class="st">"prob"</span>))</span>
+<span id="cb27-5"><a href="#cb27-5"></a></span>
+<span id="cb27-6"><a href="#cb27-6"></a>  </span>
+<span id="cb27-7"><a href="#cb27-7"></a></span>
+<span id="cb27-8"><a href="#cb27-8"></a></span>
+<span id="cb27-9"><a href="#cb27-9"></a><span class="co"># Print out the results</span></span>
+<span id="cb27-10"><a href="#cb27-10"></a>results <span class="sc">%&gt;%</span> </span>
+<span id="cb27-11"><a href="#cb27-11"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 x 4
-   diabetic .pred_class .pred_1 .pred_0
-   &lt;fct&gt;    &lt;fct&gt;         &lt;dbl&gt;   &lt;dbl&gt;
- 1 0        0            0.417    0.583
- 2 0        0            0.0985   0.902
- 3 0        0            0.0469   0.953
- 4 0        0            0.0561   0.944
- 5 1        1            0.581    0.419
- 6 0        0            0.331    0.669
- 7 0        0            0.288    0.712
- 8 1        0            0.270    0.730
- 9 0        0            0.275    0.725
-10 0        0            0.131    0.869</code></pre>
+   diabetic     .pred_class  .pred_Diabetic `.pred_Non diabetic`
+   &lt;fct&gt;        &lt;fct&gt;                 &lt;dbl&gt;                &lt;dbl&gt;
+ 1 Non diabetic Non diabetic         0.417                 0.583
+ 2 Non diabetic Non diabetic         0.0985                0.902
+ 3 Non diabetic Non diabetic         0.0469                0.953
+ 4 Non diabetic Non diabetic         0.0561                0.944
+ 5 Diabetic     Diabetic             0.581                 0.419
+ 6 Non diabetic Non diabetic         0.331                 0.669
+ 7 Non diabetic Non diabetic         0.288                 0.712
+ 8 Diabetic     Non diabetic         0.270                 0.730
+ 9 Non diabetic Non diabetic         0.275                 0.725
+10 Non diabetic Non diabetic         0.131                 0.869</code></pre>
 </div>
 </div>
-<p>The decision to score a prediction as a 1 or a 0 depends on the threshold to which the predicted probabilities are compared. If we were to change the threshold, it would affect the predictions; and therefore change the metrics in the confusion matrix. A common way to evaluate a classifier is to examine the true positive rate (which is another name for recall) and the false positive rate (1 - specificity) for a range of possible thresholds. These rates are then plotted against all possible thresholds to form a chart known as a received operator characteristic (ROC) chart, like this:</p>
+<p>The decision to score a prediction as a 1 or a 0 depends on the threshold to which the predicted probabilities are compared. If we were to change the threshold, it would affect the predictions; and therefore change the metrics in the confusion matrix. A common way to evaluate a classifier is to examine the true positive rate (which is another name for recall) and the false positive rate <span class="math inline">\((1 - specificity)\)</span> for a range of possible thresholds. These rates are then plotted against all possible thresholds to form a chart known as a received operator characteristic (ROC) chart, like this:</p>
+<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A receiver operating characteristic curve, or ROC curve, is a graphical plot that illustrates the diagnostic ability of a binary classifier system as its discrimination threshold is varied.</p>
+</div>
+</div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="co"># Make a roc_chart</span></span>
-<span id="cb28-2"><a href="#cb28-2"></a>results <span class="sc">%&gt;%</span> </span>
-<span id="cb28-3"><a href="#cb28-3"></a>  <span class="fu">roc_curve</span>(<span class="at">truth =</span> diabetic, .pred_1) <span class="sc">%&gt;%</span> </span>
-<span id="cb28-4"><a href="#cb28-4"></a>  <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>The ROC chart shows the curve of the true and false positive rates for different threshold values between 0 and 1. A perfect classifier would have a curve that goes straight up the left side and straight across the top. The diagonal line across the chart represents the probability of predicting correctly with a 50/50 random prediction; so you obviously want the curve to be higher than that (or your model is no better than simply guessing!).</p>
-<p>The area under the curve (AUC) is a value between 0 and 1 that quantifies the overall performance of the model. One way of interpreting AUC is as the probability that the model ranks a random positive example more highly than a random negative example. The closer to 1 this value is, the better the model. Once again, Tidymodels includes a function to calculate this metric: yardstick::roc_auc()</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="co"># Compute the AUC</span></span>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="co"># Make a roc_chart</span></span>
 <span id="cb29-2"><a href="#cb29-2"></a>results <span class="sc">%&gt;%</span> </span>
-<span id="cb29-3"><a href="#cb29-3"></a>  <span class="fu">roc_auc</span>(diabetic, .pred_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-3"><a href="#cb29-3"></a>  <span class="fu">roc_curve</span>(<span class="at">truth =</span> diabetic, .pred_Diabetic) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-4"><a href="#cb29-4"></a>  <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-roc" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-roc-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: The ROC curve</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The <a href="#fig-roc">Figure&nbsp;3</a> shows the curve of the true and false positive rates for different threshold values between 0 and 1. A perfect classifier would have a curve that goes straight up the left side and straight across the top. The diagonal line across the chart represents the probability of predicting correctly with a <span class="math inline">\(\frac{50}{50}\)</span> random prediction; so you obviously want the curve to be higher than that (or your model is no better than simply guessing!).</p>
+<p>The area under the curve (AUC) is a value between 0 and 1 that quantifies the overall performance of the model. One way of interpreting AUC is as the probability that the model ranks a random positive example more highly than a random negative example. The closer to 1 this value is, the better the model. Once again, <code>tidymodels</code> includes a function to calculate this metric: <code>yardstick::roc_auc()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># Compute the AUC</span></span>
+<span id="cb30-2"><a href="#cb30-2"></a>results <span class="sc">%&gt;%</span> </span>
+<span id="cb30-3"><a href="#cb30-3"></a>  <span class="fu">roc_auc</span>(diabetic, .pred_Diabetic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 x 3
   .metric .estimator .estimate
@@ -672,6 +715,209 @@ Prediction    1    0
 </div>
 </div>
 </section>
+<section id="random-forest-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="random-forest-algorithm">Random Forest Algorithm</h3>
+<p>We have been dealing with logistic regression, which is a linear algorithm. tidymodels provide a swift approach to change algorithms in the model. For instance , we can change the logistic regression to other kind of classification algorithms inluding:</p>
+<ul>
+<li><em>Support Vector Machine algorithms</em>: Algorithms that define a hyperplane that separates classes.</li>
+<li><em>Tree-based algorithms</em>: Algorithms that build a decision tree to reach a prediction</li>
+<li><em>Ensemble algorithms</em>: Algorithms that combine the outputs of multiple base algorithms to improve generalizability.</li>
+</ul>
+<p>To make life simple, let us train the model using an ensemble algorithm named <em>Random Forest</em> that averages the outputs of multiple random decision trees. Random forests help to reduce tree correlation by injecting more randomness into the tree-growing process. More specifically, instead of considering all predictors in the data, for calculating a given split, random forests pick a random sample of predictors to be considered for that split.</p>
+<p>Given the experience of the logistic regression model, the power of tidymodels is consistence and therefore we do not need to start over, the only thing we need to do is simply to specify and fit a random forest algorithm.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># Preprocess the data for modelling</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a>diabetes_recipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(diabetic <span class="sc">~</span> ., <span class="at">data =</span> diabetes_train) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-3"><a href="#cb32-3"></a>  <span class="fu">step_mutate</span>(<span class="at">age =</span> <span class="fu">factor</span>(age)) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-4"><a href="#cb32-4"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-5"><a href="#cb32-5"></a>  <span class="fu">step_dummy</span>(age)</span>
+<span id="cb32-6"><a href="#cb32-6"></a></span>
+<span id="cb32-7"><a href="#cb32-7"></a><span class="co"># specify a random forest model specification</span></span>
+<span id="cb32-8"><a href="#cb32-8"></a>rf_spec <span class="ot">&lt;-</span> <span class="fu">rand_forest</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb32-9"><a href="#cb32-9"></a>  <span class="fu">set_engine</span>(<span class="st">"ranger"</span>, <span class="at">importance =</span> <span class="st">"impurity"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-10"><a href="#cb32-10"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
+<span id="cb32-11"><a href="#cb32-11"></a></span>
+<span id="cb32-12"><a href="#cb32-12"></a><span class="co"># Bundle recipe and model spec into a workflow</span></span>
+<span id="cb32-13"><a href="#cb32-13"></a>rf_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb32-14"><a href="#cb32-14"></a>  <span class="fu">add_recipe</span>(diabetes_recipe) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-15"><a href="#cb32-15"></a>  <span class="fu">add_model</span>(rf_spec)</span>
+<span id="cb32-16"><a href="#cb32-16"></a></span>
+<span id="cb32-17"><a href="#cb32-17"></a><span class="co"># Fit a model</span></span>
+<span id="cb32-18"><a href="#cb32-18"></a>rf_wf_fit <span class="ot">&lt;-</span> rf_wf <span class="sc">%&gt;%</span> </span>
+<span id="cb32-19"><a href="#cb32-19"></a>  <span class="fu">fit</span>(<span class="at">data =</span> diabetes_train)</span>
+<span id="cb32-20"><a href="#cb32-20"></a></span>
+<span id="cb32-21"><a href="#cb32-21"></a><span class="co"># # spefiy the model</span></span>
+<span id="cb32-22"><a href="#cb32-22"></a><span class="co"># rf.fit  = rand_forest() %&gt;% </span></span>
+<span id="cb32-23"><a href="#cb32-23"></a><span class="co">#   set_engine(engine = "ranger") %&gt;% </span></span>
+<span id="cb32-24"><a href="#cb32-24"></a><span class="co">#   set_mode(mode = "classification") %&gt;% </span></span>
+<span id="cb32-25"><a href="#cb32-25"></a><span class="co">#   # fit the model</span></span>
+<span id="cb32-26"><a href="#cb32-26"></a><span class="co">#   fit(diabetic ~ ., data = diabetes_train)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we make prediction of the fitted model with the test dataset</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>rf.prediction <span class="ot">=</span> rf_wf_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">predict</span>(<span class="at">new_data =</span> diabetes_test)</span>
+<span id="cb33-3"><a href="#cb33-3"></a></span>
+<span id="cb33-4"><a href="#cb33-4"></a>rf.prediction.prob  <span class="ot">=</span>  rf_wf_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb33-5"><a href="#cb33-5"></a>  <span class="fu">predict</span>(<span class="at">new_data =</span> diabetes_test, <span class="at">type =</span> <span class="st">"prob"</span>)</span>
+<span id="cb33-6"><a href="#cb33-6"></a></span>
+<span id="cb33-7"><a href="#cb33-7"></a>rf.prediction <span class="ot">=</span>  rf.prediction <span class="sc">%&gt;%</span> </span>
+<span id="cb33-8"><a href="#cb33-8"></a>  <span class="fu">bind_cols</span>(rf.prediction.prob)</span>
+<span id="cb33-9"><a href="#cb33-9"></a></span>
+<span id="cb33-10"><a href="#cb33-10"></a>rf.result <span class="ot">=</span> diabetes_test <span class="sc">%&gt;%</span> </span>
+<span id="cb33-11"><a href="#cb33-11"></a>  <span class="fu">select</span>(diabetic) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-12"><a href="#cb33-12"></a>  <span class="fu">bind_cols</span>(rf.prediction)</span>
+<span id="cb33-13"><a href="#cb33-13"></a></span>
+<span id="cb33-14"><a href="#cb33-14"></a>rf.result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4,500 x 4
+   diabetic     .pred_class  .pred_Diabetic `.pred_Non diabetic`
+   &lt;fct&gt;        &lt;fct&gt;                 &lt;dbl&gt;                &lt;dbl&gt;
+ 1 Non diabetic Non diabetic        0.275                 0.725 
+ 2 Non diabetic Non diabetic        0.0137                0.986 
+ 3 Non diabetic Non diabetic        0.00739               0.993 
+ 4 Non diabetic Non diabetic        0.0108                0.989 
+ 5 Diabetic     Diabetic            0.910                 0.0902
+ 6 Non diabetic Non diabetic        0.103                 0.897 
+ 7 Non diabetic Non diabetic        0.237                 0.763 
+ 8 Diabetic     Non diabetic        0.270                 0.730 
+ 9 Non diabetic Non diabetic        0.0484                0.952 
+10 Non diabetic Non diabetic        0.0326                0.967 
+# ... with 4,490 more rows</code></pre>
+</div>
+</div>
+<p>The printed predicted of the random forest looks complelling, let’s evaluate its metrics!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>rf.result <span class="sc">%&gt;%</span> </span>
+<span id="cb35-2"><a href="#cb35-2"></a>  <span class="fu">conf_mat</span>(<span class="at">truth =</span> diabetic, <span class="at">estimate =</span> .pred_class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              Truth
+Prediction     Diabetic Non diabetic
+  Diabetic         1368           99
+  Non diabetic      186         2847</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>rf.result <span class="sc">%&gt;%</span> </span>
+<span id="cb37-2"><a href="#cb37-2"></a>  <span class="fu">conf_mat</span>(<span class="at">truth =</span> diabetic, <span class="at">estimate =</span> .pred_class) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-3"><a href="#cb37-3"></a>  <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We notice that there a considerable increase in the number of True Positives and True Negatives, which is a step in the right direction. Let’s take a look at other evaluation metrics</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>rf.result <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="#cb38-2"></a>  <span class="fu">accuracy</span>(<span class="at">truth =</span> diabetic, <span class="at">estimate =</span> .pred_class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 x 3
+  .metric  .estimator .estimate
+  &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+1 accuracy binary         0.937</code></pre>
+</div>
+</div>
+<p>There is considerable improvement of the accuracy from .75 to around 0.93. The high accuracy of the random forest is also clearly visible in ROC curve (<a href="#fig-roc-rf">Figure&nbsp;4</a>) with considervable high value of area under the curve (AUC).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>roc.values <span class="ot">=</span> rf.result <span class="sc">%&gt;%</span> </span>
+<span id="cb40-2"><a href="#cb40-2"></a>  <span class="fu">roc_auc</span>(<span class="at">truth =</span> diabetic, .pred_Diabetic) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-3"><a href="#cb40-3"></a>  <span class="fu">pull</span>(.estimate) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-4"><a href="#cb40-4"></a>  <span class="fu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb40-5"><a href="#cb40-5"></a></span>
+<span id="cb40-6"><a href="#cb40-6"></a>rf.result <span class="sc">%&gt;%</span> </span>
+<span id="cb40-7"><a href="#cb40-7"></a>  <span class="fu">roc_curve</span>(<span class="at">truth =</span> diabetic, .pred_Diabetic) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-8"><a href="#cb40-8"></a>  <span class="fu">autoplot</span>()<span class="sc">+</span></span>
+<span id="cb40-9"><a href="#cb40-9"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> .<span class="dv">75</span>, <span class="at">y =</span> .<span class="dv">25</span>, <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"AUC-value = "</span>, roc.values))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-roc-rf" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-roc-rf-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: ROC curve of random forest</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-vip">Figure&nbsp;5</a> is a Variable Importance Plot (VIP) that illustrates importance of each predictor variables used to predict the diabetic outcome in a random forest model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="co"># Load vip</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a><span class="fu">library</span>(vip)</span>
+<span id="cb41-3"><a href="#cb41-3"></a></span>
+<span id="cb41-4"><a href="#cb41-4"></a><span class="co"># Extract the fitted model from the workflow</span></span>
+<span id="cb41-5"><a href="#cb41-5"></a>rf_wf_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb41-6"><a href="#cb41-6"></a>  <span class="fu">extract_fit_parsnip</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb41-7"><a href="#cb41-7"></a><span class="co"># Make VIP plot</span></span>
+<span id="cb41-8"><a href="#cb41-8"></a>  <span class="fu">vip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-vip" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-vip-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5: Model-specific VIPs of tree-based model random forest</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>We notice that random forest has high predictive power compared to the logistic regression model and hence you can choose the model that give you high accuracy in prediction. The random forest lines of code is bunded in single chunk;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="do">## spliting</span></span>
+<span id="cb42-2"><a href="#cb42-2"></a>my.split <span class="ot">=</span> diabetes.tidy <span class="sc">%&gt;%</span> </span>
+<span id="cb42-3"><a href="#cb42-3"></a>  <span class="fu">initial_split</span>(<span class="at">prop =</span> .<span class="dv">8</span>)</span>
+<span id="cb42-4"><a href="#cb42-4"></a><span class="do">## test set</span></span>
+<span id="cb42-5"><a href="#cb42-5"></a>my.test <span class="ot">=</span> my.split <span class="sc">%&gt;%</span>  <span class="fu">testing</span>()</span>
+<span id="cb42-6"><a href="#cb42-6"></a><span class="do">## train set</span></span>
+<span id="cb42-7"><a href="#cb42-7"></a>my.train <span class="ot">=</span> my.split <span class="sc">%&gt;%</span> <span class="fu">training</span>()</span>
+<span id="cb42-8"><a href="#cb42-8"></a></span>
+<span id="cb42-9"><a href="#cb42-9"></a><span class="co"># spefiy the model</span></span>
+<span id="cb42-10"><a href="#cb42-10"></a>my.fit  <span class="ot">=</span> <span class="fu">rand_forest</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb42-11"><a href="#cb42-11"></a>  <span class="fu">set_engine</span>(<span class="at">engine =</span> <span class="st">"ranger"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-12"><a href="#cb42-12"></a>  <span class="fu">set_mode</span>(<span class="at">mode =</span> <span class="st">"classification"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-13"><a href="#cb42-13"></a>  <span class="co"># fit the model</span></span>
+<span id="cb42-14"><a href="#cb42-14"></a>  <span class="fu">fit</span>(diabetic <span class="sc">~</span> ., <span class="at">data =</span> my.train)</span>
+<span id="cb42-15"><a href="#cb42-15"></a></span>
+<span id="cb42-16"><a href="#cb42-16"></a><span class="co"># test the model</span></span>
+<span id="cb42-17"><a href="#cb42-17"></a>my.prediction <span class="ot">=</span> my.fit <span class="sc">%&gt;%</span> </span>
+<span id="cb42-18"><a href="#cb42-18"></a>  <span class="fu">predict</span>(<span class="at">new_data =</span> my.test)</span>
+<span id="cb42-19"><a href="#cb42-19"></a></span>
+<span id="cb42-20"><a href="#cb42-20"></a>my.prediction.prob  <span class="ot">=</span>  my.fit <span class="sc">%&gt;%</span> </span>
+<span id="cb42-21"><a href="#cb42-21"></a>  <span class="fu">predict</span>(<span class="at">new_data =</span> my.test, <span class="at">type =</span> <span class="st">"prob"</span>)</span>
+<span id="cb42-22"><a href="#cb42-22"></a></span>
+<span id="cb42-23"><a href="#cb42-23"></a>my.prediction <span class="ot">=</span>  my.prediction <span class="sc">%&gt;%</span> </span>
+<span id="cb42-24"><a href="#cb42-24"></a>  <span class="fu">bind_cols</span>(my.prediction.prob)</span>
+<span id="cb42-25"><a href="#cb42-25"></a></span>
+<span id="cb42-26"><a href="#cb42-26"></a>my.result <span class="ot">=</span> my.test <span class="sc">%&gt;%</span> </span>
+<span id="cb42-27"><a href="#cb42-27"></a>  <span class="fu">select</span>(diabetic) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-28"><a href="#cb42-28"></a>  <span class="fu">bind_cols</span>(my.prediction)</span>
+<span id="cb42-29"><a href="#cb42-29"></a></span>
+<span id="cb42-30"><a href="#cb42-30"></a><span class="co"># validate the model</span></span>
+<span id="cb42-31"><a href="#cb42-31"></a></span>
+<span id="cb42-32"><a href="#cb42-32"></a>my.result <span class="sc">%&gt;%</span> </span>
+<span id="cb42-33"><a href="#cb42-33"></a>  <span class="fu">conf_mat</span>(<span class="at">truth =</span> diabetic, <span class="at">estimate =</span> .pred_class)</span>
+<span id="cb42-34"><a href="#cb42-34"></a></span>
+<span id="cb42-35"><a href="#cb42-35"></a>my.result <span class="sc">%&gt;%</span> </span>
+<span id="cb42-36"><a href="#cb42-36"></a>  <span class="fu">accuracy</span>(<span class="at">truth =</span> diabetic, <span class="at">estimate =</span> .pred_class)</span>
+<span id="cb42-37"><a href="#cb42-37"></a></span>
+<span id="cb42-38"><a href="#cb42-38"></a><span class="co"># Combine metrics and evaluate them all at once</span></span>
+<span id="cb42-39"><a href="#cb42-39"></a>eval_metrics <span class="ot">&lt;-</span> </span>
+<span id="cb42-40"><a href="#cb42-40"></a>  <span class="fu">metric_set</span>(ppv, recall, accuracy, f_meas)</span>
+<span id="cb42-41"><a href="#cb42-41"></a></span>
+<span id="cb42-42"><a href="#cb42-42"></a></span>
+<span id="cb42-43"><a href="#cb42-43"></a><span class="fu">eval_metrics</span>(</span>
+<span id="cb42-44"><a href="#cb42-44"></a>  <span class="at">data =</span> my.result, </span>
+<span id="cb42-45"><a href="#cb42-45"></a>  <span class="at">truth =</span> diabetic, </span>
+<span id="cb42-46"><a href="#cb42-46"></a>  <span class="at">estimate =</span> .pred_class</span>
+<span id="cb42-47"><a href="#cb42-47"></a>  )</span>
+<span id="cb42-48"><a href="#cb42-48"></a></span>
+<span id="cb42-49"><a href="#cb42-49"></a><span class="do">## plotting</span></span>
+<span id="cb42-50"><a href="#cb42-50"></a></span>
+<span id="cb42-51"><a href="#cb42-51"></a>my.result <span class="sc">%&gt;%</span> </span>
+<span id="cb42-52"><a href="#cb42-52"></a>  <span class="fu">roc_curve</span>(<span class="at">truth =</span> diabetic, .pred_Diabetic) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-53"><a href="#cb42-53"></a>  <span class="fu">autoplot</span>()</span>
+<span id="cb42-54"><a href="#cb42-54"></a></span>
+<span id="cb42-55"><a href="#cb42-55"></a>my.result <span class="sc">%&gt;%</span> </span>
+<span id="cb42-56"><a href="#cb42-56"></a>  <span class="fu">roc_auc</span>(<span class="at">truth =</span> diabetic, .pred_Diabetic)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="cited-materials" class="level2">
 
@@ -682,6 +928,9 @@ Prediction    1    0
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">Cited Materials</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="doc-bibliography">
+<div id="ref-janitor" class="csl-entry" role="doc-biblioentry">
+Firke, S. (2020). <em>Janitor: Simple tools for examining and cleaning dirty data</em>. Retrieved from <a href="https://CRAN.R-project.org/package=janitor">https://CRAN.R-project.org/package=janitor</a>
+</div>
 <div id="ref-rsample" class="csl-entry" role="doc-biblioentry">
 Kuhn, M., Chow, F., &amp; Wickham, H. (2020). <em>Rsample: General resampling infrastructure</em>. Retrieved from <a href="https://CRAN.R-project.org/package=rsample">https://CRAN.R-project.org/package=rsample</a>
 </div>
@@ -690,6 +939,9 @@ Kuhn, M., &amp; Vaughan, D. (2020). <em>Yardstick: Tidy characterizations of mod
 </div>
 <div id="ref-tidymodels" class="csl-entry" role="doc-biblioentry">
 Kuhn, M., &amp; Wickham, H. (2020). <em>Tidymodels: Easily install and load the ’tidymodels’ packages</em>. Retrieved from <a href="https://CRAN.R-project.org/package=tidymodels">https://CRAN.R-project.org/package=tidymodels</a>
+</div>
+<div id="ref-dplyr" class="csl-entry" role="doc-biblioentry">
+Wickham, H., François, R., Henry, L., &amp; Müller, K. (2019). <em>Dplyr: A grammar of data manipulation</em>. Retrieved from <a href="https://CRAN.R-project.org/package=dplyr">https://CRAN.R-project.org/package=dplyr</a>
 </div>
 <div id="ref-readr" class="csl-entry" role="doc-biblioentry">
 Wickham, H., Hester, J., &amp; Francois, R. (2017). <em>Readr: Read rectangular text data</em>. Retrieved from <a href="https://CRAN.R-project.org/package=readr">https://CRAN.R-project.org/package=readr</a>

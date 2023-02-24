@@ -13,7 +13,7 @@ tags:
   - classification
   - modelling
   - Masumbuko Semba
-# image: "thumbnail.jpg"
+image: "binary.jpg"
 draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
 bibliography: ../blog.bib
 csl:  ../apa.csl
@@ -25,17 +25,7 @@ code-line-numbers: true
 ---
 
 # A gentle introduction
-In this post, we’ll learn how to create Machine learning models using R. Machine learning is the foundation for predictive modeling and artificial intelligence. We’ll learn the core principles of machine learning and how to use common tools and frameworks to train, evaluate, and use machine learning models.
-
-Modules that will be covered in this learning path include:
-
-+ Explore and analyze data with R
-+ Train and evaluate regression models
-+ Train and evaluate classification models
-+ Train and evaluate clustering models (under development) 
-+ Train and evaluate deep learning models (under development)
-
-We need some packages to accomplish the step in this post. We can have them installed as: 
+In this post, we’ll learn how to create Machine learning models using R. Machine learning is the foundation for predictive modeling and artificial intelligence. We’ll learn the core principles of machine learning and how to use common tools and frameworks to train, evaluate, and use machine learning models. in this post we are going to manipulate and visualize diabetes dataset and train and evaluate binary regression models. But before we proceed, we need some packages to accomplish the step in this post. We can have them installed as: 
 
 ```{r}
 #| eval: false
@@ -45,6 +35,7 @@ install.packages(c('tidyverse', 'tidymodels', 'ranger', 'vip', 'palmerpenguins',
 ```
 
 Then we load the packages in the session
+
 ```{r}
 require(tidyverse)
 require(tidymodels)
@@ -54,10 +45,12 @@ require(patchwork)
 
 
 ## Binary classification
+
 Let’s start by looking at an example of *binary* classification, where the model must predict a label that belongs to one of two classes. In this exercise, we’ll train a binary classifier to predict whether or not a patient should be tested for diabetes based on some medical data.
 
 ### Explore the data
-The first step in any machine learning project is to explore the data that you will use to train a model. And before we can explore the data, we must first import the dataset in our R environment. So, let’s begin by importing a CSV file of patent data into a tibble direct from the internet with `read_csv` function of **readr** package [@readr], part of the tidyverse ecosystem [@tidyverse];
+
+Let’s first import a file of patients data direct from the internet with `read_csv` function of **readr** package [@readr], part of the tidyverse ecosystem [@tidyverse];
 
 ```{r}
 diabetes <- read_csv(file = "https://raw.githubusercontent.com/MicrosoftDocs/ml-basics/master/data/diabetes.csv")
@@ -77,9 +70,9 @@ Though the printed output tell us that there are fifteen thousand records and te
 diabetes %>% 
   glimpse()
 ```
-This data consists of diagnostic information about some patients who have been tested for diabetes. Note that the final column in the dataset (Diabetic) contains the value 0 for patients who tested negative for diabetes, and 1 for patients who tested positive. This is the label that we will train our model to predict; most of the other columns (Pregnancies, PlasmaGlucose, DiastolicBloodPressure, BMI and so on) are the features we will use to predict the Diabetic label.
+This data consists of 15,000 patients with 10 variables that were used to diagnose diabetes. In this post we tread a `Diabetic` as *outome* and the remaining variables as *predictor*. A predictor variable is used to predict the occurrence and/or level of another variable, called the outcome variable. Let’s tidy and reorganize in format that easy for model to understand. The variable names do not follow the recommended standard therefore we clean them using `clean_names` function from janitor package [@janitor]. We also notice that some of the variable like PatientId adds no effect in the model and was dropped from the dataset. 
 
-Let’s reformat the data to make it easier for a model to use effectively. For now, let’s drop the PatientID column, encode the Diabetic column as a categorical variable, and clean the variable names:
+Further, since we are going to use classification algorithm in this we need to convert our our predictor variable--diabetic--from numerical to factor. This is the outcome (label) and other variable like Pregnancies, PlasmaGlucose, DiastolicBloodPressure, BMI and so on are the predictor (features) we will use to predict the Diabetic label.
 
 
 ```{r}
@@ -87,13 +80,14 @@ Let’s reformat the data to make it easier for a model to use effectively. For 
 diabetes.tidy = diabetes %>% 
   janitor::clean_names() %>% 
   select(-patient_id) %>% 
-  mutate(diabetic = factor(diabetic, levels = c(1,0)))
+  mutate(diabetic = if_else(diabetic == 1, "Diabetic", "Non diabetic"),
+         diabetic = as.factor(diabetic))
 
 diabetes.tidy
 
 ```
 
-The primary goal of this exploration is to try to understand the relationships between of the variables in the dataset. In general to assess any apparent correlation between the features and the label we want to predict. The best approach is to use mental picture through data visualization. Now let’s compare the feature distributions for each label value. We’ll begin by formatting the data to a long format to make it somewhat easier to make multiple facets.
+Our primary goal of data exploration is to try to understand the existing relationship patterns between variables in the dataset. Therefore, we should assess any apparent correlation  using picture through data visualization. To make it easy to plot multiple plot at once, the format of our dataset at this stage is wide, and that prevent us doing that. In order to plot all variable in single plot, we must first convert the dataset from wide format to long format, and we can do that using `pivot_longer` function from **dplyr** package [@dplyr].
 
 ```{r}
 diabetes.tidy.long = diabetes.tidy %>% 
@@ -105,8 +99,12 @@ diabetes.tidy.long = diabetes.tidy %>%
 ```
 
 
-Once we have pivoted the data to long format, we can make some plots for visual exploration
+Once we have pivoted the data to long format, we can create plot in a single plot using multiple facet;
+
 ```{r}
+#| label: fig-fig1
+#| fig-cap: Boxplot of the predictor variables between diabetic and non-diabetic patients
+#| 
 theme_set(theme_light())
 
 diabetes.tidy.long %>% 
@@ -114,10 +112,12 @@ diabetes.tidy.long %>%
   geom_boxplot() + 
   facet_wrap(~ features, scales = "free", ncol = 4) +
   scale_color_viridis_d(option = "plasma", end = .7) +
-  theme(legend.position = "none")
+  scale_y_continuous(name = "Values", trans = scales::sqrt_trans())+
+  theme(legend.position = "none", axis.title.x = element_blank(), 
+        strip.background = element_rect(fill = "grey60"), 
+        strip.text = element_text(color = "white", face = "bold"))
 ```
-
-Amazing! For some of the features, there’s a noticeable difference in the distribution for each label value. In particular, Pregnancies and Age show markedly different distributions for diabetic patients than for non-diabetic patients. These features may help predict whether or not a patient is diabetic.
+The values of the predictor vary between diabetic and non-diabetic individuals. In particular, with exception of diabetes_pedigree and triceps_thickness, other predictors show that diabetic individual with relatively high values than non-diabetic (@fig-fig1). These features may help predict whether or not a patient is diabetic.
 
 ### Split the data
 Our dataset includes known values for the label, so we can use this to train a classifier so that it finds a statistical relationship between the features and the label value; but how will we know if our model is any good? How do we know it will predict correctly when we use it with new data that it wasn’t trained with?
@@ -146,13 +146,16 @@ diabetes_test <- testing(diabetes_split)
 cat("Training cases: ", nrow(diabetes_train), "\n",
     "Test cases: ", nrow(diabetes_test), sep = "")
 ```
-### Train and Evaluate a Binary Classification Model
-Once we have separated the dataset into train and test set, now we’re ready to train our model by fitting the training features to the training labels (diabetic). There are various algorithms we can use to train the model. In this example, we’ll use *Logistic Regression*, which is a well-established algorithm for classification. Logistic regression is a binary classification algorithm, meaning it predicts two categories.
+## Train and Evaluate a Binary Classification Model
 
-There are quite a number of ways to fit a logistic regression model in tidymodels. For now, let’s fit a logistic regression model via the default `stats::glm()` engine.
+Once we have separated the dataset into train and test set, now we’re ready to train our model by fitting the training features to the training labels (diabetic). There are various algorithms we can use to train the model.
+
+### Logistic regression Algorithm
+
+In this section, we’ll use *Logistic Regression*, which is a well-established algorithm for classification. Logistic regression is a binary classification algorithm, meaning it predicts two categories. There are quite a number of ways to fit a logistic regression model in tidymodels. For now, let’s fit a logistic regression model via the default `stats::glm()` engine.
 
 ```{r}
-# Make a model specifcation
+# Make a model specification
 logreg_spec <- logistic_reg() %>% 
   set_engine("glm") %>% 
   set_mode("classification")
@@ -174,9 +177,7 @@ logreg_fit <- logreg_spec %>%
 logreg_fit
 ```
 
-The model print out shows the coefficients learned during training.
-
-Now we’ve trained the model using the training data, we can use the test data we held back to evaluate how well it predicts using `parsnip::predict()`. Let’s start by using the model to predict labels for our test set, and compare the predicted labels to the known labels:
+The model print out shows the coefficients learned during training. Now we’ve trained the model using the training data, we can use the test data we held back to evaluate how well it predicts using `parsnip::predict()`. Let’s start by using the model to predict labels for our test set, and compare the predicted labels to the known labels:
 
 ```{r}
 # Make predictions then bind them to the test set
@@ -192,9 +193,7 @@ results %>%
 
 ```
 
-Comparing each prediction with its corresponding “ground truth” actual value isn’t a very efficient way to determine how well the model is predicting. Fortunately, Tidymodels has a few more tricks up its sleeve: **yardstick** - a package used to measure the effectiveness of models using performance metrics [@yardstick].
-
-The most obvious thing you might want to do is to check the accuracy of the predictions - in simple terms, what proportion of the labels did the model predict correctly? `yardstick::accuracy()` does just that!
+Comparing each prediction with its corresponding “ground truth” actual value isn’t a very efficient way to determine how well the model is predicting. Fortunately, **tidymodels** has a few more tricks up its sleeve: **yardstick** - a package used to measure the effectiveness of models using performance metrics [@yardstick]. The most obvious thing you might want to do is to check the accuracy of the predictions - in simple terms, what proportion of the labels did the model predict correctly? `yardstick::accuracy()` does just that!
 
 ```{r}
 # Calculate accuracy: proportion of data predicted correctly
@@ -210,9 +209,24 @@ Fortunately, there are some other metrics that reveal a little more about how ou
 
 ```{r}
 # Confusion matrix for prediction results
-conf_mat(data = results, truth = diabetic, estimate = .pred_class)
+results %>% 
+  conf_mat(truth = diabetic, estimate = .pred_class)
 ```
-**tidymodels** provides yet another succinct way of evaluating all these metrics. Using yardstick::metric_set(), you can combine multiple metrics together into a new function that calculates all of them at once.
+The descriptive statistic of confusion matrix presented above can be presented visually as shown in @fig-confmat
+
+```{r}
+#| label: fig-confmat
+#| fig-cap: Visualize confusion matrix plot
+
+# Visualize conf mat
+update_geom_defaults(geom = "rect", new = list(fill = "midnightblue", alpha = 0.7))
+
+results %>% 
+  conf_mat(diabetic, .pred_class) %>% 
+  autoplot()
+```
+
+**tidymodels** provides yet another succinct way of evaluating all these metrics. Using `yardstick::metric_set()`, you can combine multiple metrics together into a new function that calculates all of them at once.
 
 ```{r}
 # Combine metrics and evaluate them all at once
@@ -227,11 +241,8 @@ eval_metrics(
   )
 ```
 
-Until now, we’ve considered the predictions from the model as being either 1 or 0 class labels. Actually, things are a little more complex than that. Statistical machine learning algorithms, like logistic regression, are based on probability; so what actually gets predicted by a binary classifier is the probability that the label is true (P(y)
-) and the probability that the label is false (1−P(y)
-). A threshold value of 0.5 is used to decide whether the predicted label is a 1 (P(y)>0.5
-) or a 0 (P(y)<=0.5
-). Let’s see the probability pairs for each case:
+Until now, we’ve considered the predictions from the model as being either 1 or 0 class labels. Actually, things are a little more complex than that. Statistical machine learning algorithms, like logistic regression, are based on probability; so what actually gets predicted by a binary classifier is the probability that the label is true $P(y)$
+) and the probability that the label is false $1−P(y)$. A threshold value of 0.5 is used to decide whether the predicted label is a 1 $P(y)>0.5$ or a 0 $P(y)<=0.5$. Let’s see the probability pairs for each case:
 
 ```{r}
 # Predict class probabilities and bind them to results
@@ -247,23 +258,207 @@ results %>%
   slice_head(n = 10)
 ```
 
-The decision to score a prediction as a 1 or a 0 depends on the threshold to which the predicted probabilities are compared. If we were to change the threshold, it would affect the predictions; and therefore change the metrics in the confusion matrix. A common way to evaluate a classifier is to examine the true positive rate (which is another name for recall) and the false positive rate (1 - specificity) for a range of possible thresholds. These rates are then plotted against all possible thresholds to form a chart known as a received operator characteristic (ROC) chart, like this:
+The decision to score a prediction as a 1 or a 0 depends on the threshold to which the predicted probabilities are compared. If we were to change the threshold, it would affect the predictions; and therefore change the metrics in the confusion matrix. A common way to evaluate a classifier is to examine the true positive rate (which is another name for recall) and the false positive rate $(1 - specificity)$ for a range of possible thresholds. These rates are then plotted against all possible thresholds to form a chart known as a received operator characteristic (ROC) chart, like this:
+
+::: callout-important
+A receiver operating characteristic curve, or ROC curve, is a graphical plot that illustrates the diagnostic ability of a binary classifier system as its discrimination threshold is varied.
+:::
 
 ```{r}
+#| label: fig-roc
+#| fig-cap: The ROC curve
 # Make a roc_chart
 results %>% 
-  roc_curve(truth = diabetic, .pred_1) %>% 
+  roc_curve(truth = diabetic, .pred_Diabetic) %>% 
   autoplot()
 ```
 
-The ROC chart shows the curve of the true and false positive rates for different threshold values between 0 and 1. A perfect classifier would have a curve that goes straight up the left side and straight across the top. The diagonal line across the chart represents the probability of predicting correctly with a 50/50 random prediction; so you obviously want the curve to be higher than that (or your model is no better than simply guessing!).
+The @fig-roc shows the curve of the true and false positive rates for different threshold values between 0 and 1. A perfect classifier would have a curve that goes straight up the left side and straight across the top. The diagonal line across the chart represents the probability of predicting correctly with a $\frac{50}{50}$ random prediction; so you obviously want the curve to be higher than that (or your model is no better than simply guessing!).
 
-The area under the curve (AUC) is a value between 0 and 1 that quantifies the overall performance of the model. One way of interpreting AUC is as the probability that the model ranks a random positive example more highly than a random negative example. The closer to 1 this value is, the better the model. Once again, Tidymodels includes a function to calculate this metric: yardstick::roc_auc()
+The area under the curve (AUC) is a value between 0 and 1 that quantifies the overall performance of the model. One way of interpreting AUC is as the probability that the model ranks a random positive example more highly than a random negative example. The closer to 1 this value is, the better the model. Once again, `tidymodels` includes a function to calculate this metric: `yardstick::roc_auc()`
 
 ```{r}
 # Compute the AUC
 results %>% 
-  roc_auc(diabetic, .pred_1)
+  roc_auc(diabetic, .pred_Diabetic)
+```
+
+### Random Forest Algorithm
+We have been dealing with logistic regression, which is a linear algorithm. tidymodels provide a swift approach to change algorithms in the model. For instance , we can change the logistic regression to other kind of classification algorithms inluding:
+
++ *Support Vector Machine algorithms*: Algorithms that define a hyperplane that separates classes.
++ *Tree-based algorithms*: Algorithms that build a decision tree to reach a prediction
++ *Ensemble algorithms*: Algorithms that combine the outputs of multiple base algorithms to improve generalizability.
+
+To make life simple, let us train the model using an ensemble algorithm named *Random Forest* that averages the outputs of multiple random decision trees. Random forests help to reduce tree correlation by injecting more randomness into the tree-growing process. More specifically, instead of considering all predictors in the data, for calculating a given split, random forests pick a random sample of predictors to be considered for that split.
+
+Given the experience of the logistic regression model, the power of tidymodels is consistence and therefore we do not need to start over, the only thing we need to do is simply to specify and fit  a random forest algorithm.
+
+```{r}
+# Preprocess the data for modelling
+diabetes_recipe <- recipe(diabetic ~ ., data = diabetes_train) %>% 
+  step_mutate(age = factor(age)) %>% 
+  step_normalize(all_numeric_predictors()) %>% 
+  step_dummy(age)
+
+# specify a random forest model specification
+rf_spec <- rand_forest() %>% 
+  set_engine("ranger", importance = "impurity") %>% 
+  set_mode("classification")
+
+# Bundle recipe and model spec into a workflow
+rf_wf <- workflow() %>% 
+  add_recipe(diabetes_recipe) %>% 
+  add_model(rf_spec)
+
+# Fit a model
+rf_wf_fit <- rf_wf %>% 
+  fit(data = diabetes_train)
+
+# # spefiy the model
+# rf.fit  = rand_forest() %>% 
+#   set_engine(engine = "ranger") %>% 
+#   set_mode(mode = "classification") %>% 
+#   # fit the model
+#   fit(diabetic ~ ., data = diabetes_train)
+```
+
+
+Then we make prediction of the fitted model with the test dataset
+```{r}
+rf.prediction = rf_wf_fit %>% 
+  predict(new_data = diabetes_test)
+
+rf.prediction.prob  =  rf_wf_fit %>% 
+  predict(new_data = diabetes_test, type = "prob")
+
+rf.prediction =  rf.prediction %>% 
+  bind_cols(rf.prediction.prob)
+
+rf.result = diabetes_test %>% 
+  select(diabetic) %>% 
+  bind_cols(rf.prediction)
+
+rf.result
+```
+
+The printed predicted of the random forest looks complelling, let’s evaluate its metrics!
+
+```{r}
+rf.result %>% 
+  conf_mat(truth = diabetic, estimate = .pred_class)
+```
+
+
+```{r}
+rf.result %>% 
+  conf_mat(truth = diabetic, estimate = .pred_class) %>% 
+  autoplot()
+```
+We notice that there a considerable increase in the number of True Positives and True Negatives, which is a step in the right direction. Let’s take a look at other evaluation metrics
+
+```{r}
+rf.result %>% 
+  accuracy(truth = diabetic, estimate = .pred_class)
+```
+
+There is considerable improvement of the accuracy from .75 to around 0.93. The high accuracy of the random forest is also clearly visible in ROC curve (@fig-roc-rf) with considervable high value of area under the curve (AUC).
+
+```{r}
+#| label: fig-roc-rf
+#| fig-cap: ROC curve of random forest
+
+roc.values = rf.result %>% 
+  roc_auc(truth = diabetic, .pred_Diabetic) %>% 
+  pull(.estimate) %>% 
+  round(2)
+
+rf.result %>% 
+  roc_curve(truth = diabetic, .pred_Diabetic) %>% 
+  autoplot()+
+  annotate(geom = "text", x = .75, y = .25, label = paste("AUC-value = ", roc.values))
+```
+
+@fig-vip is a Variable Importance Plot (VIP) that illustrates importance of each predictor variables used to predict the diabetic outcome  in a random forest model.
+
+```{r}
+#| label: fig-vip
+#| fig-cap: Model-specific VIPs of tree-based model random forest
+
+# Load vip
+library(vip)
+
+# Extract the fitted model from the workflow
+rf_wf_fit %>% 
+  extract_fit_parsnip() %>% 
+# Make VIP plot
+  vip()
+```
+
+
+## Summary
+We notice that random forest has high predictive power compared to the logistic regression model and hence you can choose the model that give you high accuracy in prediction. The random forest lines of code is bunded in single  chunk;
+
+```{r}
+#| eval: false
+
+## spliting
+my.split = diabetes.tidy %>% 
+  initial_split(prop = .8)
+## test set
+my.test = my.split %>%  testing()
+## train set
+my.train = my.split %>% training()
+
+# spefiy the model
+my.fit  = rand_forest() %>% 
+  set_engine(engine = "ranger") %>% 
+  set_mode(mode = "classification") %>% 
+  # fit the model
+  fit(diabetic ~ ., data = my.train)
+
+# test the model
+my.prediction = my.fit %>% 
+  predict(new_data = my.test)
+
+my.prediction.prob  =  my.fit %>% 
+  predict(new_data = my.test, type = "prob")
+
+my.prediction =  my.prediction %>% 
+  bind_cols(my.prediction.prob)
+
+my.result = my.test %>% 
+  select(diabetic) %>% 
+  bind_cols(my.prediction)
+
+# validate the model
+
+my.result %>% 
+  conf_mat(truth = diabetic, estimate = .pred_class)
+
+my.result %>% 
+  accuracy(truth = diabetic, estimate = .pred_class)
+
+# Combine metrics and evaluate them all at once
+eval_metrics <- 
+  metric_set(ppv, recall, accuracy, f_meas)
+
+
+eval_metrics(
+  data = my.result, 
+  truth = diabetic, 
+  estimate = .pred_class
+  )
+
+## plotting
+
+my.result %>% 
+  roc_curve(truth = diabetic, .pred_Diabetic) %>% 
+  autoplot()
+
+my.result %>% 
+  roc_auc(truth = diabetic, .pred_Diabetic)
+
 ```
 
 

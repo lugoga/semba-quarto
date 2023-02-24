@@ -13,7 +13,7 @@ tags:
   - regression
   - modelling
   - Masumbuko Semba
-# image: "thumbnail.jpg"
+image: "regression.jpg"
 draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
 bibliography: ../blog.bib
 csl:  ../elsevier.csl
