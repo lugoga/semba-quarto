@@ -1,0 +1,162 @@
+---
+title: "Can ChatGPT Replace a Data Scientist Role?"
+author: 
+  - name: Masumbuko Semba
+    url: https://semba.netlify.app
+    orcid: 0000-0002-5002-9747
+    affiliation: Nelson Mandela African Institution of Science and Technology
+    affiliation-url: https://semba.netlify.app/ 
+date: "2023-04-15"
+categories: [R, Modelling]
+tags: 
+  - chatgpt
+  - modelling
+  - Masumbuko Semba
+image: "chatgpt.jpg"
+draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
+bibliography: ../blog.bib
+csl:  ../elsevier.csl
+execute: 
+  warning: false
+fig-width: 7
+fig-height: 5
+code-line-numbers: true
+---
+
+## Introduction
+
+In recent years, the rise of artificial intelligence (AI) and machine learning (ML) has led to the development of chatbots like chatGPT [@chatgpt], which can simulate human conversation. These chatbots are now being used in various industries to improve customer service, automate tasks, and even provide medical advice. However, as chatbots become more advanced, some people are asking whether they could replace human data scientists. In this blog post, we will explore this question and examine the potential benefits and drawbacks of using chatbots in data science.
+
+![](Technical Analysis.png)
+
+## What is a Chatbot?
+
+Wikipedia define chatbot as a computer program that uses natural language processing (NLP) to simulate human conversation [@enwiki-1146240463]. Chatbots can be designed to perform various tasks, such as answering customer queries, providing recommendations, or even assisting with medical diagnoses. Some chatbots are rule-based, which means they follow a predefined set of rules to respond to user input. Others are powered by AI and ML algorithms, which enable them to learn from user interactions and improve their responses over time.
+
+## What is Data Science?
+
+Data science is the field of study that involves extracting insights and knowledge from data. Data scientists use various techniques, such as statistical analysis, machine learning, and data visualization, to analyze large datasets and identify patterns and trends. Data science is used in many industries, including healthcare, finance, and marketing, to make data-driven decisions and improve business outcomes.
+
+## Can Chatbots Replace Data Scientists?
+
+The short answer is no. While chatbots can be useful tools for data analysis and decision-making, they cannot replace the expertise and experience of a human data scientist. Here are some reasons why:
+
+1. Limited Domain Knowledge: Chatbots are designed to perform specific tasks within a limited domain. They may be able to provide answers to simple questions or perform basic analyses, but they lack the domain knowledge and expertise required for complex data science tasks.
+
+2. Lack of Creativity: Data science involves creative problem-solving and the ability to think outside the box. Chatbots are limited by their programming and cannot come up with innovative solutions or new approaches to data analysis.
+
+3. Limited Data Access: Chatbots can only access data that has been pre-defined and made available to them. They cannot access or analyze data that has not been specifically programmed into their system.
+
+4. Lack of Human Interaction: Data science involves collaboration and communication between team members. Chatbots cannot replace the value of human interaction and the ability to discuss ideas and insights with other experts in the field.
+
+## Benefits of Using Chatbots in Data Science
+
+While chatbots cannot replace human data scientists, they can be useful tools for data analysis and decision-making. Here are some potential benefits of using chatbots in data science:
+
+1. Improved Efficiency: Chatbots can automate routine tasks, such as data cleaning and preprocessing, which can save time and improve efficiency.
+
+2. Faster Response Times: Chatbots can provide instant responses to user queries, which can speed up the decision-making process.
+
+3. Scalability: Chatbots can handle large volumes of data and perform analyses at scale, which can be useful for businesses with large datasets.
+
+4. User-Friendly Interface: Chatbots provide a user-friendly interface for data analysis, which can make it easier for non-technical users to access and understand data insights.
+
+## Drawbacks of Using Chatbots in Data Science
+
+While chatbots can provide some benefits for data analysis, there are also some potential drawbacks to consider:
+
+1. Limited Accuracy: Chatbots may provide inaccurate responses if they are not properly trained or if they lack the necessary domain knowledge. 
+
+> For example, I threw a question to ask chatGPT to retrieve chlorophyll-a dataset in the Pemba Channel from MODIS. It did wonderful job. It first loaded the **rerddap** package and defined the ERDDAP server URL and the dataset ID for the MODIS Aqua Chlorophyll-a Level 3 dataset. It then defined the study area and time range by specifying longitude and latitude ranges, and start and end dates. It built the ERDDAP query string by specifying the variable name, standard name, and the desired ranges for longitude, latitude, and time.Then used the `erddap` function from the **rerddap** package to query the ERDDAP server and retrieve the data. The data is returned as a data frame in CSV format.
+
+![](chatgpt_snippet.png)
+
+I copied the code chunk and paste it in the chunk below:
+```{r}
+#| eval: false
+#| 
+library(rerddap)
+
+# Define the ERDDAP server URL and dataset ID
+server <- "https://coastwatch.pfeg.noaa.gov/erddap"
+dataset_id <- "erdMWChla1day"
+
+# Define the study area and time range
+lon_range <- c(39, 41)
+lat_range <- c(-7, -5)
+start_date <- "2022-01-01"
+end_date <- "2022-02-01"
+
+# Build the ERDDAP query string
+query <- list(
+  "chlorophyll_a" = list(
+    "standard_name" = "mass_concentration_of_chlorophyll_a_in_sea_water",
+    "longitude>=" = lon_range[1], "longitude<=" = lon_range[2],
+    "latitude>=" = lat_range[1], "latitude<=" = lat_range[2],
+    "time>=" = start_date, "time<=" = end_date
+  )
+)
+
+# Query the ERDDAP server and retrieve the data
+data <- rerddap::erddap(query = query, server = server, dataset_id = dataset_id, 
+                        protocol = "tabledap", response = "csv")
+
+
+```
+
+Despite the detailed explanation of chatGPT provided, it failed miserable because the `erddap` function used in line 24 of the chunk code above is not part of the **erddap** package. Therefore, as it has been emphasized, inaccurate information is a common thing we expect from these kind of tools, and the essence of expert to support the error is paramount. Therefore, the code hunk below provide a correct functions and code line that answer the question posted in the chatGPT.
+
+
+```{r}
+#| warning: false
+#| message: false
+#| comment: ""
+library(rerddap)
+library(tidyverse)
+
+chl = rerddap::griddap(
+  x = "erdMH1chla8day",
+  longitude = c(38, 39.25),
+  latitude = c(-6.5,-5.5),
+  time = c("2022-01-01", "2022-01-31"),
+  fmt = "csv") %>%
+    dplyr::as_tibble() %>%
+    dplyr::mutate(time = lubridate::as_date(time))
+
+chl
+```
+
+Finally, we use the **ggplot2** package [@ggplot; @metr] to plot the chlorophyll-a data. We specify the longitude and latitude values from the data frame, and use the z parameter to specify the chlorophyll-a values for each pixel in the plot. We also specify a color scale for the plot using the scale_fill_gradientn function. The `facet_wrap()` function is used to create a separate plot for each date of the year. The `labs()` function is used to add a title and axis labels to the plot. 
+
+```{r}
+#| warning: false
+#| message: false
+#| comment: ""
+#| label: fig-chl
+#| fig-cap: Chlorophyll-a concentration in the Pemba Channel
+
+
+
+chl %>% 
+  filter(time < "2022-01-16") %>%
+  ggplot(aes(x = longitude, y = latitude, z = chlorophyll))+
+  metR::geom_contour_fill(bins = 120)+
+  metR::geom_contour2(aes(label = ..level..)) +
+  scale_fill_gradientn(colours = oce::oce.colors9A(120), trans = scales::log10_trans(), 
+                       name = "Chl-a\n(mgm^3)")+
+  metR::scale_x_longitude(breaks = scales::pretty_breaks(n = 2))+
+  metR::scale_y_latitude(breaks = scales::pretty_breaks(n = 5)) +
+  coord_equal()+
+  facet_wrap(~time, nrow = 1) + 
+  labs(x = "Longitude", y = "Latitude")
+
+```
+
+
+
+## Conclusion
+
+In conclusion, while chatbots like ChatGPT can be useful tools for data analysis and decision-making, they cannot replace the expertise and experience of a human data scientist. Chatbots are limited by their programming and lack the domain knowledge, creativity, and human interaction required for complex data science tasks. However, chatbots can provide some benefits, such as improved efficiency, faster response times, scalability, and a user-friendly interface. As with any technology, it is important to carefully consider the potential benefits and drawbacks before implementing chatbots in data science.
+
+
+## Cited sources
