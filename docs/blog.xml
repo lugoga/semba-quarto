@@ -59,10 +59,19 @@
 <li>Limited Accuracy: Chatbots may provide inaccurate responses if they are not properly trained or if they lack the necessary domain knowledge.</li>
 </ol>
 <blockquote class="blockquote">
-<p>For example, I threw a question to ask chatGPT to retrieve chlorophyll-a dataset in the Pemba Channel from MODIS. It did wonderful job. It first loaded the <strong>rerddap</strong> package and defined the ERDDAP server URL and the dataset ID for the MODIS Aqua Chlorophyll-a Level 3 dataset. It then defined the study area and time range by specifying longitude and latitude ranges, and start and end dates. It built the ERDDAP query string by specifying the variable name, standard name, and the desired ranges for longitude, latitude, and time.Then used the <code>erddap</code> function from the <strong>rerddap</strong> package to query the ERDDAP server and retrieve the data. The data is returned as a data frame in CSV format.</p>
+<p>For example, I threw a question to ask chatGPT to retrieve chlorophyll-a dataset in the Pemba Channel from MODIS. It did wonderful job. As plainly seen in Figure&nbsp;1, it first loaded the <strong>rerddap</strong> package and defined the ERDDAP server URL and the dataset ID for the MODIS Aqua Chlorophyll-a Level 3 dataset. It then defined the study area and time range by specifying longitude and latitude ranges, and start and end dates. It built the ERDDAP query string by specifying the variable name, standard name, and the desired ranges for longitude, latitude, and time.Then used the <code>erddap</code> function from the <strong>rerddap</strong> package to query the ERDDAP server and retrieve the data. The data is returned as a data frame in CSV format.</p>
 </blockquote>
-<p><img src="https://lugoga.github.io/semba-quarto/posts/chatgpt/chatgpt_snippet.png" class="img-fluid"></p>
-<p>I copied the code chunk and paste it in the chunk below:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-chat1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/chatgpt/chatgpt_snippet.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: ChatGPT code for access and dowloading chlrophyll-a in the Pemba Channel</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>I copied the code chunk from ChatGPT snippet (Figure&nbsp;1) and paste it in the chunk below:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">library</span>(rerddap)</span>
 <span id="cb1-2"></span>
@@ -90,14 +99,14 @@
 <span id="cb1-24">data <span class="ot" style="color: #003B4F;">&lt;-</span> rerddap<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">erddap</span>(<span class="at" style="color: #657422;">query =</span> query, <span class="at" style="color: #657422;">server =</span> server, <span class="at" style="color: #657422;">dataset_id =</span> dataset_id, </span>
 <span id="cb1-25">                        <span class="at" style="color: #657422;">protocol =</span> <span class="st" style="color: #20794D;">"tabledap"</span>, <span class="at" style="color: #657422;">response =</span> <span class="st" style="color: #20794D;">"csv"</span>)</span></code></pre></div>
 </div>
-<p>Despite the detailed explanation of chatGPT provided, it failed miserable because the <code>erddap</code> function used in line 24 of the chunk code above is not part of the <strong>erddap</strong> package. Therefore, as it has been emphasized, inaccurate information is a common thing we expect from these kind of tools, and the essence of expert to support the error is paramount. Therefore, the code hunk below provide a correct functions and code line that answer the question posted in the chatGPT.</p>
+<p>Despite the detailed explanation of chatGPT provided, when the chunk is exuted, it resulted into an error message stating that <em>Error: ‘erddap’ is not an exported object from ‘namespace:rerddap’</em>. It failed miserable because the <code>erddap</code> function used in line 24 of the chunk code above is not part of the <strong>erddap</strong> package. Therefore, as it has been emphasized, inaccurate information is a common thing we expect from these kind of tools, and the essence of expert to support the error is paramount. Therefore, the code hunk below provide a correct functions and code line that answer the question posted in the chatGPT.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">library</span>(rerddap)</span>
 <span id="cb2-2"><span class="fu" style="color: #4758AB;">library</span>(tidyverse)</span>
 <span id="cb2-3"></span>
 <span id="cb2-4">chl <span class="ot" style="color: #003B4F;">=</span> rerddap<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">griddap</span>(</span>
 <span id="cb2-5">  <span class="at" style="color: #657422;">x =</span> <span class="st" style="color: #20794D;">"erdMH1chla8day"</span>,</span>
-<span id="cb2-6">  <span class="at" style="color: #657422;">longitude =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">38</span>, <span class="fl" style="color: #AD0000;">39.25</span>),</span>
+<span id="cb2-6">  <span class="at" style="color: #657422;">longitude =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">38</span>, <span class="fl" style="color: #AD0000;">39.5</span>),</span>
 <span id="cb2-7">  <span class="at" style="color: #657422;">latitude =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">6.5</span>,<span class="sc" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">5.5</span>),</span>
 <span id="cb2-8">  <span class="at" style="color: #657422;">time =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"2022-01-01"</span>, <span class="st" style="color: #20794D;">"2022-01-31"</span>),</span>
 <span id="cb2-9">  <span class="at" style="color: #657422;">fmt =</span> <span class="st" style="color: #20794D;">"csv"</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
@@ -106,7 +115,7 @@
 <span id="cb2-12"></span>
 <span id="cb2-13">chl</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3,875 x 4
+<pre><code># A tibble: 4,625 x 4
    time       latitude longitude chlorophyll
    &lt;date&gt;        &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
  1 2021-12-31    -5.48      38.0         NaN
@@ -119,28 +128,34 @@
  8 2021-12-31    -5.48      38.3         NaN
  9 2021-12-31    -5.48      38.3         NaN
 10 2021-12-31    -5.48      38.4         NaN
-# ... with 3,865 more rows</code></pre>
+# ... with 4,615 more rows</code></pre>
 </div>
 </div>
 <p>Finally, we use the <strong>ggplot2</strong> package <span class="citation" data-cites="ggplot metr">(Campitelli, 2019; Wickham, 2016)</span> to plot the chlorophyll-a data. We specify the longitude and latitude values from the data frame, and use the z parameter to specify the chlorophyll-a values for each pixel in the plot. We also specify a color scale for the plot using the scale_fill_gradientn function. The <code>facet_wrap()</code> function is used to create a separate plot for each date of the year. The <code>labs()</code> function is used to add a title and axis labels to the plot.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1">chl <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb4-2">  <span class="fu" style="color: #4758AB;">filter</span>(time <span class="sc" style="color: #5E5E5E;">&lt;</span> <span class="st" style="color: #20794D;">"2022-01-16"</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb4-3">  <span class="fu" style="color: #4758AB;">ggplot</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> longitude, <span class="at" style="color: #657422;">y =</span> latitude, <span class="at" style="color: #657422;">z =</span> chlorophyll))<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb4-4">  metR<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">geom_contour_fill</span>(<span class="at" style="color: #657422;">bins =</span> <span class="dv" style="color: #AD0000;">120</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb4-5">  metR<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">geom_contour2</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">label =</span> ..level..)) <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb4-6">  <span class="fu" style="color: #4758AB;">scale_fill_gradientn</span>(<span class="at" style="color: #657422;">colours =</span> oce<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">oce.colors9A</span>(<span class="dv" style="color: #AD0000;">120</span>), <span class="at" style="color: #657422;">trans =</span> scales<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">log10_trans</span>(), </span>
-<span id="cb4-7">                       <span class="at" style="color: #657422;">name =</span> <span class="st" style="color: #20794D;">"Chl-a</span><span class="sc" style="color: #5E5E5E;">\n</span><span class="st" style="color: #20794D;">(mgm^3)"</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb4-8">  metR<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">scale_x_longitude</span>(<span class="at" style="color: #657422;">breaks =</span> scales<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">pretty_breaks</span>(<span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">2</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb4-9">  metR<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">scale_y_latitude</span>(<span class="at" style="color: #657422;">breaks =</span> scales<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">pretty_breaks</span>(<span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">5</span>)) <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb4-10">  <span class="fu" style="color: #4758AB;">coord_equal</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb4-11">  <span class="fu" style="color: #4758AB;">facet_wrap</span>(<span class="sc" style="color: #5E5E5E;">~</span>time, <span class="at" style="color: #657422;">nrow =</span> <span class="dv" style="color: #AD0000;">1</span>) <span class="sc" style="color: #5E5E5E;">+</span> </span>
-<span id="cb4-12">  <span class="fu" style="color: #4758AB;">labs</span>(<span class="at" style="color: #657422;">x =</span> <span class="st" style="color: #20794D;">"Longitude"</span>, <span class="at" style="color: #657422;">y =</span> <span class="st" style="color: #20794D;">"Latitude"</span>)</span></code></pre></div>
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;">ggplot</span>(</span>
+<span id="cb4-2">  <span class="at" style="color: #657422;">data =</span> chl <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">filter</span>(time <span class="sc" style="color: #5E5E5E;">&lt;</span> <span class="st" style="color: #20794D;">"2022-01-16"</span>),</span>
+<span id="cb4-3">  <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> longitude, <span class="at" style="color: #657422;">y =</span> latitude, <span class="at" style="color: #657422;">z =</span> chlorophyll)</span>
+<span id="cb4-4">  )<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb4-5">  metR<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">geom_contour_fill</span>(<span class="at" style="color: #657422;">bins =</span> <span class="dv" style="color: #AD0000;">120</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb4-6">  metR<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">geom_contour2</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">label =</span> ..level..)) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb4-7">  ggspatial<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">layer_spatial</span>(tz, <span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"#84837a"</span>, <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"black"</span>, <span class="at" style="color: #657422;">linewidth =</span> .<span class="dv" style="color: #AD0000;">5</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb4-8">  <span class="fu" style="color: #4758AB;">scale_fill_gradientn</span>(<span class="at" style="color: #657422;">colours =</span> oce<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">oce.colors9A</span>(<span class="dv" style="color: #AD0000;">120</span>), <span class="at" style="color: #657422;">trans =</span> scales<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">log10_trans</span>(), </span>
+<span id="cb4-9">                       <span class="at" style="color: #657422;">name =</span> <span class="st" style="color: #20794D;">"Chl-a</span><span class="sc" style="color: #5E5E5E;">\n</span><span class="st" style="color: #20794D;">(mgm^3)"</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb4-10">  metR<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">scale_x_longitude</span>(<span class="at" style="color: #657422;">ticks =</span> .<span class="dv" style="color: #AD0000;">3</span>)<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb4-11">  metR<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">scale_y_latitude</span>(<span class="at" style="color: #657422;">ticks =</span> .<span class="dv" style="color: #AD0000;">3</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb4-12"> <span class="fu" style="color: #4758AB;">coord_sf</span>(<span class="at" style="color: #657422;">xlim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="fl" style="color: #AD0000;">38.7</span>,<span class="fl" style="color: #AD0000;">39.4</span>), <span class="at" style="color: #657422;">ylim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="sc" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">6.5</span>,<span class="sc" style="color: #5E5E5E;">-</span><span class="fl" style="color: #AD0000;">5.5</span>))<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb4-13">  <span class="fu" style="color: #4758AB;">facet_wrap</span>(<span class="sc" style="color: #5E5E5E;">~</span>time, <span class="at" style="color: #657422;">nrow =</span> <span class="dv" style="color: #AD0000;">1</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb4-14">  <span class="fu" style="color: #4758AB;">theme_bw</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb4-15">  <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">strip.background =</span> <span class="fu" style="color: #4758AB;">element_rect</span>(<span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"white"</span>))</span></code></pre></div>
 <div class="cell-output-display">
 <div id="fig-chl" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="https://lugoga.github.io/semba-quarto/posts/chatgpt/index_files/figure-html/fig-chl-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: Chlorophyll-a concentration in the Pemba Channel</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Chlorophyll-a concentration in the Pemba Channel</figcaption><p></p>
 </figure>
 </div>
 </div>

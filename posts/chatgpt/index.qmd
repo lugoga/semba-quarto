@@ -67,11 +67,21 @@ While chatbots can provide some benefits for data analysis, there are also some 
 
 1. Limited Accuracy: Chatbots may provide inaccurate responses if they are not properly trained or if they lack the necessary domain knowledge. 
 
-> For example, I threw a question to ask chatGPT to retrieve chlorophyll-a dataset in the Pemba Channel from MODIS. It did wonderful job. It first loaded the **rerddap** package and defined the ERDDAP server URL and the dataset ID for the MODIS Aqua Chlorophyll-a Level 3 dataset. It then defined the study area and time range by specifying longitude and latitude ranges, and start and end dates. It built the ERDDAP query string by specifying the variable name, standard name, and the desired ranges for longitude, latitude, and time.Then used the `erddap` function from the **rerddap** package to query the ERDDAP server and retrieve the data. The data is returned as a data frame in CSV format.
+> For example, I threw a question to ask chatGPT to retrieve chlorophyll-a dataset in the Pemba Channel from MODIS. It did wonderful job. As plainly seen in @fig-chat1, it first loaded the **rerddap** package and defined the ERDDAP server URL and the dataset ID for the MODIS Aqua Chlorophyll-a Level 3 dataset. It then defined the study area and time range by specifying longitude and latitude ranges, and start and end dates. It built the ERDDAP query string by specifying the variable name, standard name, and the desired ranges for longitude, latitude, and time.Then used the `erddap` function from the **rerddap** package to query the ERDDAP server and retrieve the data. The data is returned as a data frame in CSV format.
 
-![](chatgpt_snippet.png)
+```{r}
+#| echo: false
+#| label: fig-chat1
+#| fig-cap: ChatGPT code for access and dowloading chlrophyll-a in the Pemba Channel
+#| out-width: "100%"
 
-I copied the code chunk and paste it in the chunk below:
+knitr::include_graphics("chatgpt_snippet.png")
+```
+
+
+
+I copied the code chunk from ChatGPT snippet (@fig-chat1) and paste it in the chunk below:
+
 ```{r}
 #| eval: false
 #| 
@@ -104,7 +114,7 @@ data <- rerddap::erddap(query = query, server = server, dataset_id = dataset_id,
 
 ```
 
-Despite the detailed explanation of chatGPT provided, it failed miserable because the `erddap` function used in line 24 of the chunk code above is not part of the **erddap** package. Therefore, as it has been emphasized, inaccurate information is a common thing we expect from these kind of tools, and the essence of expert to support the error is paramount. Therefore, the code hunk below provide a correct functions and code line that answer the question posted in the chatGPT.
+Despite the detailed explanation of chatGPT provided, when the chunk is exuted, it resulted into an error message stating that *Error: 'erddap' is not an exported object from 'namespace:rerddap'*. It failed miserable because the `erddap` function used in line 24 of the chunk code above is not part of the **erddap** package. Therefore, as it has been emphasized, inaccurate information is a common thing we expect from these kind of tools, and the essence of expert to support the error is paramount. Therefore, the code hunk below provide a correct functions and code line that answer the question posted in the chatGPT.
 
 
 ```{r}
@@ -116,7 +126,7 @@ library(tidyverse)
 
 chl = rerddap::griddap(
   x = "erdMH1chla8day",
-  longitude = c(38, 39.25),
+  longitude = c(38, 39.5),
   latitude = c(-6.5,-5.5),
   time = c("2022-01-01", "2022-01-31"),
   fmt = "csv") %>%
@@ -129,6 +139,12 @@ chl
 Finally, we use the **ggplot2** package [@ggplot; @metr] to plot the chlorophyll-a data. We specify the longitude and latitude values from the data frame, and use the z parameter to specify the chlorophyll-a values for each pixel in the plot. We also specify a color scale for the plot using the scale_fill_gradientn function. The `facet_wrap()` function is used to create a separate plot for each date of the year. The `labs()` function is used to add a title and axis labels to the plot. 
 
 ```{r}
+#| echo: false
+tz = sf::st_read("tz.gpkg", quiet = TRUE)
+```
+
+
+```{r}
 #| warning: false
 #| message: false
 #| comment: ""
@@ -137,18 +153,21 @@ Finally, we use the **ggplot2** package [@ggplot; @metr] to plot the chlorophyll
 
 
 
-chl %>% 
-  filter(time < "2022-01-16") %>%
-  ggplot(aes(x = longitude, y = latitude, z = chlorophyll))+
+ggplot(
+  data = chl %>% filter(time < "2022-01-16"),
+  aes(x = longitude, y = latitude, z = chlorophyll)
+  )+
   metR::geom_contour_fill(bins = 120)+
   metR::geom_contour2(aes(label = ..level..)) +
+  ggspatial::layer_spatial(tz, fill = "#84837a", color = "black", linewidth = .5)+
   scale_fill_gradientn(colours = oce::oce.colors9A(120), trans = scales::log10_trans(), 
                        name = "Chl-a\n(mgm^3)")+
-  metR::scale_x_longitude(breaks = scales::pretty_breaks(n = 2))+
-  metR::scale_y_latitude(breaks = scales::pretty_breaks(n = 5)) +
-  coord_equal()+
-  facet_wrap(~time, nrow = 1) + 
-  labs(x = "Longitude", y = "Latitude")
+  metR::scale_x_longitude(ticks = .3)+
+  metR::scale_y_latitude(ticks = .3) +
+ coord_sf(xlim = c(38.7,39.4), ylim = c(-6.5,-5.5))+
+  facet_wrap(~time, nrow = 1) +
+  theme_bw()+
+  theme(strip.background = element_rect(fill = "white"))
 
 ```
 

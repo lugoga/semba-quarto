@@ -377,10 +377,19 @@ ga('send', {
 <li>Limited Accuracy: Chatbots may provide inaccurate responses if they are not properly trained or if they lack the necessary domain knowledge.</li>
 </ol>
 <blockquote class="blockquote">
-<p>For example, I threw a question to ask chatGPT to retrieve chlorophyll-a dataset in the Pemba Channel from MODIS. It did wonderful job. It first loaded the <strong>rerddap</strong> package and defined the ERDDAP server URL and the dataset ID for the MODIS Aqua Chlorophyll-a Level 3 dataset. It then defined the study area and time range by specifying longitude and latitude ranges, and start and end dates. It built the ERDDAP query string by specifying the variable name, standard name, and the desired ranges for longitude, latitude, and time.Then used the <code>erddap</code> function from the <strong>rerddap</strong> package to query the ERDDAP server and retrieve the data. The data is returned as a data frame in CSV format.</p>
+<p>For example, I threw a question to ask chatGPT to retrieve chlorophyll-a dataset in the Pemba Channel from MODIS. It did wonderful job. As plainly seen in <a href="#fig-chat1">Figure&nbsp;1</a>, it first loaded the <strong>rerddap</strong> package and defined the ERDDAP server URL and the dataset ID for the MODIS Aqua Chlorophyll-a Level 3 dataset. It then defined the study area and time range by specifying longitude and latitude ranges, and start and end dates. It built the ERDDAP query string by specifying the variable name, standard name, and the desired ranges for longitude, latitude, and time.Then used the <code>erddap</code> function from the <strong>rerddap</strong> package to query the ERDDAP server and retrieve the data. The data is returned as a data frame in CSV format.</p>
 </blockquote>
-<p><img src="chatgpt_snippet.png" class="img-fluid"></p>
-<p>I copied the code chunk and paste it in the chunk below:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-chat1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="chatgpt_snippet.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: ChatGPT code for access and dowloading chlrophyll-a in the Pemba Channel</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>I copied the code chunk from ChatGPT snippet (<a href="#fig-chat1">Figure&nbsp;1</a>) and paste it in the chunk below:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(rerddap)</span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
@@ -408,14 +417,14 @@ ga('send', {
 <span id="cb1-24"><a href="#cb1-24"></a>data <span class="ot">&lt;-</span> rerddap<span class="sc">::</span><span class="fu">erddap</span>(<span class="at">query =</span> query, <span class="at">server =</span> server, <span class="at">dataset_id =</span> dataset_id, </span>
 <span id="cb1-25"><a href="#cb1-25"></a>                        <span class="at">protocol =</span> <span class="st">"tabledap"</span>, <span class="at">response =</span> <span class="st">"csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Despite the detailed explanation of chatGPT provided, it failed miserable because the <code>erddap</code> function used in line 24 of the chunk code above is not part of the <strong>erddap</strong> package. Therefore, as it has been emphasized, inaccurate information is a common thing we expect from these kind of tools, and the essence of expert to support the error is paramount. Therefore, the code hunk below provide a correct functions and code line that answer the question posted in the chatGPT.</p>
+<p>Despite the detailed explanation of chatGPT provided, when the chunk is exuted, it resulted into an error message stating that <em>Error: ‘erddap’ is not an exported object from ‘namespace:rerddap’</em>. It failed miserable because the <code>erddap</code> function used in line 24 of the chunk code above is not part of the <strong>erddap</strong> package. Therefore, as it has been emphasized, inaccurate information is a common thing we expect from these kind of tools, and the essence of expert to support the error is paramount. Therefore, the code hunk below provide a correct functions and code line that answer the question posted in the chatGPT.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(rerddap)</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb2-3"><a href="#cb2-3"></a></span>
 <span id="cb2-4"><a href="#cb2-4"></a>chl <span class="ot">=</span> rerddap<span class="sc">::</span><span class="fu">griddap</span>(</span>
 <span id="cb2-5"><a href="#cb2-5"></a>  <span class="at">x =</span> <span class="st">"erdMH1chla8day"</span>,</span>
-<span id="cb2-6"><a href="#cb2-6"></a>  <span class="at">longitude =</span> <span class="fu">c</span>(<span class="dv">38</span>, <span class="fl">39.25</span>),</span>
+<span id="cb2-6"><a href="#cb2-6"></a>  <span class="at">longitude =</span> <span class="fu">c</span>(<span class="dv">38</span>, <span class="fl">39.5</span>),</span>
 <span id="cb2-7"><a href="#cb2-7"></a>  <span class="at">latitude =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">6.5</span>,<span class="sc">-</span><span class="fl">5.5</span>),</span>
 <span id="cb2-8"><a href="#cb2-8"></a>  <span class="at">time =</span> <span class="fu">c</span>(<span class="st">"2022-01-01"</span>, <span class="st">"2022-01-31"</span>),</span>
 <span id="cb2-9"><a href="#cb2-9"></a>  <span class="at">fmt =</span> <span class="st">"csv"</span>) <span class="sc">%&gt;%</span></span>
@@ -424,7 +433,7 @@ ga('send', {
 <span id="cb2-12"><a href="#cb2-12"></a></span>
 <span id="cb2-13"><a href="#cb2-13"></a>chl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3,875 x 4
+<pre><code># A tibble: 4,625 x 4
    time       latitude longitude chlorophyll
    &lt;date&gt;        &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
  1 2021-12-31    -5.48      38.0         NaN
@@ -437,28 +446,34 @@ ga('send', {
  8 2021-12-31    -5.48      38.3         NaN
  9 2021-12-31    -5.48      38.3         NaN
 10 2021-12-31    -5.48      38.4         NaN
-# ... with 3,865 more rows</code></pre>
+# ... with 4,615 more rows</code></pre>
 </div>
 </div>
 <p>Finally, we use the <strong>ggplot2</strong> package <span class="citation" data-cites="ggplot metr">(<a href="#ref-metr" role="doc-biblioref">Campitelli, 2019</a>; <a href="#ref-ggplot" role="doc-biblioref">Wickham, 2016</a>)</span> to plot the chlorophyll-a data. We specify the longitude and latitude values from the data frame, and use the z parameter to specify the chlorophyll-a values for each pixel in the plot. We also specify a color scale for the plot using the scale_fill_gradientn function. The <code>facet_wrap()</code> function is used to create a separate plot for each date of the year. The <code>labs()</code> function is used to add a title and axis labels to the plot.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>chl <span class="sc">%&gt;%</span> </span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">filter</span>(time <span class="sc">&lt;</span> <span class="st">"2022-01-16"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> longitude, <span class="at">y =</span> latitude, <span class="at">z =</span> chlorophyll))<span class="sc">+</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>  metR<span class="sc">::</span><span class="fu">geom_contour_fill</span>(<span class="at">bins =</span> <span class="dv">120</span>)<span class="sc">+</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>  metR<span class="sc">::</span><span class="fu">geom_contour2</span>(<span class="fu">aes</span>(<span class="at">label =</span> ..level..)) <span class="sc">+</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colours =</span> oce<span class="sc">::</span><span class="fu">oce.colors9A</span>(<span class="dv">120</span>), <span class="at">trans =</span> scales<span class="sc">::</span><span class="fu">log10_trans</span>(), </span>
-<span id="cb4-7"><a href="#cb4-7"></a>                       <span class="at">name =</span> <span class="st">"Chl-a</span><span class="sc">\n</span><span class="st">(mgm^3)"</span>)<span class="sc">+</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a>  metR<span class="sc">::</span><span class="fu">scale_x_longitude</span>(<span class="at">breaks =</span> scales<span class="sc">::</span><span class="fu">pretty_breaks</span>(<span class="at">n =</span> <span class="dv">2</span>))<span class="sc">+</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>  metR<span class="sc">::</span><span class="fu">scale_y_latitude</span>(<span class="at">breaks =</span> scales<span class="sc">::</span><span class="fu">pretty_breaks</span>(<span class="at">n =</span> <span class="dv">5</span>)) <span class="sc">+</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a>  <span class="fu">coord_equal</span>()<span class="sc">+</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>time, <span class="at">nrow =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb4-12"><a href="#cb4-12"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Longitude"</span>, <span class="at">y =</span> <span class="st">"Latitude"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="at">data =</span> chl <span class="sc">%&gt;%</span> <span class="fu">filter</span>(time <span class="sc">&lt;</span> <span class="st">"2022-01-16"</span>),</span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">aes</span>(<span class="at">x =</span> longitude, <span class="at">y =</span> latitude, <span class="at">z =</span> chlorophyll)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>  )<span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>  metR<span class="sc">::</span><span class="fu">geom_contour_fill</span>(<span class="at">bins =</span> <span class="dv">120</span>)<span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>  metR<span class="sc">::</span><span class="fu">geom_contour2</span>(<span class="fu">aes</span>(<span class="at">label =</span> ..level..)) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>  ggspatial<span class="sc">::</span><span class="fu">layer_spatial</span>(tz, <span class="at">fill =</span> <span class="st">"#84837a"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linewidth =</span> .<span class="dv">5</span>)<span class="sc">+</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colours =</span> oce<span class="sc">::</span><span class="fu">oce.colors9A</span>(<span class="dv">120</span>), <span class="at">trans =</span> scales<span class="sc">::</span><span class="fu">log10_trans</span>(), </span>
+<span id="cb4-9"><a href="#cb4-9"></a>                       <span class="at">name =</span> <span class="st">"Chl-a</span><span class="sc">\n</span><span class="st">(mgm^3)"</span>)<span class="sc">+</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>  metR<span class="sc">::</span><span class="fu">scale_x_longitude</span>(<span class="at">ticks =</span> .<span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a>  metR<span class="sc">::</span><span class="fu">scale_y_latitude</span>(<span class="at">ticks =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a> <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">38.7</span>,<span class="fl">39.4</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">6.5</span>,<span class="sc">-</span><span class="fl">5.5</span>))<span class="sc">+</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>time, <span class="at">nrow =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a>  <span class="fu">theme</span>(<span class="at">strip.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="fig-chl" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="index_files/figure-html/fig-chl-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: Chlorophyll-a concentration in the Pemba Channel</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Chlorophyll-a concentration in the Pemba Channel</figcaption><p></p>
 </figure>
 </div>
 </div>
