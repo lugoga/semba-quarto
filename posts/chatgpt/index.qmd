@@ -69,6 +69,7 @@ While chatbots can provide some benefits for data analysis, there are also some 
 
 > For example, I threw a question to ask chatGPT to retrieve chlorophyll-a dataset in the Pemba Channel from MODIS. It did wonderful job. As plainly seen in @fig-chat1, it first loaded the **rerddap** package and defined the ERDDAP server URL and the dataset ID for the MODIS Aqua Chlorophyll-a Level 3 dataset. It then defined the study area and time range by specifying longitude and latitude ranges, and start and end dates. It built the ERDDAP query string by specifying the variable name, standard name, and the desired ranges for longitude, latitude, and time.Then used the `erddap` function from the **rerddap** package to query the ERDDAP server and retrieve the data. The data is returned as a data frame in CSV format.
 
+
 ```{r}
 #| echo: false
 #| label: fig-chat1
