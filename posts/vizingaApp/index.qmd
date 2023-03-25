@@ -27,7 +27,7 @@ code-line-numbers: true
 
 ## Digitalized Cage Culture 
 
-Cage aquaculture is a promising way to increase fish production in Tanzania's Lake Victoria [@stateofcageculture; @cageculture2]. However, proper planning is crucial to ensure the sustainability and success of such ventures [@mlaponi]. That's where the Shiny app for planning cage aquaculture comes in [@fig-home].
+Cage aquaculture is a promising way to increase fish production in Tanzania's Lake Victoria [@stateofcageculture; @cageculture2]. However, proper planning is crucial to ensure the sustainability and success of such ventures [@mlaponi]. That's where the interactive web app for planning cage aquaculture comes in [@fig-home]. In this digital age, where data is abundant and the ability to make data-driven decisions is crucial, Shiny provides a powerful web applications that can be used to analyze and visualize data.
 
 Developed by [Masumbuko Semba](https://lugoga.github.io/semba-quarto/) from the Nelson [Mandela African Institution of Science and Technology](https://nm-aist.ac.tz/) and a team of experts from the [Tanzania Fisheries Research Institute](https://www.tafiri.go.tz/), this interactive web app is designed to help fish farmers and investors plan their cage aquaculture operations in Lake Victoria.
 
@@ -40,7 +40,7 @@ Developed by [Masumbuko Semba](https://lugoga.github.io/semba-quarto/) from the 
 knitr::include_graphics("vizingaPage.png")
 ```
 
-This app, which is still under active development, but its beta version is up and running online [here](https://semba.shinyapps.io/vizingaApp/) provides users with a range of tools and information to help them make informed decisions about their cage aquaculture projects. Users can input data such as the size and location of their cages, the type of fish they want to farm, and the expected production volume. The app then uses this information to generate a detailed plan that takes into account factors such as water quality, feed requirements, and environmental impacts.
+This app^[https://semba.shinyapps.io/vizingaApp/], which is still under active development, but its beta version is up and running online provides users with a range of tools and information to help them make informed decisions about their cage aquaculture projects. Users can input data such as the size and location of their cages, the type of fish they want to farm, and the expected production volume. The app then uses this information to generate a detailed plan that takes into account factors such as water quality, feed requirements, and environmental impacts.
 
 One of the key features of the Shiny app is its ability to simulate different scenarios and provide users with feedback on the potential outcomes. For example, users can adjust the stocking density of their cages or the amount of feed they provide and see how these changes will affect their production and profitability. This helps users to optimize their operations and make the most of their resources.
 
@@ -55,15 +55,15 @@ knitr::include_graphics("weatherPage.png")
 
 ```
 
-Here are some  features that a Shiny app focused on cage culture offers:
+Here are some  benefits that this interactive web app (dashboard) offers for  cage culture in Lake Victoria:
 
-- Interactive maps showing the location of cage culture sites and their proximity to sensitive habitats or protected areas.
-- Data visualizations of water quality data, including temperature, dissolved oxygen, and nutrient levels, to help identify  impacts of cage culture on the surrounding ecosystem.
-- A dashboard showing trends in fish production, species diversity, and other indicators of the health of the aquaculture system.
-- Tools for modeling different scenarios, such as changes in feed composition or stocking densities, to help assess the  impacts of different management strategies.
-- Educational resources, such as videos or articles, to help users learn more about the environmental impacts of cage culture and how they can make informed decisions about their seafood choices.
+- *Interactive maps* showing the location of cage culture sites and their proximity to sensitive habitats or protected areas.
+- *Data visualizations* of water quality data, including temperature, dissolved oxygen, and nutrient levels, to help identify  impacts of cage culture on the surrounding ecosystem.
+- *A dashboard* showing trends in fish production, species diversity, and other indicators of the health of the aquaculture system.
+- *Tools for modeling* different scenarios, such as changes in feed composition or stocking densities, to help assess the  impacts of different management strategies.
+- *Educational resources*, such as videos or articles, to help users learn more about the environmental impacts of cage culture and how they can make informed decisions about their seafood choices.
 
-Overall, the Shiny app for cage aquaculture in Lake Victoria is an invaluable tool for anyone looking to invest in this growing industry. By providing users with the information and tools they need to make informed decisions, this app can help to ensure the sustainability and success of cage aquaculture operations in Tanzania's largest lake. Furthermore, this Shiny app could be a valuable tool for researchers, policymakers, and members of the public who are interested in understanding the environmental impacts of aquaculture and exploring ways to promote sustainable practices.
+Overall, the web app for cage aquaculture in Lake Victoria is an invaluable tool for anyone looking to invest in this growing industry. By providing users with the information and tools they need to make informed decisions, this app can help to ensure the sustainability and success of cage aquaculture operations in Tanzania's largest lake. Furthermore, this Shiny app could be a valuable tool for researchers, policymakers, and members of the public who are interested in understanding the environmental impacts of aquaculture and exploring ways to promote sustainable practices.
 
 
 ## Cited sources
