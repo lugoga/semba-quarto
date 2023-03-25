@@ -10,7 +10,76 @@
 <atom:link href="https://lugoga.github.io/semba-quarto/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Coding for all for better today and tommorow</description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Fri, 14 Apr 2023 21:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 16 Apr 2023 21:00:00 GMT</lastBuildDate>
+<item>
+  <title>Interactive Web Application for Cage Aquaculture in Lake Victoria</title>
+  <dc:creator>Masumbuko Semba</dc:creator>
+  <link>https://lugoga.github.io/semba-quarto/posts/vizingaApp/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<section id="digitalized-cage-culture" class="level2">
+<h2 class="anchored" data-anchor-id="digitalized-cage-culture">Digitalized Cage Culture</h2>
+<p>Cage aquaculture is a promising way to increase fish production in Tanzania’s Lake Victoria <span class="citation" data-cites="stateofcageculture cageculture2">(Mlaponi et al., 2021, 2015a)</span>. However, proper planning is crucial to ensure the sustainability and success of such ventures <span class="citation" data-cites="mlaponi">(Mlaponi et al., 2015b)</span>. That’s where the Shiny app for planning cage aquaculture comes in Figure&nbsp;1.</p>
+<p>Developed by <a href="https://lugoga.github.io/semba-quarto/">Masumbuko Semba</a> from the Nelson <a href="https://nm-aist.ac.tz/">Mandela African Institution of Science and Technology</a> and a team of experts from the <a href="https://www.tafiri.go.tz/">Tanzania Fisheries Research Institute</a>, this interactive web app is designed to help fish farmers and investors plan their cage aquaculture operations in Lake Victoria.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-home" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/vizingaApp/vizingaPage.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: The home page of cage aquaculture web application in Lake Victoria</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This app, which is still under active development, but its beta version is up and running online <a href="https://semba.shinyapps.io/vizingaApp/">here</a> provides users with a range of tools and information to help them make informed decisions about their cage aquaculture projects. Users can input data such as the size and location of their cages, the type of fish they want to farm, and the expected production volume. The app then uses this information to generate a detailed plan that takes into account factors such as water quality, feed requirements, and environmental impacts.</p>
+<p>One of the key features of the Shiny app is its ability to simulate different scenarios and provide users with feedback on the potential outcomes. For example, users can adjust the stocking density of their cages or the amount of feed they provide and see how these changes will affect their production and profitability. This helps users to optimize their operations and make the most of their resources.</p>
+<p>The Shiny app also provides users with access to a range of resources and information on cage aquaculture in Lake Victoria Figure&nbsp;2. This includes data on water quality, fish species, and market trends, as well as best practices for cage construction and operation.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-weather" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/vizingaApp/weatherPage.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: The weather page of cage aquaculture web application in Lake Victoria</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here are some features that a Shiny app focused on cage culture offers:</p>
+<ul>
+<li>Interactive maps showing the location of cage culture sites and their proximity to sensitive habitats or protected areas.</li>
+<li>Data visualizations of water quality data, including temperature, dissolved oxygen, and nutrient levels, to help identify impacts of cage culture on the surrounding ecosystem.</li>
+<li>A dashboard showing trends in fish production, species diversity, and other indicators of the health of the aquaculture system.</li>
+<li>Tools for modeling different scenarios, such as changes in feed composition or stocking densities, to help assess the impacts of different management strategies.</li>
+<li>Educational resources, such as videos or articles, to help users learn more about the environmental impacts of cage culture and how they can make informed decisions about their seafood choices.</li>
+</ul>
+<p>Overall, the Shiny app for cage aquaculture in Lake Victoria is an invaluable tool for anyone looking to invest in this growing industry. By providing users with the information and tools they need to make informed decisions, this app can help to ensure the sustainability and success of cage aquaculture operations in Tanzania’s largest lake. Furthermore, this Shiny app could be a valuable tool for researchers, policymakers, and members of the public who are interested in understanding the environmental impacts of aquaculture and exploring ways to promote sustainable practices.</p>
+</section>
+<section id="cited-sources" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited sources</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-stateofcageculture" class="csl-entry">
+Mlaponi, E., Mlaponi, E., Mlaponi, E., 2021. <a href="https://scholarlypublishingcollective.org/uw-press/journals/index.php/jfs/article/view/1465">The state of cage culture in lake victoria: A focus on aquaculture, employment, and transformation</a>. Scholarly Publishing Collective.
+</div>
+<div id="ref-mlaponi" class="csl-entry">
+Mlaponi, E., Mlaponi, E., Mlaponi, E., 2015b. <a href="https://springerplus.springeropen.com/articles/10.1186/s40064-015-1241-y">Environmental impacts of cage culture in lake victoria: The case of shirati bay, tanzania</a>. SpringerPlus 4, 1–10.
+</div>
+<div id="ref-cageculture2" class="csl-entry">
+Mlaponi, E., Mlaponi, E., Mlaponi, E., 2015a. <a href="https://europepmc.org/article/PMC/4559559">Environmental impacts of cage culture in lake victoria: The case of shirati bay, tanzania</a>. Europe PMC.
+</div>
+</div></section></div> ]]></description>
+  <category>Fisheries</category>
+  <category>Aquaculture</category>
+  <guid>https://lugoga.github.io/semba-quarto/posts/vizingaApp/index.html</guid>
+  <pubDate>Sun, 16 Apr 2023 21:00:00 GMT</pubDate>
+  <media:content url="https://lugoga.github.io/semba-quarto/posts/vizingaApp/vizingaPage.png" medium="image" type="image/png" height="71" width="144"/>
+</item>
 <item>
   <title>Can ChatGPT Replace a Data Scientist Role?</title>
   <dc:creator>Masumbuko Semba</dc:creator>
