@@ -25,6 +25,16 @@ code-line-numbers: true
 
 ---
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XCGZZVKFDT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XCGZZVKFDT');
+</script>
+
 ## Digitalized Cage Culture 
 
 Cage aquaculture is a promising way to increase fish production in Tanzania's Lake Victoria [@stateofcageculture; @cageculture2]. However, proper planning is crucial to ensure the sustainability and success of such ventures [@mlaponi]. That's where the interactive web app for planning cage aquaculture comes in [@fig-home]. In this digital age, where data is abundant and the ability to make data-driven decisions is crucial, Shiny provides a powerful web applications that can be used to analyze and visualize data.
