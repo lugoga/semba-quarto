@@ -40,8 +40,8 @@ website:
               href: https://semba.shinyapps.io/OceanWebApp/
             - text: Potential Fishing Zones
               href: https://semba.shinyapps.io/marineTz/
-            - text: Marine Spatial Planning
-              href: https://lugoga.github.io/msp/
+            - text: TAFIRI Apps
+              href: https://semba.shinyapps.io/vizingaApp/
             - text: R Weekly
               href: https://rweekly.org/
             - text: R Bloggers
