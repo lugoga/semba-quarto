@@ -1,0 +1,173 @@
+---
+title: "How to handle irregular cell size error when creating Raster in R"
+author: 
+  - name: Masumbuko Semba
+    url: https://semba.netlify.app
+    orcid: 0000-0002-5002-9747
+    affiliation: Nelson Mandela African Institution of Science and Technology
+    affiliation-url: https://semba.netlify.app/ 
+date: "2023-04-16"
+date-modified: "2023-04-16"
+categories: [R, Modelling]
+tags: 
+  - terra
+  - spatial analysis
+  - Data science
+  - MODIS
+  - Chlorophly
+  - Pemba Channel
+  - Masumbuko Semba
+image: "errorRaster.png"
+draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
+bibliography: ../blog.bib
+csl:  ../elsevier.csl
+execute: 
+  warning: false
+fig-width: 7
+fig-height: 5
+code-line-numbers: true
+---
+
+In this blog post, I will discuss how to create a spatraster object from a data frame in R. This can be a useful tool for spatial analysis and visualization, as it allows you to work with raster data in R. To begin, I need to make sure I have the necessary packages installed. I will need the **magrittr**, **tidyverse**, **terra**,  and **sf**  packages, which can be loaded using the following code:
+
+
+```{r}
+require(magrittr)
+require(terra)
+require(tidyterra)
+require(tidyverse)
+require(sf)
+
+```
+
+
+Once I have these packages loaded, I can begin creating our spatRaster object. First, I need to create a data frame with our spatial data. This data frame should include columns for the x and y coordinates, as well as any additional variables  want to include in our raster. Instead of creating, I am going to download gridded file with **rerddap** package [@rerddap] and specified the geographical bound of the study area as the lines code code below shows;
+
+```{r}
+chl = rerddap::griddap(
+  x = "erdMH1chla8day",
+  longitude = c(38, 39.5),
+  latitude = c(-6.5,-5.0),
+  time = c("2022-01-01", "2022-01-31"),
+  fmt = "csv") %>%
+    dplyr::as_tibble() %>%
+    dplyr::mutate(time = lubridate::as_date(time))
+```
+
+
+
+```{r}
+chl
+```
+
+Once I have a dataframe, I use the `rast()` function to convert the xyz data frame to a spatRaster object. 
+
+
+```{r}
+#| eval: false
+#| 
+chl %>% 
+  filter(time == "2021-12-31") %>% 
+  select(-time) %>% 
+  terra::rast()
+```
+
+It frustrate when seeing the error that suggests that the X cell sizes (i.e., the spatial resolution along the x-axis) in your XYZ file are not consistent, which is required to create a spatRaster Layer. Google or ask chatGPT offers a number of solutions on how to address this problem including interpolate the data. However, when interpolate, you change the grids and also the values. 
+
+That is a flaw especially when using remote sensing data, in which  ought to state the spatial resolution  have used. Recognizing that, I decided to take a long route that ensure that  can create a raster layer that is similar to the original dataset. Let's go along step by step on how I managed to overcome this hurdle 
+
+1. compute the the minimum and maximum values of the longitude and latitude values. These values are required to define the geogrpahical extent of the spatRaster layer
+
+```{r}
+latRange = chl %>% 
+  filter(time == "2021-12-31") %>% 
+  select(-time) %$% 
+  range(latitude)
+
+lonRange = chl %>% 
+  filter(time == "2021-12-31") %>% 
+  select(-time) %$% 
+  range(longitude)
+```
+
+2. Then  need to maintain the spatial resoltuion--the grid size of each cell of the value in the raster. I downloaded an eight days mosaicked layer with a spatial resolution of about 4 kilometer. To maintain this resoltuion, I must first extract the unique longitude and latitude values and second is the length of each one. I did this by using `distict` and `pull` functions from **tidyverse** package [@tidyverse]
+
+```{r}
+latLength = chl %>% 
+  filter(time == "2021-12-31") %>% 
+  distinct(latitude) %>% 
+  pull(latitude) %>% 
+  length()
+
+lonLength = chl %>% 
+  filter(time == "2021-12-31") %>% 
+  distinct(longitude) %>% 
+  pull(longitude) %>% length()
+```
+
+3. As the raster is an xyz, so far  have dealt with longitude and latitude values which represent the x and y dimension.  I also need the z dimension, which is the chlorophyll-a value of the dataset  I simply downloaded. Unlike the longitude and latitude values, which  I computed the minimum and maximum values and the length of them, the z values should remain as raw.
+
+```{r}
+zvalue = chl %>% 
+  filter(time == "2021-12-31") %>% 
+  pull(chlorophyll)
+```
+
+
+4. Once  I have the three dimensions of x, y and z values, now  I can create a matrix layer using `matrix` and specify the `nrow = lonLength` that define spacing of longitude and `ncol = latLength` that specify the latitude spacing. Once the matrix is created, then  I use a `rast` function from **terra** package to create spatRaster layer [@terra]
+
+
+```{r}
+chl_rast = matrix(nrow = lonLength, ncol = latLength) %>% 
+  terra::rast()
+
+chl_rast
+```
+5. The printed output of the `chl_rast` shows medatata information and one of the variable is the spatial extent in the form `xmin`, `xmax`, `ymin`, `ymax`. However, that is the global spatial extent based on the `nrow` and `ncol` I specified while creating a matrix above. For the spatial extent to resemble those of our geographical area,  I need to specify them and  I can do that using the `ext` function from **terra**. I parsed the minimum and maximum values of the longitude and latitude from the `lonRange` and `latRange` objects, with values extracted before. 
+
+```{r}
+new_ext = terra::ext(lonRange[1],lonRange[2],latRange[1], latRange[2])
+```
+
+6. Once the spatial extent are created, were used to change the global one into the local with `ext` function also from **terra** package [@terra].
+
+```{r}
+terra::ext(chl_rast) = new_ext
+chl_rast
+```
+7. Notice now the spatial extent is within the geographical areas of the area of interest. I remain with one issue, the z values does not contain any values and that must also be added into the layer. with setValue function from **terra** package, I was able to add the chlorophyll-a that was extracted before.
+
+```{r}
+chl_rast = terra::setValues(x = chl_rast, values = zvalue)
+
+chl_rast
+```
+
+Voila! Now I have a raster layer with defined spatial extent that fit the local area and the chlorophyll values. But I am not sure whether the spatial resolution of 0.04054054 match the 4 kilometer from MODIS. You check that with simple mathematical multiplication. The universe rule of thumb is that one degree for areas close to the equator is equivalent to 110 kilometer and hence by multiplying the spatial resolution of 0.0405 with 110, I get an approximately 4.459 km spatial resolution, which is close to the stated one. 
+
+Finally, I plot the spatRaster object using the `geom_spatraster()` function for continuous grids and `geom_spatraster_contour()` function for contour lines in **ggplot2** [@ggplot]. 
+
+```{r}
+#| echo: false
+tz = sf::st_read("tz.gpkg", quiet = TRUE)
+```
+
+
+```{r}
+
+ggplot()+
+  geom_spatraster(data = chl_rast, maxcell = 2000)+
+  geom_spatraster_contour(data = chl_rast, breaks = .5)+
+  ggspatial::layer_spatial(tz, fill = "#84837a", color = "black", linewidth = .5)+
+  scale_fill_gradientn(colours = oce::oce.colors9A(120), trans = scales::log10_trans(), 
+                       name = expression(Chl-a~(mg^{-3})))+
+  metR::scale_x_longitude(ticks = .3)+
+  metR::scale_y_latitude(ticks = .3) +
+ coord_sf(xlim = c(38.7,39.4), ylim = c(-6.45,-5.5))+
+  theme_bw()+
+  theme(strip.background = element_rect(fill = "white"))
+
+```
+
+
+## Cited sources

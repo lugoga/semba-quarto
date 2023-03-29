@@ -1,7 +1,7 @@
 ---
 title: ""
 listing:
-  page-size: 4
+  page-size: 6
   max-description-length: 120
   date-format: long
   contents: posts

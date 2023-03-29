@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Masumbuko Semba">
+<meta name="dcterms.date" content="2023-04-16">
+
+<title>ng’ara - How to handle irregular cell size error when creating Raster in R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../ngara.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XCGZZVKFDT"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
+</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta name="twitter:title" content="ng’ara - How to handle irregular cell size error when creating Raster in R">
+<meta name="twitter:description" content="In this blog post, I will discuss how to create a spatraster object from a data frame in R.">
+<meta name="twitter:image" content="https://lugoga.github.io/semba-quarto/posts\errorRaster\thumbnail_blog.png">
+<meta name="twitter:creator" content="@semba753">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">ng’ara</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html">
+ <span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/lugoga"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/semba2020"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/channel/UC9uZ1KPyo7zIzI4BnUtHPfA"><i class="bi bi-youtube" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../blog.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-apps--links" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Apps &amp; Links</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-apps--links">    
+        <li>
+    <a class="dropdown-item" href="https://semba.netlify.app/">
+ <span class="dropdown-text">Semba-blog Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba-blog.netlify.app/">
+ <span class="dropdown-text">Semba Data Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/kwala/">
+ <span class="dropdown-text">Kwala commercial CIty</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/coastal_dashboard/">
+ <span class="dropdown-text">Marine Hub</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://nemp.shinyapps.io/nemp/">
+ <span class="dropdown-text">Environmental Master Plan</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/OceanWebApp/">
+ <span class="dropdown-text">Hydrographic Data Hub</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/marineTz/">
+ <span class="dropdown-text">Potential Fishing Zones</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/vizingaApp/">
+ <span class="dropdown-text">TAFIRI Apps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://rweekly.org/">
+ <span class="dropdown-text">R Weekly</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://www.r-bloggers.com/">
+ <span class="dropdown-text">R Bloggers</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://www.tmbish.me/lab/highcharter-cookbook/">
+ <span class="dropdown-text">Highcharter</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../archive.html">
+ <span class="menu-text">Archive</span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#cited-sources" id="toc-cited-sources" class="nav-link active" data-scroll-target="#cited-sources">Cited sources</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">How to handle irregular cell size error when creating Raster in R</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">R</div>
+    <div class="quarto-category">Modelling</div>
+  </div>
+  </div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <a href="https://semba.netlify.app">Masumbuko Semba</a> <a href="https://orcid.org/0000-0002-5002-9747" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://semba.netlify.app/">
+            Nelson Mandela African Institution of Science and Technology
+            </a>
+          </p>
+      </div>
+    </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 16, 2023</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">April 16, 2023</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<p>In this blog post, I will discuss how to create a spatraster object from a data frame in R. This can be a useful tool for spatial analysis and visualization, as it allows you to work with raster data in R. To begin, I need to make sure I have the necessary packages installed. I will need the <strong>magrittr</strong>, <strong>tidyverse</strong>, <strong>terra</strong>, and <strong>sf</strong> packages, which can be loaded using the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">require</span>(magrittr)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">require</span>(terra)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">require</span>(tidyterra)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">require</span>(sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Once I have these packages loaded, I can begin creating our spatRaster object. First, I need to create a data frame with our spatial data. This data frame should include columns for the x and y coordinates, as well as any additional variables want to include in our raster. Instead of creating, I am going to download gridded file with <strong>rerddap</strong> package <span class="citation" data-cites="rerddap">(<a href="#ref-rerddap" role="doc-biblioref">Chamberlain, 2019</a>)</span> and specified the geographical bound of the study area as the lines code code below shows;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>chl <span class="ot">=</span> rerddap<span class="sc">::</span><span class="fu">griddap</span>(</span>
+<span id="cb2-2"><a href="#cb2-2"></a>  <span class="at">x =</span> <span class="st">"erdMH1chla8day"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="at">longitude =</span> <span class="fu">c</span>(<span class="dv">38</span>, <span class="fl">39.5</span>),</span>
+<span id="cb2-4"><a href="#cb2-4"></a>  <span class="at">latitude =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">6.5</span>,<span class="sc">-</span><span class="fl">5.0</span>),</span>
+<span id="cb2-5"><a href="#cb2-5"></a>  <span class="at">time =</span> <span class="fu">c</span>(<span class="st">"2022-01-01"</span>, <span class="st">"2022-01-31"</span>),</span>
+<span id="cb2-6"><a href="#cb2-6"></a>  <span class="at">fmt =</span> <span class="st">"csv"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>    dplyr<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">time =</span> lubridate<span class="sc">::</span><span class="fu">as_date</span>(time))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>chl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6,845 x 4
+   time       latitude longitude chlorophyll
+   &lt;date&gt;        &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+ 1 2021-12-31    -4.98      38.0         NaN
+ 2 2021-12-31    -4.98      38.0         NaN
+ 3 2021-12-31    -4.98      38.1         NaN
+ 4 2021-12-31    -4.98      38.1         NaN
+ 5 2021-12-31    -4.98      38.1         NaN
+ 6 2021-12-31    -4.98      38.2         NaN
+ 7 2021-12-31    -4.98      38.2         NaN
+ 8 2021-12-31    -4.98      38.3         NaN
+ 9 2021-12-31    -4.98      38.3         NaN
+10 2021-12-31    -4.98      38.4         NaN
+# ... with 6,835 more rows</code></pre>
+</div>
+</div>
+<p>Once I have a dataframe, I use the <code>rast()</code> function to convert the xyz data frame to a spatRaster object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>chl <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">filter</span>(time <span class="sc">==</span> <span class="st">"2021-12-31"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">select</span>(<span class="sc">-</span>time) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4"></a>  terra<span class="sc">::</span><span class="fu">rast</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>It frustrate when seeing the error that suggests that the X cell sizes (i.e., the spatial resolution along the x-axis) in your XYZ file are not consistent, which is required to create a spatRaster Layer. Google or ask chatGPT offers a number of solutions on how to address this problem including interpolate the data. However, when interpolate, you change the grids and also the values.</p>
+<p>That is a flaw especially when using remote sensing data, in which ought to state the spatial resolution have used. Recognizing that, I decided to take a long route that ensure that can create a raster layer that is similar to the original dataset. Let’s go along step by step on how I managed to overcome this hurdle</p>
+<ol type="1">
+<li>compute the the minimum and maximum values of the longitude and latitude values. These values are required to define the geogrpahical extent of the spatRaster layer</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>latRange <span class="ot">=</span> chl <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">filter</span>(time <span class="sc">==</span> <span class="st">"2021-12-31"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">select</span>(<span class="sc">-</span>time) <span class="sc">%$%</span> </span>
+<span id="cb6-4"><a href="#cb6-4"></a>  <span class="fu">range</span>(latitude)</span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a>lonRange <span class="ot">=</span> chl <span class="sc">%&gt;%</span> </span>
+<span id="cb6-7"><a href="#cb6-7"></a>  <span class="fu">filter</span>(time <span class="sc">==</span> <span class="st">"2021-12-31"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-8"><a href="#cb6-8"></a>  <span class="fu">select</span>(<span class="sc">-</span>time) <span class="sc">%$%</span> </span>
+<span id="cb6-9"><a href="#cb6-9"></a>  <span class="fu">range</span>(longitude)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li>Then need to maintain the spatial resoltuion–the grid size of each cell of the value in the raster. I downloaded an eight days mosaicked layer with a spatial resolution of about 4 kilometer. To maintain this resoltuion, I must first extract the unique longitude and latitude values and second is the length of each one. I did this by using <code>distict</code> and <code>pull</code> functions from <strong>tidyverse</strong> package <span class="citation" data-cites="tidyverse">(<a href="#ref-tidyverse" role="doc-biblioref">Wickham and Wickham, 2017</a>)</span></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>latLength <span class="ot">=</span> chl <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">filter</span>(time <span class="sc">==</span> <span class="st">"2021-12-31"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">distinct</span>(latitude) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="fu">pull</span>(latitude) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-5"><a href="#cb7-5"></a>  <span class="fu">length</span>()</span>
+<span id="cb7-6"><a href="#cb7-6"></a></span>
+<span id="cb7-7"><a href="#cb7-7"></a>lonLength <span class="ot">=</span> chl <span class="sc">%&gt;%</span> </span>
+<span id="cb7-8"><a href="#cb7-8"></a>  <span class="fu">filter</span>(time <span class="sc">==</span> <span class="st">"2021-12-31"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-9"><a href="#cb7-9"></a>  <span class="fu">distinct</span>(longitude) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-10"><a href="#cb7-10"></a>  <span class="fu">pull</span>(longitude) <span class="sc">%&gt;%</span> <span class="fu">length</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li>As the raster is an xyz, so far have dealt with longitude and latitude values which represent the x and y dimension. I also need the z dimension, which is the chlorophyll-a value of the dataset I simply downloaded. Unlike the longitude and latitude values, which I computed the minimum and maximum values and the length of them, the z values should remain as raw.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>zvalue <span class="ot">=</span> chl <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">filter</span>(time <span class="sc">==</span> <span class="st">"2021-12-31"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">pull</span>(chlorophyll)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="4" type="1">
+<li>Once I have the three dimensions of x, y and z values, now I can create a matrix layer using <code>matrix</code> and specify the <code>nrow = lonLength</code> that define spacing of longitude and <code>ncol = latLength</code> that specify the latitude spacing. Once the matrix is created, then I use a <code>rast</code> function from <strong>terra</strong> package to create spatRaster layer <span class="citation" data-cites="terra">(<a href="#ref-terra" role="doc-biblioref">Hijmans, 2022</a>)</span></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>chl_rast <span class="ot">=</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> lonLength, <span class="at">ncol =</span> latLength) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2"></a>  terra<span class="sc">::</span><span class="fu">rast</span>()</span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a>chl_rast</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 37, 37, 1  (nrow, ncol, nlyr)
+resolution  : 1, 1  (x, y)
+extent      : 0, 37, 0, 37  (xmin, xmax, ymin, ymax)
+coord. ref. :  
+source(s)   : memory
+name        : lyr.1 
+min value   :   NaN 
+max value   :   NaN </code></pre>
+</div>
+</div>
+<ol start="5" type="1">
+<li>The printed output of the <code>chl_rast</code> shows medatata information and one of the variable is the spatial extent in the form <code>xmin</code>, <code>xmax</code>, <code>ymin</code>, <code>ymax</code>. However, that is the global spatial extent based on the <code>nrow</code> and <code>ncol</code> I specified while creating a matrix above. For the spatial extent to resemble those of our geographical area, I need to specify them and I can do that using the <code>ext</code> function from <strong>terra</strong>. I parsed the minimum and maximum values of the longitude and latitude from the <code>lonRange</code> and <code>latRange</code> objects, with values extracted before.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>new_ext <span class="ot">=</span> terra<span class="sc">::</span><span class="fu">ext</span>(lonRange[<span class="dv">1</span>],lonRange[<span class="dv">2</span>],latRange[<span class="dv">1</span>], latRange[<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="6" type="1">
+<li>Once the spatial extent are created, were used to change the global one into the local with <code>ext</code> function also from <strong>terra</strong> package <span class="citation" data-cites="terra">(<a href="#ref-terra" role="doc-biblioref">Hijmans, 2022</a>)</span>.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>terra<span class="sc">::</span><span class="fu">ext</span>(chl_rast) <span class="ot">=</span> new_ext</span>
+<span id="cb12-2"><a href="#cb12-2"></a>chl_rast</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 37, 37, 1  (nrow, ncol, nlyr)
+resolution  : 0.04054054, 0.04054054  (x, y)
+extent      : 37.97917, 39.47917, -6.479169, -4.979169  (xmin, xmax, ymin, ymax)
+coord. ref. :  
+source(s)   : memory
+name        : lyr.1 
+min value   :   NaN 
+max value   :   NaN </code></pre>
+</div>
+</div>
+<ol start="7" type="1">
+<li>Notice now the spatial extent is within the geographical areas of the area of interest. I remain with one issue, the z values does not contain any values and that must also be added into the layer. with setValue function from <strong>terra</strong> package, I was able to add the chlorophyll-a that was extracted before.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>chl_rast <span class="ot">=</span> terra<span class="sc">::</span><span class="fu">setValues</span>(<span class="at">x =</span> chl_rast, <span class="at">values =</span> zvalue)</span>
+<span id="cb14-2"><a href="#cb14-2"></a></span>
+<span id="cb14-3"><a href="#cb14-3"></a>chl_rast</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 37, 37, 1  (nrow, ncol, nlyr)
+resolution  : 0.04054054, 0.04054054  (x, y)
+extent      : 37.97917, 39.47917, -6.479169, -4.979169  (xmin, xmax, ymin, ymax)
+coord. ref. :  
+source(s)   : memory
+name        :      lyr.1 
+min value   : 0.09031657 
+max value   : 2.96432110 </code></pre>
+</div>
+</div>
+<p>Voila! Now I have a raster layer with defined spatial extent that fit the local area and the chlorophyll values. But I am not sure whether the spatial resolution of 0.04054054 match the 4 kilometer from MODIS. You check that with simple mathematical multiplication. The universe rule of thumb is that one degree for areas close to the equator is equivalent to 110 kilometer and hence by multiplying the spatial resolution of 0.0405 with 110, I get an approximately 4.459 km spatial resolution, which is close to the stated one.</p>
+<p>Finally, I plot the spatRaster object using the <code>geom_spatraster()</code> function for continuous grids and <code>geom_spatraster_contour()</code> function for contour lines in <strong>ggplot2</strong> <span class="citation" data-cites="ggplot">(<a href="#ref-ggplot" role="doc-biblioref">Wickham, 2016</a>)</span>.</p>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> chl_rast, <span class="at">maxcell =</span> <span class="dv">2000</span>)<span class="sc">+</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">geom_spatraster_contour</span>(<span class="at">data =</span> chl_rast, <span class="at">breaks =</span> .<span class="dv">5</span>)<span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a>  ggspatial<span class="sc">::</span><span class="fu">layer_spatial</span>(tz, <span class="at">fill =</span> <span class="st">"#84837a"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linewidth =</span> .<span class="dv">5</span>)<span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colours =</span> oce<span class="sc">::</span><span class="fu">oce.colors9A</span>(<span class="dv">120</span>), <span class="at">trans =</span> scales<span class="sc">::</span><span class="fu">log10_trans</span>(), </span>
+<span id="cb16-6"><a href="#cb16-6"></a>                       <span class="at">name =</span> <span class="fu">expression</span>(Chl<span class="sc">-</span>a<span class="sc">~</span>(mg<span class="sc">^</span>{<span class="sc">-</span><span class="dv">3</span>})))<span class="sc">+</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a>  metR<span class="sc">::</span><span class="fu">scale_x_longitude</span>(<span class="at">ticks =</span> .<span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a>  metR<span class="sc">::</span><span class="fu">scale_y_latitude</span>(<span class="at">ticks =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a> <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">38.7</span>,<span class="fl">39.4</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">6.45</span>,<span class="sc">-</span><span class="fl">5.5</span>))<span class="sc">+</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a>  <span class="fu">theme</span>(<span class="at">strip.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="cited-sources" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">Cited sources</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-rerddap" class="csl-entry" role="doc-biblioentry">
+Chamberlain, S., 2019. <a href="https://CRAN.R-project.org/package=rerddap">Rerddap: General purpose client for ’ERDDAP’ servers</a>.
+</div>
+<div id="ref-terra" class="csl-entry" role="doc-biblioentry">
+Hijmans, R.J., 2022. <a href="https://CRAN.R-project.org/package=terra">Terra: Spatial data analysis</a>.
+</div>
+<div id="ref-ggplot" class="csl-entry" role="doc-biblioentry">
+Wickham, H., 2016. <a href="https://ggplot2.tidyverse.org">ggplot2: Elegant graphics for data analysis</a>. Springer-Verlag New York.
+</div>
+<div id="ref-tidyverse" class="csl-entry" role="doc-biblioentry">
+Wickham, H., Wickham, M.H., 2017. <a href="https://CRAN.R-project.org/package=tidyverse">Tidyverse: Easily install and load the ’tidyverse’</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://lugoga.github.io/semba-quarto/archive.html</loc>
-    <lastmod>2023-03-28T08:50:32.612Z</lastmod>
+    <lastmod>2023-03-29T09:25:26.058Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/blog.html</loc>
-    <lastmod>2023-03-28T08:50:34.117Z</lastmod>
+    <lastmod>2023-03-29T09:30:22.472Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/index.html</loc>
-    <lastmod>2023-03-28T08:50:34.878Z</lastmod>
+    <lastmod>2023-03-29T09:14:39.358Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/chatgpt/index.html</loc>
-    <lastmod>2023-03-28T08:50:36.287Z</lastmod>
+    <lastmod>2023-03-29T09:21:18.730Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/combining_plots/index.html</loc>
@@ -91,5 +91,9 @@
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/vizingaApp/index.html</loc>
     <lastmod>2023-03-28T08:51:00.429Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lugoga.github.io/semba-quarto/posts/errorRaster/index.html</loc>
+    <lastmod>2023-03-29T09:25:24.840Z</lastmod>
   </url>
 </urlset>

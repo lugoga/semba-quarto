@@ -3,6 +3,7 @@
     "listing": "/archive.html",
     "items": [
       "/posts/vizingaApp/index.html",
+      "/posts/errorRaster/index.html",
       "/posts/chatgpt/index.html",
       "/posts/tidymodels_classificationTrain/index.html",
       "/posts/tidymodels_regression/index.html",
@@ -28,6 +29,7 @@
     "listing": "/blog.html",
     "items": [
       "/posts/vizingaApp/index.html",
+      "/posts/errorRaster/index.html",
       "/posts/chatgpt/index.html",
       "/posts/tidymodels_classificationTrain/index.html",
       "/posts/tidymodels_regression/index.html",
