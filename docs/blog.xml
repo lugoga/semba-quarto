@@ -10,7 +10,133 @@
 <atom:link href="https://lugoga.github.io/semba-quarto/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Coding for all for better today and tommorow</description>
 <generator>quarto-1.2.269</generator>
-<lastBuildDate>Sun, 16 Apr 2023 21:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 27 Apr 2023 21:00:00 GMT</lastBuildDate>
+<item>
+  <title>Compute Normalized Difference Vegetation Index in R</title>
+  <dc:creator>Masumbuko Semba</dc:creator>
+  <link>https://lugoga.github.io/semba-quarto/posts/ndvi/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XCGZZVKFDT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XCGZZVKFDT');
+</script>
+<div class="cell">
+
+</div>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction:</h2>
+<p>In this post, we’re going to learn how to compute Normalized Difference Vegetation Index (NDVI) from Landsat imagery using R. NDVI is a widely used remote sensing index that measures the health and vigor of vegetation. It’s calculated from the difference between near-infrared (NIR) and red reflectance values divided by their sum. NDVI values range from -1 to 1, with higher values indicating healthier vegetation. NDVI is an important tool for studying vegetation dynamics, land-use changes, and environmental monitoring.</p>
+<p>Remote sensing image are useful tool that provide satellite data covering a large area and with high frequency temporal resolution. Such satellite image include Landsat. Landsat imagery is a valuable source of data for NDVI calculation. The Landsat satellites collect data in multiple spectral bands, including red and NIR, which can be used to compute NDVI.</p>
+<p>In this post, we’ll walk through the steps of computing NDVI from Landsat imagery using R. R is a popular programming language for statistics and and provides a range of packages for processing Landsat imagery and computing NDVI. We’ll cover how to load the Landsat bands, compute NDVI, write the NDVI raster to a file, and visualize the NDVI raster. By the end of this post, you’ll be able to use R to calculate NDVI from Landsat imagery and use it for further analysis and visualization.</p>
+</section>
+<section id="what-is-ndvi" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-ndvi">What is NDVI</h2>
+<p>Normalized Difference Vegetation Index (NDVI) is a remote sensing index that measures the health and vigor of vegetation. It is widely used in environmental monitoring, land-use change detection, and vegetation dynamics studies. NDVI is calculated from remotely sensed reflectance values of red and near-infrared (NIR) bands using the following formula:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0ANDVI%20=%20%5Cfrac%7BNIR-Red%7D%7BNIR+Red%7D%0A"></p>
+<p>NDVI values range from -1 to 1, with higher values indicating healthier vegetation. Negative values indicate water bodies or non-vegetated areas, while zero values indicate bare soil or areas with very low vegetation cover. NDVI has several advantages over traditional field-based methods of vegetation monitoring, such as its ability to cover large areas at once, its ability to detect changes in vegetation cover over time, and its sensitivity to changes in vegetation health.</p>
+<p>Landsat imagery is a widely used source of data for NDVI calculation. Landsat is a series of Earth-observing satellites that collect data in multiple spectral bands, including red and NIR. The data can be downloaded for free from the United States Geological Survey (USGS) website.</p>
+<p>Lets first load the package we are going to use in this post, if these packages are not installed in your machine, you can simply install them as they are found in CRAN</p>
+<div class="cell">
+
+</div>
+<p>Then we load the Landsat bands. The <strong>terra</strong> package <span class="citation" data-cites="terra">(Hijmans, 2022)</span> has <code>rast</code> function which can load load the bands into the a single file. For illustration purpose, we will use landsat band from <strong>spDataLarge</strong> package <span class="citation" data-cites="spdata">(Nowosad and Lovelace, 2022)</span>. The chunk below highlight a code on how to load the file into our session:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 1428, 1128, 4  (nrow, ncol, nlyr)
+resolution  : 30, 30  (x, y)
+extent      : 301905, 335745, 4111245, 4154085  (xmin, xmax, ymin, ymax)
+coord. ref. : WGS 84 / UTM zone 12N (EPSG:32612) 
+source      : landsat.tif 
+names       : landsat_1, landsat_2, landsat_3, landsat_4 
+min values  :      7550,      6404,      5678,      5252 
+max values  :     19071,     22051,     25780,     31961 </code></pre>
+</div>
+</div>
+<p>The printed object is spatRaster object. SpatRaster is an object class in R that is used to represent spatial raster data. It is a three-dimensional array that contains data on different layers or bands, with the two spatial dimensions representing the row and column coordinates of the raster cells. In addition, our SpatRaster objects have several attributes that describe its spatial properties, such as extent, resolution, and projection.</p>
+<p>The spatRaster object has four satellite bands - blue, green, red, and near-infrared (NIR). We can rename this band to their corresponding band names using <strong>tidyterra</strong> package <span class="citation" data-cites="tidyterra">(Hernangómez, 2023)</span> function <code>rename</code></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 1428, 1128, 4  (nrow, ncol, nlyr)
+resolution  : 30, 30  (x, y)
+extent      : 301905, 335745, 4111245, 4154085  (xmin, xmax, ymin, ymax)
+coord. ref. : WGS 84 / UTM zone 12N (EPSG:32612) 
+source      : landsat.tif 
+names       :  blue, green,   red,   nir 
+min values  :  7550,  6404,  5678,  5252 
+max values  : 19071, 22051, 25780, 31961 </code></pre>
+</div>
+</div>
+<p>Once we have renamed the band with appropriate band names, our next step should be to compute the NDVI formula into an R function. Thanks again to <strong>tidyterra</strong> package that has simplified computation of spatRaster object using verbs similar to tidyverse package <span class="citation" data-cites="tidyverse">(Wickham and Wickham, 2017)</span>. For us we are going to compute the ndvi as separate band in the spatraster object using <code>mutate</code> function. NDVI can be computed using the formula mentioned above. Here’s the code:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 1428, 1128, 5  (nrow, ncol, nlyr)
+resolution  : 30, 30  (x, y)
+extent      : 301905, 335745, 4111245, 4154085  (xmin, xmax, ymin, ymax)
+coord. ref. : WGS 84 / UTM zone 12N (EPSG:32612) 
+source(s)   : memory
+names       :  blue, green,   red,   nir,       ndvi 
+min values  :  7550,  6404,  5678,  5252, -0.2352531 
+max values  : 19071, 22051, 25780, 31961,  0.6076995 </code></pre>
+</div>
+</div>
+<p>The printed spatRaster object has added a fifth layer as ndvi. The ndvi object now contains the computed NDVI values for each pixel. The computed NDVI raster can be visualized using various R packages, such as <strong>rasterVis</strong> or <strong>ggplot2</strong> <span class="citation" data-cites="ggplot">(Wickham, 2016)</span>. Here’s an example using <strong>ggplot2</strong> with additional function from <strong>tidyterra</strong> package: This code will produce a color-coded plot of the NDVI raster, with higher values shown in shades of green and lower values shown in shades of brown.</p>
+<div class="cell" data-crop="false">
+<div class="cell-output-display">
+<div id="fig-ndvi" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://lugoga.github.io/semba-quarto/posts/ndvi/index_files/figure-html/fig-ndvi-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Computed NDVI with color gradient where green color indicate a greenish land cover</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>In this post, we’ll walk through the steps of computing NDVI from Landsat imagery using R. Specifically, we’ll cover how to load the Landsat bands, compute NDVI raster to a file, and visualize the NDVI raster. I hope the information in this post can help you to use R to calculate NDVI from Landsat imagery and use it for further analysis and visualization.</p>
+</section>
+<section id="cited-sources" class="level2">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Cited sources</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-tidyterra" class="csl-entry">
+Hernangómez, D., 2023. <span class="nocase">tidyterra</span>: Tidyverse methods and ggplot2 helpers for terra objects. <a href="https://doi.org/10.5281/zenodo.6572471">https://doi.org/10.5281/zenodo.6572471</a>
+</div>
+<div id="ref-terra" class="csl-entry">
+Hijmans, R.J., 2022. <a href="https://CRAN.R-project.org/package=terra">Terra: Spatial data analysis</a>.
+</div>
+<div id="ref-spdata" class="csl-entry">
+Nowosad, J., Lovelace, R., 2022. <a href="https://github.com/Nowosad/spData">spDataLarge: Large datasets for spatial analysis</a>.
+</div>
+<div id="ref-ggplot" class="csl-entry">
+Wickham, H., 2016. <a href="https://ggplot2.tidyverse.org">ggplot2: Elegant graphics for data analysis</a>. Springer-Verlag New York.
+</div>
+<div id="ref-tidyverse" class="csl-entry">
+Wickham, H., Wickham, M.H., 2017. <a href="https://CRAN.R-project.org/package=tidyverse">Tidyverse: Easily install and load the ’tidyverse’</a>.
+</div>
+</div></section></div> ]]></description>
+  <category>Spatial</category>
+  <category>Analysis</category>
+  <category>Visualization</category>
+  <guid>https://lugoga.github.io/semba-quarto/posts/ndvi/index.html</guid>
+  <pubDate>Thu, 27 Apr 2023 21:00:00 GMT</pubDate>
+  <media:content url="https://lugoga.github.io/semba-quarto/posts/ndvi/ndvi.png" medium="image" type="image/png" height="59" width="144"/>
+</item>
 <item>
   <title>Interactive Web Application for Cage Aquaculture in Lake Victoria</title>
   <dc:creator>Masumbuko Semba</dc:creator>
@@ -4917,227 +5043,6 @@ font-style: italic;">## basemap shapefile from tmap package</span></span>
   <guid>https://lugoga.github.io/semba-quarto/posts/newvisuals/index.html</guid>
   <pubDate>Wed, 10 Aug 2022 21:00:00 GMT</pubDate>
   <media:content url="https://lugoga.github.io/semba-quarto/posts/newvisuals/packedbubble.png" medium="image" type="image/png" height="84" width="144"/>
-</item>
-<item>
-  <title>Spatial Data is Maturing in R</title>
-  <dc:creator>Masjumbuko Semba</dc:creator>
-  <link>https://lugoga.github.io/semba-quarto/posts/spatialState/index.html</link>
-  <description><![CDATA[ 
-
-
-
-<p>R is particularly powerful for spatial statistical analysis and quantitative researchers in particular may find R more useful than GIS desktop applications</p>
-<p>R is particularly powerful for spatial statistical analysis and quantitative researchers in particular may find R more useful than GIS desktop applications. As data becomes more geographical, there is a growing necessity to make spatial data more accessible and easy to process. While there are plenty of tools out there that can make your life much easier when processing spatial data (e.g.&nbsp;QGIS and ArcMap) using R to conduct spatial analysis can be just as easy. This is especially true if you’re new to some of these packages and don’t feel like reading through all of the documentation to learn the package or, even more tedious, writing hundreds of lines of your own code to do something relatively simple. In this article I discuss a few packages that make common spatial statistics methods easy to perform in R <span class="citation" data-cites="bivand2006implementing">(Bivand 2006)</span>.</p>
-<p>We will conduct a high-level assessment of the R packages that are dedicated for spatial analysis. By showing network connection across package dependencies — which packages utilize code from another package to execute a task – we will undertake a high-level assessment of the condition of spatial in R. For comparison, we’ll compare our Analysis of Spatial Data task view to the tidyverse, one of R’s most well-known collections of packages, as well as the venerable Environmetrics task view, which includes numerous environmental analysis tools. To accomplish so, we’ll need to write some R code and install the following packages:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><span class="in" style="color: #5E5E5E;">```{r, eval=TRUE}</span></span>
-<span id="cb1-2"><span class="fu" style="color: #4758AB;">library</span>(tidyverse)</span>
-<span id="cb1-3"><span class="fu" style="color: #4758AB;">library</span>(tidygraph)</span>
-<span id="cb1-4"><span class="fu" style="color: #4758AB;">library</span>(ggraph)</span>
-<span id="cb1-5"><span class="fu" style="color: #4758AB;">library</span>(ctv)</span>
-<span id="cb1-6"><span class="fu" style="color: #4758AB;">library</span>(tools)</span>
-<span id="cb1-7"><span class="fu" style="color: #4758AB;">library</span>(cranlogs)</span>
-<span id="cb1-8"><span class="fu" style="color: #4758AB;">require</span>(highcharter)</span>
-<span id="cb1-9"><span class="in" style="color: #5E5E5E;">```</span></span></code></pre></div>
-</div>
-<p>We will use the handy <code>CRAN_package_db</code> function from the <strong>tools</strong> package which conveniently grabs information from the <code>DESCRIPTION</code> file of every package on CRAN and turns it into a dataframe.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">all_cran_packages <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">CRAN_package_db</span>()</span></code></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">all_cran_packages <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb3-2">  <span class="fu" style="color: #4758AB;">glimpse</span>()</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Rows: 19,050
-Columns: 66
-$ Package                   &lt;chr&gt; "A3", "aaSEA", "AATtools", "ABACUS", "abbrev~
-$ Version                   &lt;chr&gt; "1.0.0", "1.1.0", "0.0.1", "1.0.0", "0.1", "~
-$ Priority                  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ Depends                   &lt;chr&gt; "R (&gt;= 2.15.0), xtable, pbapply", "R(&gt;= 3.4.~
-$ Imports                   &lt;chr&gt; NA, "DT(&gt;= 0.4), networkD3(&gt;= 0.4), shiny(&gt;=~
-$ LinkingTo                 &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, "Rcpp, B~
-$ Suggests                  &lt;chr&gt; "randomForest, e1071", "knitr, rmarkdown", N~
-$ Enhances                  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ License                   &lt;chr&gt; "GPL (&gt;= 2)", "GPL-3", "GPL-3", "GPL-3", "GP~
-$ License_is_FOSS           &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ License_restricts_use     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ OS_type                   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ Archs                     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ MD5sum                    &lt;chr&gt; "027ebdd8affce8f0effaecfcd5f5ade2", "0f9aaef~
-$ NeedsCompilation          &lt;chr&gt; "no", "no", "no", "no", "no", "no", "no", "n~
-$ Additional_repositories   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ Author                    &lt;chr&gt; "Scott Fortmann-Roe", "Raja Sekhara Reddy D.~
-$ `Authors@R`               &lt;chr&gt; NA, NA, "person(\"Sercan\", \"Kahveci\", ema~
-$ Biarch                    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ BugReports                &lt;chr&gt; NA, NA, "https://github.com/Spiritspeak/AATt~
-$ BuildKeepEmpty            &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ BuildManual               &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ BuildResaveData           &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ BuildVignettes            &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ Built                     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ ByteCompile               &lt;chr&gt; NA, NA, "true", NA, NA, NA, NA, NA, NA, NA, ~
-$ `Classification/ACM`      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ `Classification/ACM-2012` &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ `Classification/JEL`      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ `Classification/MSC`      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ `Classification/MSC-2010` &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ Collate                   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ Collate.unix              &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ Collate.windows           &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ Contact                   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, "Ian Morison~
-$ Copyright                 &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ Date                      &lt;chr&gt; "2015-08-15", NA, NA, NA, "2021-12-12", NA, ~
-$ Description               &lt;chr&gt; "Supplies tools for tabulating and analyzing~
-$ Encoding                  &lt;chr&gt; NA, "UTF-8", "UTF-8", "UTF-8", "UTF-8", NA, ~
-$ KeepSource                &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ Language                  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ LazyData                  &lt;chr&gt; NA, "true", "true", "true", NA, "true", NA, ~
-$ LazyDataCompression       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ LazyLoad                  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "yes~
-$ MailingList               &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ Maintainer                &lt;chr&gt; "Scott Fortmann-Roe &lt;scottfr@berkeley.edu&gt;",~
-$ Note                      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ Packaged                  &lt;chr&gt; "2015-08-16 14:17:33 UTC; scott", "2019-11-0~
-$ RdMacros                  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ StagedInstall             &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ SysDataCompression        &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ SystemRequirements        &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, "GNU make", ~
-$ Title                     &lt;chr&gt; "Accurate, Adaptable, and Accessible Error M~
-$ Type                      &lt;chr&gt; "Package", "Package", "Package", NA, "Packag~
-$ URL                       &lt;chr&gt; NA, NA, NA, "https://shiny.abdn.ac.uk/Stats/~
-$ UseLTO                    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ VignetteBuilder           &lt;chr&gt; NA, "knitr", NA, "knitr", NA, "knitr", NA, N~
-$ ZipData                   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ Published                 &lt;chr&gt; "2015-08-16", "2019-11-09", "2020-06-14", "2~
-$ Path                      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ `X-CRAN-Comment`          &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ `Reverse depends`         &lt;chr&gt; NA, NA, NA, NA, NA, NA, "abctools, EasyABC",~
-$ `Reverse imports`         &lt;chr&gt; NA, NA, NA, NA, NA, NA, "ecolottery, poems",~
-$ `Reverse linking to`      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
-$ `Reverse suggests`        &lt;chr&gt; NA, NA, NA, NA, NA, NA, "coala", "abctools",~
-$ `Reverse enhances`        &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~</code></pre>
-</div>
-</div>
-<p>Here we are interested with the package and imports columns, so we will select them and drop the rest from the dataset. Then, we parse clean and tidy the columns in the dataset to make it a little easier to work with:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">tidied_cran_imports <span class="ot" style="color: #003B4F;">=</span> all_cran_packages <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb5-2">  janitor<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">clean_names</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb5-3">  <span class="fu" style="color: #4758AB;">select</span>(package, imports) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb5-4">  <span class="fu" style="color: #4758AB;">as_tibble</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb5-5">  <span class="fu" style="color: #4758AB;">separate_rows</span>(imports, <span class="at" style="color: #657422;">sep =</span> <span class="st" style="color: #20794D;">","</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb5-6">  <span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">imports =</span> <span class="fu" style="color: #4758AB;">str_replace</span>(imports,<span class="st" style="color: #20794D;">"</span><span class="sc" style="color: #5E5E5E;">\\</span><span class="st" style="color: #20794D;">s*</span><span class="sc" style="color: #5E5E5E;">\\</span><span class="st" style="color: #20794D;">([^</span><span class="sc" style="color: #5E5E5E;">\\</span><span class="st" style="color: #20794D;">)]+</span><span class="sc" style="color: #5E5E5E;">\\</span><span class="st" style="color: #20794D;">)"</span>,<span class="st" style="color: #20794D;">""</span>)) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb5-7">  <span class="fu" style="color: #4758AB;">mutate</span>(<span class="at" style="color: #657422;">imports =</span> <span class="fu" style="color: #4758AB;">str_trim</span>(imports, <span class="at" style="color: #657422;">side =</span> <span class="st" style="color: #20794D;">"both"</span>)) </span>
-<span id="cb5-8"></span>
-<span id="cb5-9">tidied_cran_imports <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">head</span>(<span class="dv" style="color: #AD0000;">10</span>)</span></code></pre></div>
-</div>
-<section id="package-connectivity" class="level2">
-<h2 class="anchored" data-anchor-id="package-connectivity">Package Connectivity</h2>
-<p>Let’s start with a look at the tidyverse. We can take the unusual step of actually employing a function from the tidyverse package (aptly titled <code>tidyverse_packages</code>), which identifies those packages that are formally part of the tidyverse. To see package connection, we filter for those packages and their imports, convert to <code>tbl_graph</code>, then plot using <strong>ggraph</strong>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">tidyverse_tbl <span class="ot" style="color: #003B4F;">&lt;-</span> tidied_cran_imports <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb6-2">  <span class="fu" style="color: #4758AB;">filter</span>(package <span class="sc" style="color: #5E5E5E;">%in%</span> <span class="fu" style="color: #4758AB;">tidyverse_packages</span>()) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb6-3">  <span class="fu" style="color: #4758AB;">filter</span>(imports <span class="sc" style="color: #5E5E5E;">%in%</span> <span class="fu" style="color: #4758AB;">tidyverse_packages</span>()) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb6-4">  <span class="fu" style="color: #4758AB;">as_tbl_graph</span>()</span></code></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;">ggraph</span>(tidyverse_tbl, <span class="at" style="color: #657422;">layout =</span> <span class="st" style="color: #20794D;">"nicely"</span>)  <span class="sc" style="color: #5E5E5E;">+</span> </span>
-<span id="cb7-2">  <span class="fu" style="color: #4758AB;">geom_edge_link</span>(<span class="at" style="color: #657422;">colour =</span> <span class="st" style="color: #20794D;">"grey50"</span>) <span class="sc" style="color: #5E5E5E;">+</span> </span>
-<span id="cb7-3">  <span class="fu" style="color: #4758AB;">geom_node_point</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb7-4">  <span class="fu" style="color: #4758AB;">geom_node_text</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">label =</span> name), <span class="at" style="color: #657422;">colour =</span> <span class="st" style="color: #20794D;">"black"</span>, <span class="at" style="color: #657422;">size =</span> <span class="fl" style="color: #AD0000;">3.5</span>, <span class="at" style="color: #657422;">parse =</span> <span class="cn" style="color: #8f5902;">TRUE</span>, <span class="at" style="color: #657422;">repel =</span> <span class="cn" style="color: #8f5902;">FALSE</span>, <span class="at" style="color: #657422;">check_overlap =</span> <span class="cn" style="color: #8f5902;">TRUE</span>, <span class="at" style="color: #657422;">nudge_y =</span> .<span class="dv" style="color: #AD0000;">12</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb7-5">  <span class="fu" style="color: #4758AB;">theme_void</span>()</span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://lugoga.github.io/semba-quarto/posts/spatialState/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="576"></p>
-</div>
-</div>
-<p>Many intersecting lines traverse in all directions, as one might anticipate, because many packages in tidyverse import other packages. As the tidyverse develops, this is to be expected.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">env_packages <span class="ot" style="color: #003B4F;">&lt;-</span> ctv<span class="sc" style="color: #5E5E5E;">:::</span><span class="fu" style="color: #4758AB;">.get_pkgs_from_ctv_or_repos</span>(<span class="at" style="color: #657422;">views =</span> <span class="st" style="color: #20794D;">"Environmetrics"</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb8-2">  <span class="fu" style="color: #4758AB;">unlist</span>(<span class="at" style="color: #657422;">use.names =</span> <span class="cn" style="color: #8f5902;">FALSE</span>)</span></code></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">env_tbl <span class="ot" style="color: #003B4F;">&lt;-</span> tidied_cran_imports <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb9-2">  <span class="fu" style="color: #4758AB;">filter</span>(package <span class="sc" style="color: #5E5E5E;">%in%</span> env_packages) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb9-3">  <span class="fu" style="color: #4758AB;">filter</span>(imports <span class="sc" style="color: #5E5E5E;">%in%</span> env_packages) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb9-4">  <span class="fu" style="color: #4758AB;">as_tbl_graph</span>()</span>
-<span id="cb9-5"></span>
-<span id="cb9-6">env_tbl <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb9-7">  <span class="fu" style="color: #4758AB;">ggraph</span>(<span class="at" style="color: #657422;">layout =</span> <span class="st" style="color: #20794D;">'nicely'</span>) <span class="sc" style="color: #5E5E5E;">+</span> </span>
-<span id="cb9-8">  <span class="fu" style="color: #4758AB;">geom_edge_link</span>(<span class="at" style="color: #657422;">colour =</span> <span class="st" style="color: #20794D;">"grey50"</span>) <span class="sc" style="color: #5E5E5E;">+</span> </span>
-<span id="cb9-9">  <span class="fu" style="color: #4758AB;">geom_node_point</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb9-10">  <span class="fu" style="color: #4758AB;">geom_node_text</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">label =</span> name), <span class="at" style="color: #657422;">colour =</span> <span class="st" style="color: #20794D;">"black"</span>, <span class="at" style="color: #657422;">size =</span> <span class="fl" style="color: #AD0000;">3.5</span>, <span class="at" style="color: #657422;">parse =</span> <span class="cn" style="color: #8f5902;">TRUE</span>, <span class="at" style="color: #657422;">repel =</span> <span class="cn" style="color: #8f5902;">FALSE</span>, <span class="at" style="color: #657422;">check_overlap =</span> <span class="cn" style="color: #8f5902;">TRUE</span>, <span class="at" style="color: #657422;">nudge_y =</span> .<span class="dv" style="color: #AD0000;">3</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb9-11">  <span class="fu" style="color: #4758AB;">theme_void</span>()</span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://lugoga.github.io/semba-quarto/posts/spatialState/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>Next, let’s look at the Spatial Analysis task view, where we might not expect to see the same level of connectedness. The infrastructure underlying CRAN task views, the <strong>ctv</strong> package, (sort of) provides a function to obtain a vector of package names for a given task view, which we can use to make a network plot:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">spatial_packages <span class="ot" style="color: #003B4F;">&lt;-</span> ctv<span class="sc" style="color: #5E5E5E;">:::</span><span class="fu" style="color: #4758AB;">.get_pkgs_from_ctv_or_repos</span>(<span class="at" style="color: #657422;">views =</span> <span class="st" style="color: #20794D;">"Spatial"</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb10-2">  <span class="fu" style="color: #4758AB;">unlist</span>(<span class="at" style="color: #657422;">use.names =</span> <span class="cn" style="color: #8f5902;">FALSE</span>)</span></code></pre></div>
-</div>
-<p>We then pull the packages that are in spatial analysis task view that are found in all packages that are tidied and convert them to ggraph table and plot the network</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">sp_tbl <span class="ot" style="color: #003B4F;">&lt;-</span> tidied_cran_imports <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb11-2">  <span class="fu" style="color: #4758AB;">filter</span>(package <span class="sc" style="color: #5E5E5E;">%in%</span> spatial_packages) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb11-3">  <span class="fu" style="color: #4758AB;">filter</span>(imports <span class="sc" style="color: #5E5E5E;">%in%</span> spatial_packages) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb11-4">  <span class="fu" style="color: #4758AB;">as_tbl_graph</span>()</span>
-<span id="cb11-5"></span>
-<span id="cb11-6">sp_tbl <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb11-7">  <span class="fu" style="color: #4758AB;">ggraph</span>(<span class="at" style="color: #657422;">layout =</span> <span class="st" style="color: #20794D;">'fr'</span>) <span class="sc" style="color: #5E5E5E;">+</span> </span>
-<span id="cb11-8">  <span class="fu" style="color: #4758AB;">geom_edge_link</span>(<span class="at" style="color: #657422;">colour =</span> <span class="st" style="color: #20794D;">"grey"</span>) <span class="sc" style="color: #5E5E5E;">+</span> </span>
-<span id="cb11-9">  <span class="fu" style="color: #4758AB;">geom_node_point</span>(<span class="at" style="color: #657422;">colour=</span><span class="st" style="color: #20794D;">"lightblue"</span>, <span class="at" style="color: #657422;">size=</span><span class="dv" style="color: #AD0000;">2</span>) <span class="sc" style="color: #5E5E5E;">+</span> </span>
-<span id="cb11-10">  <span class="fu" style="color: #4758AB;">geom_node_text</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">label=</span>name), <span class="at" style="color: #657422;">repel=</span><span class="cn" style="color: #8f5902;">FALSE</span>, <span class="at" style="color: #657422;">check_overlap =</span> <span class="cn" style="color: #8f5902;">TRUE</span>, <span class="at" style="color: #657422;">nudge_y =</span> .<span class="dv" style="color: #AD0000;">2</span>) <span class="sc" style="color: #5E5E5E;">+</span>  </span>
-<span id="cb11-11">  <span class="fu" style="color: #4758AB;">theme_graph</span>()</span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://lugoga.github.io/semba-quarto/posts/spatialState/index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="576"></p>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">sp_tbl <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb12-2">  <span class="fu" style="color: #4758AB;">ggraph</span>(<span class="at" style="color: #657422;">layout =</span> <span class="st" style="color: #20794D;">'linear'</span>,<span class="at" style="color: #657422;">circular =</span> <span class="cn" style="color: #8f5902;">TRUE</span>) <span class="sc" style="color: #5E5E5E;">+</span> </span>
-<span id="cb12-3">  <span class="fu" style="color: #4758AB;">geom_edge_link</span>(<span class="at" style="color: #657422;">colour =</span> <span class="st" style="color: #20794D;">"grey50"</span>) <span class="sc" style="color: #5E5E5E;">+</span> </span>
-<span id="cb12-4">  <span class="fu" style="color: #4758AB;">geom_node_point</span>()<span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb12-5">  <span class="fu" style="color: #4758AB;">geom_node_text</span>(<span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">label =</span> name), <span class="at" style="color: #657422;">colour =</span> <span class="st" style="color: #20794D;">"black"</span>, <span class="at" style="color: #657422;">size =</span> <span class="fl" style="color: #AD0000;">3.5</span>, <span class="at" style="color: #657422;">parse =</span> <span class="cn" style="color: #8f5902;">TRUE</span>, <span class="at" style="color: #657422;">repel =</span> <span class="cn" style="color: #8f5902;">TRUE</span>, <span class="at" style="color: #657422;">check_overlap =</span> <span class="cn" style="color: #8f5902;">TRUE</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb12-6">  <span class="fu" style="color: #4758AB;">theme_void</span>()</span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://lugoga.github.io/semba-quarto/posts/spatialState/index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="576"></p>
-</div>
-</div>
-<p>There is clearly some connectivity among spatial-related packages, which serves as a reminder that task views on CRAN aren’t the only location where users find packages to use. Some programs, like <strong>sf</strong>, establish a hub of related packages because they share a package maintainer, while others, like <strong>sp</strong>, investigate spatial systems using a wide range of spatial packages. The graph below shows the number of downloads of the <strong>cranlogs</strong> package from the RStudio CRAN mirror over the last year.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">kgcount <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">cran_downloads</span>(<span class="at" style="color: #657422;">packages =</span> spatial_packages, </span>
-<span id="cb13-2">                           <span class="at" style="color: #657422;">from =</span> <span class="fu" style="color: #4758AB;">Sys.Date</span>()<span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">1</span><span class="sc" style="color: #5E5E5E;">*</span><span class="dv" style="color: #AD0000;">365</span>, </span>
-<span id="cb13-3">                           <span class="at" style="color: #657422;">to =</span> <span class="fu" style="color: #4758AB;">Sys.Date</span>())</span></code></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">kgcount <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb14-2">  <span class="fu" style="color: #4758AB;">group_by</span>(package) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb14-3">  <span class="fu" style="color: #4758AB;">summarise</span>(<span class="at" style="color: #657422;">downloads =</span> <span class="fu" style="color: #4758AB;">sum</span>(count)) <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
-<span id="cb14-4">  <span class="fu" style="color: #4758AB;">filter</span>(downloads <span class="sc" style="color: #5E5E5E;">&gt;=</span> <span class="dv" style="color: #AD0000;">450000</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb14-5">  <span class="fu" style="color: #4758AB;">arrange</span>(<span class="fu" style="color: #4758AB;">desc</span>(downloads)) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb14-6">  <span class="fu" style="color: #4758AB;">hchart</span>(<span class="at" style="color: #657422;">type =</span> <span class="st" style="color: #20794D;">"bar"</span>, <span class="fu" style="color: #4758AB;">hcaes</span>(<span class="at" style="color: #657422;">x =</span> package, <span class="at" style="color: #657422;">y =</span> downloads)) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb14-7">  <span class="fu" style="color: #4758AB;">hc_xAxis</span>(<span class="at" style="color: #657422;">title =</span> <span class="fu" style="color: #4758AB;">list</span>(<span class="at" style="color: #657422;">text =</span> <span class="st" style="color: #20794D;">"Mothly downloads"</span>)) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb14-8">  <span class="fu" style="color: #4758AB;">hc_yAxis</span>(<span class="at" style="color: #657422;">title =</span> <span class="cn" style="color: #8f5902;">FALSE</span>)</span></code></pre></div>
-</div>
-</section>
-<section id="reference" class="level1 unnumbered">
-
-
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reference</h2><div id="refs" class="references csl-bib-body hanging-indent">
-<div id="ref-bivand2006implementing" class="csl-entry">
-Bivand, Roger. 2006. <span>“Implementing Spatial Data Analysis Software Tools in r.”</span> <em>Geographical Analysis</em> 38 (1): 23–40.
-</div>
-</div></section></div> ]]></description>
-  <category>Analysis</category>
-  <category>Spatial</category>
-  <category>Visualization</category>
-  <guid>https://lugoga.github.io/semba-quarto/posts/spatialState/index.html</guid>
-  <pubDate>Sun, 07 Aug 2022 21:00:00 GMT</pubDate>
-  <media:content url="https://lugoga.github.io/semba-quarto/posts/spatialState/spatial.png" medium="image" type="image/png" height="66" width="144"/>
 </item>
 </channel>
 </rss>

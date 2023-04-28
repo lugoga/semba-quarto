@@ -2,6 +2,7 @@
   {
     "listing": "/archive.html",
     "items": [
+      "/posts/ndvi/index.html",
       "/posts/vizingaApp/index.html",
       "/posts/errorRaster/index.html",
       "/posts/chatgpt/index.html",
@@ -28,6 +29,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/ndvi/index.html",
       "/posts/vizingaApp/index.html",
       "/posts/errorRaster/index.html",
       "/posts/chatgpt/index.html",
