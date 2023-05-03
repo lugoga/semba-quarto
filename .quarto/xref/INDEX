@@ -107,5 +107,8 @@
   },
   "posts/ndvi/index.qmd": {
     "index.html": "0a0e49b4"
+  },
+  "posts/dataScienceGap/index.qmd": {
+    "index.html": "4eadc22a"
   }
 }
