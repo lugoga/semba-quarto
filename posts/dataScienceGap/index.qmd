@@ -15,7 +15,7 @@ tags:
   - University
   - Blogs
   - Masumbuko Semba
-image: "chatgpt.jpg"
+image: "datagap.png"
 draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
 bibliography: ../blog.bib
 csl:  ../elsevier.csl
@@ -28,7 +28,7 @@ code-line-numbers: true
 
 As we celebrate Labour Day on 1st May 2023, it's important to reflect on the changing nature of work and the skills required to succeed in the modern workplace. One area where the skill gap is particularly acute is data science. With the exponential growth of data in recent years, the demand for data scientists has skyrocketed. However, universities have struggled to keep up with the pace of change, leaving many graduates ill-equipped for the demands of the job market.
 
-![](Technical Analysis.png)
+![](datagap.png)    
 
 Universities have been slow to respond to the growing demand for data scientists, with many struggling to keep up with the rapid pace of change. However, some institutions have taken steps to bridge the gap. In Tanzania, the skill gap in data science is particularly acute. Only one institution, the University of Dar es Salaam (UDSM), offers a data science course at the master's level. This has left many graduates without the skills required by employers, hindering economic development in the country.
 
