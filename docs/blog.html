@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.3.319">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,7 +17,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
 </style>
@@ -101,6 +101,7 @@ gtag('js', new Date());
 gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 </script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
@@ -121,96 +122,98 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
     <span class="navbar-title">ng’ara</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html">
+    <a class="nav-link" href="./index.html" rel="" target="">
  <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./blog.html" aria-current="page">
+    <a class="nav-link active" href="./blog.html" rel="" target="" aria-current="page">
  <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/lugoga"><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/lugoga" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/semba2020"><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/semba2020" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://www.youtube.com/channel/UC9uZ1KPyo7zIzI4BnUtHPfA"><i class="bi bi-youtube" role="img">
+    <a class="nav-link" href="https://www.youtube.com/channel/UC9uZ1KPyo7zIzI4BnUtHPfA" rel="" target=""><i class="bi bi-youtube" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="./blog.xml"><i class="bi bi-rss" role="img">
+    <a class="nav-link" href="./blog.xml" rel="" target=""><i class="bi bi-rss" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-apps--links" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-apps--links" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
  <span class="menu-text">Apps &amp; Links</span>
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-apps--links">    
         <li>
-    <a class="dropdown-item" href="https://semba.netlify.app/">
+    <a class="dropdown-item" href="https://semba.netlify.app/" rel="" target="">
  <span class="dropdown-text">Semba-blog Analysis</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://semba-blog.netlify.app/">
+    <a class="dropdown-item" href="https://semba-blog.netlify.app/" rel="" target="">
  <span class="dropdown-text">Semba Data Analysis</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://semba.shinyapps.io/kwala/">
+    <a class="dropdown-item" href="https://semba.shinyapps.io/kwala/" rel="" target="">
  <span class="dropdown-text">Kwala commercial CIty</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://semba.shinyapps.io/coastal_dashboard/">
+    <a class="dropdown-item" href="https://semba.shinyapps.io/coastal_dashboard/" rel="" target="">
  <span class="dropdown-text">Marine Hub</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://nemp.shinyapps.io/nemp/">
+    <a class="dropdown-item" href="https://nemp.shinyapps.io/nemp/" rel="" target="">
  <span class="dropdown-text">Environmental Master Plan</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://semba.shinyapps.io/OceanWebApp/">
+    <a class="dropdown-item" href="https://semba.shinyapps.io/OceanWebApp/" rel="" target="">
  <span class="dropdown-text">Hydrographic Data Hub</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://semba.shinyapps.io/marineTz/">
+    <a class="dropdown-item" href="https://semba.shinyapps.io/marineTz/" rel="" target="">
  <span class="dropdown-text">Potential Fishing Zones</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://semba.shinyapps.io/vizingaApp/">
+    <a class="dropdown-item" href="https://semba.shinyapps.io/vizingaApp/" rel="" target="">
  <span class="dropdown-text">TAFIRI Apps</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://rweekly.org/">
+    <a class="dropdown-item" href="https://rweekly.org/" rel="" target="">
  <span class="dropdown-text">R Weekly</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://www.r-bloggers.com/">
+    <a class="dropdown-item" href="https://www.r-bloggers.com/" rel="" target="">
  <span class="dropdown-text">R Bloggers</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://www.tmbish.me/lab/highcharter-cookbook/">
+    <a class="dropdown-item" href="https://www.tmbish.me/lab/highcharter-cookbook/" rel="" target="">
  <span class="dropdown-text">Highcharter</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="./archive.html">
+    <a class="nav-link" href="./archive.html" rel="" target="">
  <span class="menu-text">Archive</span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
+            <div class="quarto-navbar-tools">
+</div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
@@ -221,7 +224,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(23)</span></div><div class="category" data-category="Analysis">Analysis <span class="quarto-category-count">(14)</span></div><div class="category" data-category="Aquaculture">Aquaculture <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Data">Data <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Fisheries">Fisheries <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Manipulation">Manipulation <span class="quarto-category-count">(5)</span></div><div class="category" data-category="Modelling">Modelling <span class="quarto-category-count">(5)</span></div><div class="category" data-category="Programming">Programming <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Python">Python <span class="quarto-category-count">(7)</span></div><div class="category" data-category="R">R <span class="quarto-category-count">(8)</span></div><div class="category" data-category="Spatial">Spatial <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Visualization">Visualization <span class="quarto-category-count">(18)</span></div><div class="category" data-category="code">code <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(24)</span></div><div class="category" data-category="Analysis">Analysis <span class="quarto-category-count">(15)</span></div><div class="category" data-category="Aquaculture">Aquaculture <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Data">Data <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Fisheries">Fisheries <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Manipulation">Manipulation <span class="quarto-category-count">(5)</span></div><div class="category" data-category="Modelling">Modelling <span class="quarto-category-count">(5)</span></div><div class="category" data-category="Programming">Programming <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Python">Python <span class="quarto-category-count">(7)</span></div><div class="category" data-category="R">R <span class="quarto-category-count">(8)</span></div><div class="category" data-category="Spatial">Spatial <span class="quarto-category-count">(4)</span></div><div class="category" data-category="Visualization">Visualization <span class="quarto-category-count">(19)</span></div><div class="category" data-category="code">code <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content column-page-left" id="quarto-document-content">
 
@@ -251,9 +254,53 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   </div>
 </div>
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="R,Python,Data,Programming" data-listing-date-sort="1682888400000" data-listing-file-modified-sort="1683093061349" data-listing-reading-time-sort="2.815">
+<div class="quarto-post image-right" data-index="0" data-categories="Spatial,Analysis,Visualization" data-listing-date-sort="1684530000000" data-listing-file-modified-sort="1684642407888" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16">
 <div class="thumbnail">
-<p><a href="./posts/dataScienceGap/index.html"> <img src="./posts/dataScienceGap/datagap.png" class="thumnail-image"> </a></p>
+<p><a href="./posts/streamline/index.html"> <img src="./posts/streamline/streamline.png" class="thumbnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/streamline/index.html">
+<h3 class="no-anchor listing-title">
+Streamlines for Surface Currents in Coastal Waters of Western Indian Ocean Region
+</h3>
+<div class="listing-subtitle">
+
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Spatial'); return false;">
+Spatial
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Analysis'); return false;">
+Analysis
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Visualization'); return false;">
+Visualization
+</div>
+</div>
+<a href="./posts/streamline/index.html">
+<div class="listing-description">
+Streamlines are imaginary lines that are tangent to the velocity vector at every point in space. They represent the…
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/streamline/index.html">
+<div class="listing-date">
+May 20, 2023
+</div>
+<div class="listing-author">
+Masumbuko Semba
+</div>
+<div class="listing-reading-time">
+16 min
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="R,Python,Data,Programming" data-listing-date-sort="1682888400000" data-listing-file-modified-sort="1683075062000" data-listing-date-modified-sort="1683061200000" data-listing-reading-time-sort="3">
+<div class="thumbnail">
+<p><a href="./posts/dataScienceGap/index.html"> <img src="./posts/dataScienceGap/datagap.png" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/dataScienceGap/index.html">
@@ -293,14 +340,14 @@ May 1, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-2 min
+3 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="Spatial,Analysis,Visualization" data-listing-date-sort="1682629200000" data-listing-file-modified-sort="1682685127718" data-listing-reading-time-sort="4.615">
+<div class="quarto-post image-right" data-index="2" data-categories="Spatial,Analysis,Visualization" data-listing-date-sort="1682629200000" data-listing-file-modified-sort="1684642684184" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
 <div class="thumbnail">
-<p><a href="./posts/ndvi/index.html"> <img src="./posts/ndvi/ndvi.png" class="thumnail-image"> </a></p>
+<p><a href="./posts/ndvi/index.html"> <img src="./posts/ndvi/ndvi.png" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/ndvi/index.html">
@@ -337,14 +384,14 @@ April 28, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-4 min
+5 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="Fisheries,Aquaculture" data-listing-date-sort="1681678800000" data-listing-file-modified-sort="1679728444075" data-listing-reading-time-sort="2.97">
+<div class="quarto-post image-right" data-index="3" data-categories="Fisheries,Aquaculture" data-listing-date-sort="1681678800000" data-listing-file-modified-sort="1679710446000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
 <div class="thumbnail">
-<p><a href="./posts/vizingaApp/index.html"> <img src="./posts/vizingaApp/vizingaPage.png" class="thumnail-image"> </a></p>
+<p><a href="./posts/vizingaApp/index.html"> <img src="./posts/vizingaApp/vizingaPage.png" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/vizingaApp/index.html">
@@ -378,14 +425,14 @@ April 17, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-2 min
+3 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-categories="R,Modelling" data-listing-date-sort="1681592400000" data-listing-file-modified-sort="1680081912200" data-listing-reading-time-sort="5.295">
+<div class="quarto-post image-right" data-index="4" data-categories="R,Modelling" data-listing-date-sort="1681592400000" data-listing-file-modified-sort="1680063914000" data-listing-date-modified-sort="1681592400000" data-listing-reading-time-sort="6">
 <div class="thumbnail">
-<p><a href="./posts/errorRaster/index.html"> <img src="./posts/errorRaster/errorRaster.png" class="thumnail-image"> </a></p>
+<p><a href="./posts/errorRaster/index.html"> <img src="./posts/errorRaster/errorRaster.png" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/errorRaster/index.html">
@@ -419,14 +466,14 @@ April 16, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-5 min
+6 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="4" data-categories="R,Modelling" data-listing-date-sort="1681506000000" data-listing-file-modified-sort="1680074158067" data-listing-reading-time-sort="5.575">
+<div class="quarto-post image-right" data-index="5" data-categories="R,Modelling" data-listing-date-sort="1681506000000" data-listing-file-modified-sort="1680056160000" data-listing-date-modified-sort="1682715600000" data-listing-reading-time-sort="6">
 <div class="thumbnail">
-<p><a href="./posts/chatgpt/index.html"> <img src="./posts/chatgpt/chatgpt.jpg" class="thumnail-image"> </a></p>
+<p><a href="./posts/chatgpt/index.html"> <img src="./posts/chatgpt/chatgpt.jpg" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/chatgpt/index.html">
@@ -460,14 +507,14 @@ April 15, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-5 min
+6 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="5" data-categories="Manipulation,Visualization,R,Modelling" data-listing-date-sort="1681333200000" data-listing-file-modified-sort="1677209737641" data-listing-reading-time-sort="14.46">
+<div class="quarto-post image-right" data-index="6" data-categories="Manipulation,Visualization,R,Modelling" data-listing-date-sort="1681333200000" data-listing-file-modified-sort="1677191738000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15">
 <div class="thumbnail">
-<p><a href="./posts/tidymodels_classificationTrain/index.html"> <img src="./posts/tidymodels_classificationTrain/binary.jpg" class="thumnail-image"> </a></p>
+<p><a href="./posts/tidymodels_classificationTrain/index.html"> <img data-src="./posts/tidymodels_classificationTrain/binary.jpg" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/tidymodels_classificationTrain/index.html">
@@ -507,14 +554,14 @@ April 13, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-14 min
+15 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="6" data-categories="Manipulation,Visualization,R,Modelling" data-listing-date-sort="1681160400000" data-listing-file-modified-sort="1677204163826" data-listing-reading-time-sort="13.73">
+<div class="quarto-post image-right" data-index="7" data-categories="Manipulation,Visualization,R,Modelling" data-listing-date-sort="1681160400000" data-listing-file-modified-sort="1677186164000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14">
 <div class="thumbnail">
-<p><a href="./posts/tidymodels_regression/index.html"> <img data-src="./posts/tidymodels_regression/regression.jpg" class="thumnail-image"> </a></p>
+<p><a href="./posts/tidymodels_regression/index.html"> <img data-src="./posts/tidymodels_regression/regression.jpg" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/tidymodels_regression/index.html">
@@ -554,18 +601,14 @@ April 11, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-13 min
+14 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="7" data-categories="Manipulation,Visualization,R,Modelling" data-listing-date-sort="1680469200000" data-listing-file-modified-sort="1679728306865" data-listing-reading-time-sort="7.755">
+<div class="quarto-post image-right" data-index="8" data-categories="Manipulation,Visualization,R,Modelling" data-listing-date-sort="1680469200000" data-listing-file-modified-sort="1679710308000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8">
 <div class="thumbnail">
-<a href="./posts/tidymodels_classification/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/tidymodels_classification/index.html"></a></p>
+<p><a href="./posts/tidymodels_classification/index.html"> <p class="card-img-top"><img data-src="posts\tidymodels_classification\index_files\figure-html\unnamed-chunk-16-1.png"  class="thumbnail-image card-img"/></p> </a></p>
 </div>
 <div class="body">
 <a href="./posts/tidymodels_classification/index.html">
@@ -605,14 +648,14 @@ April 3, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-7 min
+8 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="8" data-categories="Manipulation,Visualization,R" data-listing-date-sort="1677618000000" data-listing-file-modified-sort="1676994294012" data-listing-reading-time-sort="10.47">
+<div class="quarto-post image-right" data-index="9" data-categories="Manipulation,Visualization,R" data-listing-date-sort="1677618000000" data-listing-file-modified-sort="1676976296000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11">
 <div class="thumbnail">
-<p><a href="./posts/gebco/index.html"> <img data-src="./posts/gebco/thumbnail.jpg" class="thumnail-image"> </a></p>
+<p><a href="./posts/gebco/index.html"> <img data-src="./posts/gebco/thumbnail.jpg" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/gebco/index.html">
@@ -649,14 +692,14 @@ March 1, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-10 min
+11 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="9" data-categories="Analysis,Visualization,Python" data-listing-date-sort="1677186000000" data-listing-file-modified-sort="1676833588113" data-listing-reading-time-sort="2.4">
+<div class="quarto-post image-right" data-index="10" data-categories="Analysis,Visualization,Python" data-listing-date-sort="1677186000000" data-listing-file-modified-sort="1676815590000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
 <div class="thumbnail">
-<p><a href="./posts/seaborn_boxplot/index.html"> <img data-src="./posts/seaborn_boxplot/boxplot.jpg" class="thumnail-image"> </a></p>
+<p><a href="./posts/seaborn_boxplot/index.html"> <img data-src="./posts/seaborn_boxplot/boxplot.jpg" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/seaborn_boxplot/index.html">
@@ -693,14 +736,14 @@ February 24, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-2 min
+3 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="10" data-categories="Analysis,Visualization,Python" data-listing-date-sort="1677099600000" data-listing-file-modified-sort="1676833620161" data-listing-reading-time-sort="1.665">
+<div class="quarto-post image-right" data-index="11" data-categories="Analysis,Visualization,Python" data-listing-date-sort="1677099600000" data-listing-file-modified-sort="1676815622000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
 <div class="thumbnail">
-<p><a href="./posts/seaborn_barplot/index.html"> <img data-src="./posts/seaborn_barplot/barplot.jpg" class="thumnail-image"> </a></p>
+<p><a href="./posts/seaborn_barplot/index.html"> <img data-src="./posts/seaborn_barplot/barplot.jpg" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/seaborn_barplot/index.html">
@@ -737,14 +780,14 @@ February 23, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-1 min
+2 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="11" data-categories="Analysis,Visualization,Python" data-listing-date-sort="1677013200000" data-listing-file-modified-sort="1676859817806" data-listing-reading-time-sort="1.995">
+<div class="quarto-post image-right" data-index="12" data-categories="Analysis,Visualization,Python" data-listing-date-sort="1677013200000" data-listing-file-modified-sort="1676841818000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
 <div class="thumbnail">
-<p><a href="./posts/seabornjointplot/index.html"> <img data-src="./posts/seabornjointplot/jointPlot.jpg" class="thumnail-image"> </a></p>
+<p><a href="./posts/seabornjointplot/index.html"> <img data-src="./posts/seabornjointplot/jointPlot.jpg" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/seabornjointplot/index.html">
@@ -781,14 +824,14 @@ February 22, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-1 min
+2 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="12" data-categories="Analysis,Visualization,Python" data-listing-date-sort="1677013200000" data-listing-file-modified-sort="1676864663713" data-listing-reading-time-sort="3.46">
+<div class="quarto-post image-right" data-index="13" data-categories="Analysis,Visualization,Python" data-listing-date-sort="1677013200000" data-listing-file-modified-sort="1676846664000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
 <div class="thumbnail">
-<p><a href="./posts/seaborn_lineplot/index.html"> <img data-src="./posts/seaborn_lineplot/lineplot.jpg" class="thumnail-image"> </a></p>
+<p><a href="./posts/seaborn_lineplot/index.html"> <img data-src="./posts/seaborn_lineplot/lineplot.jpg" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/seaborn_lineplot/index.html">
@@ -825,14 +868,14 @@ February 22, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-3 min
+4 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="13" data-categories="Analysis,Visualization,Python" data-listing-date-sort="1676926800000" data-listing-file-modified-sort="1676799714573" data-listing-reading-time-sort="4.24">
+<div class="quarto-post image-right" data-index="14" data-categories="Analysis,Visualization,Python" data-listing-date-sort="1676926800000" data-listing-file-modified-sort="1676781716000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
 <div class="thumbnail">
-<p><a href="./posts/seabornVisualization/index.html"> <img data-src="./posts/seabornVisualization/displot.jpg" class="thumnail-image"> </a></p>
+<p><a href="./posts/seabornVisualization/index.html"> <img data-src="./posts/seabornVisualization/displot.jpg" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/seabornVisualization/index.html">
@@ -869,18 +912,14 @@ February 21, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-4 min
+5 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="14" data-categories="Analysis,Visualization" data-listing-date-sort="1676840400000" data-listing-file-modified-sort="1676800682080" data-listing-reading-time-sort="5.725">
+<div class="quarto-post image-right" data-index="15" data-categories="Analysis,Visualization" data-listing-date-sort="1676840400000" data-listing-file-modified-sort="1676782684000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6">
 <div class="thumbnail">
-<a href="./posts/r_python/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/r_python/index.html"></a></p>
+<p><a href="./posts/r_python/index.html"> <p class="card-img-top"><img data-src="posts\r_python\index_files\figure-html\fig-ggpair-1.png"  class="thumbnail-image card-img"/></p> </a></p>
 </div>
 <div class="body">
 <a href="./posts/r_python/index.html">
@@ -914,18 +953,14 @@ February 20, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-5 min
+6 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="15" data-categories="Analysis,Visualization" data-listing-date-sort="1676754000000" data-listing-file-modified-sort="1676800745297" data-listing-reading-time-sort="8.89">
+<div class="quarto-post image-right" data-index="16" data-categories="Analysis,Visualization" data-listing-date-sort="1676754000000" data-listing-file-modified-sort="1676782746000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9">
 <div class="thumbnail">
-<a href="./posts/inset_main_map/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/inset_main_map/index.html"></a></p>
+<p><a href="./posts/inset_main_map/index.html"> <p class="card-img-top"><img data-src="posts\inset_main_map\index_files\figure-html\focus-1.png"  class="thumbnail-image card-img"/></p> </a></p>
 </div>
 <div class="body">
 <a href="./posts/inset_main_map/index.html">
@@ -959,18 +994,14 @@ February 19, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-8 min
+9 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="16" data-categories="Analysis,Visualization" data-listing-date-sort="1676408400000" data-listing-file-modified-sort="1676448796682" data-listing-reading-time-sort="5.285">
+<div class="quarto-post image-right" data-index="17" data-categories="Analysis,Visualization" data-listing-date-sort="1676408400000" data-listing-file-modified-sort="1676430798000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6">
 <div class="thumbnail">
-<a href="./posts/ttest/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/ttest/index.html"></a></p>
+<p><a href="./posts/ttest/index.html"> <p class="card-img-top"><img data-src="posts\ttest\index_files\figure-html\fig-hist-1.png"  class="thumbnail-image card-img"/></p> </a></p>
 </div>
 <div class="body">
 <a href="./posts/ttest/index.html">
@@ -1004,14 +1035,14 @@ February 15, 2023
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-5 min
+6 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="17" data-categories="Analysis,Visualization" data-listing-date-sort="1675458000000" data-listing-file-modified-sort="1676452681287" data-listing-reading-time-sort="3.455">
+<div class="quarto-post image-right" data-index="18" data-categories="Analysis,Visualization" data-listing-date-sort="1675458000000" data-listing-file-modified-sort="1676434682000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
 <div class="thumbnail">
-<p><a href="./posts/combining_plots/index.html"> <img data-src="./posts/combining_plots/combine_plot.png" class="thumnail-image"> </a></p>
+<p><a href="./posts/combining_plots/index.html"> <img data-src="./posts/combining_plots/combine_plot.png" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/combining_plots/index.html">
@@ -1045,18 +1076,14 @@ February 4, 2023
 Masumbuko Semba, Nyamisi Peter
 </div>
 <div class="listing-reading-time">
-3 min
+4 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="18" data-categories="Manipulation,Visualization,R" data-listing-date-sort="1669842000000" data-listing-file-modified-sort="1676985687123" data-listing-reading-time-sort="5.235">
+<div class="quarto-post image-right" data-index="19" data-categories="Manipulation,Visualization,R" data-listing-date-sort="1669842000000" data-listing-file-modified-sort="1676967688000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6">
 <div class="thumbnail">
-<a href="./posts/simplefeature_pointline/index.html">
-<div class="thumbnail-image">
-
-</div>
-</a><p><a href="./posts/simplefeature_pointline/index.html"></a></p>
+<p><a href="./posts/simplefeature_pointline/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
 </div>
 <div class="body">
 <a href="./posts/simplefeature_pointline/index.html">
@@ -1093,14 +1120,14 @@ December 1, 2022
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-5 min
+6 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="19" data-categories="code,Analysis,Spatial" data-listing-date-sort="1660338000000" data-listing-file-modified-sort="1676986011777" data-listing-reading-time-sort="7.935">
+<div class="quarto-post image-right" data-index="20" data-categories="code,Analysis,Spatial" data-listing-date-sort="1660338000000" data-listing-file-modified-sort="1676968012000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8">
 <div class="thumbnail">
-<p><a href="./posts/forecastingTimeseries/index.html"> <img data-src="./posts/forecastingTimeseries/forecast.png" class="thumnail-image"> </a></p>
+<p><a href="./posts/forecastingTimeseries/index.html"> <img data-src="./posts/forecastingTimeseries/forecast.png" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/forecastingTimeseries/index.html">
@@ -1137,14 +1164,14 @@ August 13, 2022
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-7 min
+8 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="20" data-categories="Visualization,Analysis" data-listing-date-sort="1660165200000" data-listing-file-modified-sort="1676464734624" data-listing-reading-time-sort="11.48">
+<div class="quarto-post image-right" data-index="21" data-categories="Visualization,Analysis" data-listing-date-sort="1660165200000" data-listing-file-modified-sort="1676446736000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12">
 <div class="thumbnail">
-<p><a href="./posts/newvisuals/index.html"> <img data-src="./posts/newvisuals/packedbubble.png" class="thumnail-image"> </a></p>
+<p><a href="./posts/newvisuals/index.html"> <img data-src="./posts/newvisuals/packedbubble.png" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/newvisuals/index.html">
@@ -1178,14 +1205,14 @@ August 11, 2022
 Masjumbuko Semba
 </div>
 <div class="listing-reading-time">
-11 min
+12 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="21" data-categories="Analysis,Spatial,Visualization" data-listing-date-sort="1659906000000" data-listing-file-modified-sort="1676464698680" data-listing-reading-time-sort="4.95">
+<div class="quarto-post image-right" data-index="22" data-categories="Analysis,Spatial,Visualization" data-listing-date-sort="1659906000000" data-listing-file-modified-sort="1676446700000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
 <div class="thumbnail">
-<p><a href="./posts/spatialState/index.html"> <img data-src="./posts/spatialState/spatial.png" class="thumnail-image"> </a></p>
+<p><a href="./posts/spatialState/index.html"> <img data-src="./posts/spatialState/spatial.png" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/spatialState/index.html">
@@ -1222,14 +1249,14 @@ August 8, 2022
 Masjumbuko Semba
 </div>
 <div class="listing-reading-time">
-4 min
+5 min
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="22" data-categories="Analysis,Visualization,Python" data-listing-date-sort="1537218000000" data-listing-file-modified-sort="1676985116068" data-listing-reading-time-sort="12.32">
+<div class="quarto-post image-right" data-index="23" data-categories="Analysis,Visualization,Python" data-listing-date-sort="1537218000000" data-listing-file-modified-sort="1676967118000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13">
 <div class="thumbnail">
-<p><a href="./posts/satelliteData/index.html"> <img data-src="./posts/satelliteData/boxplot.jpg" class="thumnail-image"> </a></p>
+<p><a href="./posts/satelliteData/index.html"> <img data-src="./posts/satelliteData/boxplot.jpg" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/satelliteData/index.html">
@@ -1266,7 +1293,7 @@ September 18, 2018
 Masumbuko Semba
 </div>
 <div class="listing-reading-time">
-12 min
+13 min
 </div>
 </a>
 </div>
@@ -1306,9 +1333,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -1373,6 +1414,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {

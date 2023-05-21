@@ -22,7 +22,11 @@ about:
 <!-- ::: -->
 
 <!-- ::: {.g-col-12 .g-col-md-6} -->
-Hi, I'm Masumbuko Semba,  a data scientist and spatial analyst and oceanographer. With experience in programming, I have developed tools, algorithms and techniques, and analytical workflows that makes easy to organize, manage, analyse, model data and share the findings and insights with modern web-tehnology media. I'm multi-lingual --- use several programming languages -- [MATLAB](https://www.mathworks.com/products/matlab.html), [Python](https://www.python.org/), [Observable JavaScript](https://observablehq.com/@observablehq/observable-javascript), and R to automate data processing and analysis and generate reports in either PDF or html documents. The scripts and tools allows reproducibility of data analysis worklow and reporting to support in decision making. These code and some of the work that I do on daily basis are freely available to the public to use at the my [blog](https://semba.netlify.app/), [website](https://semba-blog.netlify.app/) and [github](https://github.com/lugoga/) accounts. 
+ 
+
+Greetings, I am Masumbuko Semba, a skilled data scientist specializing in spatial analysis and oceanography. Leveraging my programming expertise, I have developed a diverse range of tools, algorithms, and analytical workflows that streamline the organization, management, analysis, and modeling of data. Furthermore, I possess proficiency in various programming languages such as -- [MATLAB](https://www.mathworks.com/products/matlab.html), [Python](https://www.python.org/), [Observable JavaScript](https://observablehq.com/@observablehq/observable-javascript), and R. By harnessing these languages, I am able to automate data processing and analysis tasks, as well as generate comprehensive reports in formats such as PDF or HTML documents. Notably, the scripts and tools I create ensure the reproducibility of data analysis workflows, bolstering informed decision-making processes. I take pride in openly sharing my code and work on platforms such as my [blog](https://semba.netlify.app/), [website](https://semba-blog.netlify.app/) and [github](https://github.com/lugoga/) accounts, allowing the public to freely access and utilize these resources.
+
+
 
 ![](sembaProfile3.jpg)
 
@@ -30,6 +34,10 @@ Hi, I'm Masumbuko Semba,  a data scientist and spatial analyst and oceanographer
 <!-- ::: -->
 
 ## Peer Review Articles
+
+1. [Silas, M. O., Kishe, M. A., Semba, M. R., Kuboja, B. N., Ngatunga, B., Mgeleka, S. S., ... & Gullström, M. (2023). Seascape configuration influences big blue octopus (Octopus cyanea) catches: Implications for a sustainable fishery. Fisheries Research, 264, 106716.](https://www.sciencedirect.com/science/article/pii/S0165783623001091)
+
+1. [Silas, M. O., Semba, M. R., Mgeleka, S. S., Van Well, L., Linderholm, H. W., & Gullström, M. (2023). Using fishers’ local ecological knowledge for management of small-scale fisheries in data-poor regions: Comparing seasonal interview and field observation records in East Africa. Fisheries Research, 264, 106721](https://www.sciencedirect.com/science/article/pii/S0165783623001145)
 
 1.  [Lugendo, B. R., Igulu, M. M., Semba, M. L., & Kimirei, I. A. (2022). Caudal fin as a proxy for dorsal muscle for nutrient enrichment monitoring using stable isotope analysis: the case of Gerres filamentosus and G. oyena from mangrove creeks of Tanzania. Western Indian Ocean Journal of Marine Science, 21(2), 71-81.](https://www.ajol.info/index.php/wiojms/article/view/225660)
 

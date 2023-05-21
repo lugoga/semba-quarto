@@ -2,15 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://lugoga.github.io/semba-quarto/archive.html</loc>
-    <lastmod>2023-05-03T05:51:58.948Z</lastmod>
+    <lastmod>2023-05-21T04:20:40.778Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/blog.html</loc>
-    <lastmod>2023-05-03T05:52:00.545Z</lastmod>
+    <lastmod>2023-05-21T04:22:00.991Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/index.html</loc>
-    <lastmod>2023-05-03T05:13:38.446Z</lastmod>
+    <lastmod>2023-05-21T04:03:39.640Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/chatgpt/index.html</loc>
@@ -94,14 +94,18 @@
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/errorRaster/index.html</loc>
-    <lastmod>2023-03-29T09:25:24.840Z</lastmod>
+    <lastmod>2023-05-21T04:21:31.199Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/ndvi/index.html</loc>
-    <lastmod>2023-04-28T12:32:27.826Z</lastmod>
+    <lastmod>2023-05-21T04:20:39.552Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/dataScienceGap/index.html</loc>
-    <lastmod>2023-05-03T05:51:57.673Z</lastmod>
+    <lastmod>2023-05-21T04:21:53.314Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lugoga.github.io/semba-quarto/posts/streamline/index.html</loc>
+    <lastmod>2023-05-21T04:15:34.626Z</lastmod>
   </url>
 </urlset>

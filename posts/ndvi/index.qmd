@@ -18,7 +18,7 @@ bibliography: ../blog.bib
 csl:  ../elsevier.csl
 execute: 
   warning: false
-  echo: false
+  echo: true
 fig-width: 7
 fig-height: 5
 code-line-numbers: true
