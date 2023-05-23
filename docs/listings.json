@@ -2,6 +2,7 @@
   {
     "listing": "/archive.html",
     "items": [
+      "/posts/ims/index.html",
       "/posts/streamline/index.html",
       "/posts/dataScienceGap/index.html",
       "/posts/ndvi/index.html",
@@ -31,6 +32,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/ims/index.html",
       "/posts/streamline/index.html",
       "/posts/dataScienceGap/index.html",
       "/posts/ndvi/index.html",
