@@ -12,7 +12,7 @@ tags:
   - ggplot2
   - ggcharts
   - R
-image: "ims.png"
+image: "ggchart.png"
 draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
 bibliography: ../blog.bib
 csl:  ../elsevier.csl
