@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://lugoga.github.io/semba-quarto/archive.html</loc>
-    <lastmod>2023-05-23T05:03:10.290Z</lastmod>
+    <lastmod>2023-07-10T11:59:22.759Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/blog.html</loc>
-    <lastmod>2023-05-23T05:03:24.857Z</lastmod>
+    <lastmod>2023-07-10T12:00:00.559Z</lastmod>
   </url>
   <url>
     <loc>https://lugoga.github.io/semba-quarto/index.html</loc>
@@ -111,5 +111,9 @@
   <url>
     <loc>https://lugoga.github.io/semba-quarto/posts/ims/index.html</loc>
     <lastmod>2023-05-23T05:03:09.039Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lugoga.github.io/semba-quarto/posts/ggcharts/index.html</loc>
+    <lastmod>2023-07-10T12:00:16.594Z</lastmod>
   </url>
 </urlset>

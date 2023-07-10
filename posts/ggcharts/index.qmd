@@ -1,0 +1,339 @@
+---
+title: "Plotting with ggcharts Package in R"
+author: 
+  - name: Masumbuko Semba
+    url: https://semba.netlify.app
+    orcid: 0000-0002-5002-9747
+    affiliation: Nelson Mandela African Institution of Science and Technology
+    affiliation-url: https://semba.netlify.app/ 
+date: "2023-07-02"
+categories: [Analysis, Visualization]
+tags: 
+  - ggplot2
+  - ggcharts
+  - R
+image: "ims.png"
+draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
+bibliography: ../blog.bib
+csl:  ../elsevier.csl
+execute: 
+  warning: false
+  echo: true
+fig-width: 7
+fig-height: 5
+code-line-numbers: true
+
+---
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XCGZZVKFDT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XCGZZVKFDT');
+</script>
+
+```{r}
+#| eval: true
+#| echo: false
+#| 
+knitr::knit_hooks$set(crop = knitr::hook_pdfcrop)
+
+```
+
+
+## Introduction
+Data visualization is an essential tool for data analysis and interpretation. R is a popular programming language for data analysis and visualization, and ggplot2 [@ggplot] is a widely used package for creating high-quality graphics. However, ggplot2 can be challenging for beginners due to its steep learning curve. The **ggcharts** [@ggchart] package provides a simpler and more intuitive interface for creating charts using ggplot2. In this blog post, we will focus on the `bar_chart` and `lollipop_chart` functions in ggcharts and provide illustrative examples. 
+
+Let's install the package in our machine if not installed 
+
+
+```{r}
+if (!"ggcharts" %in% installed.packages()) {
+  install.packages("ggcharts")
+}
+```
+
+
+Then load the packages in our machine
+
+```{r}
+require(ggcharts)
+require(tidyverse)
+require(gt)
+
+```
+
+
+### Bar Chart Function
+The bar_chart function in ggcharts creates a vertical bar chart with optional error bars. The function takes a data frame, `x` and `y` variables, and optional arguments such as error bars, color, and fill. Here is an example of how to create a bar chart using the **ggcharts** package:
+
+```{r}
+data = data.frame(
+  category = c("A", "B", "C", "D"),
+  value = c(10, 20, 30, 40)
+  )
+
+data %>% 
+  bar_chart(
+    x = category, 
+    y = value, 
+    fill = "blue"
+    )
+
+```
+
+
+### Lollipop Chart Function
+
+The `lollipop_chart` function in ggcharts creates a lollipop chart, which is a combination of a scatter plot and a bar chart. The function takes a data frame, x and y variables, and optional arguments such as color, fill, and size. Here is an example of how to create a lollipop chart using the ggcharts package:
+
+```{r}
+data <- data.frame(
+  category = c("A", "B", "C", "D"),
+  value = c(10, 20, 30, 40)
+  )
+data %>% 
+  lollipop_chart(
+    x =  category, y = value, 
+    color = "red", size = 3, 
+    )
+
+```
+
+
+## Gross Domestic Product (GDP) growth annual 
+
+To demonstrate the use of ggcharts package, we need a dataset that contains annual GDP growth data. For this example, let's assume we have a dataframe named "gdp_data" with three columns: "country", "year" and "gdp." Ensure your data is in a similar format before proceeding. The annual Gross Domestic Product (GDP) growth for the world was extracted from the website https://data.worldbank.org/country. This data is crucial in understanding the economic progress of countries across the globe. The GDP growth rate is a measure of the increase in the value of goods and services produced by a country over a specific period. It is an important indicator of a country's economic health and development. By analyzing this data, policymakers can make informed decisions to improve their country's economic performance. The World Bank's website provides a comprehensive database of GDP growth rates for countries around the world, making it a valuable resource for researchers, policymakers, and investors.
+
+Let read the data from our working directory into the R session using `read_csv` function from **readr** package [@readr] and assign the variables with appropriate names with `rename` function from **dplyr** [@dplyr]
+
+```{r}
+gdp.world = read_csv("gdp.csv", skip = 4) %>% 
+  rename(country = 1, code = 2)
+
+gdp.world
+```
+
+
+The dataset is for global, but we are interested for countries in Africa and get rid of countries from other continent. However, the gdp dataset does not have field for world continents. We can fix that by joining that information from other datase. Let's us load the country_codes informtion from the **geodata** package [@geodata]
+
+```{r}
+africa.countries = geodata::country_codes() %>% 
+  filter(continent == "Africa") %>% 
+  select(country = 1, code = 2) %>% 
+  as_tibble()
+
+africa.countries
+```
+
+Now we can merge the two dataset and then filter the gdp information for Africa countries 
+
+```{r}
+gdp.africa = africa.countries %>% 
+  left_join(gdp.world) %>% 
+  pivot_longer(cols = 5:67, values_to = "gdp", names_to = "year") %>% 
+  select(country, year, gdp) %>% 
+  mutate(year = as.integer(year))
+
+gdp.africa
+```
+
+
+@tbl-gdp shows the annual growth in percentage of the gross domestic product across Africa over the last five year.
+
+```{r}
+#| label: tbl-gdp
+#| tbl-cap: GDP for African countries since from 2018 to 2022
+
+
+gdp.africa %>% 
+  filter(year %in%  2018:2022) %>% 
+  mutate(year = as.character(year)) %>% 
+  pivot_wider(values_from = "gdp", names_from = "year", names_prefix = "Year ") %>%
+  drop_na()%>% 
+  gt::gt() %>% 
+  # fmt_number(decimals = 1) |>
+  # fmt_integer(ID) |>
+  cols_label_with(
+    fn = ~ janitor::make_clean_names(., case = "all_caps")
+  ) |>
+  data_color(
+    columns = 'Year 2018',
+     palette = hcl.colors(n = 60, palette = "Roma")
+  ) |>
+  data_color(
+    columns = 'Year 2019',
+     palette = hcl.colors(n = 60, palette = "Roma")
+  ) |>
+  data_color(
+    columns = 'Year 2020',
+     palette = hcl.colors(n = 60, palette = "Roma")
+  )|>
+  data_color(
+    columns = 'Year 2021',
+    palette = hcl.colors(n = 60, palette = "GnBu")
+  )|>
+  data_color(
+    columns = 'Year 2022',
+     palette = hcl.colors(n = 60, palette = "GnBu")
+  )
+
+
+```
+
+
+### Barchart
+
+Let' check the bar chart for all countries in Africa
+
+```{r}
+gdp.africa %>% 
+  filter(year == 2020) %>% 
+  ggcharts::bar_chart(x = country, y = gdp)+
+  labs(x = "Countries", 
+       y = "Annual Growth Domestic Product (%)")+
+  labs(x = "Countries", y = "Annual Growth Domestic Product (%)")
+```
+
+We notice that the countries are cluttered and make it difficult to visualize and read them. Fortunate, bar_chart has a wrapper `top_n` function, that can limit only a certain number of countries with positive values to be plotted
+
+```{r}
+gdp.africa %>% 
+  filter(year == 2020) %>% 
+  ggcharts::bar_chart(x = country, y = gdp, top_n = 20)+
+  labs(x = "Countries", 
+       y = "Annual Growth Domestic Product (%)")+
+  labs(x = "Countries", y = "Annual Growth Domestic Product (%)")
+```
+Likewise, the negative values prefix of `top_n` will limit only list 
+
+```{r}
+gdp.africa %>% 
+  filter(year == 2020) %>% 
+  ggcharts::bar_chart(x = country, y = gdp, top_n = -20)+
+  labs(x = "Countries", y = "Annual Growth Domestic Product (%)")
+```
+
+We can highlight the country of interest with `highlight` function
+
+```{r}
+gdp.africa %>% 
+  filter(year == 2020) %>% 
+  ggcharts::bar_chart(x = country, y = gdp, top_n = 15, 
+                      highlight = "Tanzania")+
+  labs(x = "Countries", y = "Annual Growth Domestic Product (%)")
+```
+
+
+You can highlight more than one 
+
+```{r}
+gdp.africa %>% 
+  filter(year == 2020) %>% 
+  ggcharts::bar_chart(x = country, y = gdp, top_n = 15, 
+                      highlight = c("Tanzania", "Ghana"))+
+  labs(x = "Countries", y = "Annual Growth Domestic Product (%)")
+```
+
+
+and use the facet if you wish to check the change of highlighted countries for more than one year
+
+```{r}
+gdp.africa %>% 
+  filter(year %in% c(2019:2022)) %>% 
+  ggcharts::bar_chart(x = country, y = gdp, top_n = 10, 
+                      highlight = "Tanzania", facet = year)+
+  labs(x = "Countries", y = "Annual Growth Domestic Product (%)")
+```
+
+and finally the theme
+
+```{r}
+
+gdp.africa %>% 
+  filter(year %in% c(2019:2022)) %>% 
+  ggcharts::bar_chart(
+    x = country, y = gdp, 
+    top_n = 10, highlight = "Tanzania", 
+    facet = year)+
+  ggcharts::theme_nightblue()+
+  labs(x = "Countries", y = "Annual Growth Domestic Product (%)")
+
+```
+
+
+### Lollipop plot
+
+```{r}
+gdp.africa %>% 
+  filter(year == 2020) %>% 
+  ggcharts::lollipop_chart(x = country, y = gdp)+
+  labs(x = "Countries", y = "Annual Growth Domestic Product (%)")
+```
+
+
+```{r}
+gdp.africa %>% 
+  filter(year == 2020) %>% 
+  ggcharts::lollipop_chart(x = country, y = gdp, top_n = 15)+
+  labs(x = "Countries", y = "Annual Growth Domestic Product (%)")
+```
+
+
+```{r}
+gdp.africa %>% 
+  filter(year == 2020) %>% 
+  ggcharts::lollipop_chart(x = country, y = gdp, top_n = -15)+
+  labs(x = "Countries", y = "Annual Growth Domestic Product (%)")
+```
+
+
+```{r}
+gdp.africa %>% 
+  filter(year == 2020) %>% 
+  ggcharts::lollipop_chart(x = country, y = gdp, top_n = 15, 
+                           highlight = "Tanzania")+
+  labs(x = "Countries", y = "Annual Growth Domestic Product (%)")
+```
+
+
+
+
+```{r}
+gdp.africa %>% 
+  filter(year == 2020) %>% 
+  ggcharts::lollipop_chart(x = country, y = gdp, top_n = 15, 
+                           highlight = c("Tanzania", "Ghana"))+
+  labs(x = "Countries", y = "Annual Growth Domestic Product (%)")
+```
+
+
+
+
+```{r}
+gdp.africa %>% 
+  filter(year %in% c(2019:2022)) %>% 
+  ggcharts::lollipop_chart(x = country, y = gdp, top_n = 10,
+                           highlight = "Tanzania", facet = year)+
+  labs(x = "Countries", y = "Annual Growth Domestic Product (%)")
+```
+
+
+```{r}
+
+gdp.africa %>% 
+  filter(year %in% c(2019:2022)) %>% 
+  ggcharts::lollipop_chart(
+    x = country, y = gdp, 
+    top_n = 10, highlight = "Tanzania", 
+    facet = year)+
+  ggcharts::theme_ng()+
+  labs(x = "Countries", y = "Annual Growth Domestic Product (%)")
+
+```
+
+## References {-}
+

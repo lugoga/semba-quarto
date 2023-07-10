@@ -116,5 +116,8 @@
   },
   "posts/ims/index.qmd": {
     "index.html": "84a9abc3"
+  },
+  "posts/ggcharts/index.qmd": {
+    "index.html": "cd796a65"
   }
 }

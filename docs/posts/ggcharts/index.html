@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.319">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Masumbuko Semba">
+<meta name="dcterms.date" content="2023-07-02">
+
+<title>ng’ara - Plotting with ggcharts Package in R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../ngara.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XCGZZVKFDT"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
+</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta name="twitter:title" content="ng’ara - Plotting with ggcharts Package in R">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://lugoga.github.io/semba-quarto/posts/ggcharts/thumbnail_blog.png">
+<meta name="twitter:creator" content="@semba753">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">ng’ara</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html" rel="" target="">
+ <span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/lugoga" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/semba2020" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/channel/UC9uZ1KPyo7zIzI4BnUtHPfA" rel="" target=""><i class="bi bi-youtube" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../blog.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-apps--links" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Apps &amp; Links</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-apps--links">    
+        <li>
+    <a class="dropdown-item" href="https://semba.netlify.app/" rel="" target="">
+ <span class="dropdown-text">Semba-blog Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba-blog.netlify.app/" rel="" target="">
+ <span class="dropdown-text">Semba Data Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/kwala/" rel="" target="">
+ <span class="dropdown-text">Kwala commercial CIty</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/coastal_dashboard/" rel="" target="">
+ <span class="dropdown-text">Marine Hub</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://nemp.shinyapps.io/nemp/" rel="" target="">
+ <span class="dropdown-text">Environmental Master Plan</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/OceanWebApp/" rel="" target="">
+ <span class="dropdown-text">Hydrographic Data Hub</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/marineTz/" rel="" target="">
+ <span class="dropdown-text">Potential Fishing Zones</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://semba.shinyapps.io/vizingaApp/" rel="" target="">
+ <span class="dropdown-text">TAFIRI Apps</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://rweekly.org/" rel="" target="">
+ <span class="dropdown-text">R Weekly</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://www.r-bloggers.com/" rel="" target="">
+ <span class="dropdown-text">R Bloggers</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://www.tmbish.me/lab/highcharter-cookbook/" rel="" target="">
+ <span class="dropdown-text">Highcharter</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../archive.html" rel="" target="">
+ <span class="menu-text">Archive</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#bar-chart-function" id="toc-bar-chart-function" class="nav-link" data-scroll-target="#bar-chart-function">Bar Chart Function</a></li>
+  <li><a href="#lollipop-chart-function" id="toc-lollipop-chart-function" class="nav-link" data-scroll-target="#lollipop-chart-function">Lollipop Chart Function</a></li>
+  </ul></li>
+  <li><a href="#gross-domestic-product-gdp-growth-annual" id="toc-gross-domestic-product-gdp-growth-annual" class="nav-link" data-scroll-target="#gross-domestic-product-gdp-growth-annual">Gross Domestic Product (GDP) growth annual</a>
+  <ul class="collapse">
+  <li><a href="#barchart" id="toc-barchart" class="nav-link" data-scroll-target="#barchart">Barchart</a></li>
+  <li><a href="#lollipop-plot" id="toc-lollipop-plot" class="nav-link" data-scroll-target="#lollipop-plot">Lollipop plot</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Plotting with ggcharts Package in R</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Analysis</div>
+    <div class="quarto-category">Visualization</div>
+  </div>
+  </div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://semba.netlify.app">Masumbuko Semba</a> <a href="https://orcid.org/0000-0002-5002-9747" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://semba.netlify.app/">
+            Nelson Mandela African Institution of Science and Technology
+            </a>
+          </p>
+      </div>
+    </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 2, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XCGZZVKFDT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XCGZZVKFDT');
+</script>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Data visualization is an essential tool for data analysis and interpretation. R is a popular programming language for data analysis and visualization, and ggplot2 <span class="citation" data-cites="ggplot">(<a href="#ref-ggplot" role="doc-biblioref">Wickham, 2016</a>)</span> is a widely used package for creating high-quality graphics. However, ggplot2 can be challenging for beginners due to its steep learning curve. The <strong>ggcharts</strong> <span class="citation" data-cites="ggchart">(<a href="#ref-ggchart" role="doc-biblioref">Neitmann, 2020</a>)</span> package provides a simpler and more intuitive interface for creating charts using ggplot2. In this blog post, we will focus on the <code>bar_chart</code> and <code>lollipop_chart</code> functions in ggcharts and provide illustrative examples.</p>
+<p>Let’s install the package in our machine if not installed</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="st">"ggcharts"</span> <span class="sc">%in%</span> <span class="fu">installed.packages</span>()) {</span>
+<span id="cb1-2"><a href="#cb1-2"></a>  <span class="fu">install.packages</span>(<span class="st">"ggcharts"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then load the packages in our machine</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">require</span>(ggcharts)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="fu">require</span>(gt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="bar-chart-function" class="level3">
+<h3 class="anchored" data-anchor-id="bar-chart-function">Bar Chart Function</h3>
+<p>The bar_chart function in ggcharts creates a vertical bar chart with optional error bars. The function takes a data frame, <code>x</code> and <code>y</code> variables, and optional arguments such as error bars, color, and fill. Here is an example of how to create a bar chart using the <strong>ggcharts</strong> package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>data <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="at">category =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>),</span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="at">value =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>  )</span>
+<span id="cb3-5"><a href="#cb3-5"></a></span>
+<span id="cb3-6"><a href="#cb3-6"></a>data <span class="sc">%&gt;%</span> </span>
+<span id="cb3-7"><a href="#cb3-7"></a>  <span class="fu">bar_chart</span>(</span>
+<span id="cb3-8"><a href="#cb3-8"></a>    <span class="at">x =</span> category, </span>
+<span id="cb3-9"><a href="#cb3-9"></a>    <span class="at">y =</span> value, </span>
+<span id="cb3-10"><a href="#cb3-10"></a>    <span class="at">fill =</span> <span class="st">"blue"</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="lollipop-chart-function" class="level3">
+<h3 class="anchored" data-anchor-id="lollipop-chart-function">Lollipop Chart Function</h3>
+<p>The <code>lollipop_chart</code> function in ggcharts creates a lollipop chart, which is a combination of a scatter plot and a bar chart. The function takes a data frame, x and y variables, and optional arguments such as color, fill, and size. Here is an example of how to create a lollipop chart using the ggcharts package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="at">category =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>),</span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="at">value =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>  )</span>
+<span id="cb4-5"><a href="#cb4-5"></a>data <span class="sc">%&gt;%</span> </span>
+<span id="cb4-6"><a href="#cb4-6"></a>  <span class="fu">lollipop_chart</span>(</span>
+<span id="cb4-7"><a href="#cb4-7"></a>    <span class="at">x =</span>  category, <span class="at">y =</span> value, </span>
+<span id="cb4-8"><a href="#cb4-8"></a>    <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">3</span>, </span>
+<span id="cb4-9"><a href="#cb4-9"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="gross-domestic-product-gdp-growth-annual" class="level2">
+<h2 class="anchored" data-anchor-id="gross-domestic-product-gdp-growth-annual">Gross Domestic Product (GDP) growth annual</h2>
+<p>To demonstrate the use of ggcharts package, we need a dataset that contains annual GDP growth data. For this example, let’s assume we have a dataframe named “gdp_data” with three columns: “country”, “year” and “gdp.” Ensure your data is in a similar format before proceeding. The annual Gross Domestic Product (GDP) growth for the world was extracted from the website https://data.worldbank.org/country. This data is crucial in understanding the economic progress of countries across the globe. The GDP growth rate is a measure of the increase in the value of goods and services produced by a country over a specific period. It is an important indicator of a country’s economic health and development. By analyzing this data, policymakers can make informed decisions to improve their country’s economic performance. The World Bank’s website provides a comprehensive database of GDP growth rates for countries around the world, making it a valuable resource for researchers, policymakers, and investors.</p>
+<p>Let read the data from our working directory into the R session using <code>read_csv</code> function from <strong>readr</strong> package <span class="citation" data-cites="readr">(<a href="#ref-readr" role="doc-biblioref">Wickham et al., 2017</a>)</span> and assign the variables with appropriate names with <code>rename</code> function from <strong>dplyr</strong> <span class="citation" data-cites="dplyr">(<a href="#ref-dplyr" role="doc-biblioref">Wickham et al., 2019</a>)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>gdp.world <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"gdp.csv"</span>, <span class="at">skip =</span> <span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">rename</span>(<span class="at">country =</span> <span class="dv">1</span>, <span class="at">code =</span> <span class="dv">2</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a>gdp.world</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 266 × 68
+   country   code  `Indicator Name` `Indicator Code` `1960` `1961` `1962` `1963`
+   &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;            &lt;chr&gt;            &lt;lgl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+ 1 Aruba     ABW   GDP growth (ann… NY.GDP.MKTP.KD.… NA     NA     NA      NA   
+ 2 Africa E… AFE   GDP growth (ann… NY.GDP.MKTP.KD.… NA      0.255  7.97    5.15
+ 3 Afghanis… AFG   GDP growth (ann… NY.GDP.MKTP.KD.… NA     NA     NA      NA   
+ 4 Africa W… AFW   GDP growth (ann… NY.GDP.MKTP.KD.… NA      1.85   3.77    7.28
+ 5 Angola    AGO   GDP growth (ann… NY.GDP.MKTP.KD.… NA     NA     NA      NA   
+ 6 Albania   ALB   GDP growth (ann… NY.GDP.MKTP.KD.… NA     NA     NA      NA   
+ 7 Andorra   AND   GDP growth (ann… NY.GDP.MKTP.KD.… NA     NA     NA      NA   
+ 8 Arab Wor… ARB   GDP growth (ann… NY.GDP.MKTP.KD.… NA     NA     NA      NA   
+ 9 United A… ARE   GDP growth (ann… NY.GDP.MKTP.KD.… NA     NA     NA      NA   
+10 Argentina ARG   GDP growth (ann… NY.GDP.MKTP.KD.… NA      5.43  -0.852  -5.31
+# ℹ 256 more rows
+# ℹ 60 more variables: `1964` &lt;dbl&gt;, `1965` &lt;dbl&gt;, `1966` &lt;dbl&gt;, `1967` &lt;dbl&gt;,
+#   `1968` &lt;dbl&gt;, `1969` &lt;dbl&gt;, `1970` &lt;dbl&gt;, `1971` &lt;dbl&gt;, `1972` &lt;dbl&gt;,
+#   `1973` &lt;dbl&gt;, `1974` &lt;dbl&gt;, `1975` &lt;dbl&gt;, `1976` &lt;dbl&gt;, `1977` &lt;dbl&gt;,
+#   `1978` &lt;dbl&gt;, `1979` &lt;dbl&gt;, `1980` &lt;dbl&gt;, `1981` &lt;dbl&gt;, `1982` &lt;dbl&gt;,
+#   `1983` &lt;dbl&gt;, `1984` &lt;dbl&gt;, `1985` &lt;dbl&gt;, `1986` &lt;dbl&gt;, `1987` &lt;dbl&gt;,
+#   `1988` &lt;dbl&gt;, `1989` &lt;dbl&gt;, `1990` &lt;dbl&gt;, `1991` &lt;dbl&gt;, `1992` &lt;dbl&gt;, …</code></pre>
+</div>
+</div>
+<p>The dataset is for global, but we are interested for countries in Africa and get rid of countries from other continent. However, the gdp dataset does not have field for world continents. We can fix that by joining that information from other datase. Let’s us load the country_codes informtion from the <strong>geodata</strong> package <span class="citation" data-cites="geodata">(<a href="#ref-geodata" role="doc-biblioref">Hijmans et al., 2023</a>)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>africa.countries <span class="ot">=</span> geodata<span class="sc">::</span><span class="fu">country_codes</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">filter</span>(continent <span class="sc">==</span> <span class="st">"Africa"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">select</span>(<span class="at">country =</span> <span class="dv">1</span>, <span class="at">code =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="fu">as_tibble</span>()</span>
+<span id="cb7-5"><a href="#cb7-5"></a></span>
+<span id="cb7-6"><a href="#cb7-6"></a>africa.countries</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 59 × 2
+   country                  code 
+   &lt;chr&gt;                    &lt;chr&gt;
+ 1 Algeria                  DZA  
+ 2 Angola                   AGO  
+ 3 Benin                    BEN  
+ 4 Botswana                 BWA  
+ 5 Burkina Faso             BFA  
+ 6 Burundi                  BDI  
+ 7 Cameroon                 CMR  
+ 8 Cabo Verde               CPV  
+ 9 Central African Republic CAF  
+10 Chad                     TCD  
+# ℹ 49 more rows</code></pre>
+</div>
+</div>
+<p>Now we can merge the two dataset and then filter the gdp information for Africa countries</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>gdp.africa <span class="ot">=</span> africa.countries <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">left_join</span>(gdp.world) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">67</span>, <span class="at">values_to =</span> <span class="st">"gdp"</span>, <span class="at">names_to =</span> <span class="st">"year"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="fu">select</span>(country, year, gdp) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-5"><a href="#cb9-5"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.integer</span>(year))</span>
+<span id="cb9-6"><a href="#cb9-6"></a></span>
+<span id="cb9-7"><a href="#cb9-7"></a>gdp.africa</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3,717 × 3
+   country  year    gdp
+   &lt;chr&gt;   &lt;int&gt;  &lt;dbl&gt;
+ 1 Algeria  1960  NA   
+ 2 Algeria  1961 -13.6 
+ 3 Algeria  1962 -19.7 
+ 4 Algeria  1963  34.3 
+ 5 Algeria  1964   5.84
+ 6 Algeria  1965   6.21
+ 7 Algeria  1966  -4.80
+ 8 Algeria  1967   9.45
+ 9 Algeria  1968  10.8 
+10 Algeria  1969   8.43
+# ℹ 3,707 more rows</code></pre>
+</div>
+</div>
+<p><a href="#tbl-gdp">Table&nbsp;1</a> shows the annual growth in percentage of the gross domestic product across Africa over the last five year.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span>  <span class="dv">2018</span><span class="sc">:</span><span class="dv">2022</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-3"><a href="#cb11-3"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.character</span>(year)) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-4"><a href="#cb11-4"></a>  <span class="fu">pivot_wider</span>(<span class="at">values_from =</span> <span class="st">"gdp"</span>, <span class="at">names_from =</span> <span class="st">"year"</span>, <span class="at">names_prefix =</span> <span class="st">"Year "</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>  <span class="fu">drop_na</span>()<span class="sc">%&gt;%</span> </span>
+<span id="cb11-6"><a href="#cb11-6"></a>  gt<span class="sc">::</span><span class="fu">gt</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb11-7"><a href="#cb11-7"></a>  <span class="co"># fmt_number(decimals = 1) |&gt;</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a>  <span class="co"># fmt_integer(ID) |&gt;</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a>  <span class="fu">cols_label_with</span>(</span>
+<span id="cb11-10"><a href="#cb11-10"></a>    <span class="at">fn =</span> <span class="sc">~</span> janitor<span class="sc">::</span><span class="fu">make_clean_names</span>(., <span class="at">case =</span> <span class="st">"all_caps"</span>)</span>
+<span id="cb11-11"><a href="#cb11-11"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a>  <span class="fu">data_color</span>(</span>
+<span id="cb11-13"><a href="#cb11-13"></a>    <span class="at">columns =</span> <span class="st">'Year 2018'</span>,</span>
+<span id="cb11-14"><a href="#cb11-14"></a>     <span class="at">palette =</span> <span class="fu">hcl.colors</span>(<span class="at">n =</span> <span class="dv">60</span>, <span class="at">palette =</span> <span class="st">"Roma"</span>)</span>
+<span id="cb11-15"><a href="#cb11-15"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb11-16"><a href="#cb11-16"></a>  <span class="fu">data_color</span>(</span>
+<span id="cb11-17"><a href="#cb11-17"></a>    <span class="at">columns =</span> <span class="st">'Year 2019'</span>,</span>
+<span id="cb11-18"><a href="#cb11-18"></a>     <span class="at">palette =</span> <span class="fu">hcl.colors</span>(<span class="at">n =</span> <span class="dv">60</span>, <span class="at">palette =</span> <span class="st">"Roma"</span>)</span>
+<span id="cb11-19"><a href="#cb11-19"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb11-20"><a href="#cb11-20"></a>  <span class="fu">data_color</span>(</span>
+<span id="cb11-21"><a href="#cb11-21"></a>    <span class="at">columns =</span> <span class="st">'Year 2020'</span>,</span>
+<span id="cb11-22"><a href="#cb11-22"></a>     <span class="at">palette =</span> <span class="fu">hcl.colors</span>(<span class="at">n =</span> <span class="dv">60</span>, <span class="at">palette =</span> <span class="st">"Roma"</span>)</span>
+<span id="cb11-23"><a href="#cb11-23"></a>  )<span class="sc">|&gt;</span></span>
+<span id="cb11-24"><a href="#cb11-24"></a>  <span class="fu">data_color</span>(</span>
+<span id="cb11-25"><a href="#cb11-25"></a>    <span class="at">columns =</span> <span class="st">'Year 2021'</span>,</span>
+<span id="cb11-26"><a href="#cb11-26"></a>    <span class="at">palette =</span> <span class="fu">hcl.colors</span>(<span class="at">n =</span> <span class="dv">60</span>, <span class="at">palette =</span> <span class="st">"GnBu"</span>)</span>
+<span id="cb11-27"><a href="#cb11-27"></a>  )<span class="sc">|&gt;</span></span>
+<span id="cb11-28"><a href="#cb11-28"></a>  <span class="fu">data_color</span>(</span>
+<span id="cb11-29"><a href="#cb11-29"></a>    <span class="at">columns =</span> <span class="st">'Year 2022'</span>,</span>
+<span id="cb11-30"><a href="#cb11-30"></a>     <span class="at">palette =</span> <span class="fu">hcl.colors</span>(<span class="at">n =</span> <span class="dv">60</span>, <span class="at">palette =</span> <span class="st">"GnBu"</span>)</span>
+<span id="cb11-31"><a href="#cb11-31"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="tbl-gdp" class="anchored">
+
+<div id="iztkgqjnwu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#iztkgqjnwu table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#iztkgqjnwu thead, #iztkgqjnwu tbody, #iztkgqjnwu tfoot, #iztkgqjnwu tr, #iztkgqjnwu td, #iztkgqjnwu th {
+  border-style: none;
+}
+
+#iztkgqjnwu p {
+  margin: 0;
+  padding: 0;
+}
+
+#iztkgqjnwu .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#iztkgqjnwu .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#iztkgqjnwu .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#iztkgqjnwu .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#iztkgqjnwu .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#iztkgqjnwu .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iztkgqjnwu .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#iztkgqjnwu .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#iztkgqjnwu .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#iztkgqjnwu .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#iztkgqjnwu .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#iztkgqjnwu .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#iztkgqjnwu .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#iztkgqjnwu .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#iztkgqjnwu .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#iztkgqjnwu .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#iztkgqjnwu .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#iztkgqjnwu .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#iztkgqjnwu .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iztkgqjnwu .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#iztkgqjnwu .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#iztkgqjnwu .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#iztkgqjnwu .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iztkgqjnwu .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#iztkgqjnwu .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#iztkgqjnwu .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iztkgqjnwu .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iztkgqjnwu .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#iztkgqjnwu .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iztkgqjnwu .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#iztkgqjnwu .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iztkgqjnwu .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#iztkgqjnwu .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iztkgqjnwu .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#iztkgqjnwu .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iztkgqjnwu .gt_left {
+  text-align: left;
+}
+
+#iztkgqjnwu .gt_center {
+  text-align: center;
+}
+
+#iztkgqjnwu .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#iztkgqjnwu .gt_font_normal {
+  font-weight: normal;
+}
+
+#iztkgqjnwu .gt_font_bold {
+  font-weight: bold;
+}
+
+#iztkgqjnwu .gt_font_italic {
+  font-style: italic;
+}
+
+#iztkgqjnwu .gt_super {
+  font-size: 65%;
+}
+
+#iztkgqjnwu .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#iztkgqjnwu .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#iztkgqjnwu .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#iztkgqjnwu .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#iztkgqjnwu .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#iztkgqjnwu .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#iztkgqjnwu .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>Table&nbsp;1:  <p>GDP for African countries since from 2018 to 2022</p> </caption>
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="COUNTRY">COUNTRY</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="YEAR_2018">YEAR_2018</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="YEAR_2019">YEAR_2019</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="YEAR_2020">YEAR_2020</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="YEAR_2021">YEAR_2021</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="YEAR_2022">YEAR_2022</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="country" class="gt_row gt_left">Algeria</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #D1EFCA; color: #000000;">1.2000000</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #A2DDBC; color: #000000;">1.0000000</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #53C0AF; color: #000000;">-5.1000000</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0070AE; color: #FFFFFF;">3.4000000</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #008ABA; color: #FFFFFF;">3.1000000</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Angola</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #CCC86C; color: #000000;">-1.3163617</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #D2EECD; color: #000000;">-0.7022730</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #61C5B1; color: #000000;">-5.6382147</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #00579B; color: #FFFFFF;">1.1992105</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0089BA; color: #FFFFFF;">3.0454030</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Benin</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0076A3; color: #FFFFFF;">6.6972595</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0077A3; color: #FFFFFF;">6.8656873</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0056A0; color: #FFFFFF;">3.8487924</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0096BB; color: #FFFFFF;">7.1554516</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00B5BC; color: #000000;">6.2532449</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Botswana</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #40BAAD; color: #000000;">4.1898469</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #53C0AF; color: #000000;">3.0325566</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #A4DDBC; color: #000000;">-8.7294515</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #00B9BC; color: #000000;">11.8703583</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00AFBC; color: #FFFFFF;">5.7823492</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Burkina Faso</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0079A4; color: #FFFFFF;">6.6045691</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #008FA7; color: #FFFFFF;">5.6881151</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0072A3; color: #FFFFFF;">1.9303249</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0094BB; color: #FFFFFF;">6.9063417</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #006BAA; color: #FFFFFF;">1.4793006</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Burundi</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #C7EBC9; color: #000000;">1.6099354</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #86D2B6; color: #000000;">1.8125653</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0086A5; color: #FFFFFF;">0.3271569</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #006DAB; color: #FFFFFF;">3.1000000</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0072AF; color: #FFFFFF;">1.8490000</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Cameroon</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #51C0AF; color: #000000;">3.9555142</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #3AB9AD; color: #000000;">3.4750600</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0087A6; color: #FFFFFF;">0.2599329</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0074B0; color: #FFFFFF;">3.6499169</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0090BA; color: #FFFFFF;">3.5409779</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Cabo Verde</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #62C5B1; color: #000000;">3.7069646</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0065A1; color: #FFFFFF;">7.6360817</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #C9B756; color: #000000;">-19.3028228</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0093BA; color: #FFFFFF;">6.8111764</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #F5F8EA; color: #000000;">17.7141812</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Central African Republic</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #5CC3B0; color: #000000;">3.7894436</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #4FBFAE; color: #000000;">3.1000000</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #007FA4; color: #FFFFFF;">0.9000000</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #015399; color: #FFFFFF;">0.9000000</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0E4D93; color: #FFFFFF;">0.0000000</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Chad</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #A7DEBD; color: #000000;">2.3740378</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #48BDAE; color: #000000;">3.2471819</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #009CA9; color: #FFFFFF;">-1.6000067</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #2A3A84; color: #FFFFFF;">-1.1999905</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #007AB4; color: #FFFFFF;">2.2359797</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Comoros</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #65C6B1; color: #000000;">3.6424511</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #88D3B6; color: #000000;">1.7607802</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #008CA6; color: #FFFFFF;">-0.1955568</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0061A3; color: #FFFFFF;">2.1121956</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #007DB6; color: #FFFFFF;">2.3876785</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Djibouti</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #01ACAB; color: #FFFFFF;">4.7744169</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0092A7; color: #FFFFFF;">5.5451306</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #007BA4; color: #FFFFFF;">1.2020220</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0080B8; color: #FFFFFF;">4.8000000</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0088BA; color: #FFFFFF;">3.0000000</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Equatorial Guinea</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #7D0112; color: #FFFFFF;">-6.2365441</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #C8B04E; color: #000000;">-5.4818254</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #37B8AD; color: #000000;">-4.2414813</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #273D87; color: #FFFFFF;">-0.9453829</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #008ABA; color: #FFFFFF;">3.1457983</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Ethiopia</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0073A3; color: #FFFFFF;">6.8161478</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #00519F; color: #FFFFFF;">8.3640857</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #1F28A2; color: #FFFFFF;">6.0595309</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0089BA; color: #FFFFFF;">5.6415307</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00AABB; color: #FFFFFF;">5.3170960</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Gabon</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #CEF0BA; color: #000000;">0.8379166</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #19B1AC; color: #FFFFFF;">3.9208088</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #009FA9; color: #FFFFFF;">-1.8377611</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #005A9E; color: #FFFFFF;">1.4679573</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0089BA; color: #FFFFFF;">3.0369419</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Ghana</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0085A5; color: #FFFFFF;">6.2000777</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #007FA4; color: #FFFFFF;">6.5077748</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0084A5; color: #FFFFFF;">0.5139417</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0086BA; color: #FFFFFF;">5.3564779</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #008CBA; color: #FFFFFF;">3.2397063</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Guinea-Bissau</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #D2EECD; color: #000000;">1.2837367</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #00A7AA; color: #FFFFFF;">4.5000000</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #00A5AA; color: #FFFFFF;">-2.4000000</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0075B1; color: #FFFFFF;">3.8000024</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0090BA; color: #FFFFFF;">3.5000496</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Guinea</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0081A5; color: #FFFFFF;">6.3584919</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0091A7; color: #FFFFFF;">5.6169145</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #00449F; color: #FFFFFF;">4.9202664</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0076B2; color: #FFFFFF;">3.9000000</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00A1BB; color: #FFFFFF;">4.7000000</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Kenya</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0095A8; color: #FFFFFF;">5.6479464</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #009BA8; color: #FFFFFF;">5.1141589</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #008DA6; color: #FFFFFF;">-0.2727663</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #009ABB; color: #FFFFFF;">7.5904895</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00A3BB; color: #FFFFFF;">4.8466349</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Lesotho</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #CBC366; color: #000000;">-1.4806336</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #D1EFCB; color: #000000;">-0.7642260</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #60C4B0; color: #000000;">-5.6194024</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #005B9E; color: #FFFFFF;">1.5576798</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00599C; color: #FFFFFF;">0.5919178</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Liberia</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #D1EFC8; color: #000000;">1.1575751</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #CDE69B; color: #000000;">-2.4672976</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #00ABAB; color: #FFFFFF;">-2.9824913</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0082B8; color: #FFFFFF;">4.9867128</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00A2BB; color: #FFFFFF;">4.8081135</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Libya</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #014A9F; color: #FFFFFF;">7.9413679</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #7D0112; color: #FFFFFF;">-11.1956946</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #7D0112; color: #FFFFFF;">-29.7871480</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #F5F8EA; color: #000000;">31.3725154</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #2F327D; color: #FFFFFF;">-1.2369819</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Madagascar</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #7FD0B4; color: #000000;">3.1943565</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #00A9AA; color: #FFFFFF;">4.4112321</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #84D2B5; color: #000000;">-7.1376716</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #008ABA; color: #FFFFFF;">5.7396157</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0094BB; color: #FFFFFF;">3.7962049</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Malawi</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #2EB5AD; color: #000000;">4.3916883</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0094A7; color: #FFFFFF;">5.4481813</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0080A5; color: #FFFFFF;">0.7999983</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0069A9; color: #FFFFFF;">2.7514026</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #005FA2; color: #FFFFFF;">0.9234363</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Mali</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #05ADAB; color: #FFFFFF;">4.7464843</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #00A2A9; color: #FFFFFF;">4.7561608</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0098A8; color: #FFFFFF;">-1.2354504</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #006CAB; color: #FFFFFF;">3.0526136</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0093BA; color: #FFFFFF;">3.6874841</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Mauritania</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #02ACAB; color: #FFFFFF;">4.7721736</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0097A8; color: #FFFFFF;">5.2966374</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0095A8; color: #FFFFFF;">-0.9385162</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0066A6; color: #FFFFFF;">2.4453683</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00A8BB; color: #FFFFFF;">5.2000000</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Mauritius</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #4EBEAE; color: #000000;">4.0067406</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #59C2B0; color: #000000;">2.8912850</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #CDE69C; color: #000000;">-14.5973980</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0070AE; color: #FFFFFF;">3.3993801</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #63CFBF; color: #000000;">8.6907351</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Morocco</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #86D2B6; color: #000000;">3.0656413</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #59C2B0; color: #000000;">2.8909748</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #85D2B5; color: #000000;">-7.1870796</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #009DBB; color: #FFFFFF;">7.9296679</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0062A4; color: #FFFFFF;">1.0799695</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Mozambique</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #71CBB2; color: #000000;">3.4438131</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #72CBB2; color: #000000;">2.3144426</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0098A8; color: #FFFFFF;">-1.1985483</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0064A5; color: #FFFFFF;">2.3275236</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #009ABB; color: #FFFFFF;">4.1484145</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Namibia</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #CFF1C3; color: #000000;">1.0599435</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #D1EFC8; color: #000000;">-0.8391547</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #98D9B9; color: #000000;">-8.1014008</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0072AF; color: #FFFFFF;">3.5246580</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #009FBB; color: #FFFFFF;">4.5602940</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Niger</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0065A1; color: #FFFFFF;">7.2108030</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #008AA6; color: #FFFFFF;">5.9413969</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #005BA0; color: #FFFFFF;">3.5502275</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #00599D; color: #FFFFFF;">1.3871292</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #ACE4C8; color: #000000;">11.5000049</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Nigeria</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #BBE6C4; color: #000000;">1.9227573</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #76CDB3; color: #000000;">2.2084293</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #009EA9; color: #FFFFFF;">-1.7942531</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0074B0; color: #FFFFFF;">3.6471865</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #008CBA; color: #FFFFFF;">3.2516814</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Rwanda</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #1F28A2; color: #FFFFFF;">8.5398365</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #1F28A2; color: #FFFFFF;">9.4640253</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #12AFAC; color: #FFFFFF;">-3.3739863</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #00B2BC; color: #FFFFFF;">10.8767338</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #50CABE; color: #000000;">8.1574877</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Senegal</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0085A5; color: #FFFFFF;">6.2092410</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #00A5AA; color: #FFFFFF;">4.6136281</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0079A4; color: #FFFFFF;">1.3420738</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0091BA; color: #FFFFFF;">6.5396737</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #009ABB; color: #FFFFFF;">4.1538565</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Seychelles</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #61C5B1; color: #000000;">3.7094343</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #00A0A9; color: #FFFFFF;">4.8769462</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #A3DDBC; color: #000000;">-8.6492065</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0086BA; color: #FFFFFF;">5.4000000</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #67D0BF; color: #000000;">8.8000002</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Sierra Leone</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #6FCAB2; color: #000000;">3.4729026</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0098A8; color: #FFFFFF;">5.2537463</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #00A0A9; color: #FFFFFF;">-1.9684869</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0079B3; color: #FFFFFF;">4.1047001</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0090BA; color: #FFFFFF;">3.5007417</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Somalia</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #005AA0; color: #FFFFFF;">7.5309693</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0069A2; color: #FFFFFF;">7.4565215</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #006AA2; color: #FFFFFF;">2.4893743</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0078B3; color: #FFFFFF;">4.0491105</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00A2BB; color: #FFFFFF;">4.7987790</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">South Africa</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #CAECCA; color: #000000;">1.5223294</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #B8E5C3; color: #000000;">0.3034532</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #72CBB2; color: #000000;">-6.3424711</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0081B8; color: #FFFFFF;">4.9130967</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0076B2; color: #FFFFFF;">2.0422994</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Sudan</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #C39F3D; color: #000000;">-2.6809305</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #CDE9A3; color: #000000;">-2.1782510</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #1BB2AC; color: #FFFFFF;">-3.6298008</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #2F327D; color: #FFFFFF;">-1.8685205</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #2C3882; color: #FFFFFF;">-0.9534070</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Eswatini</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #A7DEBD; color: #000000;">2.3800955</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #62C5B1; color: #000000;">2.6921683</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #009CA9; color: #FFFFFF;">-1.5596426</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #009CBB; color: #FFFFFF;">7.8833064</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0096BB; color: #FFFFFF;">3.9145410</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Tanzania</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #009AA8; color: #FFFFFF;">5.4575829</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #008DA6; color: #FFFFFF;">5.8000000</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0071A3; color: #FFFFFF;">1.9919646</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #007BB5; color: #FFFFFF;">4.3213843</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #009FBB; color: #FFFFFF;">4.5580273</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Togo</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #00A3AA; color: #FFFFFF;">5.1384723</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #009FA9; color: #FFFFFF;">4.9229259</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0071A3; color: #FFFFFF;">1.9757429</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #008CBA; color: #FFFFFF;">5.9915720</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00B0BC; color: #FFFFFF;">5.8105400</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Tunisia</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #9BDABA; color: #000000;">2.6248283</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #8ED5B7; color: #000000;">1.5880128</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #A6DEBD; color: #000000;">-8.8178788</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #007CB5; color: #FFFFFF;">4.4053620</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #007FB7; color: #FFFFFF;">2.5217614</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Uganda</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0082A5; color: #FFFFFF;">6.3039238</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0080A5; color: #FFFFFF;">6.4387450</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0064A1; color: #FFFFFF;">2.9513064</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0072AF; color: #FFFFFF;">3.5365803</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00A0BB; color: #FFFFFF;">4.6501337</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Zambia</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #4CBEAE; color: #000000;">4.0344939</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #93D7B8; color: #000000;">1.4413060</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #00A9AB; color: #FFFFFF;">-2.7850551</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #007EB6; color: #FFFFFF;">4.5987340</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00A1BB; color: #FFFFFF;">4.7449425</td></tr>
+    <tr><td headers="country" class="gt_row gt_left">Zimbabwe</td>
+<td headers="Year 2018" class="gt_row gt_right" style="background-color: #00A7AA; color: #FFFFFF;">5.0098668</td>
+<td headers="Year 2019" class="gt_row gt_right" style="background-color: #C39C3A; color: #FFFFFF;">-6.3324464</td>
+<td headers="Year 2020" class="gt_row gt_right" style="background-color: #92D6B8; color: #000000;">-7.8169506</td>
+<td headers="Year 2021" class="gt_row gt_right" style="background-color: #00A0BB; color: #FFFFFF;">8.4680169</td>
+<td headers="Year 2022" class="gt_row gt_right" style="background-color: #008EBA; color: #FFFFFF;">3.4000000</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+</div>
+<section id="barchart" class="level3">
+<h3 class="anchored" data-anchor-id="barchart">Barchart</h3>
+<p>Let’ check the bar chart for all countries in Africa</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2020</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3"></a>  ggcharts<span class="sc">::</span><span class="fu">bar_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp)<span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, </span>
+<span id="cb12-5"><a href="#cb12-5"></a>       <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)<span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We notice that the countries are cluttered and make it difficult to visualize and read them. Fortunate, bar_chart has a wrapper <code>top_n</code> function, that can limit only a certain number of countries with positive values to be plotted</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2020</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3"></a>  ggcharts<span class="sc">::</span><span class="fu">bar_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp, <span class="at">top_n =</span> <span class="dv">20</span>)<span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, </span>
+<span id="cb13-5"><a href="#cb13-5"></a>       <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)<span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Likewise, the negative values prefix of <code>top_n</code> will limit only list</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2020</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="#cb14-3"></a>  ggcharts<span class="sc">::</span><span class="fu">bar_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp, <span class="at">top_n =</span> <span class="sc">-</span><span class="dv">20</span>)<span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can highlight the country of interest with <code>highlight</code> function</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2020</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-3"><a href="#cb15-3"></a>  ggcharts<span class="sc">::</span><span class="fu">bar_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp, <span class="at">top_n =</span> <span class="dv">15</span>, </span>
+<span id="cb15-4"><a href="#cb15-4"></a>                      <span class="at">highlight =</span> <span class="st">"Tanzania"</span>)<span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>You can highlight more than one</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2020</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="#cb16-3"></a>  ggcharts<span class="sc">::</span><span class="fu">bar_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp, <span class="at">top_n =</span> <span class="dv">15</span>, </span>
+<span id="cb16-4"><a href="#cb16-4"></a>                      <span class="at">highlight =</span> <span class="fu">c</span>(<span class="st">"Tanzania"</span>, <span class="st">"Ghana"</span>))<span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>and use the facet if you wish to check the change of highlighted countries for more than one year</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2019</span><span class="sc">:</span><span class="dv">2022</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-3"><a href="#cb17-3"></a>  ggcharts<span class="sc">::</span><span class="fu">bar_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp, <span class="at">top_n =</span> <span class="dv">10</span>, </span>
+<span id="cb17-4"><a href="#cb17-4"></a>                      <span class="at">highlight =</span> <span class="st">"Tanzania"</span>, <span class="at">facet =</span> year)<span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>and finally the theme</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2019</span><span class="sc">:</span><span class="dv">2022</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-3"><a href="#cb18-3"></a>  ggcharts<span class="sc">::</span><span class="fu">bar_chart</span>(</span>
+<span id="cb18-4"><a href="#cb18-4"></a>    <span class="at">x =</span> country, <span class="at">y =</span> gdp, </span>
+<span id="cb18-5"><a href="#cb18-5"></a>    <span class="at">top_n =</span> <span class="dv">10</span>, <span class="at">highlight =</span> <span class="st">"Tanzania"</span>, </span>
+<span id="cb18-6"><a href="#cb18-6"></a>    <span class="at">facet =</span> year)<span class="sc">+</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a>  ggcharts<span class="sc">::</span><span class="fu">theme_nightblue</span>()<span class="sc">+</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="lollipop-plot" class="level3">
+<h3 class="anchored" data-anchor-id="lollipop-plot">Lollipop plot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2020</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-3"><a href="#cb19-3"></a>  ggcharts<span class="sc">::</span><span class="fu">lollipop_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp)<span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2020</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-3"><a href="#cb20-3"></a>  ggcharts<span class="sc">::</span><span class="fu">lollipop_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp, <span class="at">top_n =</span> <span class="dv">15</span>)<span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2020</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-3"><a href="#cb21-3"></a>  ggcharts<span class="sc">::</span><span class="fu">lollipop_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp, <span class="at">top_n =</span> <span class="sc">-</span><span class="dv">15</span>)<span class="sc">+</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2020</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-3"><a href="#cb22-3"></a>  ggcharts<span class="sc">::</span><span class="fu">lollipop_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp, <span class="at">top_n =</span> <span class="dv">15</span>, </span>
+<span id="cb22-4"><a href="#cb22-4"></a>                           <span class="at">highlight =</span> <span class="st">"Tanzania"</span>)<span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2020</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-3"><a href="#cb23-3"></a>  ggcharts<span class="sc">::</span><span class="fu">lollipop_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp, <span class="at">top_n =</span> <span class="dv">15</span>, </span>
+<span id="cb23-4"><a href="#cb23-4"></a>                           <span class="at">highlight =</span> <span class="fu">c</span>(<span class="st">"Tanzania"</span>, <span class="st">"Ghana"</span>))<span class="sc">+</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2019</span><span class="sc">:</span><span class="dv">2022</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3"></a>  ggcharts<span class="sc">::</span><span class="fu">lollipop_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp, <span class="at">top_n =</span> <span class="dv">10</span>,</span>
+<span id="cb24-4"><a href="#cb24-4"></a>                           <span class="at">highlight =</span> <span class="st">"Tanzania"</span>, <span class="at">facet =</span> year)<span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
+<span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2019</span><span class="sc">:</span><span class="dv">2022</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="#cb25-3"></a>  ggcharts<span class="sc">::</span><span class="fu">lollipop_chart</span>(</span>
+<span id="cb25-4"><a href="#cb25-4"></a>    <span class="at">x =</span> country, <span class="at">y =</span> gdp, </span>
+<span id="cb25-5"><a href="#cb25-5"></a>    <span class="at">top_n =</span> <span class="dv">10</span>, <span class="at">highlight =</span> <span class="st">"Tanzania"</span>, </span>
+<span id="cb25-6"><a href="#cb25-6"></a>    <span class="at">facet =</span> year)<span class="sc">+</span></span>
+<span id="cb25-7"><a href="#cb25-7"></a>  ggcharts<span class="sc">::</span><span class="fu">theme_ng</span>()<span class="sc">+</span></span>
+<span id="cb25-8"><a href="#cb25-8"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="references" class="level2 unnumbered">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-geodata" class="csl-entry" role="listitem">
+Hijmans, R.J., Barbosa, M., Ghosh, A., Mandel, A., 2023. <a href="https://CRAN.R-project.org/package=geodata">Geodata: Download geographic data</a>.
+</div>
+<div id="ref-ggchart" class="csl-entry" role="listitem">
+Neitmann, T., 2020. <a href="https://CRAN.R-project.org/package=ggcharts">Ggcharts: Shorten the distance from data visualization idea to actual plot</a>.
+</div>
+<div id="ref-ggplot" class="csl-entry" role="listitem">
+Wickham, H., 2016. <a href="https://ggplot2.tidyverse.org">ggplot2: Elegant graphics for data analysis</a>. Springer-Verlag New York.
+</div>
+<div id="ref-dplyr" class="csl-entry" role="listitem">
+Wickham, H., François, R., Henry, L., Müller, K., 2019. <a href="https://CRAN.R-project.org/package=dplyr">Dplyr: A grammar of data manipulation</a>.
+</div>
+<div id="ref-readr" class="csl-entry" role="listitem">
+Wickham, H., Hester, J., Francois, R., 2017. <a href="https://CRAN.R-project.org/package=readr">Readr: Read rectangular text data</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
