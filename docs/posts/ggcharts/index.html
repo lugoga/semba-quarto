@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.319">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,6 +60,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -101,7 +102,13 @@ div.csl-indent {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -110,8 +117,10 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XCGZZVKFDT"></script>
@@ -127,19 +136,21 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 
 <link rel="stylesheet" href="../../styles.css">
 <meta name="twitter:title" content="ng’ara - Plotting with ggcharts Package in R">
-<meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://lugoga.github.io/semba-quarto/posts/ggcharts/thumbnail_blog.png">
+<meta name="twitter:description" content="Coding for all for better today and tommorow">
+<meta name="twitter:image" content="https://lugoga.github.io/semba-quarto/posts/ggcharts/ggchart.png">
 <meta name="twitter:creator" content="@semba753">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image-height" content="360">
+<meta name="twitter:image-width" content="784">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">ng’ara</span>
     </a>
@@ -151,92 +162,92 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../blog.html" rel="" target="">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/lugoga" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/lugoga"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/semba2020" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/semba2020"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://www.youtube.com/channel/UC9uZ1KPyo7zIzI4BnUtHPfA" rel="" target=""><i class="bi bi-youtube" role="img">
+    <a class="nav-link" href="https://www.youtube.com/channel/UC9uZ1KPyo7zIzI4BnUtHPfA"> <i class="bi bi-youtube" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="../../blog.xml" rel="" target=""><i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../blog.xml"> <i class="bi bi-rss" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-apps--links" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-apps--links" role="button" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Apps &amp; Links</span>
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-apps--links">    
         <li>
-    <a class="dropdown-item" href="https://semba.netlify.app/" rel="" target="">
+    <a class="dropdown-item" href="https://semba.netlify.app/">
  <span class="dropdown-text">Semba-blog Analysis</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://semba-blog.netlify.app/" rel="" target="">
+    <a class="dropdown-item" href="https://semba-blog.netlify.app/">
  <span class="dropdown-text">Semba Data Analysis</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://semba.shinyapps.io/kwala/" rel="" target="">
+    <a class="dropdown-item" href="https://semba.shinyapps.io/kwala/">
  <span class="dropdown-text">Kwala commercial CIty</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://semba.shinyapps.io/coastal_dashboard/" rel="" target="">
+    <a class="dropdown-item" href="https://semba.shinyapps.io/coastal_dashboard/">
  <span class="dropdown-text">Marine Hub</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://nemp.shinyapps.io/nemp/" rel="" target="">
+    <a class="dropdown-item" href="https://nemp.shinyapps.io/nemp/">
  <span class="dropdown-text">Environmental Master Plan</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://semba.shinyapps.io/OceanWebApp/" rel="" target="">
+    <a class="dropdown-item" href="https://semba.shinyapps.io/OceanWebApp/">
  <span class="dropdown-text">Hydrographic Data Hub</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://semba.shinyapps.io/marineTz/" rel="" target="">
+    <a class="dropdown-item" href="https://semba.shinyapps.io/marineTz/">
  <span class="dropdown-text">Potential Fishing Zones</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://semba.shinyapps.io/vizingaApp/" rel="" target="">
+    <a class="dropdown-item" href="https://semba.shinyapps.io/vizingaApp/">
  <span class="dropdown-text">TAFIRI Apps</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://rweekly.org/" rel="" target="">
+    <a class="dropdown-item" href="https://rweekly.org/">
  <span class="dropdown-text">R Weekly</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://www.r-bloggers.com/" rel="" target="">
+    <a class="dropdown-item" href="https://www.r-bloggers.com/">
  <span class="dropdown-text">R Bloggers</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://www.tmbish.me/lab/highcharter-cookbook/" rel="" target="">
+    <a class="dropdown-item" href="https://www.tmbish.me/lab/highcharter-cookbook/">
  <span class="dropdown-text">Highcharter</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="../../archive.html" rel="" target="">
- <span class="menu-text">Archive</span></a>
+    <a class="nav-link" href="../../archive.html"> 
+<span class="menu-text">Archive</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -283,14 +294,14 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
     <div class="quarto-title-meta-contents">
     <p class="author"><a href="https://semba.netlify.app">Masumbuko Semba</a> <a href="https://orcid.org/0000-0002-5002-9747" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
   </div>
-    <div class="quarto-title-meta-contents">
+  <div class="quarto-title-meta-contents">
         <p class="affiliation">
             <a href="https://semba.netlify.app/">
             Nelson Mandela African Institution of Science and Technology
             </a>
           </p>
       </div>
-    </div>
+  </div>
 
 <div class="quarto-title-meta">
 
@@ -306,7 +317,9 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   </div>
   
 
+
 </header>
+
 
 <!-- Google tag (gtag.js) -->
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-XCGZZVKFDT"></script>
@@ -348,7 +361,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb3-10"><a href="#cb3-10"></a>    <span class="at">fill =</span> <span class="st">"blue"</span></span>
 <span id="cb3-11"><a href="#cb3-11"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -366,7 +383,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb4-8"><a href="#cb4-8"></a>    <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">3</span>, </span>
 <span id="cb4-9"><a href="#cb4-9"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -454,7 +475,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 # ℹ 3,707 more rows</code></pre>
 </div>
 </div>
-<p><a href="#tbl-gdp">Table&nbsp;1</a> shows the annual growth in percentage of the gross domestic product across Africa over the last five year.</p>
+<p><a href="#tbl-gdp" class="quarto-xref">Table&nbsp;1</a> shows the annual growth in percentage of the gross domestic product across Africa over the last five year.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>gdp.africa <span class="sc">%&gt;%</span> </span>
 <span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span>  <span class="dv">2018</span><span class="sc">:</span><span class="dv">2022</span>) <span class="sc">%&gt;%</span> </span>
@@ -487,26 +508,31 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb11-29"><a href="#cb11-29"></a>    <span class="at">columns =</span> <span class="st">'Year 2022'</span>,</span>
 <span id="cb11-30"><a href="#cb11-30"></a>     <span class="at">palette =</span> <span class="fu">hcl.colors</span>(<span class="at">n =</span> <span class="dv">60</span>, <span class="at">palette =</span> <span class="st">"GnBu"</span>)</span>
 <span id="cb11-31"><a href="#cb11-31"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="tbl-gdp" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-gdp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: GDP for African countries since from 2018 to 2022
+</figcaption>
+<div aria-describedby="tbl-gdp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="tbl-gdp" class="anchored">
-
-<div id="eaozsiibaj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#eaozsiibaj table {
+<div>
+<div id="ioytiewnjx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ioytiewnjx table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#eaozsiibaj thead, #eaozsiibaj tbody, #eaozsiibaj tfoot, #eaozsiibaj tr, #eaozsiibaj td, #eaozsiibaj th {
+#ioytiewnjx thead, #ioytiewnjx tbody, #ioytiewnjx tfoot, #ioytiewnjx tr, #ioytiewnjx td, #ioytiewnjx th {
   border-style: none;
 }
 
-#eaozsiibaj p {
+#ioytiewnjx p {
   margin: 0;
   padding: 0;
 }
 
-#eaozsiibaj .gt_table {
+#ioytiewnjx .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -532,12 +558,12 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   border-left-color: #D3D3D3;
 }
 
-#eaozsiibaj .gt_caption {
+#ioytiewnjx .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#eaozsiibaj .gt_title {
+#ioytiewnjx .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -549,7 +575,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   border-bottom-width: 0;
 }
 
-#eaozsiibaj .gt_subtitle {
+#ioytiewnjx .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -561,7 +587,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   border-top-width: 0;
 }
 
-#eaozsiibaj .gt_heading {
+#ioytiewnjx .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -573,13 +599,13 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   border-right-color: #D3D3D3;
 }
 
-#eaozsiibaj .gt_bottom_border {
+#ioytiewnjx .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#eaozsiibaj .gt_col_headings {
+#ioytiewnjx .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -594,7 +620,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   border-right-color: #D3D3D3;
 }
 
-#eaozsiibaj .gt_col_heading {
+#ioytiewnjx .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -614,7 +640,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   overflow-x: hidden;
 }
 
-#eaozsiibaj .gt_column_spanner_outer {
+#ioytiewnjx .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -626,15 +652,15 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   padding-right: 4px;
 }
 
-#eaozsiibaj .gt_column_spanner_outer:first-child {
+#ioytiewnjx .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#eaozsiibaj .gt_column_spanner_outer:last-child {
+#ioytiewnjx .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#eaozsiibaj .gt_column_spanner {
+#ioytiewnjx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -646,11 +672,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   width: 100%;
 }
 
-#eaozsiibaj .gt_spanner_row {
+#ioytiewnjx .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#eaozsiibaj .gt_group_heading {
+#ioytiewnjx .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -676,7 +702,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   text-align: left;
 }
 
-#eaozsiibaj .gt_empty_group_heading {
+#ioytiewnjx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -691,15 +717,15 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   vertical-align: middle;
 }
 
-#eaozsiibaj .gt_from_md > :first-child {
+#ioytiewnjx .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#eaozsiibaj .gt_from_md > :last-child {
+#ioytiewnjx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#eaozsiibaj .gt_row {
+#ioytiewnjx .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -718,7 +744,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   overflow-x: hidden;
 }
 
-#eaozsiibaj .gt_stub {
+#ioytiewnjx .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -731,7 +757,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   padding-right: 5px;
 }
 
-#eaozsiibaj .gt_stub_row_group {
+#ioytiewnjx .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -745,15 +771,15 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   vertical-align: top;
 }
 
-#eaozsiibaj .gt_row_group_first td {
+#ioytiewnjx .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#eaozsiibaj .gt_row_group_first th {
+#ioytiewnjx .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#eaozsiibaj .gt_summary_row {
+#ioytiewnjx .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -763,16 +789,16 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   padding-right: 5px;
 }
 
-#eaozsiibaj .gt_first_summary_row {
+#ioytiewnjx .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#eaozsiibaj .gt_first_summary_row.thick {
+#ioytiewnjx .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#eaozsiibaj .gt_last_summary_row {
+#ioytiewnjx .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -782,7 +808,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   border-bottom-color: #D3D3D3;
 }
 
-#eaozsiibaj .gt_grand_summary_row {
+#ioytiewnjx .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -792,7 +818,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   padding-right: 5px;
 }
 
-#eaozsiibaj .gt_first_grand_summary_row {
+#ioytiewnjx .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -802,7 +828,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   border-top-color: #D3D3D3;
 }
 
-#eaozsiibaj .gt_last_grand_summary_row_top {
+#ioytiewnjx .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -812,11 +838,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   border-bottom-color: #D3D3D3;
 }
 
-#eaozsiibaj .gt_striped {
+#ioytiewnjx .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#eaozsiibaj .gt_table_body {
+#ioytiewnjx .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -825,7 +851,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   border-bottom-color: #D3D3D3;
 }
 
-#eaozsiibaj .gt_footnotes {
+#ioytiewnjx .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -839,7 +865,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   border-right-color: #D3D3D3;
 }
 
-#eaozsiibaj .gt_footnote {
+#ioytiewnjx .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -848,7 +874,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   padding-right: 5px;
 }
 
-#eaozsiibaj .gt_sourcenotes {
+#ioytiewnjx .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -862,7 +888,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   border-right-color: #D3D3D3;
 }
 
-#eaozsiibaj .gt_sourcenote {
+#ioytiewnjx .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -870,361 +896,455 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
   padding-right: 5px;
 }
 
-#eaozsiibaj .gt_left {
+#ioytiewnjx .gt_left {
   text-align: left;
 }
 
-#eaozsiibaj .gt_center {
+#ioytiewnjx .gt_center {
   text-align: center;
 }
 
-#eaozsiibaj .gt_right {
+#ioytiewnjx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#eaozsiibaj .gt_font_normal {
+#ioytiewnjx .gt_font_normal {
   font-weight: normal;
 }
 
-#eaozsiibaj .gt_font_bold {
+#ioytiewnjx .gt_font_bold {
   font-weight: bold;
 }
 
-#eaozsiibaj .gt_font_italic {
+#ioytiewnjx .gt_font_italic {
   font-style: italic;
 }
 
-#eaozsiibaj .gt_super {
+#ioytiewnjx .gt_super {
   font-size: 65%;
 }
 
-#eaozsiibaj .gt_footnote_marks {
+#ioytiewnjx .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#eaozsiibaj .gt_asterisk {
+#ioytiewnjx .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#eaozsiibaj .gt_indent_1 {
+#ioytiewnjx .gt_indent_1 {
   text-indent: 5px;
 }
 
-#eaozsiibaj .gt_indent_2 {
+#ioytiewnjx .gt_indent_2 {
   text-indent: 10px;
 }
 
-#eaozsiibaj .gt_indent_3 {
+#ioytiewnjx .gt_indent_3 {
   text-indent: 15px;
 }
 
-#eaozsiibaj .gt_indent_4 {
+#ioytiewnjx .gt_indent_4 {
   text-indent: 20px;
 }
 
-#eaozsiibaj .gt_indent_5 {
+#ioytiewnjx .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>Table&nbsp;1:  <p>GDP for African countries since from 2018 to 2022</p> </caption>
-  <thead>
-    
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="COUNTRY">COUNTRY</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="YEAR_2018">YEAR_2018</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="YEAR_2019">YEAR_2019</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="YEAR_2020">YEAR_2020</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="YEAR_2021">YEAR_2021</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="YEAR_2022">YEAR_2022</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="country" class="gt_row gt_left">Algeria</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #D1EFCA; color: #000000;">1.2000000</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #A2DDBC; color: #000000;">1.0000000</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #53C0AF; color: #000000;">-5.1000000</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0070AE; color: #FFFFFF;">3.4000000</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #008ABA; color: #FFFFFF;">3.1000000</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Angola</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #CCC86C; color: #000000;">-1.3163617</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #D2EECD; color: #000000;">-0.7022730</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #61C5B1; color: #000000;">-5.6382147</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #00579B; color: #FFFFFF;">1.1992105</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0089BA; color: #FFFFFF;">3.0454030</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Benin</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0076A3; color: #FFFFFF;">6.6972595</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0077A3; color: #FFFFFF;">6.8656873</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0056A0; color: #FFFFFF;">3.8487924</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0096BB; color: #FFFFFF;">7.1554516</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00B5BC; color: #000000;">6.2532449</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Botswana</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #40BAAD; color: #000000;">4.1898469</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #53C0AF; color: #000000;">3.0325566</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #A4DDBC; color: #000000;">-8.7294515</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #00B9BC; color: #000000;">11.8703583</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00AFBC; color: #FFFFFF;">5.7823492</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Burkina Faso</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0079A4; color: #FFFFFF;">6.6045691</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #008FA7; color: #FFFFFF;">5.6881151</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0072A3; color: #FFFFFF;">1.9303249</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0094BB; color: #FFFFFF;">6.9063417</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #006BAA; color: #FFFFFF;">1.4793006</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Burundi</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #C7EBC9; color: #000000;">1.6099354</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #86D2B6; color: #000000;">1.8125653</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0086A5; color: #FFFFFF;">0.3271569</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #006DAB; color: #FFFFFF;">3.1000000</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0072AF; color: #FFFFFF;">1.8490000</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Cameroon</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #51C0AF; color: #000000;">3.9555142</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #3AB9AD; color: #000000;">3.4750600</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0087A6; color: #FFFFFF;">0.2599329</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0074B0; color: #FFFFFF;">3.6499169</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0090BA; color: #FFFFFF;">3.5409779</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Cabo Verde</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #62C5B1; color: #000000;">3.7069646</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0065A1; color: #FFFFFF;">7.6360817</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #C9B756; color: #000000;">-19.3028228</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0093BA; color: #FFFFFF;">6.8111764</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #F5F8EA; color: #000000;">17.7141812</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Central African Republic</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #5CC3B0; color: #000000;">3.7894436</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #4FBFAE; color: #000000;">3.1000000</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #007FA4; color: #FFFFFF;">0.9000000</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #015399; color: #FFFFFF;">0.9000000</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0E4D93; color: #FFFFFF;">0.0000000</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Chad</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #A7DEBD; color: #000000;">2.3740378</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #48BDAE; color: #000000;">3.2471819</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #009CA9; color: #FFFFFF;">-1.6000067</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #2A3A84; color: #FFFFFF;">-1.1999905</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #007AB4; color: #FFFFFF;">2.2359797</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Comoros</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #65C6B1; color: #000000;">3.6424511</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #88D3B6; color: #000000;">1.7607802</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #008CA6; color: #FFFFFF;">-0.1955568</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0061A3; color: #FFFFFF;">2.1121956</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #007DB6; color: #FFFFFF;">2.3876785</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Djibouti</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #01ACAB; color: #FFFFFF;">4.7744169</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0092A7; color: #FFFFFF;">5.5451306</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #007BA4; color: #FFFFFF;">1.2020220</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0080B8; color: #FFFFFF;">4.8000000</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0088BA; color: #FFFFFF;">3.0000000</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Equatorial Guinea</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #7D0112; color: #FFFFFF;">-6.2365441</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #C8B04E; color: #000000;">-5.4818254</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #37B8AD; color: #000000;">-4.2414813</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #273D87; color: #FFFFFF;">-0.9453829</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #008ABA; color: #FFFFFF;">3.1457983</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Ethiopia</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0073A3; color: #FFFFFF;">6.8161478</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #00519F; color: #FFFFFF;">8.3640857</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #1F28A2; color: #FFFFFF;">6.0595309</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0089BA; color: #FFFFFF;">5.6415307</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00AABB; color: #FFFFFF;">5.3170960</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Gabon</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #CEF0BA; color: #000000;">0.8379166</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #19B1AC; color: #FFFFFF;">3.9208088</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #009FA9; color: #FFFFFF;">-1.8377611</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #005A9E; color: #FFFFFF;">1.4679573</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0089BA; color: #FFFFFF;">3.0369419</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Ghana</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0085A5; color: #FFFFFF;">6.2000777</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #007FA4; color: #FFFFFF;">6.5077748</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0084A5; color: #FFFFFF;">0.5139417</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0086BA; color: #FFFFFF;">5.3564779</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #008CBA; color: #FFFFFF;">3.2397063</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Guinea-Bissau</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #D2EECD; color: #000000;">1.2837367</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #00A7AA; color: #FFFFFF;">4.5000000</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #00A5AA; color: #FFFFFF;">-2.4000000</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0075B1; color: #FFFFFF;">3.8000024</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0090BA; color: #FFFFFF;">3.5000496</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Guinea</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0081A5; color: #FFFFFF;">6.3584919</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0091A7; color: #FFFFFF;">5.6169145</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #00449F; color: #FFFFFF;">4.9202664</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0076B2; color: #FFFFFF;">3.9000000</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00A1BB; color: #FFFFFF;">4.7000000</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Kenya</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0095A8; color: #FFFFFF;">5.6479464</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #009BA8; color: #FFFFFF;">5.1141589</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #008DA6; color: #FFFFFF;">-0.2727663</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #009ABB; color: #FFFFFF;">7.5904895</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00A3BB; color: #FFFFFF;">4.8466349</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Lesotho</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #CBC366; color: #000000;">-1.4806336</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #D1EFCB; color: #000000;">-0.7642260</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #60C4B0; color: #000000;">-5.6194024</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #005B9E; color: #FFFFFF;">1.5576798</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00599C; color: #FFFFFF;">0.5919178</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Liberia</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #D1EFC8; color: #000000;">1.1575751</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #CDE69B; color: #000000;">-2.4672976</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #00ABAB; color: #FFFFFF;">-2.9824913</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0082B8; color: #FFFFFF;">4.9867128</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00A2BB; color: #FFFFFF;">4.8081135</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Libya</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #014A9F; color: #FFFFFF;">7.9413679</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #7D0112; color: #FFFFFF;">-11.1956946</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #7D0112; color: #FFFFFF;">-29.7871480</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #F5F8EA; color: #000000;">31.3725154</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #2F327D; color: #FFFFFF;">-1.2369819</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Madagascar</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #7FD0B4; color: #000000;">3.1943565</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #00A9AA; color: #FFFFFF;">4.4112321</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #84D2B5; color: #000000;">-7.1376716</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #008ABA; color: #FFFFFF;">5.7396157</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0094BB; color: #FFFFFF;">3.7962049</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Malawi</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #2EB5AD; color: #000000;">4.3916883</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0094A7; color: #FFFFFF;">5.4481813</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0080A5; color: #FFFFFF;">0.7999983</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0069A9; color: #FFFFFF;">2.7514026</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #005FA2; color: #FFFFFF;">0.9234363</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Mali</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #05ADAB; color: #FFFFFF;">4.7464843</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #00A2A9; color: #FFFFFF;">4.7561608</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0098A8; color: #FFFFFF;">-1.2354504</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #006CAB; color: #FFFFFF;">3.0526136</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0093BA; color: #FFFFFF;">3.6874841</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Mauritania</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #02ACAB; color: #FFFFFF;">4.7721736</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0097A8; color: #FFFFFF;">5.2966374</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0095A8; color: #FFFFFF;">-0.9385162</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0066A6; color: #FFFFFF;">2.4453683</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00A8BB; color: #FFFFFF;">5.2000000</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Mauritius</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #4EBEAE; color: #000000;">4.0067406</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #59C2B0; color: #000000;">2.8912850</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #CDE69C; color: #000000;">-14.5973980</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0070AE; color: #FFFFFF;">3.3993801</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #63CFBF; color: #000000;">8.6907351</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Morocco</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #86D2B6; color: #000000;">3.0656413</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #59C2B0; color: #000000;">2.8909748</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #85D2B5; color: #000000;">-7.1870796</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #009DBB; color: #FFFFFF;">7.9296679</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0062A4; color: #FFFFFF;">1.0799695</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Mozambique</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #71CBB2; color: #000000;">3.4438131</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #72CBB2; color: #000000;">2.3144426</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0098A8; color: #FFFFFF;">-1.1985483</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0064A5; color: #FFFFFF;">2.3275236</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #009ABB; color: #FFFFFF;">4.1484145</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Namibia</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #CFF1C3; color: #000000;">1.0599435</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #D1EFC8; color: #000000;">-0.8391547</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #98D9B9; color: #000000;">-8.1014008</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0072AF; color: #FFFFFF;">3.5246580</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #009FBB; color: #FFFFFF;">4.5602940</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Niger</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0065A1; color: #FFFFFF;">7.2108030</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #008AA6; color: #FFFFFF;">5.9413969</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #005BA0; color: #FFFFFF;">3.5502275</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #00599D; color: #FFFFFF;">1.3871292</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #ACE4C8; color: #000000;">11.5000049</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Nigeria</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #BBE6C4; color: #000000;">1.9227573</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #76CDB3; color: #000000;">2.2084293</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #009EA9; color: #FFFFFF;">-1.7942531</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0074B0; color: #FFFFFF;">3.6471865</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #008CBA; color: #FFFFFF;">3.2516814</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Rwanda</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #1F28A2; color: #FFFFFF;">8.5398365</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #1F28A2; color: #FFFFFF;">9.4640253</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #12AFAC; color: #FFFFFF;">-3.3739863</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #00B2BC; color: #FFFFFF;">10.8767338</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #50CABE; color: #000000;">8.1574877</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Senegal</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0085A5; color: #FFFFFF;">6.2092410</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #00A5AA; color: #FFFFFF;">4.6136281</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0079A4; color: #FFFFFF;">1.3420738</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0091BA; color: #FFFFFF;">6.5396737</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #009ABB; color: #FFFFFF;">4.1538565</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Seychelles</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #61C5B1; color: #000000;">3.7094343</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #00A0A9; color: #FFFFFF;">4.8769462</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #A3DDBC; color: #000000;">-8.6492065</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0086BA; color: #FFFFFF;">5.4000000</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #67D0BF; color: #000000;">8.8000002</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Sierra Leone</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #6FCAB2; color: #000000;">3.4729026</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0098A8; color: #FFFFFF;">5.2537463</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #00A0A9; color: #FFFFFF;">-1.9684869</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0079B3; color: #FFFFFF;">4.1047001</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0090BA; color: #FFFFFF;">3.5007417</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Somalia</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #005AA0; color: #FFFFFF;">7.5309693</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0069A2; color: #FFFFFF;">7.4565215</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #006AA2; color: #FFFFFF;">2.4893743</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0078B3; color: #FFFFFF;">4.0491105</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00A2BB; color: #FFFFFF;">4.7987790</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">South Africa</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #CAECCA; color: #000000;">1.5223294</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #B8E5C3; color: #000000;">0.3034532</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #72CBB2; color: #000000;">-6.3424711</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0081B8; color: #FFFFFF;">4.9130967</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0076B2; color: #FFFFFF;">2.0422994</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Sudan</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #C39F3D; color: #000000;">-2.6809305</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #CDE9A3; color: #000000;">-2.1782510</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #1BB2AC; color: #FFFFFF;">-3.6298008</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #2F327D; color: #FFFFFF;">-1.8685205</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #2C3882; color: #FFFFFF;">-0.9534070</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Eswatini</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #A7DEBD; color: #000000;">2.3800955</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #62C5B1; color: #000000;">2.6921683</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #009CA9; color: #FFFFFF;">-1.5596426</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #009CBB; color: #FFFFFF;">7.8833064</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #0096BB; color: #FFFFFF;">3.9145410</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Tanzania</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #009AA8; color: #FFFFFF;">5.4575829</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #008DA6; color: #FFFFFF;">5.8000000</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0071A3; color: #FFFFFF;">1.9919646</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #007BB5; color: #FFFFFF;">4.3213843</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #009FBB; color: #FFFFFF;">4.5580273</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Togo</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #00A3AA; color: #FFFFFF;">5.1384723</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #009FA9; color: #FFFFFF;">4.9229259</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0071A3; color: #FFFFFF;">1.9757429</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #008CBA; color: #FFFFFF;">5.9915720</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00B0BC; color: #FFFFFF;">5.8105400</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Tunisia</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #9BDABA; color: #000000;">2.6248283</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #8ED5B7; color: #000000;">1.5880128</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #A6DEBD; color: #000000;">-8.8178788</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #007CB5; color: #FFFFFF;">4.4053620</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #007FB7; color: #FFFFFF;">2.5217614</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Uganda</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #0082A5; color: #FFFFFF;">6.3039238</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #0080A5; color: #FFFFFF;">6.4387450</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #0064A1; color: #FFFFFF;">2.9513064</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #0072AF; color: #FFFFFF;">3.5365803</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00A0BB; color: #FFFFFF;">4.6501337</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Zambia</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #4CBEAE; color: #000000;">4.0344939</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #93D7B8; color: #000000;">1.4413060</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #00A9AB; color: #FFFFFF;">-2.7850551</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #007EB6; color: #FFFFFF;">4.5987340</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #00A1BB; color: #FFFFFF;">4.7449425</td></tr>
-    <tr><td headers="country" class="gt_row gt_left">Zimbabwe</td>
-<td headers="Year 2018" class="gt_row gt_right" style="background-color: #00A7AA; color: #FFFFFF;">5.0098668</td>
-<td headers="Year 2019" class="gt_row gt_right" style="background-color: #C39C3A; color: #FFFFFF;">-6.3324464</td>
-<td headers="Year 2020" class="gt_row gt_right" style="background-color: #92D6B8; color: #000000;">-7.8169506</td>
-<td headers="Year 2021" class="gt_row gt_right" style="background-color: #00A0BB; color: #FFFFFF;">8.4680169</td>
-<td headers="Year 2022" class="gt_row gt_right" style="background-color: #008EBA; color: #FFFFFF;">3.4000000</td></tr>
-  </tbody>
-  
-  
+
+<table class="gt_table do-not-create-environment cell table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="COUNTRY" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">COUNTRY</th>
+<th id="YEAR_2018" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">YEAR_2018</th>
+<th id="YEAR_2019" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">YEAR_2019</th>
+<th id="YEAR_2020" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">YEAR_2020</th>
+<th id="YEAR_2021" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">YEAR_2021</th>
+<th id="YEAR_2022" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">YEAR_2022</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Algeria</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #D1EFCA; color: #000000">1.2000000</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #A2DDBC; color: #000000">1.0000000</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #53C0AF; color: #000000">-5.1000000</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0070AE; color: #FFFFFF">3.4000000</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #008ABA; color: #FFFFFF">3.1000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Angola</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #CCC86C; color: #000000">-1.3163617</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #D2EECD; color: #000000">-0.7022730</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #61C5B1; color: #000000">-5.6382147</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #00579B; color: #FFFFFF">1.1992105</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #0089BA; color: #FFFFFF">3.0454030</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Benin</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #0076A3; color: #FFFFFF">6.6972595</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #0077A3; color: #FFFFFF">6.8656873</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #0056A0; color: #FFFFFF">3.8487924</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0096BB; color: #FFFFFF">7.1554516</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #00B5BC; color: #000000">6.2532449</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Botswana</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #40BAAD; color: #000000">4.1898469</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #53C0AF; color: #000000">3.0325566</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #A4DDBC; color: #000000">-8.7294515</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #00B9BC; color: #000000">11.8703583</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #00AFBC; color: #FFFFFF">5.7823492</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Burkina Faso</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #0079A4; color: #FFFFFF">6.6045691</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #008FA7; color: #FFFFFF">5.6881151</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #0072A3; color: #FFFFFF">1.9303249</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0094BB; color: #FFFFFF">6.9063417</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #006BAA; color: #FFFFFF">1.4793006</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Burundi</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #C7EBC9; color: #000000">1.6099354</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #86D2B6; color: #000000">1.8125653</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #0086A5; color: #FFFFFF">0.3271569</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #006DAB; color: #FFFFFF">3.1000000</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #0072AF; color: #FFFFFF">1.8490000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Cameroon</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #51C0AF; color: #000000">3.9555142</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #3AB9AD; color: #000000">3.4750600</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #0087A6; color: #FFFFFF">0.2599329</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0074B0; color: #FFFFFF">3.6499169</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #0090BA; color: #FFFFFF">3.5409779</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Cabo Verde</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #62C5B1; color: #000000">3.7069646</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #0065A1; color: #FFFFFF">7.6360817</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #C9B756; color: #000000">-19.3028228</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0093BA; color: #FFFFFF">6.8111764</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #F5F8EA; color: #000000">17.7141812</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Central African Republic</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #5CC3B0; color: #000000">3.7894436</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #4FBFAE; color: #000000">3.1000000</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #007FA4; color: #FFFFFF">0.9000000</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #015399; color: #FFFFFF">0.9000000</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #0E4D93; color: #FFFFFF">0.0000000</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Chad</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #A7DEBD; color: #000000">2.3740378</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #48BDAE; color: #000000">3.2471819</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #009CA9; color: #FFFFFF">-1.6000067</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #2A3A84; color: #FFFFFF">-1.1999905</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #007AB4; color: #FFFFFF">2.2359797</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Comoros</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #65C6B1; color: #000000">3.6424511</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #88D3B6; color: #000000">1.7607802</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #008CA6; color: #FFFFFF">-0.1955568</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0061A3; color: #FFFFFF">2.1121956</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #007DB6; color: #FFFFFF">2.3876785</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Djibouti</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #01ACAB; color: #FFFFFF">4.7744169</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #0092A7; color: #FFFFFF">5.5451306</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #007BA4; color: #FFFFFF">1.2020220</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0080B8; color: #FFFFFF">4.8000000</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #0088BA; color: #FFFFFF">3.0000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Equatorial Guinea</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #7D0112; color: #FFFFFF">-6.2365441</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #C8B04E; color: #000000">-5.4818254</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #37B8AD; color: #000000">-4.2414813</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #273D87; color: #FFFFFF">-0.9453829</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #008ABA; color: #FFFFFF">3.1457983</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Ethiopia</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #0073A3; color: #FFFFFF">6.8161478</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #00519F; color: #FFFFFF">8.3640857</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #1F28A2; color: #FFFFFF">6.0595309</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0089BA; color: #FFFFFF">5.6415307</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #00AABB; color: #FFFFFF">5.3170960</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Gabon</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #CEF0BA; color: #000000">0.8379166</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #19B1AC; color: #FFFFFF">3.9208088</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #009FA9; color: #FFFFFF">-1.8377611</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #005A9E; color: #FFFFFF">1.4679573</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #0089BA; color: #FFFFFF">3.0369419</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Ghana</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #0085A5; color: #FFFFFF">6.2000777</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #007FA4; color: #FFFFFF">6.5077748</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #0084A5; color: #FFFFFF">0.5139417</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0086BA; color: #FFFFFF">5.3564779</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #008CBA; color: #FFFFFF">3.2397063</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Guinea-Bissau</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #D2EECD; color: #000000">1.2837367</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #00A7AA; color: #FFFFFF">4.5000000</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #00A5AA; color: #FFFFFF">-2.4000000</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0075B1; color: #FFFFFF">3.8000024</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #0090BA; color: #FFFFFF">3.5000496</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Guinea</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #0081A5; color: #FFFFFF">6.3584919</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #0091A7; color: #FFFFFF">5.6169145</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #00449F; color: #FFFFFF">4.9202664</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0076B2; color: #FFFFFF">3.9000000</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #00A1BB; color: #FFFFFF">4.7000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Kenya</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #0095A8; color: #FFFFFF">5.6479464</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #009BA8; color: #FFFFFF">5.1141589</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #008DA6; color: #FFFFFF">-0.2727663</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #009ABB; color: #FFFFFF">7.5904895</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #00A3BB; color: #FFFFFF">4.8466349</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Lesotho</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #CBC366; color: #000000">-1.4806336</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #D1EFCB; color: #000000">-0.7642260</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #60C4B0; color: #000000">-5.6194024</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #005B9E; color: #FFFFFF">1.5576798</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #00599C; color: #FFFFFF">0.5919178</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Liberia</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #D1EFC8; color: #000000">1.1575751</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #CDE69B; color: #000000">-2.4672976</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #00ABAB; color: #FFFFFF">-2.9824913</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0082B8; color: #FFFFFF">4.9867128</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #00A2BB; color: #FFFFFF">4.8081135</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Libya</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #014A9F; color: #FFFFFF">7.9413679</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #7D0112; color: #FFFFFF">-11.1956946</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #7D0112; color: #FFFFFF">-29.7871480</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #F5F8EA; color: #000000">31.3725154</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #2F327D; color: #FFFFFF">-1.2369819</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Madagascar</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #7FD0B4; color: #000000">3.1943565</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #00A9AA; color: #FFFFFF">4.4112321</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #84D2B5; color: #000000">-7.1376716</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #008ABA; color: #FFFFFF">5.7396157</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #0094BB; color: #FFFFFF">3.7962049</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Malawi</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #2EB5AD; color: #000000">4.3916883</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #0094A7; color: #FFFFFF">5.4481813</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #0080A5; color: #FFFFFF">0.7999983</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0069A9; color: #FFFFFF">2.7514026</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #005FA2; color: #FFFFFF">0.9234363</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Mali</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #05ADAB; color: #FFFFFF">4.7464843</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #00A2A9; color: #FFFFFF">4.7561608</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #0098A8; color: #FFFFFF">-1.2354504</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #006CAB; color: #FFFFFF">3.0526136</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #0093BA; color: #FFFFFF">3.6874841</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Mauritania</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #02ACAB; color: #FFFFFF">4.7721736</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #0097A8; color: #FFFFFF">5.2966374</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #0095A8; color: #FFFFFF">-0.9385162</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0066A6; color: #FFFFFF">2.4453683</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #00A8BB; color: #FFFFFF">5.2000000</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Mauritius</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #4EBEAE; color: #000000">4.0067406</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #59C2B0; color: #000000">2.8912850</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #CDE69C; color: #000000">-14.5973980</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0070AE; color: #FFFFFF">3.3993801</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #63CFBF; color: #000000">8.6907351</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Morocco</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #86D2B6; color: #000000">3.0656413</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #59C2B0; color: #000000">2.8909748</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #85D2B5; color: #000000">-7.1870796</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #009DBB; color: #FFFFFF">7.9296679</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #0062A4; color: #FFFFFF">1.0799695</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Mozambique</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #71CBB2; color: #000000">3.4438131</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #72CBB2; color: #000000">2.3144426</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #0098A8; color: #FFFFFF">-1.1985483</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0064A5; color: #FFFFFF">2.3275236</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #009ABB; color: #FFFFFF">4.1484145</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Namibia</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #CFF1C3; color: #000000">1.0599435</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #D1EFC8; color: #000000">-0.8391547</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #98D9B9; color: #000000">-8.1014008</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0072AF; color: #FFFFFF">3.5246580</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #009FBB; color: #FFFFFF">4.5602940</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Niger</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #0065A1; color: #FFFFFF">7.2108030</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #008AA6; color: #FFFFFF">5.9413969</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #005BA0; color: #FFFFFF">3.5502275</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #00599D; color: #FFFFFF">1.3871292</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #ACE4C8; color: #000000">11.5000049</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Nigeria</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #BBE6C4; color: #000000">1.9227573</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #76CDB3; color: #000000">2.2084293</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #009EA9; color: #FFFFFF">-1.7942531</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0074B0; color: #FFFFFF">3.6471865</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #008CBA; color: #FFFFFF">3.2516814</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Rwanda</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #1F28A2; color: #FFFFFF">8.5398365</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #1F28A2; color: #FFFFFF">9.4640253</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #12AFAC; color: #FFFFFF">-3.3739863</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #00B2BC; color: #FFFFFF">10.8767338</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #50CABE; color: #000000">8.1574877</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Senegal</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #0085A5; color: #FFFFFF">6.2092410</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #00A5AA; color: #FFFFFF">4.6136281</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #0079A4; color: #FFFFFF">1.3420738</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0091BA; color: #FFFFFF">6.5396737</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #009ABB; color: #FFFFFF">4.1538565</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Seychelles</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #61C5B1; color: #000000">3.7094343</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #00A0A9; color: #FFFFFF">4.8769462</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #A3DDBC; color: #000000">-8.6492065</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0086BA; color: #FFFFFF">5.4000000</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #67D0BF; color: #000000">8.8000002</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Sierra Leone</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #6FCAB2; color: #000000">3.4729026</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #0098A8; color: #FFFFFF">5.2537463</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #00A0A9; color: #FFFFFF">-1.9684869</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0079B3; color: #FFFFFF">4.1047001</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #0090BA; color: #FFFFFF">3.5007417</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Somalia</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #005AA0; color: #FFFFFF">7.5309693</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #0069A2; color: #FFFFFF">7.4565215</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #006AA2; color: #FFFFFF">2.4893743</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0078B3; color: #FFFFFF">4.0491105</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #00A2BB; color: #FFFFFF">4.7987790</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">South Africa</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #CAECCA; color: #000000">1.5223294</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #B8E5C3; color: #000000">0.3034532</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #72CBB2; color: #000000">-6.3424711</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0081B8; color: #FFFFFF">4.9130967</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #0076B2; color: #FFFFFF">2.0422994</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Sudan</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #C39F3D; color: #000000">-2.6809305</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #CDE9A3; color: #000000">-2.1782510</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #1BB2AC; color: #FFFFFF">-3.6298008</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #2F327D; color: #FFFFFF">-1.8685205</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #2C3882; color: #FFFFFF">-0.9534070</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Eswatini</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #A7DEBD; color: #000000">2.3800955</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #62C5B1; color: #000000">2.6921683</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #009CA9; color: #FFFFFF">-1.5596426</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #009CBB; color: #FFFFFF">7.8833064</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #0096BB; color: #FFFFFF">3.9145410</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Tanzania</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #009AA8; color: #FFFFFF">5.4575829</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #008DA6; color: #FFFFFF">5.8000000</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #0071A3; color: #FFFFFF">1.9919646</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #007BB5; color: #FFFFFF">4.3213843</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #009FBB; color: #FFFFFF">4.5580273</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Togo</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #00A3AA; color: #FFFFFF">5.1384723</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #009FA9; color: #FFFFFF">4.9229259</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #0071A3; color: #FFFFFF">1.9757429</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #008CBA; color: #FFFFFF">5.9915720</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #00B0BC; color: #FFFFFF">5.8105400</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Tunisia</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #9BDABA; color: #000000">2.6248283</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #8ED5B7; color: #000000">1.5880128</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #A6DEBD; color: #000000">-8.8178788</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #007CB5; color: #FFFFFF">4.4053620</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #007FB7; color: #FFFFFF">2.5217614</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Uganda</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #0082A5; color: #FFFFFF">6.3039238</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #0080A5; color: #FFFFFF">6.4387450</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #0064A1; color: #FFFFFF">2.9513064</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #0072AF; color: #FFFFFF">3.5365803</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #00A0BB; color: #FFFFFF">4.6501337</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country">Zambia</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #4CBEAE; color: #000000">4.0344939</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #93D7B8; color: #000000">1.4413060</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #00A9AB; color: #FFFFFF">-2.7850551</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #007EB6; color: #FFFFFF">4.5987340</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #00A1BB; color: #FFFFFF">4.7449425</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country">Zimbabwe</td>
+<td class="gt_row gt_right" headers="Year 2018" style="background-color: #00A7AA; color: #FFFFFF">5.0098668</td>
+<td class="gt_row gt_right" headers="Year 2019" style="background-color: #C39C3A; color: #FFFFFF">-6.3324464</td>
+<td class="gt_row gt_right" headers="Year 2020" style="background-color: #92D6B8; color: #000000">-7.8169506</td>
+<td class="gt_row gt_right" headers="Year 2021" style="background-color: #00A0BB; color: #FFFFFF">8.4680169</td>
+<td class="gt_row gt_right" headers="Year 2022" style="background-color: #008EBA; color: #FFFFFF">3.4000000</td>
+</tr>
+</tbody>
 </table>
+
 </div>
 </div>
+</div>
+</div>
+</figure>
 </div>
 </div>
 <section id="barchart" class="level3">
@@ -1238,7 +1358,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb12-5"><a href="#cb12-5"></a>       <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)<span class="sc">+</span></span>
 <span id="cb12-6"><a href="#cb12-6"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We notice that the countries are cluttered and make it difficult to visualize and read them. Fortunate, bar_chart has a wrapper <code>top_n</code> function, that can limit only a certain number of countries with positive values to be plotted</p>
@@ -1250,7 +1374,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb13-5"><a href="#cb13-5"></a>       <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)<span class="sc">+</span></span>
 <span id="cb13-6"><a href="#cb13-6"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Likewise, the negative values prefix of <code>top_n</code> will limit only list</p>
@@ -1260,7 +1388,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb14-3"><a href="#cb14-3"></a>  ggcharts<span class="sc">::</span><span class="fu">bar_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp, <span class="at">top_n =</span> <span class="sc">-</span><span class="dv">20</span>)<span class="sc">+</span></span>
 <span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We can highlight the country of interest with <code>highlight</code> function</p>
@@ -1271,7 +1403,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb15-4"><a href="#cb15-4"></a>                      <span class="at">highlight =</span> <span class="st">"Tanzania"</span>)<span class="sc">+</span></span>
 <span id="cb15-5"><a href="#cb15-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>You can highlight more than one</p>
@@ -1282,7 +1418,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb16-4"><a href="#cb16-4"></a>                      <span class="at">highlight =</span> <span class="fu">c</span>(<span class="st">"Tanzania"</span>, <span class="st">"Ghana"</span>))<span class="sc">+</span></span>
 <span id="cb16-5"><a href="#cb16-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>and use the facet if you wish to check the change of highlighted countries for more than one year</p>
@@ -1293,7 +1433,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb17-4"><a href="#cb17-4"></a>                      <span class="at">highlight =</span> <span class="st">"Tanzania"</span>, <span class="at">facet =</span> year)<span class="sc">+</span></span>
 <span id="cb17-5"><a href="#cb17-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>and finally the theme</p>
@@ -1307,7 +1451,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb18-7"><a href="#cb18-7"></a>  ggcharts<span class="sc">::</span><span class="fu">theme_nightblue</span>()<span class="sc">+</span></span>
 <span id="cb18-8"><a href="#cb18-8"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -1319,7 +1467,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb19-3"><a href="#cb19-3"></a>  ggcharts<span class="sc">::</span><span class="fu">lollipop_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp)<span class="sc">+</span></span>
 <span id="cb19-4"><a href="#cb19-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -1328,7 +1480,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb20-3"><a href="#cb20-3"></a>  ggcharts<span class="sc">::</span><span class="fu">lollipop_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp, <span class="at">top_n =</span> <span class="dv">15</span>)<span class="sc">+</span></span>
 <span id="cb20-4"><a href="#cb20-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -1337,7 +1493,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb21-3"><a href="#cb21-3"></a>  ggcharts<span class="sc">::</span><span class="fu">lollipop_chart</span>(<span class="at">x =</span> country, <span class="at">y =</span> gdp, <span class="at">top_n =</span> <span class="sc">-</span><span class="dv">15</span>)<span class="sc">+</span></span>
 <span id="cb21-4"><a href="#cb21-4"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -1347,7 +1507,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb22-4"><a href="#cb22-4"></a>                           <span class="at">highlight =</span> <span class="st">"Tanzania"</span>)<span class="sc">+</span></span>
 <span id="cb22-5"><a href="#cb22-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -1357,7 +1521,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb23-4"><a href="#cb23-4"></a>                           <span class="at">highlight =</span> <span class="fu">c</span>(<span class="st">"Tanzania"</span>, <span class="st">"Ghana"</span>))<span class="sc">+</span></span>
 <span id="cb23-5"><a href="#cb23-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -1367,7 +1535,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb24-4"><a href="#cb24-4"></a>                           <span class="at">highlight =</span> <span class="st">"Tanzania"</span>, <span class="at">facet =</span> year)<span class="sc">+</span></span>
 <span id="cb24-5"><a href="#cb24-5"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -1380,7 +1552,11 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 <span id="cb25-7"><a href="#cb25-7"></a>  ggcharts<span class="sc">::</span><span class="fu">theme_ng</span>()<span class="sc">+</span></span>
 <span id="cb25-8"><a href="#cb25-8"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Countries"</span>, <span class="at">y =</span> <span class="st">"Annual Growth Domestic Product (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -1392,7 +1568,7 @@ gtag('config', 'G-XCGZZVKFDT', { 'anonymize_ip': true});
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-geodata" class="csl-entry" role="listitem">
 Hijmans, R.J., Barbosa, M., Ghosh, A., Mandel, A., 2023. <a href="https://CRAN.R-project.org/package=geodata">Geodata: Download geographic data</a>.
 </div>
@@ -1488,10 +1664,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1501,8 +1676,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1515,6 +1699,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1558,6 +1861,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1583,6 +1887,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1643,6 +1973,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 
